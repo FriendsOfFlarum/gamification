@@ -21,11 +21,16 @@ export default function () {
 
     extend(UserCard.prototype, 'infoItems', function (items, user) {
         let rank = this.props.user.data.attributes.Rank.split(': ');
+        let points = this.props.user.data.attributes.Points;
+      
+        if (points == 0) {
+            points = '0';
+        }
         if (rank[0] == '') {
             rank[0] = app.forum.attribute('DefaultRank');
         }
         items.add('points',
-            app.translator.trans('reflar-gamification.forum.user.points', {points: this.props.user.data.attributes.Points})
+            app.translator.trans('reflar-gamification.forum.user.points', {points})
         );
 
         items.add('rank',

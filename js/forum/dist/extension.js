@@ -16,10 +16,15 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
 
         extend(UserCard.prototype, 'infoItems', function (items, user) {
             var rank = this.props.user.data.attributes.Rank.split(': ');
+            var points = this.props.user.data.attributes.Points;
+
+            if (points == 0) {
+                points = '0';
+            }
             if (rank[0] == '') {
                 rank[0] = app.forum.attribute('DefaultRank');
             }
-            items.add('points', app.translator.trans('reflar-gamification.forum.user.points', { points: this.props.user.data.attributes.Points }));
+            items.add('points', app.translator.trans('reflar-gamification.forum.user.points', { points: points }));
 
             items.add('rank', app.translator.trans('reflar-gamification.forum.user.rank', { rank: rank[0] }));
         });
