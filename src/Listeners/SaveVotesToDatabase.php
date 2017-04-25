@@ -76,7 +76,7 @@ class SaveVotesToDatabase
                     if ($vote->type == 'Up') {
                         $post->user->decrement('votes');
 
-                        if ($post->number = 1) {
+                        if ($post->number == 1) {
                             $discussion->decrement('votes');
                         }
 
@@ -86,7 +86,7 @@ class SaveVotesToDatabase
                     } else {
                         $post->user->increment('votes');
 
-                        if ($post->number = 1) {
+                        if ($post->number == 1) {
                             $discussion->increment('votes');
                         }
 
@@ -102,7 +102,7 @@ class SaveVotesToDatabase
 
                     $post->user->votes = $post->user->votes - 2;
 
-                    if ($post->number = 1) {
+                    if ($post->number == 1) {
                         $discussion->votes = $discussion->votes - 2;
                     }
 
@@ -116,7 +116,7 @@ class SaveVotesToDatabase
 
                     $post->user->votes = $post->user->votes + 2;
 
-                    if ($post->number = 1) {
+                    if ($post->number == 1) {
                         $discussion->votes = $discussion->votes + 2;
                     }
 
@@ -129,7 +129,7 @@ class SaveVotesToDatabase
 
                 $post->user->decrement('votes');
 
-                if ($post->number = 1) {
+                if ($post->number == 1) {
                     $discussion->decrement('votes');
                 }
 
@@ -141,7 +141,7 @@ class SaveVotesToDatabase
 
                 $post->user->increment('votes');
 
-                if ($post->number = 1) {
+                if ($post->number == 1) {
                     $discussion->increment('votes');
                 }
 
