@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  This file is part of reflar/gamification.
  *
  *  Copyright (c) ReFlar.
@@ -9,15 +8,14 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
- *
  */
 
 namespace Reflar\gamification\Api\Controllers;
 
 use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\Core\Discussion;
 use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\Core\Discussion;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\gamification\Likes;
 use Reflar\gamification\Repository\Gamification;
@@ -25,7 +23,6 @@ use Zend\Diactoros\Response\JsonResponse;
 
 class ConvertLikesController implements ControllerInterface
 {
-
     use AssertPermissionTrait;
 
     /**
@@ -40,7 +37,7 @@ class ConvertLikesController implements ControllerInterface
 
     /**
      * @param SettingsRepositoryInterface $settings
-     * @param Gamification $gamification
+     * @param Gamification                $gamification
      */
     public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
     {
@@ -50,6 +47,7 @@ class ConvertLikesController implements ControllerInterface
 
     /**
      * @param ServerRequestInterface $request
+     *
      * @return int
      */
     public function handle(ServerRequestInterface $request)
@@ -67,14 +65,15 @@ class ConvertLikesController implements ControllerInterface
                 $this->gamification->convertLike($like->post_id, $like->user_id, $actor);
                 $counter++;
             }
-          
+
             $discussions = Discussion::all();
-          
+
             foreach ($discussions as $discussion) {
                 $this->gamification->calculateHotness($discussion);
             }
-          
+
             $this->settings->set('reflar.gamification.convertedLikes', $counter);
+
             return new JsonResponse($counter, 200);
         }
     }
