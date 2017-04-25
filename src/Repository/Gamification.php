@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  This file is part of reflar/gamification.
  *
  *  Copyright (c) ReFlar.
@@ -9,12 +8,10 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
- *
  */
 
 namespace Reflar\gamification\Repository;
 
-use Flarum\Core\Post;
 use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;
 use Flarum\Core\User;
@@ -22,7 +19,6 @@ use Reflar\gamification\Vote;
 
 class Gamification
 {
-
     /**
      * @var PostRepository
      */
@@ -77,7 +73,6 @@ class Gamification
         $this->saveVote($post->id, $actor->id, 'Up');
     }
 
-
     /**
      * @param $post_id
      * @param User $actor
@@ -88,12 +83,11 @@ class Gamification
         $user = $post->user;
 
         $this->saveVote($post->id, $actor->id, 'Down');
-
     }
 
-
     /**
-     * The Reddit hotness algorithm from https://github.com/reddit/reddit
+     * The Reddit hotness algorithm from https://github.com/reddit/reddit.
+     *
      * @param $discussion
      */
     public function calculateHotness($discussion)
@@ -103,12 +97,13 @@ class Gamification
         $s = $discussion->votes;
         $order = log10(max(abs($s), 1));
 
-        if ($s > 0)
+        if ($s > 0) {
             $sign = 1;
-        elseif ($s < 0)
+        } elseif ($s < 0) {
             $sign = -1;
-        else
+        } else {
             $sign = 0;
+        }
 
         $seconds = $date - 1134028003;
 
@@ -120,13 +115,14 @@ class Gamification
     /**
      * @param $post_id
      * @param $user_id
+     *
      * @return mixed
      */
     public function findVote($post_id, $user_id)
     {
         return Vote::where([
             'post_id' => $post_id,
-            'user_id' => $user_id
+            'user_id' => $user_id,
         ])->first();
     }
 
@@ -143,8 +139,8 @@ class Gamification
         return $query;
     }
 
-    public function findColorForRank($rank) {
-
+    public function findColorForRank($rank)
+    {
     }
 
     /**
@@ -158,13 +154,11 @@ class Gamification
         $post = $this->posts->query()->where('id', $post_id)->first();
 
         if ($post !== null && $user !== null) {
-
             $user->increment('votes');
 
             if ($post->number = 1) {
                 $post->discussion->increment('votes');
             }
-
 
             $this->upvote($post_id, $actor);
         }

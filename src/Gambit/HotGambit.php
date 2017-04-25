@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  This file is part of reflar/gamification.
  *
  *  Copyright (c) ReFlar.
@@ -9,14 +8,12 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
- *
  */
 
 namespace Reflar\gamification\Gambit;
 
 use Flarum\Core\Search\AbstractRegexGambit;
 use Flarum\Core\Search\AbstractSearch;
-use Illuminate\Database\Query\Expression;
 
 class HotGambit extends AbstractRegexGambit
 {
@@ -27,7 +24,7 @@ class HotGambit extends AbstractRegexGambit
 
     /**
      * @param AbstractSearch $search
-     * @param array $matches
+     * @param array          $matches
      * @param $negate
      */
     protected function conditions(AbstractSearch $search, array $matches, $negate)

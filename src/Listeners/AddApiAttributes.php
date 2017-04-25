@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  This file is part of reflar/gamification.
  *
  *  Copyright (c) ReFlar.
@@ -9,7 +8,6 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
- *
  */
 
 namespace Reflar\gamification\Listeners;
@@ -39,11 +37,11 @@ class AddApiAttributes
         $event->post('/reflar/gamification/convert', 'reflar.gamification.convert', ConvertLikesController::class);
         // $event->get('/rankings', 'rankings', ListTopThreeController::class);
     }
-  
-    /**
+
+    /*
      * @param ConfigureForumRoutes $event
      */
-    /** public function configureForumRoutes(ConfigureForumRoutes $event)
+    /* public function configureForumRoutes(ConfigureForumRoutes $event)
     {
         $event->get('/rankings', 'rankings');
     } **/

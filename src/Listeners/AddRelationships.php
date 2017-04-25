@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  This file is part of reflar/gamification.
  *
  *  Copyright (c) ReFlar.
@@ -9,16 +8,15 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
- *
  */
 
 namespace Reflar\gamification\Listeners;
 
 use Flarum\Api\Controller;
+use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Serializer\UserBasicSerializer;
 use Flarum\Api\Serializer\UserSerializer;
-use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Core\Post;
 use Flarum\Core\User;
 use Flarum\Event\ConfigureApiController;
@@ -50,8 +48,10 @@ class AddRelationships
         $events->listen(PrepareApiAttributes::class, [$this, 'prepareApiAttributes']);
         $events->listen(ConfigureApiController::class, [$this, 'includeLikes']);
     }
+
     /**
      * @param GetModelRelationship $event
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany|null
      */
     public function getModelRelationship(GetModelRelationship $event)
@@ -67,6 +67,7 @@ class AddRelationships
 
     /**
      * @param GetApiRelationship $event
+     *
      * @return \Tobscure\JsonApi\Relationship|null
      */
     public function getApiAttributes(GetApiRelationship $event)

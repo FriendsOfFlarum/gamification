@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  This file is part of reflar/gamification.
  *
  *  Copyright (c) ReFlar.
@@ -9,11 +8,9 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
- *
  */
 
 namespace Reflar\gamification\Commands;
-
 
 class Vote
 {
@@ -33,8 +30,8 @@ class Vote
     public $type;
 
     /**
-     * @param int $post_id
-     * @param User $actor
+     * @param int    $post_id
+     * @param User   $actor
      * @param string $type
      */
     public function __construct($post_id, User $actor, $type)

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  This file is part of reflar/gamification.
  *
  *  Copyright (c) ReFlar.
@@ -9,7 +8,6 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
- *
  */
 
 namespace Reflar\gamification\Listeners;
@@ -71,16 +69,13 @@ class SaveVotesToDatabase
         }
 
         if ($post->exists) {
-
             $vote = $this->gamification->findVote($post->id, $actor->id);
 
             if (isset($vote)) {
-
                 if ($isUpvoted == false && $isDownvoted == false) {
-                    if ($vote->type == 'Up')
-                    {
+                    if ($vote->type == 'Up') {
                         $post->user->decrement('votes');
-                      
+
                         if ($post->number = 1) {
                             $discussion->decrement('votes');
                         }
@@ -88,10 +83,9 @@ class SaveVotesToDatabase
                         $this->events->fire(
                             new PostWasDownvoted($post, $user, $actor)
                         );
-
                     } else {
                         $post->user->increment('votes');
-                      
+
                         if ($post->number = 1) {
                             $discussion->increment('votes');
                         }
@@ -101,43 +95,40 @@ class SaveVotesToDatabase
                         );
                     }
                     $vote->delete();
-
                 } elseif ($vote->type == 'Up') {
-                        $vote->type = 'Down';
+                    $vote->type = 'Down';
 
-                        $vote->save();
+                    $vote->save();
 
-                        $post->user->votes = $post->user->votes - 2;
-                  
-                        if ($post->number = 1) {
-                            $discussion->votes = $discussion->votes - 2;
-                        }
+                    $post->user->votes = $post->user->votes - 2;
 
-                        $this->events->fire(
+                    if ($post->number = 1) {
+                        $discussion->votes = $discussion->votes - 2;
+                    }
+
+                    $this->events->fire(
                             new PostWasDownvoted($post, $user, $actor)
                         );
-
                 } elseif ($vote->type == 'Down') {
-                        $vote->type = 'Up';
+                    $vote->type = 'Up';
 
-                        $vote->save();
+                    $vote->save();
 
-                        $post->user->votes = $post->user->votes + 2;
-                  
-                        if ($post->number = 1) {
-                            $discussion->votes = $discussion->votes + 2;
-                        }
+                    $post->user->votes = $post->user->votes + 2;
 
-                        $this->events->fire(
+                    if ($post->number = 1) {
+                        $discussion->votes = $discussion->votes + 2;
+                    }
+
+                    $this->events->fire(
                             new PostWasUpvoted($post, $user, $actor)
                         );
                 }
-
             } elseif ($isDownvoted == true) {
                 $this->gamification->downvote($post->id, $actor);
 
                 $post->user->decrement('votes');
-              
+
                 if ($post->number = 1) {
                     $discussion->decrement('votes');
                 }
@@ -145,12 +136,11 @@ class SaveVotesToDatabase
                 $this->events->fire(
                     new PostWasDownvoted($post, $user, $actor)
                 );
-
             } elseif ($isUpvoted == true) {
                 $this->gamification->upvote($post->id, $actor);
 
                 $post->user->increment('votes');
-              
+
                 if ($post->number = 1) {
                     $discussion->increment('votes');
                 }
