@@ -12,6 +12,7 @@
 
 namespace Reflar\gamification\Listeners;
 
+use Flarum\Core\Post\Floodgate;
 use Flarum\Event\PostWillBeSaved;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Events\PostWasDownvoted;
@@ -29,11 +30,17 @@ class SaveVotesToDatabase
      * @var Gamification
      */
     protected $gamification;
+  
+    /**
+     * @var FloodGate
+     */
+    protected $floodgate;
 
-    public function __construct(Gamification $gamification, Dispatcher $events)
+    public function __construct(Gamification $gamification, Dispatcher $events, FloodGate $floodgate)
     {
         $this->gamification = $gamification;
         $this->events = $events;
+        $this->floodgate = $floodgate;
     }
 
     /**
@@ -55,6 +62,8 @@ class SaveVotesToDatabase
         $actor = $event->actor;
         $user = $post->user;
         $discussion = $post->discussion;
+      
+        $this->floodgate->assertNotFlooding($actor);
 
         if (isset($data['attributes']['isUpvoted'])) {
             $isUpvoted = $data['attributes']['isUpvoted'];

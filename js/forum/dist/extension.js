@@ -1,11 +1,13 @@
 'use strict';
 
-System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers/avatar', 'flarum/helpers/username', 'flarum/extend', 'flarum/Model', 'flarum/models/Post', 'flarum/components/PostUser', 'flarum/models/User', 'flarum/components/UserCard', 'flarum/helpers/userOnline', 'flarum/helpers/listItems'], function (_export, _context) {
+System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers/avatar', 'flarum/helpers/username', 'flarum/models/Discussion', 'flarum/extend', 'flarum/Model', 'flarum/models/Post', 'flarum/components/PostUser', 'flarum/models/User', 'flarum/components/UserCard', 'flarum/helpers/userOnline', 'flarum/helpers/listItems'], function (_export, _context) {
     "use strict";
 
-    var avatar, username, extend, Model, Post, PostUser, User, UserCard, userOnline, listItems;
+    var avatar, username, Discussion, extend, Model, Post, PostUser, User, UserCard, userOnline, listItems;
 
     _export('default', function () {
+        Discussion.prototype.canVote = Model.attribute('canVote');
+
         User.prototype.points = Model.attribute('points');
         User.prototype.Rank = Model.attribute('Rank');
 
@@ -93,6 +95,8 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
             avatar = _flarumHelpersAvatar.default;
         }, function (_flarumHelpersUsername) {
             username = _flarumHelpersUsername.default;
+        }, function (_flarumModelsDiscussion) {
+            Discussion = _flarumModelsDiscussion.default;
         }, function (_flarumExtend) {
             extend = _flarumExtend.extend;
         }, function (_flarumModel) {
@@ -200,7 +204,7 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
     extend(CommentPost.prototype, 'actionItems', function (items) {
       var post = this.props.post;
 
-      if (post.isHidden()) return;
+      if (post.isHidden() || !post.discussion().canVote()) return;
 
       var isUpvoted = app.session.user && post.upvotes().some(function (user) {
         return user === app.session.user;

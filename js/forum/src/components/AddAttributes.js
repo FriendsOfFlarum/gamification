@@ -1,5 +1,6 @@
 import avatar from 'flarum/helpers/avatar';
 import username from 'flarum/helpers/username';
+import Discussion from 'flarum/models/Discussion';
 import { extend } from 'flarum/extend';
 import Model from 'flarum/Model';
 import Post from 'flarum/models/Post';
@@ -10,6 +11,8 @@ import userOnline from 'flarum/helpers/userOnline';
 import listItems from 'flarum/helpers/listItems';
 
 export default function () {
+    Discussion.prototype.canVote = Model.attribute('canVote');
+  
     User.prototype.points = Model.attribute('points');
     User.prototype.Rank = Model.attribute('Rank');
 

@@ -9,6 +9,8 @@ reflar-gamification:
       points: "Points: {points}"
       rank: "{rank}"
   admin:
+    permissions:
+      vote_label: Upvote/Downvote posts
     nav:
       desc: Gamification for your Flarum community
     page:

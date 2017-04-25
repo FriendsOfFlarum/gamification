@@ -7,7 +7,7 @@ export default function () {
   extend(CommentPost.prototype, 'actionItems', function(items) {
     const post = this.props.post;
 
-    if (post.isHidden()) return;
+    if (post.isHidden() || !post.discussion().canVote()) return;
 
     let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user);
     let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user);

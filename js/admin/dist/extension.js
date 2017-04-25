@@ -238,22 +238,34 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
 });;
 'use strict';
 
-System.register('Reflar/gamification/main', ['flarum/app', 'Reflar/gamification/addSettingsPage'], function (_export, _context) {
-    "use strict";
+System.register('Reflar/gamification/main', ['flarum/app', 'flarum/extend', 'flarum/components/PermissionGrid', 'Reflar/gamification/addSettingsPage'], function (_export, _context) {
+  "use strict";
 
-    var app, addSettingsPage;
-    return {
-        setters: [function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_ReflarGamificationAddSettingsPage) {
-            addSettingsPage = _ReflarGamificationAddSettingsPage.default;
-        }],
-        execute: function () {
+  var app, extend, PermissionGrid, addSettingsPage;
+  return {
+    setters: [function (_flarumApp) {
+      app = _flarumApp.default;
+    }, function (_flarumExtend) {
+      extend = _flarumExtend.extend;
+    }, function (_flarumComponentsPermissionGrid) {
+      PermissionGrid = _flarumComponentsPermissionGrid.default;
+    }, function (_ReflarGamificationAddSettingsPage) {
+      addSettingsPage = _ReflarGamificationAddSettingsPage.default;
+    }],
+    execute: function () {
 
-            app.initializers.add('reflar-gamification', function () {
+      app.initializers.add('reflar-gamification', function () {
 
-                addSettingsPage();
-            });
-        }
-    };
+        extend(PermissionGrid.prototype, 'replyItems', function (items) {
+          items.add('Vote', {
+            icon: 'thumbs-up',
+            label: app.translator.trans('reflar-gamification.admin.permissions.vote_label'),
+            permission: 'discussion.vote'
+          });
+        });
+
+        addSettingsPage();
+      });
+    }
+  };
 });

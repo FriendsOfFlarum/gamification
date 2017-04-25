@@ -13,6 +13,7 @@
 namespace Reflar\gamification\Listeners;
 
 use Flarum\Api\Controller;
+use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Api\Serializer\UserBasicSerializer;
@@ -92,6 +93,9 @@ class AddRelationships
         }
         if ($event->isSerializer(ForumSerializer::class)) {
             $event->attributes['DefaultRank'] = $this->settings->get('reflar.gamification.defaultRank');
+        }
+        if ($event->isSerializer(DiscussionSerializer::class)) {
+            $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
         }
     }
 
