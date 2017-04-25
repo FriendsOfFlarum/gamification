@@ -1,0 +1,28 @@
+core:
+  forum:
+    index_sort:
+      hot_button: Hot
+      
+reflar-gamification:
+  forum:
+    user:
+      points: "Points: {points}"
+      rank: "{rank}"
+  admin:
+    nav:
+      desc: Gamification for your Flarum community
+    page:
+      save_settings: Save settings
+      convert:
+        button: Convert likes to upvotes
+        help: Convert your previous likes from flarum-ext-likes into upvotes, as well as calculate the hotness for all current discussions.
+        converting: Your likes are now being converted.
+        converted: "Successfully converted all {number} likes"
+      ranks:
+        title: Ranks
+        ranks: Custom ranks
+        help: "Input the required number of upvotes, the name of the rank followed by ': ' and the hex of the rank's color"
+        default: Default rank
+        default_help: This rank will be shown if a user does not have a rank. Leave blank to show none.   
+        
+        
