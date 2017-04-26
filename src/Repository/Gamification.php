@@ -67,10 +67,11 @@ class Gamification
      */
     public function upvote($post_id, User $actor)
     {
-        $post = $this->posts->findOrFail($post_id, $actor);
-        $user = $post->user;
+        $post = $this->posts->query()->where('id', $post_id)->first();
 
-        $this->saveVote($post->id, $actor->id, 'Up');
+        if ($post !== null) {
+            $this->saveVote($post->id, $actor->id, 'Up');
+        }
     }
 
     /**
@@ -152,7 +153,6 @@ class Gamification
     {
         $user = $this->users->query()->where('id', $user_id)->first();
         $post = $this->posts->query()->where('id', $post_id)->first();
-
 
         if ($post !== null && $post->user !== null && $user !== null) {
             $post->user->increment('votes');
