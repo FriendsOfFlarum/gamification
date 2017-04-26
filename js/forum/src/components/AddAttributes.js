@@ -12,7 +12,8 @@ import listItems from 'flarum/helpers/listItems';
 
 export default function () {
     Discussion.prototype.canVote = Model.attribute('canVote');
-  
+    Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
+
     User.prototype.points = Model.attribute('points');
     User.prototype.Rank = Model.attribute('Rank');
 
@@ -22,7 +23,7 @@ export default function () {
     extend(UserCard.prototype, 'infoItems', function (items, user) {
         let rank = this.props.user.data.attributes.Rank.split(': ');
         let points = this.props.user.data.attributes.Points;
-      
+
         if (points == 0) {
             points = '0';
         }

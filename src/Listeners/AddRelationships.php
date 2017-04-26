@@ -96,6 +96,7 @@ class AddRelationships
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
+            $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
         }
     }
 

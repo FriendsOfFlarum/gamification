@@ -13,6 +13,14 @@ app.initializers.add('reflar-gamification', () => {
         permission: 'discussion.vote'
       });
     });
+
+    extend(PermissionGrid.prototype, 'viewItems', items => {
+      items.add('canSeeVotes', {
+        icon: 'info-circle',
+        label: app.translator.trans('reflar-gamification.admin.permissions.see_votes_label'),
+        permission: 'discussion.canSeeVotes'
+      });
+    });
   
     addSettingsPage();
 

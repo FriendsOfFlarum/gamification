@@ -148,19 +148,19 @@ class Gamification
      * @param $user_id
      * @param User $actor
      */
-    public function convertLike($post_id, $user_id, User $actor)
+    public function convertLike($post_id, $user_id)
     {
         $user = $this->users->query()->where('id', $user_id)->first();
         $post = $this->posts->query()->where('id', $post_id)->first();
 
         if ($post !== null && $user !== null) {
-            $user->increment('votes');
+            $post->user->increment('votes');
 
             if ($post->number = 1) {
                 $post->discussion->increment('votes');
             }
 
-            $this->upvote($post_id, $actor);
+            $this->upvote($post_id, $user);
         }
     }
 }

@@ -3,11 +3,11 @@ import app from 'flarum/app';
 import Button from 'flarum/components/Button';
 import CommentPost from 'flarum/components/CommentPost';
 
+import VotesModal from 'Reflar/gamification/components/VotesModal';
+
 export default function () {
   extend(CommentPost.prototype, 'actionItems', function(items) {
     const post = this.props.post;
-
-    if (post.isHidden() || !post.discussion().canVote()) return;
 
     let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user);
     let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user);
@@ -18,6 +18,7 @@ export default function () {
         className: 'Post-vote Post-upvote',
         style: isUpvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : 'color:',
         onclick: () => {
+          if (post.isHidden() || !post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
 
@@ -47,12 +48,17 @@ export default function () {
         }
       })
     );
-    
-      items.add('points', (
-        <div className="Post-points">
+
+      items.add('points',
+        <button className="Post-points" onclick={() => {
+          console.log('hi');
+          if (!post.discussion().canSeeVotes()) return;
+          console.log('wow');
+          app.modal.show(new VotesModal({post}))
+        }}>
           {post.data.relationships.upvotes.data.length - post.data.relationships.downvotes.data.length}
-        </div>
-      ));
+        </button>
+      );
 
     items.add('downvote',
       Button.component({

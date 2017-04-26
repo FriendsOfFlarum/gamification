@@ -35,7 +35,8 @@ export default function () {
         const params = this.params();
 
         if (sort === 'hot') {
-            m.route('/hot');
+			m.route(app.route('index'));
+            m.route(m.route() + '/hot');
         } else {
             if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
                 delete params.sort;

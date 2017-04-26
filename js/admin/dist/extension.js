@@ -264,6 +264,14 @@ System.register('Reflar/gamification/main', ['flarum/app', 'flarum/extend', 'fla
           });
         });
 
+        extend(PermissionGrid.prototype, 'viewItems', function (items) {
+          items.add('canSeeVotes', {
+            icon: 'info-circle',
+            label: app.translator.trans('reflar-gamification.admin.permissions.see_votes_label'),
+            permission: 'discussion.canSeeVotes'
+          });
+        });
+
         addSettingsPage();
       });
     }

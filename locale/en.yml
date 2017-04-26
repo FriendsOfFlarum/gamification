@@ -1,16 +1,21 @@
 core:
   forum:
     index_sort:
-      hot_button: Hot
+      hot_button: Trending
       
 reflar-gamification:
   forum:
     user:
       points: "Points: {points}"
       rank: "{rank}"
+    modal:
+      title: Votes
+      upvotes_label: Upvotes
+      downvotes_label: Downvotes
   admin:
     permissions:
       vote_label: Upvote/Downvote posts
+      see_votes_label: See post upvotes/downvotes
     nav:
       desc: Gamification for your Flarum community
     page:
@@ -18,7 +23,7 @@ reflar-gamification:
       convert:
         button: Convert likes to upvotes
         help: Convert your previous likes from flarum-ext-likes into upvotes, as well as calculate the hotness for all current discussions.
-        converting: Your likes are now being converted.
+        converting: Your likes are now being converted. Refresh your site after a few minutes to see the process finished. (Conversion time might take a while depending on your total forum likes)
         converted: "Successfully converted all {number} likes"
       ranks:
         title: Ranks

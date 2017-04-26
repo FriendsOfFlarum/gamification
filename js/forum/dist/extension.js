@@ -7,6 +7,7 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
 
     _export('default', function () {
         Discussion.prototype.canVote = Model.attribute('canVote');
+        Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
 
         User.prototype.points = Model.attribute('points');
         User.prototype.Rank = Model.attribute('Rank');
@@ -158,7 +159,8 @@ System.register('Reflar/gamification/components/AddHotnessSort', ['flarum/extend
             var params = this.params();
 
             if (sort === 'hot') {
-                m.route('/hot');
+                m.route(app.route('index'));
+                m.route(m.route() + '/hot');
             } else {
                 if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
                     delete params.sort;
@@ -200,16 +202,14 @@ System.register('Reflar/gamification/components/AddHotnessSort', ['flarum/extend
 });;
 'use strict';
 
-System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/CommentPost'], function (_export, _context) {
+System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/CommentPost', 'Reflar/gamification/components/VotesModal'], function (_export, _context) {
   "use strict";
 
-  var extend, app, Button, CommentPost;
+  var extend, app, Button, CommentPost, VotesModal;
 
   _export('default', function () {
     extend(CommentPost.prototype, 'actionItems', function (items) {
       var post = this.props.post;
-
-      if (post.isHidden() || !post.discussion().canVote()) return;
 
       var isUpvoted = app.session.user && post.upvotes().some(function (user) {
         return user === app.session.user;
@@ -223,6 +223,7 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
         className: 'Post-vote Post-upvote',
         style: isUpvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : 'color:',
         onclick: function onclick() {
+          if (post.isHidden() || !post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
 
@@ -253,8 +254,13 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
       }));
 
       items.add('points', m(
-        'div',
-        { className: 'Post-points' },
+        'button',
+        { className: 'Post-points', onclick: function onclick() {
+            console.log('hi');
+            if (!post.discussion().canSeeVotes()) return;
+            console.log('wow');
+            app.modal.show(new VotesModal({ post: post }));
+          } },
         post.data.relationships.upvotes.data.length - post.data.relationships.downvotes.data.length
       ));
 
@@ -303,6 +309,8 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
       Button = _flarumComponentsButton.default;
     }, function (_flarumComponentsCommentPost) {
       CommentPost = _flarumComponentsCommentPost.default;
+    }, function (_ReflarGamificationComponentsVotesModal) {
+      VotesModal = _ReflarGamificationComponentsVotesModal.default;
     }],
     execute: function () {}
   };
@@ -560,6 +568,97 @@ System.register('Reflar/gamification/components/UserPromotedNotification', ['fla
       }(Notification);
 
       _export('default', UserPromotedNotification);
+    }
+  };
+});;
+'use strict';
+
+System.register('Reflar/gamification/components/VotesModal', ['flarum/components/Modal', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
+  "use strict";
+
+  var Modal, avatar, username, VotesModal;
+  return {
+    setters: [function (_flarumComponentsModal) {
+      Modal = _flarumComponentsModal.default;
+    }, function (_flarumHelpersAvatar) {
+      avatar = _flarumHelpersAvatar.default;
+    }, function (_flarumHelpersUsername) {
+      username = _flarumHelpersUsername.default;
+    }],
+    execute: function () {
+      VotesModal = function (_Modal) {
+        babelHelpers.inherits(VotesModal, _Modal);
+
+        function VotesModal() {
+          babelHelpers.classCallCheck(this, VotesModal);
+          return babelHelpers.possibleConstructorReturn(this, (VotesModal.__proto__ || Object.getPrototypeOf(VotesModal)).apply(this, arguments));
+        }
+
+        babelHelpers.createClass(VotesModal, [{
+          key: 'className',
+          value: function className() {
+            return 'VotesModal Modal--small';
+          }
+        }, {
+          key: 'title',
+          value: function title() {
+            return app.translator.trans('reflar-gamification.forum.modal.title');
+          }
+        }, {
+          key: 'content',
+          value: function content() {
+            return m(
+              'div',
+              { className: 'Modal-body' },
+              m(
+                'ul',
+                { className: 'VotesModal-list' },
+                m(
+                  'legend',
+                  null,
+                  app.translator.trans('reflar-gamification.forum.modal.upvotes_label')
+                ),
+                this.props.post.upvotes().map(function (user) {
+                  return m(
+                    'li',
+                    null,
+                    m(
+                      'a',
+                      { href: app.route.user(user), config: m.route },
+                      avatar(user),
+                      ' ',
+                      ' ',
+                      username(user)
+                    )
+                  );
+                }),
+                m(
+                  'legend',
+                  null,
+                  app.translator.trans('reflar-gamification.forum.modal.downvotes_label')
+                ),
+                this.props.post.downvotes().map(function (user) {
+                  return m(
+                    'li',
+                    null,
+                    m(
+                      'a',
+                      { href: app.route.user(user), config: m.route },
+                      avatar(user),
+                      ' ',
+                      ' ',
+                      username(user)
+                    )
+                  );
+                })
+              )
+            );
+          }
+        }]);
+        return VotesModal;
+      }(Modal);
+
+      _export('default', VotesModal);
     }
   };
 });;
