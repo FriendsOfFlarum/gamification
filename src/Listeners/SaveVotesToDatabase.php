@@ -30,7 +30,7 @@ class SaveVotesToDatabase
      * @var Gamification
      */
     protected $gamification;
-  
+
     /**
      * @var FloodGate
      */
@@ -62,7 +62,7 @@ class SaveVotesToDatabase
         $actor = $event->actor;
         $user = $post->user;
         $discussion = $post->discussion;
-      
+
         $this->floodgate->assertNotFlooding($actor);
 
         if (isset($data['attributes']['isUpvoted'])) {
