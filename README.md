@@ -4,7 +4,7 @@
 
 A [Flarum](http://flarum.org) extension that adds upvotes, downvotes, and ranks to your Flarum Community!
 
-Upvote and downvote posts anonymously, and reward active users with ranks, and sort posts by hotness.
+Upvote and downvote posts anonymously, and reward active users with ranks, and sort posts by hotness/popularity.
 
 ### Usage
 
@@ -31,7 +31,16 @@ You have 2 events to listen for "PostWasUpvoted" as well as "PostWasDownvoted" w
 
 - Add ranking page
 - Add notifications
+- Add a Modal for non-logged users trying to upvote/downvote
+- Add a hover popup to the vote count number
+- Allow Mods to change user rank
+- Add the ability to change the icons of upvotes/downvotes as well as the word "Points"
+- Fix buttoms background.
 - Requests?
+
+### Important
+
+This Extension is meant as a replacement for the Flarum Likes Extension. Therefore, they are not compatible and it's recommended to disable the Likes Extension.
 
 ### Issues
 
