@@ -160,14 +160,14 @@ System.register('Reflar/gamification/components/AddHotnessSort', ['flarum/extend
 
             if (sort === 'hot') {
                 m.route(app.route('index'));
-                m.route(m.route() + '/hot');
+                m.route(m.route() + 'hot');
             } else {
                 if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
                     delete params.sort;
                 } else {
                     params.sort = sort;
                 }
-                if (params.filter = 'hot') {
+                if (params.filter == 'hot') {
                     delete params.filter;
                 }
                 m.route(app.route('index', params));
