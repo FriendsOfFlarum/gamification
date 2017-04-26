@@ -1,0 +1,30 @@
+core:
+  forum:
+    index_sort:
+      hot_button: Destacado
+      
+reflar-gamification:
+  forum:
+    user:
+      points: "Puntos: {points}"
+      rank: "{rank}"
+  admin:
+    permissions:
+      vote_label: Publicaciones Positivas/Negativas
+    nav:
+      desc: Gamificación para tu comunidad Flarum.
+    page:
+      save_settings: Guardando ajustes
+      convert:
+        button: Convertir likes en votos positivos.
+        help: Convertir todos tus likes anteriores de flarum-ext-likes en votos positivos, asi como calcular la popularidad las discusiones actuales.
+        converting: Tus likes están siendo convertidos.
+        converted: "Se han convertido {number} likes exitósamente"
+      ranks:
+        title: Rangos
+        ranks: Rangos personalizados
+        help: "Escribe el número requerido de votos positivos, el nombre del rango seguido por un ':' y el HEX del color para el rango."
+        default: Rango por defecto
+        default_help: Este rango se mostrará si el user aun no tiene un rango. Deja este espacio vacío para no mostrar nada en este caso.   
+        
+     
