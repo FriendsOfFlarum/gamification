@@ -14,6 +14,8 @@ namespace Reflar\gamification\Api\Controllers;
 
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Discussion;
+use Flarum\Core\Post;
+use Flarum\Core\Post\CommentPost;
 use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -55,15 +57,22 @@ class ConvertLikesController implements ControllerInterface
         $actor = $request->getAttribute('actor');
 
         if ($actor !== null && $actor->isAdmin() && $request->getMethod() === 'POST' && $this->settings->get('reflar.gamification.convertedLikes') == false) {
-            $likes = Likes::all();
 
             $this->settings->set('reflar.gamification.convertedLikes', 'converting');
 
             $counter = 0;
 
-            foreach ($likes as $like) {
-                $this->gamification->convertLike($like->post_id, $like->user_id);
-                $counter++;
+            $posts = Post::all();
+
+            foreach ($posts as $post) {
+                if ($post instanceof CommentPost) {
+                    $likes = Likes::where('post_id', $post->id)->get();
+
+                    foreach ($likes as $like) {
+                        $this->gamification->convertLike($like->post_id, $like->user_id);
+                        $counter++;
+                    }
+                }
             }
 
             $discussions = Discussion::all();
