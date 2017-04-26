@@ -153,7 +153,8 @@ class Gamification
         $user = $this->users->query()->where('id', $user_id)->first();
         $post = $this->posts->query()->where('id', $post_id)->first();
 
-        if ($post !== null && $user !== null) {
+
+        if ($post !== null && $post->user !== null && $user !== null) {
             $post->user->increment('votes');
 
             if ($post->number = 1) {
