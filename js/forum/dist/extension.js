@@ -23,7 +23,7 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
                 points = '0';
             }
             if (rank[0] == '') {
-                rank[0] = app.forum.attribute('DefaultRank');
+                rank[0] = app.forum.attribute('DefaultRank') || '';
             }
 
             var rankHolder = '';

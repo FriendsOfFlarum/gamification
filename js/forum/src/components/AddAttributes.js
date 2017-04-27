@@ -28,7 +28,7 @@ export default function () {
             points = '0';
         }
         if (rank[0] == '') {
-            rank[0] = app.forum.attribute('DefaultRank');
+            rank[0] = app.forum.attribute('DefaultRank') || '';
         }
 
         let rankHolder = '';
