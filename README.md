@@ -34,7 +34,7 @@ You have 2 events to listen for "PostWasUpvoted" as well as "PostWasDownvoted" w
 - Add a Modal for non-logged users trying to upvote/downvote
 - Add a hover popup to the vote count number
 - Allow Mods to change user rank
-- Add the ability to change the icons of upvotes/downvotes as well as the word "Points"
+- [s]Add the ability to change the icons of upvotes/downvotes as well as the word "Points"[/s] - Done
 - Fix buttoms background.
 - Requests?
 
