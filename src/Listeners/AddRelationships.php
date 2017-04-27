@@ -26,6 +26,8 @@ use Flarum\Event\GetModelRelationship;
 use Flarum\Event\PrepareApiAttributes;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
+use Reflar\gamification\Rank;
+use Reflar\gamification\Api\Serializers\RankSerializer;
 
 class AddRelationships
 {
@@ -64,6 +66,10 @@ class AddRelationships
         if ($event->isRelationship(Post::class, 'downvotes')) {
             return $event->model->belongsToMany(User::class, 'posts_votes', 'post_id', 'user_id', 'downvotes')->where('type', 'Down');
         }
+
+        if ($event->isRelationship(User::class, 'ranks')) {
+            return $event->model->belongsToMany(Rank::class, 'users_ranks');
+        }
     }
 
     /**
@@ -79,6 +85,10 @@ class AddRelationships
 
         if ($event->isRelationship(PostSerializer::class, 'downvotes')) {
             return $event->serializer->hasMany($event->model, UserBasicSerializer::class, 'downvotes');
+        }
+
+        if ($event->isRelationship(UserSerializer::class, 'ranks')) {
+            return $event->serializer->hasMany($event->model, RankSerializer::class, 'ranks');
         }
     }
 
@@ -117,6 +127,13 @@ class AddRelationships
             || $event->isController(Controller\UpdatePostController::class)) {
             $event->addInclude('upvotes');
             $event->addInclude('downvotes');
+        }
+        if ($event->isController(Controller\ListUsersController::class)
+            || $event->isController(Controller\ShowUserController::class)
+            || $event->isController(Controller\CreateUserController::class)
+            || $event->isController(Controller\UpdateUserController::class)
+            || $event->isController(Controller\ListPostsController::class)) {
+            $event->addInclude('Ranks');
         }
     }
 }

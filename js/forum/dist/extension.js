@@ -10,7 +10,7 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
         Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
 
         User.prototype.points = Model.attribute('points');
-        User.prototype.Rank = Model.attribute('Rank');
+        User.prototype.ranks = Model.hasMany('ranks');
 
         Post.prototype.upvotes = Model.hasMany('upvotes');
         Post.prototype.downvotes = Model.hasMany('downvotes');
@@ -34,7 +34,7 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
                 rankHolder = app.forum.attribute('RankHolder');
             }
 
-            items.add('points', app.translator.trans('reflar-gamification.forum.user.points', { points: points }));
+            items.add('points', console.log(this.props.user.ranks()), app.translator.trans('reflar-gamification.forum.user.points', { points: points }));
 
             items.add('rank', rankHolder.replace('{rank}', rank[0]));
         });
@@ -42,6 +42,8 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
         PostUser.prototype.view = function () {
             var post = this.props.post;
             var user = post.user();
+
+            console.log(post);
 
             var rank = user.Rank().split(': ');
 

@@ -15,7 +15,7 @@ export default function () {
     Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
 
     User.prototype.points = Model.attribute('points');
-    User.prototype.Rank = Model.attribute('Rank');
+    User.prototype.ranks = Model.hasMany('ranks');
 
     Post.prototype.upvotes = Model.hasMany('upvotes');
     Post.prototype.downvotes = Model.hasMany('downvotes');
@@ -40,7 +40,7 @@ export default function () {
         }
 
         items.add('points',
-          app.translator.trans('reflar-gamification.forum.user.points', {points})
+          console.log(this.props.user.ranks()), app.translator.trans('reflar-gamification.forum.user.points', {points})
         );
 
         items.add('rank',
@@ -51,6 +51,8 @@ export default function () {
     PostUser.prototype.view = function () {
         const post = this.props.post;
         const user = post.user();
+
+        console.log(post);
 
         const rank = user.Rank().split(': ');
 
