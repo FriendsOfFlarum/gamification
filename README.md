@@ -1,6 +1,6 @@
 # Gamification by ReFlar
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://gitlab.com/ReFlar/gamification/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/reflar/gamification.svg)](https://gitlab.com/ReFlar/gamification/
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://gitlab.com/ReFlar/gamification/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/reflar/gamification.svg)](https://gitlab.com/ReFlar/gamification)
 
 A [Flarum](http://flarum.org) extension that adds upvotes, downvotes, and ranks to your Flarum Community!
 
