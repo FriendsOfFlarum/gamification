@@ -33,6 +33,4 @@ reflar-gamification:
         ranks: Rangos personalizados
         help: "Escribe el número requerido de votos positivos, el nombre del rango seguido por un ': ' y el HEX del color para el rango."
         default: Rango por defecto
-        default_help: Este rango se mostrará si el user aun no tiene un rango. Deja este espacio vacío para no mostrar nada en este caso.   
-        
-     
+        default_help: Este rango se mostrará si el user aun no tiene un rango. Deja este espacio vacío para no mostrar nada en este caso.
