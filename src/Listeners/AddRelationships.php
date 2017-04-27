@@ -133,7 +133,7 @@ class AddRelationships
             || $event->isController(Controller\CreateUserController::class)
             || $event->isController(Controller\UpdateUserController::class)
             || $event->isController(Controller\ListPostsController::class)) {
-            $event->addInclude('Ranks');
+            $event->addInclude('user.ranks');
         }
     }
 }

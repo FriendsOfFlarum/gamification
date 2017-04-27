@@ -10,7 +10,7 @@ import UserCard from 'flarum/components/UserCard';
 import userOnline from 'flarum/helpers/userOnline';
 import listItems from 'flarum/helpers/listItems';
 
-export default function () {
+export default function () {    
     Discussion.prototype.canVote = Model.attribute('canVote');
     Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
 
@@ -21,14 +21,11 @@ export default function () {
     Post.prototype.downvotes = Model.hasMany('downvotes');
 
     extend(UserCard.prototype, 'infoItems', function (items, user) {
-        let rank = this.props.user.data.attributes.Rank.split(': ');
+        this.ranks = this.props.user.ranks();
         let points = this.props.user.data.attributes.Points;
 
         if (points == 0) {
             points = '0';
-        }
-        if (rank[0] == '') {
-            rank[0] = app.forum.attribute('DefaultRank') || '';
         }
 
         let rankHolder = '';
@@ -40,19 +37,22 @@ export default function () {
         }
 
         items.add('points',
-          console.log(this.props.user.ranks()), app.translator.trans('reflar-gamification.forum.user.points', {points})
+          app.translator.trans('reflar-gamification.forum.user.points', {points})
         );
-
-        items.add('rank',
-            rankHolder.replace('{rank}', rank[0])
-        );
+      
+        console.log(this.ranks);
+      
+        this.ranks.map((rank) => {
+          console.log(rank);
+          items.add(rank.name(), function() {
+            {rankHolder.replace('{rank}', rank.name())}
+          })
+        });
     });
 
     PostUser.prototype.view = function () {
         const post = this.props.post;
         const user = post.user();
-
-        console.log(post);
 
         const rank = user.Rank().split(': ');
 

@@ -5,11 +5,15 @@ import app from 'flarum/app';
 import AddAttributes from 'Reflar/gamification/components/AddAttributes';
 import AddHotnessFilter from 'Reflar/gamification/components/AddHotnessSort';
 import AddVoteButtons from 'Reflar/gamification/components/AddVoteButtons';
+import Rank from 'Reflar/gamification/models/Rank';
 // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
 // import RankingsPage from 'Reflar/gamification/components/RankingsPage';
 
 
 app.initializers.add('Reflar-gamification', () => {
+  
+  
+    app.store.models.ranks = Rank;
   
     // app.notificationComponents.userPromoted = UserPromotedNotification;
 
