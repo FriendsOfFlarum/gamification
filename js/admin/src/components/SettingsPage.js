@@ -13,7 +13,9 @@ export default class SettingsPage extends Component {
             'defaultRank',
             'amountPerPost',
             'amountPerDiscussion',
-            'postStartAmount'
+            'postStartAmount',
+            'rankHolder',
+            'iconName'
         ];
 
 
@@ -128,15 +130,30 @@ export default class SettingsPage extends Component {
                                 placeholder: 'Newbie',
                                 oninput: m.withAttr('value', this.values.defaultRank)
                             }),
+                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.default_help')),
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.name')),
+                            m('input', {
+                              className: 'FormControl Ranks-default',
+                              value: this.values.rankHolder() || '',
+                              placeholder: 'Rank: {rank}',
+                              oninput: m.withAttr('value', this.values.rankHolder)
+                            }),
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.icon_name')),
+                            m('input', {
+                              className: 'FormControl Ranks-default',
+                              value: this.values.iconName() || '',
+                              placeholder: 'thumbs',
+                              oninput: m.withAttr('value', this.values.iconName)
+                            }),
+                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.icon_help')),
+                            Button.component({
+                              type: 'submit',
+                              className: 'Button Button--primary Ranks-save',
+                              children: app.translator.trans('reflar-gamification.admin.page.save_settings'),
+                              loading: this.loading,
+                              disabled: !this.changed()
+                            })
                         ]),
-                        m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.default_help')),
-                        Button.component({
-                            type: 'submit',
-                            className: 'Button Button--primary Ranks-save',
-                            children: app.translator.trans('reflar-gamification.admin.page.save_settings'),
-                            loading: this.loading,
-                            disabled: !this.changed()
-                        })
                     ])
                 ])
             ])

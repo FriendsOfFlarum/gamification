@@ -25,7 +25,7 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
             if (rank[0] == '') {
                 rank[0] = app.forum.attribute('DefaultRank');
             }
-            items.add('points', app.translator.trans('reflar-gamification.forum.user.points', { points: points }));
+            items.add('points', app.forum.attribute('RankHolder').replace('{rank}', rank[0]));
 
             items.add('rank', app.translator.trans('reflar-gamification.forum.user.rank', { rank: rank[0] }));
         });
@@ -202,10 +202,10 @@ System.register('Reflar/gamification/components/AddHotnessSort', ['flarum/extend
 });;
 'use strict';
 
-System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/CommentPost', 'Reflar/gamification/components/VotesModal'], function (_export, _context) {
+System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/LogInModal', 'flarum/components/CommentPost', 'Reflar/gamification/components/VotesModal'], function (_export, _context) {
   "use strict";
 
-  var extend, app, Button, CommentPost, VotesModal;
+  var extend, app, Button, LogInModal, CommentPost, VotesModal;
 
   _export('default', function () {
     extend(CommentPost.prototype, 'actionItems', function (items) {
@@ -218,11 +218,26 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
         return user === app.session.user;
       });
 
+      if (!app.session.user) {
+        isDownvoted = false;
+        isUpvoted = false;
+      }
+
+      var icon = app.forum.attribute('IconName');
+
+      if (icon === null || icon === '') {
+        icon = 'thumbs';
+      }
+
       items.add('upvote', Button.component({
-        icon: 'thumbs-up',
+        icon: icon + '-up',
         className: 'Post-vote Post-upvote',
         style: isUpvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : 'color:',
         onclick: function onclick() {
+          if (!app.session.user) {
+            app.modal.show(new LogInModal());
+            return;
+          }
           if (post.isHidden() || !post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
@@ -265,10 +280,15 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
       ));
 
       items.add('downvote', Button.component({
-        icon: 'thumbs-down',
+        icon: icon + '-down',
         className: 'Post-vote Post-downvote',
         style: isDownvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : '',
         onclick: function onclick() {
+          if (!app.session.user) {
+            app.modal.show(new LogInModal());
+            return;
+          }
+          if (post.isHidden() || !post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
 
@@ -307,6 +327,8 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
       app = _flarumApp.default;
     }, function (_flarumComponentsButton) {
       Button = _flarumComponentsButton.default;
+    }, function (_flarumComponentsLogInModal) {
+      LogInModal = _flarumComponentsLogInModal.default;
     }, function (_flarumComponentsCommentPost) {
       CommentPost = _flarumComponentsCommentPost.default;
     }, function (_ReflarGamificationComponentsVotesModal) {

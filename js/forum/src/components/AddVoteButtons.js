@@ -1,6 +1,7 @@
 import {extend} from 'flarum/extend';
 import app from 'flarum/app';
 import Button from 'flarum/components/Button';
+import LogInModal from 'flarum/components/LogInModal';
 import CommentPost from 'flarum/components/CommentPost';
 
 import VotesModal from 'Reflar/gamification/components/VotesModal';
@@ -12,12 +13,28 @@ export default function () {
     let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user);
     let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user);
 
+    if (!app.session.user) {
+      isDownvoted = false;
+      isUpvoted = false;
+    }
+
+    let icon = app.forum.attribute('IconName');
+
+    if (icon === null || icon === '') {
+      icon = 'thumbs';
+    }
+
+
     items.add('upvote',
       Button.component({
-        icon: 'thumbs-up',
+        icon: icon + '-up',
         className: 'Post-vote Post-upvote',
         style: isUpvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : 'color:',
         onclick: () => {
+          if (!app.session.user) {
+            app.modal.show(new LogInModal());
+            return;
+          }
           if (post.isHidden() || !post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
@@ -62,10 +79,15 @@ export default function () {
 
     items.add('downvote',
       Button.component({
-        icon: 'thumbs-down',
+        icon: icon + '-down',
         className: 'Post-vote Post-downvote',
         style: isDownvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : '',
         onclick: () => {
+          if (!app.session.user) {
+            app.modal.show(new LogInModal());
+            return;
+          }
+          if (post.isHidden() || !post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data
 

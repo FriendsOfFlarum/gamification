@@ -67,7 +67,7 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
 
                         this.loading = false;
 
-                        this.fields = ['convertedLikes', 'defaultRank', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount'];
+                        this.fields = ['convertedLikes', 'defaultRank', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'rankHolder', 'iconName'];
 
                         // fields that are objects
                         this.objects = ['ranks'];
@@ -145,13 +145,23 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
                             value: this.values.defaultRank() || '',
                             placeholder: 'Newbie',
                             oninput: m.withAttr('value', this.values.defaultRank)
-                        })]), m('div', { className: 'helpText' }, app.translator.trans('reflar-gamification.admin.page.ranks.default_help')), Button.component({
+                        }), m('div', { className: 'helpText' }, app.translator.trans('reflar-gamification.admin.page.ranks.default_help')), m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.name')), m('input', {
+                            className: 'FormControl Ranks-default',
+                            value: this.values.rankHolder() || '',
+                            placeholder: 'Rank: {rank}',
+                            oninput: m.withAttr('value', this.values.rankHolder)
+                        }), m('label', {}, app.translator.trans('reflar-gamification.admin.page.icon_name')), m('input', {
+                            className: 'FormControl Ranks-default',
+                            value: this.values.iconName() || '',
+                            placeholder: 'thumbs',
+                            oninput: m.withAttr('value', this.values.iconName)
+                        }), m('div', { className: 'helpText' }, app.translator.trans('reflar-gamification.admin.page.icon_help')), Button.component({
                             type: 'submit',
                             className: 'Button Button--primary Ranks-save',
                             children: app.translator.trans('reflar-gamification.admin.page.save_settings'),
                             loading: this.loading,
                             disabled: !this.changed()
-                        })])])])];
+                        })])])])])];
                     }
                 }, {
                     key: "updateRankPoints",

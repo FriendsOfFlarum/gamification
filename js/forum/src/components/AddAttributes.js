@@ -31,7 +31,7 @@ export default function () {
             rank[0] = app.forum.attribute('DefaultRank');
         }
         items.add('points',
-            app.translator.trans('reflar-gamification.forum.user.points', {points})
+          app.forum.attribute('RankHolder').replace('{rank}', rank[0])
         );
 
         items.add('rank',
