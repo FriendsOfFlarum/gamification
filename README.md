@@ -23,6 +23,10 @@ Then login and enable the extension.
 
 You can optionally convert your likes into upvotes, as well as calculate the hotness of all previous discussions.
 
+### How hotness is sorted? 
+
+The total amount of hotness is got between the amount of votes on the discussion and the posts inside of it. Also, newer posts with the same amount of upvotes as another post will have more hotness, so time is also an influent factor.
+
 ### Developer Guide
 
 You have 2 events to listen for "PostWasUpvoted" as well as "PostWasDownvoted" which both contain the post, post's user, and the upvoter/downvoter.
