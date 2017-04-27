@@ -35,7 +35,7 @@ You have 2 events to listen for "PostWasUpvoted" as well as "PostWasDownvoted" w
 
 - Add ranking page
 - Add notifications
-- Add a Modal for non-logged users trying to upvote/downvote
+- ~~Add a Modal for non-logged users trying to upvote/downvote~~
 - Add a hover popup to the vote count number
 - Allow Mods to change user rank
 - ~~Add customization to the word "Points" on the profile page.~~ - Done
