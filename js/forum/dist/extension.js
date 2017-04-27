@@ -25,9 +25,18 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
             if (rank[0] == '') {
                 rank[0] = app.forum.attribute('DefaultRank');
             }
-            items.add('points', app.forum.attribute('RankHolder').replace('{rank}', rank[0]));
 
-            items.add('rank', app.translator.trans('reflar-gamification.forum.user.rank', { rank: rank[0] }));
+            var rankHolder = '';
+
+            if (app.forum.attribute('RankHolder') === null || app.forum.attribute('RankHolder') === '') {
+                rankHolder = '{rank}';
+            } else {
+                rankHolder = app.forum.attribute('RankHolder');
+            }
+
+            items.add('points', app.translator.trans('reflar-gamification.forum.user.points', { points: points }));
+
+            items.add('rank', rankHolder.replace('{rank}', rank[0]));
         });
 
         PostUser.prototype.view = function () {

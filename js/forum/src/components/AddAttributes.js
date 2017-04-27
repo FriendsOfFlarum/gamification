@@ -30,12 +30,21 @@ export default function () {
         if (rank[0] == '') {
             rank[0] = app.forum.attribute('DefaultRank');
         }
+
+        let rankHolder = '';
+
+        if (app.forum.attribute('RankHolder') === null || app.forum.attribute('RankHolder') === '') {
+          rankHolder = '{rank}';
+        } else {
+          rankHolder = app.forum.attribute('RankHolder');
+        }
+
         items.add('points',
-          app.forum.attribute('RankHolder').replace('{rank}', rank[0])
+          app.translator.trans('reflar-gamification.forum.user.points', {points})
         );
 
         items.add('rank',
-            app.translator.trans('reflar-gamification.forum.user.rank', {rank: rank[0]})
+            rankHolder.replace('{rank}', rank[0])
         );
     });
 
