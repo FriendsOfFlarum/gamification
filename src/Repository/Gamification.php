@@ -15,6 +15,7 @@ namespace Reflar\gamification\Repository;
 use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;
 use Flarum\Core\User;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Reflar\gamification\Vote;
 
 class Gamification
@@ -30,13 +31,20 @@ class Gamification
     protected $users;
 
     /**
+     * @var SettingsRepositoryInterface
+     */
+    protected $settings;
+
+    /**
      * @param PostRepository $posts
      * @param UserRepository $users
+     * @param SettingsRepositoryInterface $settings
      */
-    public function __construct(PostRepository $posts, UserRepository $users)
+    public function __construct(PostRepository $posts, UserRepository $users, SettingsRepositoryInterface $settings)
     {
         $this->posts = $posts;
         $this->users = $users;
+        $this->settings = $settings;
     }
 
     /**
@@ -162,6 +170,13 @@ class Gamification
             }
 
             $this->upvote($post_id, $user);
+
+            $ranks = json_decode($this->settings->get('reflar.gamification.ranks'), true);
+
+            if (isset($ranks[$post->user->votes])) {
+                $post->user->rank = $ranks[$post->user->votes];
+                $post->user->save();
+            }
         }
     }
 }
