@@ -218,6 +218,14 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
         return user === app.session.user;
       });
 
+      var color = '';
+
+      if (app.forum.attribute('themePrimaryColor') === app.forum.attribute('themeSecondaryColor')) {
+        color = '#f44336';
+      } else {
+        color = app.forum.attribute('themePrimaryColor');
+      }
+
       if (!app.session.user) {
         isDownvoted = false;
         isUpvoted = false;
@@ -232,7 +240,7 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
       items.add('upvote', Button.component({
         icon: icon + '-up',
         className: 'Post-vote Post-upvote',
-        style: isUpvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : 'color:',
+        style: isUpvoted !== false ? 'color:' + color : 'color:',
         onclick: function onclick() {
           if (!app.session.user) {
             app.modal.show(new LogInModal());
@@ -282,7 +290,7 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
       items.add('downvote', Button.component({
         icon: icon + '-down',
         className: 'Post-vote Post-downvote',
-        style: isDownvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : '',
+        style: isDownvoted !== false ? 'color:' + color : '',
         onclick: function onclick() {
           if (!app.session.user) {
             app.modal.show(new LogInModal());

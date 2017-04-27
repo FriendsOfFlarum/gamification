@@ -13,6 +13,14 @@ export default function () {
     let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user);
     let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user);
 
+    let color = '';
+
+    if (app.forum.attribute('themePrimaryColor') === app.forum.attribute('themeSecondaryColor')) {
+      color = '#f44336';
+    } else {
+      color = app.forum.attribute('themePrimaryColor');
+    }
+
     if (!app.session.user) {
       isDownvoted = false;
       isUpvoted = false;
@@ -29,7 +37,7 @@ export default function () {
       Button.component({
         icon: icon + '-up',
         className: 'Post-vote Post-upvote',
-        style: isUpvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : 'color:',
+        style: isUpvoted !== false ? 'color:' + color : 'color:',
         onclick: () => {
           if (!app.session.user) {
             app.modal.show(new LogInModal());
@@ -81,7 +89,7 @@ export default function () {
       Button.component({
         icon: icon + '-down',
         className: 'Post-vote Post-downvote',
-        style: isDownvoted !== false ? 'color:' + app.forum.attribute('themePrimaryColor') : '',
+        style: isDownvoted !== false ? 'color:' + color : '',
         onclick: () => {
           if (!app.session.user) {
             app.modal.show(new LogInModal());
