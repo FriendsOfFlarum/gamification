@@ -19,6 +19,8 @@ reflar-gamification:
     nav:
       desc: Gamificación para tu comunidad Flarum.
     page:
+      icon_name: Icono de votos positivos y negativos
+      icon_help: "Escribe cualquier icono de Font-Awesome que contenga los sufijos -up y -down. Por ejemplo: arrow, thumbs, chevron."
       save_settings: Guardando ajustes
       convert:
         button: Convertir likes en votos positivos.
@@ -26,10 +28,9 @@ reflar-gamification:
         converting: Tus likes están siendo convertidos. Espera unos minutos y actualiza esta página para ver el proceso terminado. (El tiempo de conversión depende de la cantidad de Likes en todo tu foro)
         converted: "Se han convertido {number} likes exitósamente"
       ranks:
+        name: Prefijo de los rangos en la página de perfil.
         title: Rangos
         ranks: Rangos personalizados
         help: "Escribe el número requerido de votos positivos, el nombre del rango seguido por un ': ' y el HEX del color para el rango."
         default: Rango por defecto
-        default_help: Este rango se mostrará si el user aun no tiene un rango. Deja este espacio vacío para no mostrar nada en este caso.   
-        
-     
+        default_help: Este rango se mostrará si el user aun no tiene un rango. Deja este espacio vacío para no mostrar nada en este caso.
