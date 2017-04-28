@@ -15,7 +15,7 @@ namespace Reflar\gamification\Api\Controllers;
 use Flarum\Api\Controller\AbstractCollectionController;
 use Flarum\Core\Post\Floodgate;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\gamification\Repository\Gamification;
+use Reflar\gamification\Gamification;
 use Tobscure\JsonApi\Document;
 
 class ListTopThreeController extends AbstractCollectionController

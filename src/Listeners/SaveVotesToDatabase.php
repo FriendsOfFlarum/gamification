@@ -17,7 +17,7 @@ use Flarum\Event\PostWillBeSaved;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Events\PostWasDownvoted;
 use Reflar\gamification\Events\PostWasUpvoted;
-use Reflar\gamification\Repository\Gamification;
+use Reflar\gamification\Gamification;
 
 class SaveVotesToDatabase
 {

@@ -19,7 +19,7 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Events\PostWasUpvoted;
 use Reflar\gamification\Notification\RankupBlueprint;
-use Reflar\gamification\Repository\Gamification;
+use Reflar\gamification\Gamification;
 
 class EventHandlers
 {

@@ -17,6 +17,7 @@ use Flarum\Event\ConfigureApiRoutes;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Api\Controllers\ConvertLikesController;
 use Reflar\gamification\Api\Controllers\ListTopThreeController;
+use Reflar\gamification\Api\Controllers\RanksController;
 
 class AddApiAttributes
 {
@@ -35,6 +36,7 @@ class AddApiAttributes
     public function configureApiRoutes(ConfigureApiRoutes $event)
     {
         $event->post('/reflar/gamification/convert', 'reflar.gamification.convert', ConvertLikesController::class);
+        $event->post('/reflar/gamification/ranks', 'reflar.gamification.ranks', RanksController::class);
         // $event->get('/rankings', 'rankings', ListTopThreeController::class);
     }
 

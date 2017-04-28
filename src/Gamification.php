@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Repository;
+namespace Reflar\gamification;
 
 use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;

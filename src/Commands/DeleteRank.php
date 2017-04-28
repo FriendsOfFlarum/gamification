@@ -12,32 +12,25 @@
 
 namespace Reflar\gamification\Commands;
 
-class Vote
-{
-    /**.
-     * @var integer
-     */
-    public $post_id;
+use Flarum\Core\User;
 
+class DeleteRank
+{
+    /**
+     * @var int
+     */
+    public $rankId;
     /**
      * @var User
      */
     public $actor;
-
     /**
-     * @var string
+     * @param int $rankId
+     * @param User $actor 
      */
-    public $type;
-
-    /**
-     * @param int    $post_id
-     * @param User   $actor
-     * @param string $type
-     */
-    public function __construct($post_id, User $actor, $type)
+    public function __construct($rankId, User $actor)
     {
-        $this->post_id = $post_id;
+        $this->rankId = $rankId;
         $this->actor = $actor;
-        $this->type = $type;
     }
 }

@@ -21,7 +21,6 @@ export default function () {
     Post.prototype.downvotes = Model.hasMany('downvotes');
 
     extend(UserCard.prototype, 'infoItems', function (items, user) {
-        this.ranks = this.props.user.ranks();
         let points = this.props.user.data.attributes.Points;
 
         if (points == 0) {
@@ -40,25 +39,23 @@ export default function () {
           app.translator.trans('reflar-gamification.forum.user.points', {points})
         );
       
-        console.log(this.ranks);
+      if (this.props.user.ranks() !== false) {
       
-        this.ranks.map((rank) => {
-          console.log(rank);
-          items.add(rank.name(), function() {
-            {rankHolder.replace('{rank}', rank.name())}
-          })
-        });
+        this.props.user.ranks().map((rank) => {
+            items.add(rank.name(), (
+              <span className="Post-Rank" style={"color: " + rank.color()}>
+                rankHolder.replace('{rank}', rank.name())
+              </span>
+            ));
+          });
+      }
     });
 
     PostUser.prototype.view = function () {
         const post = this.props.post;
         const user = post.user();
 
-        const rank = user.Rank().split(': ');
-
-        if (rank[0] == '') {
-            rank[0] = app.forum.attribute('DefaultRank');
-        }
+        const ranks = user.ranks();
 
         if (!user) {
             return (
@@ -85,9 +82,13 @@ export default function () {
                     <a href={app.route.user(user)} config={m.route}>
                         {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
                     </a>
-                        <span className="Post-Rank" style={"color: " + rank[1]}>
-                            {rank[0]}
+                    {ranks.map((rank) => {
+                      return (
+                       <span className="Post-Rank" style={"color: " + rank.color()}>
+                            {rank.name()}
                         </span>
+                      );
+                    })}
                 </h3>
                 <ul className="PostUser-badges badges">
                     {listItems(user.badges().toArray())}

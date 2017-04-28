@@ -18,7 +18,7 @@ use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\gamification\Likes;
-use Reflar\gamification\Repository\Gamification;
+use Reflar\gamification\Gamification;
 use Zend\Diactoros\Response\JsonResponse;
 
 class ConvertLikesController implements ControllerInterface
