@@ -36,7 +36,7 @@ class Rank extends AbstractModel
     {
         $rank = new static;
         $rank->name = $name;
-        $rank->color = $color
+        $rank->color = $color;
         $rank->points = $points;
         return $rank;
     }
@@ -47,10 +47,11 @@ class Rank extends AbstractModel
      * @param integer $points
      * @return $this
      */
-    public function update($name, $color, $points)
+    public function update(array $attributes = [])
     {
-        $this->name = $name;
-        $this->color = $color;
+        $this->name = $attributes['name'];
+        $this->color = $attributes['color'];
+        $this->points = $attributes['points'];
         return $this;
     }
   

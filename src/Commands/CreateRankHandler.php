@@ -46,7 +46,7 @@ class CreateRankHandler
 
         $this->assertAdmin($actor);
 
-        $group = Rank::build(
+        $rank = Rank::build(
             array_get($data, 'attributes.name'),
             array_get($data, 'attributes.color'),
             array_get($data, 'attributes.points')
@@ -54,7 +54,7 @@ class CreateRankHandler
 
         $this->validator->assertValid($rank->getAttributes());
 
-        $group->save();
+        $rank->save();
 
         return $rank;
     }

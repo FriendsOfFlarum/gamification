@@ -15,9 +15,7 @@ namespace Reflar\gamification\Listeners;
 use Flarum\Event\ConfigureApiRoutes;
 // use Flarum\Event\ConfigureForumRoutes;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Api\Controllers\ConvertLikesController;
-use Reflar\gamification\Api\Controllers\ListTopThreeController;
-use Reflar\gamification\Api\Controllers\RanksController;
+use Reflar\gamification\Api\Controllers;
 
 class AddApiAttributes
 {
@@ -35,8 +33,14 @@ class AddApiAttributes
      */
     public function configureApiRoutes(ConfigureApiRoutes $event)
     {
-        $event->post('/reflar/gamification/convert', 'reflar.gamification.convert', ConvertLikesController::class);
-        $event->post('/reflar/gamification/ranks', 'reflar.gamification.ranks', RanksController::class);
+        $event->post('/reflar/gamification/convert', 'reflar.gamification.convert', Controllers\ConvertLikesController::class);
+
+        $event->get('/ranks', 'ranks.index', Controllers\ListRanksController::class);
+
+        $event->post('/rank', 'ranks.create', Controllers\CreateRankController::class);
+
+        $event->patch('/rank{id}', 'ranks.update', Controllers\UpdateRankController::class);
+        $event->delete('/rank{id}', 'ranks.delete', Controllers\DeleteRankController::class);
         // $event->get('/rankings', 'rankings', ListTopThreeController::class);
     }
 

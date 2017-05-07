@@ -24,6 +24,7 @@ use Flarum\Event\ConfigureApiController;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
 use Flarum\Event\PrepareApiAttributes;
+use Flarum\Event\PrepareApiData;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Rank;
@@ -47,6 +48,7 @@ class AddRelationships
     public function subscribe(Dispatcher $events)
     {
         $events->listen(GetModelRelationship::class, [$this, 'getModelRelationship']);
+        $events->listen(PrepareApiData::class, [$this, 'loadRanksRelationship']);
         $events->listen(GetApiRelationship::class, [$this, 'getApiAttributes']);
         $events->listen(PrepareApiAttributes::class, [$this, 'prepareApiAttributes']);
         $events->listen(ConfigureApiController::class, [$this, 'includeLikes']);
@@ -90,6 +92,20 @@ class AddRelationships
         if ($event->isRelationship(UserSerializer::class, 'ranks')) {
             return $event->serializer->hasMany($event->model, RankSerializer::class, 'ranks');
         }
+        if ($event->isRelationship(ForumSerializer::class, 'ranks')) {
+            return $event->serializer->hasMany($event->model, RankSerializer::class, 'ranks');
+        }
+    }
+
+
+    /**
+     * @param PrepareApiData $event
+     */
+    public function loadRanksRelationship(PrepareApiData $event)
+    {
+        if ($event->isController(Controller\ShowForumController::class)) {
+            $event->data['ranks'] = Rank::get();
+        }
     }
 
     /**
@@ -99,7 +115,6 @@ class AddRelationships
     {
         if ($event->isSerializer(UserSerializer::class)) {
             $event->attributes['Points'] = $event->model->votes;
-            $event->attributes['Rank'] = $event->model->rank;
         }
         if ($event->isSerializer(ForumSerializer::class)) {
             $event->attributes['DefaultRank'] = $this->settings->get('reflar.gamification.defaultRank');
@@ -117,6 +132,12 @@ class AddRelationships
      */
     public function includeLikes(ConfigureApiController $event)
     {
+        if ($event->isController(Controller\ListUsersController::class)
+            || $event->isController(Controller\ShowUserController::class)
+            || $event->isController(Controller\CreateUserController::class)
+            || $event->isController(Controller\UpdateUserController::class)) {
+            $event->addInclude('ranks');
+        }
         if ($event->isController(Controller\ShowDiscussionController::class)) {
             $event->addInclude('posts.upvotes');
             $event->addInclude('posts.downvotes');
@@ -127,13 +148,10 @@ class AddRelationships
             || $event->isController(Controller\UpdatePostController::class)) {
             $event->addInclude('upvotes');
             $event->addInclude('downvotes');
-        }
-        if ($event->isController(Controller\ListUsersController::class)
-            || $event->isController(Controller\ShowUserController::class)
-            || $event->isController(Controller\CreateUserController::class)
-            || $event->isController(Controller\UpdateUserController::class)
-            || $event->isController(Controller\ListPostsController::class)) {
             $event->addInclude('user.ranks');
+        }
+        if ($event->isController(Controller\ShowForumController::class)) {
+            $event->addInclude('ranks');
         }
     }
 }

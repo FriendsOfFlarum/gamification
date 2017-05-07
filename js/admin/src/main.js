@@ -3,8 +3,11 @@ import { extend } from 'flarum/extend';
 import PermissionGrid from 'flarum/components/PermissionGrid';
 
 import addSettingsPage from 'Reflar/gamification/addSettingsPage';
+import Rank from 'Reflar/gamification/models/Rank';
 
-app.initializers.add('reflar-gamification', () => {
+app.initializers.add('reflar-gamification', app => {
+
+    app.store.models.ranks = Rank;
 
     extend(PermissionGrid.prototype, 'replyItems', items => {
       items.add('Vote', {

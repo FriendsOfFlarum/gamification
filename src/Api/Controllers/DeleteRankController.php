@@ -32,11 +32,9 @@ class DeleteRankController extends AbstractDeleteController
     {
         $this->bus = $bus;
     }
-  
+
     /**
      * @param ServerRequestInterface $request
-     *
-     * @return mixed
      */
     protected function delete(ServerRequestInterface $request)
     {

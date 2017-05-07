@@ -709,53 +709,53 @@ System.register('Reflar/gamification/components/VotesModal', ['flarum/components
 'use strict';
 
 System.register('Reflar/gamification/main', ['flarum/extend', 'flarum/app', 'Reflar/gamification/components/AddAttributes', 'Reflar/gamification/components/AddHotnessSort', 'Reflar/gamification/components/AddVoteButtons', 'Reflar/gamification/models/Rank'], function (_export, _context) {
-  "use strict";
+    "use strict";
 
-  var extend, app, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank;
-  return {
-    setters: [function (_flarumExtend) {
-      extend = _flarumExtend.extend;
-    }, function (_flarumApp) {
-      app = _flarumApp.default;
-    }, function (_ReflarGamificationComponentsAddAttributes) {
-      AddAttributes = _ReflarGamificationComponentsAddAttributes.default;
-    }, function (_ReflarGamificationComponentsAddHotnessSort) {
-      AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default;
-    }, function (_ReflarGamificationComponentsAddVoteButtons) {
-      AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
-    }, function (_ReflarGamificationModelsRank) {
-      Rank = _ReflarGamificationModelsRank.default;
-    }],
-    execute: function () {
-      // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
-      // import RankingsPage from 'Reflar/gamification/components/RankingsPage';
+    var extend, app, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank;
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_ReflarGamificationComponentsAddAttributes) {
+            AddAttributes = _ReflarGamificationComponentsAddAttributes.default;
+        }, function (_ReflarGamificationComponentsAddHotnessSort) {
+            AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default;
+        }, function (_ReflarGamificationComponentsAddVoteButtons) {
+            AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
+        }, function (_ReflarGamificationModelsRank) {
+            Rank = _ReflarGamificationModelsRank.default;
+        }],
+        execute: function () {
+            // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
+            // import RankingsPage from 'Reflar/gamification/components/RankingsPage';
 
 
-      // import NotificationGrid from 'flarum/components/NotificationGrid';
+            // import NotificationGrid from 'flarum/components/NotificationGrid';
 
-      app.initializers.add('Reflar-gamification', function () {
+            app.initializers.add('Reflar-gamification', function () {
 
-        app.store.models.ranks = Rank;
+                app.store.models.ranks = Rank;
 
-        // app.notificationComponents.userPromoted = UserPromotedNotification;
+                // app.notificationComponents.userPromoted = UserPromotedNotification;
 
-        // app.routes.page = {path: '/rankings', component: RankingsPage.component()};
+                // app.routes.page = {path: '/rankings', component: RankingsPage.component()};
 
-        AddVoteButtons();
-        AddHotnessFilter();
-        AddAttributes();
+                AddVoteButtons();
+                AddHotnessFilter();
+                AddAttributes();
 
-        /**
-          extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
-              items.add('userPromoted', {
-                  name: 'userPromoted',
-                  icon: 'arrow-up',
-                  label: ['hi']
-              });
-          });*/
-      });
-    }
-  };
+                /**
+                  extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+                      items.add('userPromoted', {
+                          name: 'userPromoted',
+                          icon: 'arrow-up',
+                          label: ['hi']
+                      });
+                  });*/
+            });
+        }
+    };
 });;
 'use strict';
 

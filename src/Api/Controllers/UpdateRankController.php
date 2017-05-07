@@ -35,10 +35,10 @@ class UpdateRankController extends AbstractResourceController
     {
         $this->bus = $bus;
     }
-  
+
     /**
      * @param ServerRequestInterface $request
-     *
+     * @param Document $document
      * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)

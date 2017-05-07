@@ -29,8 +29,8 @@ class EditRankHandler
     /**
      * @param RankValidator $validator
      */
-    public function __construct( RankValidator $validator)
-    
+    public function __construct(RankValidator $validator)
+    {
         $this->validator = $validator;
     }
 
@@ -50,7 +50,7 @@ class EditRankHandler
 
         $attributes = array_get($data, 'attributes', []);
 
-        $rank->update($attributes['name'], $attributes['color'], $attributes['points']);
+        $rank->update($attributes);
       
         $this->validator->assertValid($rank->getDirty());
 

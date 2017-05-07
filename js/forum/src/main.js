@@ -10,7 +10,7 @@ import Rank from 'Reflar/gamification/models/Rank';
 // import RankingsPage from 'Reflar/gamification/components/RankingsPage';
 
 
-app.initializers.add('Reflar-gamification', () => {
+app.initializers.add('Reflar-gamification', app => {
   
   
     app.store.models.ranks = Rank;

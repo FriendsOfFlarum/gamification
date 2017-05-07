@@ -37,15 +37,17 @@ System.register("Reflar/gamification/addSettingsPage", ["flarum/extend", "flarum
 });;
 "use strict";
 
-System.register("Reflar/gamification/components/SettingsPage", ["flarum/Component", "flarum/components/Button", "flarum/utils/saveSettings", "flarum/components/Alert"], function (_export, _context) {
+System.register("Reflar/gamification/components/SettingsPage", ["flarum/Component", "flarum/components/Button", "flarum/components/LoadingIndicator", "flarum/utils/saveSettings", "flarum/components/Alert"], function (_export, _context) {
     "use strict";
 
-    var Component, Button, saveSettings, Alert, SettingsPage;
+    var Component, Button, LoadingIndicator, saveSettings, Alert, SettingsPage;
     return {
         setters: [function (_flarumComponent) {
             Component = _flarumComponent.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsLoadingIndicator) {
+            LoadingIndicator = _flarumComponentsLoadingIndicator.default;
         }, function (_flarumUtilsSaveSettings) {
             saveSettings = _flarumUtilsSaveSettings.default;
         }, function (_flarumComponentsAlert) {
@@ -65,12 +67,9 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
                     value: function init() {
                         var _this2 = this;
 
-                        this.loading = false;
-
                         this.fields = ['convertedLikes', 'defaultRank', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'rankHolder', 'iconName'];
 
-                        // fields that are objects
-                        this.objects = ['ranks'];
+                        this.ranks = app.store.all('ranks');
 
                         this.values = {};
 
@@ -82,17 +81,10 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
                             return _this2.values[key] = m.prop(settings[_this2.addPrefix(key)]);
                         });
 
-                        this.objects.forEach(function (key) {
-                            return _this2.values[key] = settings[_this2.addPrefix(key)] ? m.prop(JSON.parse(settings[_this2.addPrefix(key)])) : m.prop('');
-                        });
-
-                        this.values.ranks() || (this.values.ranks = m.prop({
-                            '50': 'Helper: #000'
-                        }));
-
                         this.newRank = {
                             'points': m.prop(''),
-                            'name': m.prop('')
+                            'name': m.prop(''),
+                            'color': m.prop('')
                         };
                     }
                 }, {
@@ -110,16 +102,20 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
                                     method: 'POST'
                                 }).then(_this3.values.convertedLikes('converting'));
                             }
-                        }) : this.values.convertedLikes() === 'converting' ? m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converting')) : m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converted', { number: this.values.convertedLikes() })), m('fieldset', { className: 'SettingsPage-ranks' }, [m('legend', {}, app.translator.trans('reflar-gamification.admin.page.ranks.title')), m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.ranks')), m('div', { className: 'Ranks--Container' }, Object.keys(this.values.ranks()).map(function (rank) {
+                        }) : this.values.convertedLikes() === 'converting' ? m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converting')) : m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converted', { number: this.values.convertedLikes() })), m('fieldset', { className: 'SettingsPage-ranks' }, [m('legend', {}, app.translator.trans('reflar-gamification.admin.page.ranks.title')), m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.ranks')), m('div', { className: 'Ranks--Container' }, this.ranks.map(function (rank) {
                             return m('div', {}, [m('input', {
                                 className: 'FormControl Ranks-number',
                                 type: 'number',
-                                value: rank,
-                                oninput: m.withAttr('value', _this3.updateRankPoints.bind(_this3, rank))
+                                value: rank.points(),
+                                oninput: m.withAttr('value', _this3.updatePoints.bind(_this3, rank))
                             }), m('input', {
                                 className: 'FormControl Ranks-name',
-                                value: _this3.values.ranks()[rank],
-                                oninput: m.withAttr('value', _this3.updateRankName.bind(_this3, rank))
+                                value: rank.name(),
+                                oninput: m.withAttr('value', _this3.updateName.bind(_this3, rank))
+                            }), m('input', {
+                                className: 'FormControl Ranks-color',
+                                value: rank.color(),
+                                oninput: m.withAttr('value', _this3.updateColor.bind(_this3, rank))
                             }), Button.component({
                                 type: 'button',
                                 className: 'Button Button--warning Ranks-button',
@@ -164,21 +160,51 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
                         })])])])])];
                     }
                 }, {
-                    key: "updateRankPoints",
-                    value: function updateRankPoints(rank, value) {
-                        this.values.ranks()[value] = this.values.ranks()[rank];
-
-                        this.deleteRank(rank);
+                    key: "updateName",
+                    value: function updateName(rank, value) {
+                        app.request({
+                            method: 'PATCH',
+                            url: app.forum.attribute('apiUrl') + '/rank/' + rank.data.id,
+                            data: {
+                                color: rank.color(),
+                                name: value,
+                                points: rank.points()
+                            }
+                        });
                     }
                 }, {
-                    key: "updateRankName",
-                    value: function updateRankName(rank, value) {
-                        this.values.ranks()[rank] = value;
+                    key: "updatePoints",
+                    value: function updatePoints(rank, value) {
+                        app.request({
+                            method: 'PATCH',
+                            url: app.forum.attribute('apiUrl') + '/rank/' + rank.data.id,
+                            data: {
+                                color: rank.color(),
+                                name: rank.name(),
+                                points: value
+                            }
+                        });
+                    }
+                }, {
+                    key: "updateColor",
+                    value: function updateColor(rank, value) {
+                        app.request({
+                            method: 'PATCH',
+                            url: app.forum.attribute('apiUrl') + '/rank/' + rank.data.id,
+                            data: {
+                                color: value,
+                                name: rank.name(),
+                                points: rank.points()
+                            }
+                        });
                     }
                 }, {
                     key: "deleteRank",
-                    value: function deleteRank(rank) {
-                        delete this.values.ranks()[rank];
+                    value: function deleteRank(rank, value) {
+                        app.request({
+                            method: 'DELETE',
+                            url: app.forum.attribute('apiUrl') + '/rank/' + rank.id
+                        });
                     }
                 }, {
                     key: "addRank",
@@ -196,10 +222,7 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
                         var fieldsCheck = this.fields.some(function (key) {
                             return _this4.values[key]() !== app.data.settings[_this4.addPrefix(key)];
                         });
-                        var objectsCheck = this.objects.some(function (key) {
-                            return JSON.stringify(_this4.values[key]()) !== app.data.settings[_this4.addPrefix(key)];
-                        });
-                        return fieldsCheck || objectsCheck;
+                        return fieldsCheck;
                     }
                 }, {
                     key: "onsubmit",
@@ -218,9 +241,6 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
 
                         this.fields.forEach(function (key) {
                             return settings[_this5.addPrefix(key)] = _this5.values[key]();
-                        });
-                        this.objects.forEach(function (key) {
-                            return settings[_this5.addPrefix(key)] = JSON.stringify(_this5.values[key]());
                         });
 
                         saveSettings(settings).then(function () {
@@ -248,10 +268,10 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/Componen
 });;
 'use strict';
 
-System.register('Reflar/gamification/main', ['flarum/app', 'flarum/extend', 'flarum/components/PermissionGrid', 'Reflar/gamification/addSettingsPage'], function (_export, _context) {
+System.register('Reflar/gamification/main', ['flarum/app', 'flarum/extend', 'flarum/components/PermissionGrid', 'Reflar/gamification/addSettingsPage', 'Reflar/gamification/models/Rank'], function (_export, _context) {
   "use strict";
 
-  var app, extend, PermissionGrid, addSettingsPage;
+  var app, extend, PermissionGrid, addSettingsPage, Rank;
   return {
     setters: [function (_flarumApp) {
       app = _flarumApp.default;
@@ -261,10 +281,14 @@ System.register('Reflar/gamification/main', ['flarum/app', 'flarum/extend', 'fla
       PermissionGrid = _flarumComponentsPermissionGrid.default;
     }, function (_ReflarGamificationAddSettingsPage) {
       addSettingsPage = _ReflarGamificationAddSettingsPage.default;
+    }, function (_ReflarGamificationModelsRank) {
+      Rank = _ReflarGamificationModelsRank.default;
     }],
     execute: function () {
 
-      app.initializers.add('reflar-gamification', function () {
+      app.initializers.add('reflar-gamification', function (app) {
+
+        app.store.models.ranks = Rank;
 
         extend(PermissionGrid.prototype, 'replyItems', function (items) {
           items.add('Vote', {
@@ -284,6 +308,38 @@ System.register('Reflar/gamification/main', ['flarum/app', 'flarum/extend', 'fla
 
         addSettingsPage();
       });
+    }
+  };
+});;
+'use strict';
+
+System.register('Reflar/gamification/models/Rank', ['flarum/Model', 'flarum/utils/mixin'], function (_export, _context) {
+  "use strict";
+
+  var Model, mixin, Rank;
+  return {
+    setters: [function (_flarumModel) {
+      Model = _flarumModel.default;
+    }, function (_flarumUtilsMixin) {
+      mixin = _flarumUtilsMixin.default;
+    }],
+    execute: function () {
+      Rank = function (_mixin) {
+        babelHelpers.inherits(Rank, _mixin);
+
+        function Rank() {
+          babelHelpers.classCallCheck(this, Rank);
+          return babelHelpers.possibleConstructorReturn(this, (Rank.__proto__ || Object.getPrototypeOf(Rank)).apply(this, arguments));
+        }
+
+        return Rank;
+      }(mixin(Model, {
+        points: Model.attribute('points'),
+        name: Model.attribute('name'),
+        color: Model.attribute('color')
+      }));
+
+      _export('default', Rank);
     }
   };
 });

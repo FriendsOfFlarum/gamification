@@ -40,21 +40,20 @@ export default function () {
         );
       
       if (this.props.user.ranks() !== false) {
-      
+
         this.props.user.ranks().map((rank) => {
-            items.add(rank.name(), (
-              <span className="Post-Rank" style={"color: " + rank.color()}>
-                rankHolder.replace('{rank}', rank.name())
-              </span>
-            ));
-          });
+          items.add(rank.name(), (
+            <span style={"color: " + rank.color()}>
+              {rankHolder.replace('{rank}', rank.name())}
+            </span>
+          ));
+        });
       }
     });
 
     PostUser.prototype.view = function () {
         const post = this.props.post;
         const user = post.user();
-
         const ranks = user.ranks();
 
         if (!user) {

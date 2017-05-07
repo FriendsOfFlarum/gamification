@@ -12,29 +12,18 @@
 
 namespace Reflar\gamification\Api\Controllers;
 
-use Flarum\Api\Controller\AbstractCreateController;
-use Illuminate\Contracts\Bus\Dispatcher;
+use Flarum\Api\Controller\AbstractCollectionController;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Reflar\gamification\Api\Serializers\RankSerializer;
-use Reflar\gamification\Commands\CreateRank;
+use Reflar\gamification\Rank;
 
-class CreateRankController extends AbstractCreateController
+class ListRanksController extends AbstractCollectionController
 {
+    /**
+     * @var RankSerializer
+     */
     public $serializer = RankSerializer::class;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $bus;
-
-    /**
-     * @param Dispatcher $bus
-     */
-    public function __construct(Dispatcher $bus)
-    {
-        $this->bus = $bus;
-    }
 
     /**
      * @param ServerRequestInterface $request
@@ -43,8 +32,6 @@ class CreateRankController extends AbstractCreateController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return $this->bus->dispatch(
-            new CreateRank($request->getAttribute('actor'), array_get($request->getParsedBody(), 'data', []))
-        );
+        return Rank::all();
     }
 }
