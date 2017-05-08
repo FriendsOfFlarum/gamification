@@ -28,11 +28,10 @@ class DeleteRankHandler
     public function handle(DeleteRank $command)
     {
         $actor = $command->actor;
-        $data = $command->data;
       
         $this->assertAdmin($actor);
 
-        $rank = Rank::where('id', $command->rankId)->findOrFail();
+        $rank = Rank::where('id', $command->rankId)->firstOrFail();
 
         $rank->delete();
 

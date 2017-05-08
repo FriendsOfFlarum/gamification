@@ -40,18 +40,32 @@ class Rank extends AbstractModel
         $rank->points = $points;
         return $rank;
     }
-  
+
     /**
-     * @param string  $name
-     * @param string  $color
-     * @param integer $points
+     * @param $name
      * @return $this
      */
-    public function update(array $attributes = [])
+    public function updateName($name)
     {
-        $this->name = $attributes['name'];
-        $this->color = $attributes['color'];
-        $this->points = $attributes['points'];
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @param $points
+     * @return $this
+     */
+    public function updatePoints($points) {
+        $this->points = $points;
+        return $this;
+    }
+
+    /**
+     * @param $color
+     * @return $this
+     */
+    public function updateColor($color) {
+        $this->color = $color;
         return $this;
     }
   

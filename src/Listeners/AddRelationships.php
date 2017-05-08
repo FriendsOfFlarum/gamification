@@ -89,10 +89,7 @@ class AddRelationships
             return $event->serializer->hasMany($event->model, UserBasicSerializer::class, 'downvotes');
         }
 
-        if ($event->isRelationship(UserSerializer::class, 'ranks')) {
-            return $event->serializer->hasMany($event->model, RankSerializer::class, 'ranks');
-        }
-        if ($event->isRelationship(ForumSerializer::class, 'ranks')) {
+        if ($event->isRelationship(ForumSerializer::class, 'ranks') || $event->isRelationship(UserSerializer::class, 'ranks')) {
             return $event->serializer->hasMany($event->model, RankSerializer::class, 'ranks');
         }
     }
@@ -119,6 +116,7 @@ class AddRelationships
         if ($event->isSerializer(ForumSerializer::class)) {
             $event->attributes['DefaultRank'] = $this->settings->get('reflar.gamification.defaultRank');
             $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
+            $event->attributes['autoUpvote'] = $this->settings->get('reflar.gamification.voteColor');
             $event->attributes['RankHolder'] = $this->settings->get('reflar.gamification.rankHolder');
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
@@ -139,16 +137,13 @@ class AddRelationships
             $event->addInclude('ranks');
         }
         if ($event->isController(Controller\ShowDiscussionController::class)) {
-            $event->addInclude('posts.upvotes');
-            $event->addInclude('posts.downvotes');
+            $event->addInclude(['posts.upvotes', 'posts.downvotes', 'posts.user.ranks']);
         }
         if ($event->isController(Controller\ListPostsController::class)
             || $event->isController(Controller\ShowPostController::class)
             || $event->isController(Controller\CreatePostController::class)
             || $event->isController(Controller\UpdatePostController::class)) {
-            $event->addInclude('upvotes');
-            $event->addInclude('downvotes');
-            $event->addInclude('user.ranks');
+            $event->addInclude(['upvotes', 'downvotes', 'user.ranks']);
         }
         if ($event->isController(Controller\ShowForumController::class)) {
             $event->addInclude('ranks');

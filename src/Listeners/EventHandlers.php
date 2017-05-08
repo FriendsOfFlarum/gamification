@@ -17,9 +17,11 @@ use Flarum\Event\PostWasDeleted;
 use Flarum\Event\PostWasPosted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
+use Reflar\gamification\Events\PostWasDownvoted;
 use Reflar\gamification\Events\PostWasUpvoted;
 use Reflar\gamification\Notification\RankupBlueprint;
 use Reflar\gamification\Gamification;
+use Reflar\gamification\Rank;
 
 class EventHandlers
 {
@@ -54,7 +56,8 @@ class EventHandlers
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(PostWasUpvoted::class, [$this, 'checkUser']);
+        $events->listen(PostWasDownvoted::class, [$this, 'checkDownUser']);
+        $events->listen(PostWasUpvoted::class, [$this, 'checkUpUser']);
         $events->listen(PostWasPosted::class, [$this, 'addVote']);
         $events->listen(PostWasDeleted::class, [$this, 'removeVote']);
     }
@@ -62,9 +65,17 @@ class EventHandlers
     /**
      * @param PostWasUpvoted $event
      */
-    public function checkUser(PostWasUpvoted $event)
+    public function checkUpUser(PostWasUpvoted $event)
     {
-        $this->checkUserVotes($event->user, $event->actor);
+        $this->checkUpUserVotes($event->user, $event->actor);
+    }
+
+    /**
+     * @param PostWasUpvoted $event
+     */
+    public function checkDownUser(PostWasDownvoted $event)
+    {
+        $this->checkDownUserVotes($event->user);
     }
 
     /**
@@ -72,12 +83,14 @@ class EventHandlers
      */
     public function addVote(PostWasPosted $event)
     {
-        $event->actor->increment('votes');
-        $event->post->discussion->increment('votes');
-        $this->gamification->calculateHotness($event->post->discussion);
-        $this->gamification->upvote($event->post->id, $event->actor);
+        if ($this->settings->get('reflar.gamification.autoUpvotePosts') !== false) {
+            $event->actor->increment('votes');
+            $event->post->discussion->increment('votes');
+            $this->gamification->calculateHotness($event->post->discussion);
+            $this->gamification->upvote($event->post->id, $event->actor);
 
-        $this->checkUserVotes($event->actor, $event->actor);
+            $this->checkUpUserVotes($event->actor, $event->actor);
+        }
     }
 
     /**
@@ -86,20 +99,38 @@ class EventHandlers
     public function removeVote(PostWasDeleted $event)
     {
         $event->post->user->decrement('votes');
+        $this->checkDownUserVotes($event->post->user);
     }
 
-    protected function checkUserVotes($user, $actor)
+    /**
+     * @param $user
+     * @param $actor
+     */
+    protected function checkUpUserVotes($user, $actor)
     {
-        $ranks = json_decode($this->settings->get('reflar.gamification.ranks'), true);
+        $ranks = Rank::where('points', $user->votes)->get();
 
-        if (isset($ranks[$user->votes])) {
-            $user->rank = $ranks[$user->votes];
-            $user->save();
+        if ($ranks !== null) {
+            foreach($ranks as $rank)
+            $user->ranks()->attach($rank->id);
             /*
             $this->notifications->sync(
                 new RankupBlueprint($ranks[$user->votes], $actor),
                 [$user]);
             */
+        }
+    }
+
+    /**
+     * @param $user
+     */
+    protected function checkDownUserVotes($user)
+    {
+        $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
+
+        if ($ranks !== null) {
+            foreach($ranks as $rank)
+                $user->ranks()->detach($rank->id);
         }
     }
 }

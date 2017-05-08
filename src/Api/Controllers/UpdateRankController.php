@@ -27,7 +27,7 @@ class UpdateRankController extends AbstractResourceController
      * @var Dispatcher
      */
     protected $bus;
-  
+
     /**
      * @param Dispatcher $bus
      */
@@ -43,12 +43,8 @@ class UpdateRankController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $id = array_get($request->getQueryParams(), 'id');
-        $actor = $request->getAttribute('actor');
-        $data = array_get($request->getParsedBody(), 'data', []);
-      
         return $this->bus->dispatch(
-            new EditRank($id, $actor, $data)
+            new EditRank(array_get($request->getQueryParams(), 'id'), $request->getAttribute('actor'), array_get($request->getParsedBody(), 'data', []))
         );
     }
 }

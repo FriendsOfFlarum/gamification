@@ -1,7 +1,7 @@
 # 0.1.0-beta.1 
 * Inital release
 
-# 0.1.0-BETA.2
+# 0.1.0-beta.2
 * Fix bug for upvoting posts that aren't the OP
 
 # 0.1.0-beta.3

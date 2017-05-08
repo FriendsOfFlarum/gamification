@@ -37,10 +37,10 @@ class AddApiAttributes
 
         $event->get('/ranks', 'ranks.index', Controllers\ListRanksController::class);
 
-        $event->post('/rank', 'ranks.create', Controllers\CreateRankController::class);
+        $event->post('/ranks', 'ranks.create', Controllers\CreateRankController::class);
 
-        $event->patch('/rank{id}', 'ranks.update', Controllers\UpdateRankController::class);
-        $event->delete('/rank{id}', 'ranks.delete', Controllers\DeleteRankController::class);
+        $event->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class);
+        $event->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class);
         // $event->get('/rankings', 'rankings', ListTopThreeController::class);
     }
 
