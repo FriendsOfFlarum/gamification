@@ -133,14 +133,6 @@ export default class SettingsPage extends Page {
                                     }),
                                 ]),
                             ),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.default')),
-                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.default_help')),
-                            m('input', {
-                                className: 'FormControl Ranks-default',
-                                value: this.values.defaultRank() || '',
-                                placeholder: 'Newbie',
-                                oninput: m.withAttr('value', this.values.defaultRank)
-                            }),
                             m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.name')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
@@ -162,6 +154,13 @@ export default class SettingsPage extends Page {
                                 children: app.translator.trans('reflar-gamification.admin.page.votes.auto_upvote'),
                                 onchange: this.values.autoUpvotePosts,
                                 className: 'votes-switch'
+                            }),
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.vote_color')),
+                            m('input', {
+                                className: 'FormControl Ranks-default',
+                                placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.color'),
+                                value: this.values.voteColor() || '',
+                                oninput: m.withAttr('value', this.values.voteColor)
                             }),
                             Button.component({
                                 type: 'submit',
