@@ -8,27 +8,11 @@ import UserCard from 'flarum/components/UserCard';
 
 export default class RankingsPage extends Component {
   init() {
-    app.current = this;
-    this.cardVisible = false;
+      this.loading = true;
+      this.moreResults = false;
+      this.users = [];
+      this.refresh();
 
-    app.request({
-      method: 'GET',
-      url: app.forum.attribute('apiUrl') + '/rankings'
-    }).then(
-        response => {
-          this.data = response.data;
-          this.users = [];
-          for (i = 0; i < this.data.length; i++) {
-            this.users[i] = [];
-            this.users[i]['user'] = this.findRecipient(this.data[i].id);
-            this.users[i]['class'] = i+1;
-          }
-          console.log(this.users);
-          console.log(this.users[1]);
-          this.loading = false;
-          m.redraw();
-        }
-    )
   }
 
   view() {
@@ -50,8 +34,6 @@ export default class RankingsPage extends Component {
                   {this.users.map((user) => {
                     
                   user['user'].then(function(user) {
-                    
-                  let card = '';
 
                   return [
                     <tr>
@@ -63,7 +45,6 @@ export default class RankingsPage extends Component {
                               {avatar(user, {className: 'info-avatar rankings-' + user + '-avatar'})}
                             </a>
                           </h3>
-                          {card}
                         </div>
                       </td>
                       <td>{user.data.attributes['antoinefr-money.money']}</td>
@@ -78,39 +59,56 @@ export default class RankingsPage extends Component {
     );
   }
 
-  findRecipient(id) {
-    return app.store.find('users', id);
-  }
+    refresh(clear = true) {
+        if (clear) {
+            this.loading = true;
+            this.users = [];
+        }
 
-  config(isInitialized) {
-    if (isInitialized) return;
+        return this.loadResults().then(
+            results => {
+                this.users = [];
+                this.parseResults(results);
+            },
+            () => {
+                this.loading = false;
+                m.redraw();
+            }
+        );
+    }
 
-    let timeout;
 
-    this.$()
-      .on('mouseover', 'h3 a, .UserCard', () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(this.showCard.bind(this), 500);
-      })
-      .on('mouseout', 'h3 a, .UserCard', () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(this.hideCard.bind(this), 250);
-      });
-  }
+    loadResults(offset) {
+        const params = {};
+        params.page = {
+            offset: offset,
+            limit: '10'
+        };
+        params.sort = 'points';
 
-  showCard() {
-    this.cardVisible = true;
+        return app.store.find('users', params);
+    }
 
-    m.redraw();
 
-    setTimeout(() => this.$('.UserCard').addClass('in'));
-  }
+    loadMore() {
+        this.loading = true;
 
-  hideCard() {
-    this.$('.UserCard').removeClass('in')
-      .one('transitionend webkitTransitionEnd oTransitionEnd', () => {
-        this.cardVisible = false;
-        m.redraw();
-      });
-  }
+        this.loadResults(this.users.length)
+            .then(this.parseResults.bind(this));
+    }
+
+    parseResults(results) {
+        [].push.apply(this.users, results);
+
+        this.loading = false;
+        this.moreResults = !!results.payload.links.next;
+
+        m.lazyRedraw();
+
+        return results;
+    }
+
+
+
+
 }

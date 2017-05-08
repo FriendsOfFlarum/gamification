@@ -22,14 +22,6 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
                 points = '0';
             }
 
-            var rankHolder = '';
-
-            if (app.forum.attribute('RankHolder') === null || app.forum.attribute('RankHolder') === '') {
-                rankHolder = '{rank}';
-            } else {
-                rankHolder = app.forum.attribute('RankHolder');
-            }
-
             items.add('points', app.translator.trans('reflar-gamification.forum.user.points', { points: points }));
 
             if (this.props.user.ranks() !== false) {
@@ -37,10 +29,8 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
                 this.props.user.ranks().map(function (rank) {
                     items.add(rank.name(), m(
                         'span',
-                        { className: 'Post-Rank', style: "color: " + rank.color() },
-                        'rankHolder.replace(\'',
-                        rank,
-                        '\', rank.name())'
+                        { style: "color: " + rank.color() },
+                        rank.name()
                     ));
                 });
             }
@@ -49,8 +39,6 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
         PostUser.prototype.view = function () {
             var post = this.props.post;
             var user = post.user();
-
-            var ranks = user.ranks();
 
             if (!user) {
                 return m(
@@ -92,7 +80,7 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
                         ' ',
                         username(user)
                     ),
-                    ranks.map(function (rank) {
+                    user.ranks().map(function (rank) {
                         return m(
                             'span',
                             { className: 'Post-Rank', style: "color: " + rank.color() },
@@ -234,10 +222,10 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
 
       var color = '';
 
-      if (app.forum.attribute('themePrimaryColor') === app.forum.attribute('themeSecondaryColor')) {
-        color = '#f44336';
+      if (app.forum.attribute('autoUpvote') !== null && app.forum.attribute('autoUpvote') !== '') {
+        color = app.forum.attribute('autoUpvote');
       } else {
-        color = app.forum.attribute('themePrimaryColor');
+        color = '#f44336';
       }
 
       if (!app.session.user) {
@@ -393,27 +381,10 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
         babelHelpers.createClass(RankingsPage, [{
           key: 'init',
           value: function init() {
-            var _this2 = this;
-
-            app.current = this;
-            this.cardVisible = false;
-
-            app.request({
-              method: 'GET',
-              url: app.forum.attribute('apiUrl') + '/rankings'
-            }).then(function (response) {
-              _this2.data = response.data;
-              _this2.users = [];
-              for (i = 0; i < _this2.data.length; i++) {
-                _this2.users[i] = [];
-                _this2.users[i]['user'] = _this2.findRecipient(_this2.data[i].id);
-                _this2.users[i]['class'] = i + 1;
-              }
-              console.log(_this2.users);
-              console.log(_this2.users[1]);
-              _this2.loading = false;
-              m.redraw();
-            });
+            this.loading = true;
+            this.moreResults = false;
+            this.users = [];
+            this.refresh();
           }
         }, {
           key: 'view',
@@ -463,8 +434,6 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
 
                       user['user'].then(function (user) {
 
-                        var card = '';
-
                         return [m(
                           'tr',
                           null,
@@ -487,8 +456,7 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
                                   { href: app.route.user(user), config: m.route },
                                   avatar(user, { className: 'info-avatar rankings-' + user + '-avatar' })
                                 )
-                              ),
-                              card
+                              )
                             )
                           ),
                           m(
@@ -505,49 +473,55 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
             );
           }
         }, {
-          key: 'findRecipient',
-          value: function findRecipient(id) {
-            return app.store.find('users', id);
-          }
-        }, {
-          key: 'config',
-          value: function config(isInitialized) {
-            var _this3 = this;
+          key: 'refresh',
+          value: function refresh() {
+            var _this2 = this;
 
-            if (isInitialized) return;
+            var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
-            var timeout = void 0;
+            if (clear) {
+              this.loading = true;
+              this.users = [];
+            }
 
-            this.$().on('mouseover', 'h3 a, .UserCard', function () {
-              clearTimeout(timeout);
-              timeout = setTimeout(_this3.showCard.bind(_this3), 500);
-            }).on('mouseout', 'h3 a, .UserCard', function () {
-              clearTimeout(timeout);
-              timeout = setTimeout(_this3.hideCard.bind(_this3), 250);
-            });
-          }
-        }, {
-          key: 'showCard',
-          value: function showCard() {
-            var _this4 = this;
-
-            this.cardVisible = true;
-
-            m.redraw();
-
-            setTimeout(function () {
-              return _this4.$('.UserCard').addClass('in');
-            });
-          }
-        }, {
-          key: 'hideCard',
-          value: function hideCard() {
-            var _this5 = this;
-
-            this.$('.UserCard').removeClass('in').one('transitionend webkitTransitionEnd oTransitionEnd', function () {
-              _this5.cardVisible = false;
+            return this.loadResults().then(function (results) {
+              _this2.users = [];
+              _this2.parseResults(results);
+            }, function () {
+              _this2.loading = false;
               m.redraw();
             });
+          }
+        }, {
+          key: 'loadResults',
+          value: function loadResults(offset) {
+            var params = {};
+            params.page = {
+              offset: offset,
+              limit: '10'
+            };
+            params.sort = 'points';
+
+            return app.store.find('users', params);
+          }
+        }, {
+          key: 'loadMore',
+          value: function loadMore() {
+            this.loading = true;
+
+            this.loadResults(this.users.length).then(this.parseResults.bind(this));
+          }
+        }, {
+          key: 'parseResults',
+          value: function parseResults(results) {
+            [].push.apply(this.users, results);
+
+            this.loading = false;
+            this.moreResults = !!results.payload.links.next;
+
+            m.lazyRedraw();
+
+            return results;
           }
         }]);
         return RankingsPage;
@@ -733,7 +707,7 @@ System.register('Reflar/gamification/main', ['flarum/extend', 'flarum/app', 'Ref
 
             // import NotificationGrid from 'flarum/components/NotificationGrid';
 
-            app.initializers.add('Reflar-gamification', function () {
+            app.initializers.add('Reflar-gamification', function (app) {
 
                 app.store.models.ranks = Rank;
 
@@ -780,7 +754,6 @@ System.register('Reflar/gamification/models/Rank', ['flarum/Model', 'flarum/util
 
         return Rank;
       }(mixin(Model, {
-        id: Model.attribute('id'),
         points: Model.attribute('points'),
         name: Model.attribute('name'),
         color: Model.attribute('color')

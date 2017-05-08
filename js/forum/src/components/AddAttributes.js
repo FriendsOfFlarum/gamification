@@ -27,14 +27,6 @@ export default function () {
             points = '0';
         }
 
-        let rankHolder = '';
-
-        if (app.forum.attribute('RankHolder') === null || app.forum.attribute('RankHolder') === '') {
-          rankHolder = '{rank}';
-        } else {
-          rankHolder = app.forum.attribute('RankHolder');
-        }
-
         items.add('points',
           app.translator.trans('reflar-gamification.forum.user.points', {points})
         );
@@ -44,7 +36,7 @@ export default function () {
         this.props.user.ranks().map((rank) => {
           items.add(rank.name(), (
             <span style={"color: " + rank.color()}>
-              {rankHolder.replace('{rank}', rank.name())}
+              {rank.name()}
             </span>
           ));
         });
@@ -54,7 +46,6 @@ export default function () {
     PostUser.prototype.view = function () {
         const post = this.props.post;
         const user = post.user();
-        const ranks = user.ranks();
 
         if (!user) {
             return (
@@ -81,7 +72,7 @@ export default function () {
                     <a href={app.route.user(user)} config={m.route}>
                         {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
                     </a>
-                    {ranks.map((rank) => {
+                    {user.ranks().map(rank => {
                       return (
                        <span className="Post-Rank" style={"color: " + rank.color()}>
                             {rank.name()}

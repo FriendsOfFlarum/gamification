@@ -15,10 +15,10 @@ export default function () {
 
     let color = '';
 
-    if (app.forum.attribute('themePrimaryColor') === app.forum.attribute('themeSecondaryColor')) {
-      color = '#f44336';
+    if (app.forum.attribute('autoUpvote') !== null && app.forum.attribute('autoUpvote') !== '') {
+      color = app.forum.attribute('autoUpvote');
     } else {
-      color = app.forum.attribute('themePrimaryColor');
+      color = '#f44336';
     }
 
     if (!app.session.user) {
