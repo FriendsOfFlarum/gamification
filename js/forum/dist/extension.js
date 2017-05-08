@@ -222,6 +222,8 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
 
       var color = '';
 
+      if (post.isHidden()) return;
+
       if (app.forum.attribute('autoUpvote') !== null && app.forum.attribute('autoUpvote') !== '') {
         color = app.forum.attribute('autoUpvote');
       } else {
@@ -248,7 +250,7 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
             app.modal.show(new LogInModal());
             return;
           }
-          if (post.isHidden() || !post.discussion().canVote()) return;
+          if (!post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
 
@@ -298,7 +300,7 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
             app.modal.show(new LogInModal());
             return;
           }
-          if (post.isHidden() || !post.discussion().canVote()) return;
+          if (!post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
 

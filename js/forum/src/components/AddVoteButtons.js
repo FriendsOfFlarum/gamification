@@ -15,6 +15,8 @@ export default function () {
 
     let color = '';
 
+    if (post.isHidden()) return;
+
     if (app.forum.attribute('autoUpvote') !== null && app.forum.attribute('autoUpvote') !== '') {
       color = app.forum.attribute('autoUpvote');
     } else {
@@ -43,7 +45,7 @@ export default function () {
             app.modal.show(new LogInModal());
             return;
           }
-          if (post.isHidden() || !post.discussion().canVote()) return;
+          if (!post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data;
 
@@ -95,7 +97,7 @@ export default function () {
             app.modal.show(new LogInModal());
             return;
           }
-          if (post.isHidden() || !post.discussion().canVote()) return;
+          if (!post.discussion().canVote()) return;
           var upData = post.data.relationships.upvotes.data;
           var downData = post.data.relationships.downvotes.data
 
