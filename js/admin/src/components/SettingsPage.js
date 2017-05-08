@@ -1,21 +1,25 @@
-import Component from "flarum/Component";
-import Button from "flarum/components/Button";
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import saveSettings from "flarum/utils/saveSettings";
 import Alert from "flarum/components/Alert";
+import Page from 'flarum/components/Page';
+import Button from "flarum/components/Button";
+import saveSettings from "flarum/utils/saveSettings";
+import Switch from "flarum/components/Switch";
 
-export default class SettingsPage extends Component {
+export default class SettingsPage extends Page {
 
     init() {
 
         this.fields = [
             'convertedLikes',
-            'defaultRank',
             'amountPerPost',
             'amountPerDiscussion',
             'postStartAmount',
             'rankHolder',
-            'iconName'
+            'iconName',
+            'voteColor'
+        ];
+
+        this.switches = [
+            'autoUpvotePosts'
         ];
 
         this.ranks = app.store.all('ranks');
@@ -30,13 +34,16 @@ export default class SettingsPage extends Component {
             this.values[key] = m.prop(settings[this.addPrefix(key)])
         );
 
+        this.switches.forEach(key =>
+            this.values[key] = m.prop(settings[this.addPrefix(key)] === '1')
+        );
+
         this.newRank = {
             'points': m.prop(''),
             'name': m.prop(''),
             'color': m.prop('')
         };
     }
-
 
     /**
      * @returns {*}
@@ -66,6 +73,7 @@ export default class SettingsPage extends Component {
                         m('fieldset', {className: 'SettingsPage-ranks'}, [
                             m('legend', {}, app.translator.trans('reflar-gamification.admin.page.ranks.title')),
                             m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.ranks')),
+                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.help.help')),
                             m('div', {className: 'Ranks--Container'},
                                 this.ranks.map(rank => {
                                     return m('div', {}, [
@@ -73,16 +81,19 @@ export default class SettingsPage extends Component {
                                             className: 'FormControl Ranks-number',
                                             type: 'number',
                                             value: rank.points(),
+                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.points'),
                                             oninput: m.withAttr('value', this.updatePoints.bind(this, rank))
                                         }),
                                         m('input', {
                                             className: 'FormControl Ranks-name',
                                             value: rank.name(),
+                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.name'),
                                             oninput: m.withAttr('value', this.updateName.bind(this, rank))
                                         }),
                                         m('input', {
                                             className: 'FormControl Ranks-color',
                                             value: rank.color(),
+                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.color'),
                                             oninput: m.withAttr('value', this.updateColor.bind(this, rank))
                                         }),
                                         Button.component({
@@ -93,19 +104,27 @@ export default class SettingsPage extends Component {
                                         }),
                                     ])
                                 }),
-                                m('br'),
                                 m('div', {}, [
                                     m('input', {
                                         className: 'FormControl Ranks-number',
                                         value: this.newRank.points(),
+                                        placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.points'),
                                         type: 'number',
                                         oninput: m.withAttr('value', this.newRank.points)
                                     }),
                                     m('input', {
                                         className: 'FormControl Ranks-name',
                                         value: this.newRank.name(),
+                                        placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.name'),
                                         oninput: m.withAttr('value', this.newRank.name)
                                     }),
+                                        m('input', {
+                                            className: 'FormControl Ranks-color',
+                                            value: this.newRank.color(),
+                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.color'),
+                                            oninput: m.withAttr('value', this.newRank.color)
+                                        }
+                                    ),
                                     Button.component({
                                         type: 'button',
                                         className: 'Button Button--warning Ranks-button',
@@ -114,15 +133,14 @@ export default class SettingsPage extends Component {
                                     }),
                                 ]),
                             ),
-                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.help')),
                             m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.default')),
+                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.default_help')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.defaultRank() || '',
                                 placeholder: 'Newbie',
                                 oninput: m.withAttr('value', this.values.defaultRank)
                             }),
-                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.default_help')),
                             m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.name')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
@@ -130,14 +148,21 @@ export default class SettingsPage extends Component {
                                 placeholder: 'Rank: {rank}',
                                 oninput: m.withAttr('value', this.values.rankHolder)
                             }),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.icon_name')),
+                            m('legend', {}, app.translator.trans('reflar-gamification.admin.page.votes.title')),
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.icon_name')),
+                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.votes.icon_help')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.iconName() || '',
                                 placeholder: 'thumbs',
                                 oninput: m.withAttr('value', this.values.iconName)
                             }),
-                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.icon_help')),
+                            Switch.component({
+                                state: this.values.autoUpvotePosts() || false,
+                                children: app.translator.trans('reflar-gamification.admin.page.votes.auto_upvote'),
+                                onchange: this.values.autoUpvotePosts,
+                                className: 'votes-switch'
+                            }),
                             Button.component({
                                 type: 'submit',
                                 className: 'Button Button--primary Ranks-save',
@@ -154,55 +179,41 @@ export default class SettingsPage extends Component {
 
 
     updateName(rank, value) {
-        app.request({
-            method: 'PATCH',
-            url: app.forum.attribute('apiUrl') + '/rank/' + rank.data.id,
-            data: {
-                color: rank.color(),
-                name: value,
-                points: rank.points()
-            }
-        })
+        rank.save({name: value});
     }
 
     updatePoints(rank, value) {
-        app.request({
-            method: 'PATCH',
-            url: app.forum.attribute('apiUrl') + '/rank/' + rank.data.id,
-            data: {
-                color: rank.color(),
-                name: rank.name(),
-                points: value
-            }
-        })
+        rank.save({points: value});
     }
 
     updateColor(rank, value) {
-        app.request({
-            method: 'PATCH',
-            url: app.forum.attribute('apiUrl') + '/rank/' + rank.data.id,
-            data: {
-                color: value,
-                name: rank.name(),
-                points: rank.points()
+        rank.save({color: value});
+    }
+
+    deleteRank(rankToDelete) {
+        rankToDelete.delete();
+        this.ranks.some((rank, i) => {
+            if (rank.data.id === rankToDelete.data.id) {
+                this.ranks.splice(i, 1);
+                return true;
             }
         })
     }
 
-    deleteRank(rank, value) {
-        app.request({
-            method: 'DELETE',
-            url: app.forum.attribute('apiUrl') + '/rank/' + rank.id
-        })
-    }
-
-
-
-    addRank() {
-        this.values.ranks()[this.newRank.points()] = this.newRank.name();
-
-        this.newRank.points('');
-        this.newRank.name('');
+    addRank(rank) {
+        app.store.createRecord('ranks').save({
+            points: this.newRank.points(),
+            name: this.newRank.name(),
+            color: this.newRank.color()
+        }).then(
+            rank => {
+                this.newRank.color('');
+                this.newRank.name('');
+                this.newRank.points('');
+                this.ranks.push(rank);
+                m.redraw();
+            }
+        );
     }
 
 
@@ -211,8 +222,9 @@ export default class SettingsPage extends Component {
      * @returns boolean
      */
     changed() {
+        var switchesCheck = this.switches.some(key => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
         var fieldsCheck = this.fields.some(key => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
-        return fieldsCheck
+        return fieldsCheck || switchesCheck;
     }
 
     /**
@@ -229,6 +241,7 @@ export default class SettingsPage extends Component {
 
         const settings = {};
 
+        this.switches.forEach(key => settings[this.addPrefix(key)] = this.values[key]());
         this.fields.forEach(key => settings[this.addPrefix(key)] = this.values[key]());
 
         saveSettings(settings)
