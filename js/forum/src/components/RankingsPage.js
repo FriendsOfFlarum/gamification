@@ -4,61 +4,58 @@ import IndexPage from 'flarum/components/IndexPage';
 import listItems from 'flarum/helpers/listItems';
 import icon from 'flarum/helpers/icon';
 import username from 'flarum/helpers/username';
-import UserCard from 'flarum/components/UserCard';
 
-
-  function UserItem(user, number) {
-    return (
-      <tr>
-        <td class={"rankings-" + number}>{icon("trophy")}</td>
-          <td>
-            <div className = "PostUser">
-              <h3 className="rankings-info">
-                <a href={app.route.user(user)} config={m.route}>
-                  {avatar(user, {className: 'info-avatar rankings-' + user + '-avatar'})}
-                </a>
-              </h3>
-            </div>
-          </td>
-        <td>{user.data.attributes['antoinefr-money.money']}</td>
-      </tr>
-    )
-  }
 
 export default class RankingsPage extends Component {
-  init() {
-      this.loading = true;
-      this.moreResults = false;
-      this.users = [];
-      this.refresh();
+    init() {
+        this.loading = true;
+        this.moreResults = false;
+        this.users = [];
+        this.refresh();
 
-  }
-  
-  view() {
-    console.log(this.users);
-    return (
-      <div className="RankingPage">
-        {IndexPage.prototype.hero()}
-        <div className="container">
-          <nav className="IndexPage-nav sideNav" config={IndexPage.prototype.affixSidebar}>
-            <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
-          </nav>
-          <div className="sideNavOffset">
-            <table class="rankings">
-              <tr>
-                <th>{app.translator.trans('reflar-gamification.forum.ranking.rank')}</th>
-                <th>{app.translator.trans('reflar-gamification.forum.ranking.name')}</th>
-                <th>{app.translator.trans('reflar-gamification.forum.ranking.amount')}</th>
-              </tr>
-              {this.users.map(user => {
-                UserItem(user, i)
-              })}
-            </table>
-          </div>
-        </div>
-      </div>
-    )
-  }
+    }
+
+    view() {
+        return (
+            <div className="RankingPage">
+                {IndexPage.prototype.hero()}
+                <div className="container">
+                    <nav className="IndexPage- nav sideNav" config={IndexPage.prototype.affixSidebar}>
+                        <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
+                    </nav>
+                    <div className="sideNavOffset">
+                        <table class="rankings">
+                            <tr>
+                                <th>{app.translator.trans('reflar-gamification.forum.ranking.rank')}</th>
+                                <th>{app.translator.trans('reflar-gamification.forum.ranking.name')}</th>
+                                <th>{app.translator.trans('reflar-gamification.forum.ranking.amount')}</th>
+                            </tr>
+                            {this.users.map(function (user, i) {
+                                console.log(user);
+
+
+                                return [
+                                    <tr>
+                                        <td class={"rankings-" + ++i}> {icon("trophy")}</td>
+                                        <td>
+                                            <div className="PostUser">
+                                                <h3 className="rankings-info">
+                                                    <a href={app.route.user(user)} config={m.route}>
+                                                        {avatar(user, {className: 'info-avatar rankings-' + ++i + '-avatar'})} {username(user)}
+                                                    </a>
+                                                </h3>
+                                            </div>
+                                        </td>
+                                        <td>{user.data.attributes.Points}</td>
+                                    </tr>
+                                ]
+                            })}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
     refresh(clear = true) {
         if (clear) {
@@ -86,11 +83,11 @@ export default class RankingsPage extends Component {
             limit: '10'
         };
 
-        app.request({
-          method: 'GET',
-          url: app.forum.attribute('apiUrl') + '/rankings',
-          data
-        }).then(this.parseResults.bind(this));
+        return app.request({
+            method: 'GET',
+            url: app.forum.attribute('apiUrl') + '/rankings',
+            data
+        });
     }
 
 
@@ -101,21 +98,20 @@ export default class RankingsPage extends Component {
             .then(this.parseResults.bind(this));
     }
 
-    parseResults() {
-        this.map(user => {
-          user = app.store.find('users', user.id)
+    parseResults(results) {
+        let users = [];
+        results.data.map(function (user, i) {
+            users[i] = app.store.getBy('users', 'id', user.id);
         });
-        [].push.apply(this.users, results);
+
+        [].push.apply(this.users, users);
 
         this.loading = false;
-        this.moreResults = !!results.payload.links.next;
 
         m.lazyRedraw();
 
         return results;
     }
-
-
 
 
 }
