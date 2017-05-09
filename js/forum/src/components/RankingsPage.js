@@ -6,6 +6,25 @@ import icon from 'flarum/helpers/icon';
 import username from 'flarum/helpers/username';
 import UserCard from 'flarum/components/UserCard';
 
+
+  function UserItem(user, number) {
+    return (
+      <tr>
+        <td class={"rankings-" + number}>{icon("trophy")}</td>
+          <td>
+            <div className = "PostUser">
+              <h3 className="rankings-info">
+                <a href={app.route.user(user)} config={m.route}>
+                  {avatar(user, {className: 'info-avatar rankings-' + user + '-avatar'})}
+                </a>
+              </h3>
+            </div>
+          </td>
+        <td>{user.data.attributes['antoinefr-money.money']}</td>
+      </tr>
+    )
+  }
+
 export default class RankingsPage extends Component {
   init() {
       this.loading = true;
@@ -14,8 +33,9 @@ export default class RankingsPage extends Component {
       this.refresh();
 
   }
-
+  
   view() {
+    console.log(this.users);
     return (
       <div className="RankingPage">
         {IndexPage.prototype.hero()}
@@ -23,7 +43,6 @@ export default class RankingsPage extends Component {
           <nav className="IndexPage-nav sideNav" config={IndexPage.prototype.affixSidebar}>
             <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
           </nav>
-
           <div className="sideNavOffset">
             <table class="rankings">
               <tr>
@@ -31,32 +50,14 @@ export default class RankingsPage extends Component {
                 <th>{app.translator.trans('reflar-gamification.forum.ranking.name')}</th>
                 <th>{app.translator.trans('reflar-gamification.forum.ranking.amount')}</th>
               </tr>
-                  {this.users.map((user) => {
-                    
-                  user['user'].then(function(user) {
-
-                  return [
-                    <tr>
-                      <td class={"rankings-" + user['class']}>{icon("trophy")}</td>
-                      <td>
-                        <div className = "PostUser">
-                          <h3 className="rankings-info">
-                            <a href={app.route.user(user)} config={m.route}>
-                              {avatar(user, {className: 'info-avatar rankings-' + user + '-avatar'})}
-                            </a>
-                          </h3>
-                        </div>
-                      </td>
-                      <td>{user.data.attributes['antoinefr-money.money']}</td>
-                    </tr>
-                    ]
-                  })
-                })}
+              {this.users.map(user => {
+                UserItem(user, i)
+              })}
             </table>
           </div>
         </div>
       </div>
-    );
+    )
   }
 
     refresh(clear = true) {
@@ -79,14 +80,17 @@ export default class RankingsPage extends Component {
 
 
     loadResults(offset) {
-        const params = {};
-        params.page = {
+        const data = {};
+        data.page = {
             offset: offset,
             limit: '10'
         };
-        params.sort = 'points';
 
-        return app.store.find('users', params);
+        app.request({
+          method: 'GET',
+          url: app.forum.attribute('apiUrl') + '/rankings',
+          data
+        }).then(this.parseResults.bind(this));
     }
 
 
@@ -97,7 +101,10 @@ export default class RankingsPage extends Component {
             .then(this.parseResults.bind(this));
     }
 
-    parseResults(results) {
+    parseResults() {
+        this.map(user => {
+          user = app.store.find('users', user.id)
+        });
         [].push.apply(this.users, results);
 
         this.loading = false;

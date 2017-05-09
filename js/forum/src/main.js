@@ -7,7 +7,7 @@ import AddHotnessFilter from 'Reflar/gamification/components/AddHotnessSort';
 import AddVoteButtons from 'Reflar/gamification/components/AddVoteButtons';
 import Rank from 'Reflar/gamification/models/Rank';
 // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
-// import RankingsPage from 'Reflar/gamification/components/RankingsPage';
+import RankingsPage from 'Reflar/gamification/components/RankingsPage';
 
 
 app.initializers.add('Reflar-gamification', app => {
@@ -17,7 +17,7 @@ app.initializers.add('Reflar-gamification', app => {
   
     // app.notificationComponents.userPromoted = UserPromotedNotification;
 
-    // app.routes.page = {path: '/rankings', component: RankingsPage.component()};
+    app.routes.page = {path: '/rankings', component: RankingsPage.component()};
 
     AddVoteButtons();
     AddHotnessFilter();

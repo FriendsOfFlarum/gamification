@@ -20,6 +20,8 @@ reflar-gamification:
       desc: Gamification for your Flarum community
     page:
       votes:
+        color_holder: '#ffffff'
+        auto_upvote: Auto upvote posts when posted
         title: Votes
         vote_color: Voted color
         icon_name: Upvote/downvote icon
@@ -39,5 +41,3 @@ reflar-gamification:
           help: "Input the required number of upvotes, the name of the rank, and the hex color of the rank"
           points: Points
           name: Name
-        default: Default rank
-        default_help: This rank will be shown if a user does not have a rank. Leave blank to show none.

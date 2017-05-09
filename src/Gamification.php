@@ -138,18 +138,15 @@ class Gamification
     /**
      * @return mixed
      */
-    public function findTopThree()
+    public function orderByPoints($limit, $offset)
     {
         $query = User::query()
             ->orderBy('votes', 'desc')
-            ->take(3)
+            ->offset($offset)
+            ->take($limit)
             ->get();
 
         return $query;
-    }
-
-    public function findColorForRank($rank)
-    {
     }
 
     /**

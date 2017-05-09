@@ -355,6 +355,42 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
   "use strict";
 
   var avatar, Component, IndexPage, listItems, icon, username, UserCard, RankingsPage;
+
+
+  function UserItem(user, number) {
+    return m(
+      'tr',
+      null,
+      m(
+        'td',
+        { 'class': "rankings-" + number },
+        icon("trophy")
+      ),
+      m(
+        'td',
+        null,
+        m(
+          'div',
+          { className: 'PostUser' },
+          m(
+            'h3',
+            { className: 'rankings-info' },
+            m(
+              'a',
+              { href: app.route.user(user), config: m.route },
+              avatar(user, { className: 'info-avatar rankings-' + user + '-avatar' })
+            )
+          )
+        )
+      ),
+      m(
+        'td',
+        null,
+        user.data.attributes['antoinefr-money.money']
+      )
+    );
+  }
+
   return {
     setters: [function (_flarumHelpersAvatar) {
       avatar = _flarumHelpersAvatar.default;
@@ -391,6 +427,7 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
         }, {
           key: 'view',
           value: function view() {
+            console.log(this.users);
             return m(
               'div',
               { className: 'RankingPage' },
@@ -433,41 +470,7 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
                       )
                     ),
                     this.users.map(function (user) {
-
-                      user['user'].then(function (user) {
-
-                        return [m(
-                          'tr',
-                          null,
-                          m(
-                            'td',
-                            { 'class': "rankings-" + user['class'] },
-                            icon("trophy")
-                          ),
-                          m(
-                            'td',
-                            null,
-                            m(
-                              'div',
-                              { className: 'PostUser' },
-                              m(
-                                'h3',
-                                { className: 'rankings-info' },
-                                m(
-                                  'a',
-                                  { href: app.route.user(user), config: m.route },
-                                  avatar(user, { className: 'info-avatar rankings-' + user + '-avatar' })
-                                )
-                              )
-                            )
-                          ),
-                          m(
-                            'td',
-                            null,
-                            user.data.attributes['antoinefr-money.money']
-                          )
-                        )];
-                      });
+                      UserItem(user, i);
                     })
                   )
                 )
@@ -497,14 +500,17 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
         }, {
           key: 'loadResults',
           value: function loadResults(offset) {
-            var params = {};
-            params.page = {
+            var data = {};
+            data.page = {
               offset: offset,
               limit: '10'
             };
-            params.sort = 'points';
 
-            return app.store.find('users', params);
+            app.request({
+              method: 'GET',
+              url: app.forum.attribute('apiUrl') + '/rankings',
+              data: data
+            }).then(this.parseResults.bind(this));
           }
         }, {
           key: 'loadMore',
@@ -515,7 +521,10 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
           }
         }, {
           key: 'parseResults',
-          value: function parseResults(results) {
+          value: function parseResults() {
+            this.map(function (user) {
+              user = app.store.find('users', user.id);
+            });
             [].push.apply(this.users, results);
 
             this.loading = false;
@@ -684,54 +693,54 @@ System.register('Reflar/gamification/components/VotesModal', ['flarum/components
 });;
 'use strict';
 
-System.register('Reflar/gamification/main', ['flarum/extend', 'flarum/app', 'Reflar/gamification/components/AddAttributes', 'Reflar/gamification/components/AddHotnessSort', 'Reflar/gamification/components/AddVoteButtons', 'Reflar/gamification/models/Rank'], function (_export, _context) {
-    "use strict";
+System.register('Reflar/gamification/main', ['flarum/extend', 'flarum/app', 'Reflar/gamification/components/AddAttributes', 'Reflar/gamification/components/AddHotnessSort', 'Reflar/gamification/components/AddVoteButtons', 'Reflar/gamification/models/Rank', 'Reflar/gamification/components/RankingsPage'], function (_export, _context) {
+  "use strict";
 
-    var extend, app, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank;
-    return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_ReflarGamificationComponentsAddAttributes) {
-            AddAttributes = _ReflarGamificationComponentsAddAttributes.default;
-        }, function (_ReflarGamificationComponentsAddHotnessSort) {
-            AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default;
-        }, function (_ReflarGamificationComponentsAddVoteButtons) {
-            AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
-        }, function (_ReflarGamificationModelsRank) {
-            Rank = _ReflarGamificationModelsRank.default;
-        }],
-        execute: function () {
-            // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
-            // import RankingsPage from 'Reflar/gamification/components/RankingsPage';
+  var extend, app, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank, RankingsPage;
+  return {
+    setters: [function (_flarumExtend) {
+      extend = _flarumExtend.extend;
+    }, function (_flarumApp) {
+      app = _flarumApp.default;
+    }, function (_ReflarGamificationComponentsAddAttributes) {
+      AddAttributes = _ReflarGamificationComponentsAddAttributes.default;
+    }, function (_ReflarGamificationComponentsAddHotnessSort) {
+      AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default;
+    }, function (_ReflarGamificationComponentsAddVoteButtons) {
+      AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
+    }, function (_ReflarGamificationModelsRank) {
+      Rank = _ReflarGamificationModelsRank.default;
+    }, function (_ReflarGamificationComponentsRankingsPage) {
+      RankingsPage = _ReflarGamificationComponentsRankingsPage.default;
+    }],
+    execute: function () {
 
+      app.initializers.add('Reflar-gamification', function (app) {
 
-            // import NotificationGrid from 'flarum/components/NotificationGrid';
+        app.store.models.ranks = Rank;
 
-            app.initializers.add('Reflar-gamification', function (app) {
+        // app.notificationComponents.userPromoted = UserPromotedNotification;
 
-                app.store.models.ranks = Rank;
+        app.routes.page = { path: '/rankings', component: RankingsPage.component() };
 
-                // app.notificationComponents.userPromoted = UserPromotedNotification;
+        AddVoteButtons();
+        AddHotnessFilter();
+        AddAttributes();
 
-                // app.routes.page = {path: '/rankings', component: RankingsPage.component()};
+        /**
+          extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+              items.add('userPromoted', {
+                  name: 'userPromoted',
+                  icon: 'arrow-up',
+                  label: ['hi']
+              });
+          });*/
+      });
+      // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
 
-                AddVoteButtons();
-                AddHotnessFilter();
-                AddAttributes();
-
-                /**
-                  extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
-                      items.add('userPromoted', {
-                          name: 'userPromoted',
-                          icon: 'arrow-up',
-                          label: ['hi']
-                      });
-                  });*/
-            });
-        }
-    };
+      // import NotificationGrid from 'flarum/components/NotificationGrid';
+    }
+  };
 });;
 'use strict';
 

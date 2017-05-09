@@ -114,10 +114,8 @@ class AddRelationships
             $event->attributes['Points'] = $event->model->votes;
         }
         if ($event->isSerializer(ForumSerializer::class)) {
-            $event->attributes['DefaultRank'] = $this->settings->get('reflar.gamification.defaultRank');
             $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
             $event->attributes['autoUpvote'] = $this->settings->get('reflar.gamification.voteColor');
-            $event->attributes['RankHolder'] = $this->settings->get('reflar.gamification.rankHolder');
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
