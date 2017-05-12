@@ -13,14 +13,15 @@
 namespace Reflar\gamification\Notification;
 
 use Flarum\Core\Notification\BlueprintInterface;
+use Flarum\Core\Post;
 use Flarum\Core\User;
 
-class RankupBlueprint implements BlueprintInterface
+class DownvotedBlueprint implements BlueprintInterface
 {
     /**
-     * @var string
+     * @var Post
      */
-    public $rank;
+    public $post;
 
     /**
      * @var User
@@ -28,12 +29,11 @@ class RankupBlueprint implements BlueprintInterface
     public $user;
 
     /**
-     * @param $rank
-     * @param User $user
+     * @param Post $post
      */
-    public function __construct($rank, User $user)
+    public function __construct(Post $post, User $user)
     {
-        $this->rank = $rank;
+        $this->post = $post;
         $this->user = $user;
     }
 
@@ -42,7 +42,7 @@ class RankupBlueprint implements BlueprintInterface
      */
     public function getSubject()
     {
-        return $this->user;
+        return $this->post;
     }
 
     /**
@@ -58,7 +58,6 @@ class RankupBlueprint implements BlueprintInterface
      */
     public function getData()
     {
-        return ['rank' => $this->rank->name];
     }
 
     /**
@@ -66,7 +65,7 @@ class RankupBlueprint implements BlueprintInterface
      */
     public static function getType()
     {
-        return 'userPromoted';
+        return 'downvoted';
     }
 
     /**
@@ -74,6 +73,6 @@ class RankupBlueprint implements BlueprintInterface
      */
     public static function getSubjectModel()
     {
-        return User::class;
+        return Post::class;
     }
 }

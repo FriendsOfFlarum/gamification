@@ -1,51 +1,49 @@
-import { extend } from 'flarum/extend';
-import avatar from 'flarum/helpers/avatar';
-import Page from 'flarum/components/Page';
-import IndexPage from 'flarum/components/IndexPage';
-import Button from 'flarum/components/Button';
-import ItemList from 'flarum/utils/ItemList';
-import LogInModal from 'flarum/components/LogInModal';
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import Select from 'flarum/components/Select';
-import LinkButton from 'flarum/components/LinkButton';
-import listItems from 'flarum/helpers/listItems';
-import icon from 'flarum/helpers/icon';
-import username from 'flarum/helpers/username';
-import SelectDropdown from 'flarum/components/SelectDropdown';
+import {extend} from "flarum/extend";
+import avatar from "flarum/helpers/avatar";
+import Page from "flarum/components/Page";
+import IndexPage from "flarum/components/IndexPage";
+import Button from "flarum/components/Button";
+import ItemList from "flarum/utils/ItemList";
+import LogInModal from "flarum/components/LogInModal";
+import LoadingIndicator from "flarum/components/LoadingIndicator";
+import LinkButton from "flarum/components/LinkButton";
+import listItems from "flarum/helpers/listItems";
+import icon from "flarum/helpers/icon";
+import username from "flarum/helpers/username";
+import SelectDropdown from "flarum/components/SelectDropdown";
 
 
 export default class RankingsPage extends Page {
     init() {
         super.init();
-      
+
         this.loading = true;
         this.users = [];
         this.refresh();
     }
-  
-  
+
 
     view() {
         let loading;
 
         if (this.loading) {
-          loading = LoadingIndicator.component();
+            loading = LoadingIndicator.component();
         } else {
-          loading = Button.component({
-            children: app.translator.trans('core.forum.discussion_list.load_more_button'),
-            className: 'Button',
-            onclick: this.loadMore.bind(this)
-          });
+            loading = Button.component({
+                children: app.translator.trans('core.forum.discussion_list.load_more_button'),
+                className: 'Button rankings-button',
+                onclick: this.loadMore.bind(this)
+            });
         }
         return (
-          <div className="IndexPage">
+            <div className="IndexPage">
                 {IndexPage.prototype.hero()}
                 <div className="container">
                     <div className="IndexPage-results">
                         <div className="RankingPage">
                             <div className="container">
                                 <nav className="IndexPage-nav sideNav">
-                                    <ul>{listItems(this.sidebarItems().toArray())}</ul>
+                                    <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
                                 </nav>
                                 <div className="sideNavOffset">
                                     <table class="rankings">
@@ -58,8 +56,8 @@ export default class RankingsPage extends Page {
                                             ++i;
                                             return [
                                                 <tr className={"ranking-" + i}>
-                                              {i < 4 ? (<td className={"rankings-" + i}> {icon("trophy")}</td>) 
-                                                    : (<td className="rankings-4">{this.addOrdinalSuffix(i)}</td>)}
+                                                    {i < 4 ? (<td className={"rankings-" + i}> {icon("trophy")}</td>)
+                                                        : (<td className="rankings-4">{this.addOrdinalSuffix(i)}</td>)}
                                                     <td>
                                                         <div className="PostUser">
                                                             <h3 className="rankings-info">
@@ -69,8 +67,10 @@ export default class RankingsPage extends Page {
                                                             </h3>
                                                         </div>
                                                     </td>
-                                                    {i < 4 ? (<td className={"rankings-" + i}>{user.data.attributes.Points}</td>)
-                                                         : (<td className="rankings-4">{user.data.attributes.Points}</td>)}
+                                                    {i < 4 ? (
+                                                            <td className={"rankings-" + i}>{user.data.attributes.Points}</td>)
+                                                        : (
+                                                            <td className="rankings-4">{user.data.attributes.Points}</td>)}
                                                 </tr>
                                             ]
                                         })}
@@ -118,57 +118,6 @@ export default class RankingsPage extends Page {
         return i + "th";
     }
 
-    sidebarItems() {
-        const items = new ItemList();
-        const canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
-
-        items.add('newDiscussion',
-            Button.component({
-                children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
-                icon: 'edit',
-                className: 'Button Button--primary IndexPage-newDiscussion',
-                itemClassName: 'App-primaryControl',
-                onclick: this.newDiscussion.bind(this),
-                disabled: !canStartDiscussion
-            })
-        );
-
-        items.add('nav',
-            SelectDropdown.component({
-                children: this.navItems(this).toArray(),
-                buttonClassName: 'Button',
-                className: 'App-titleControl'
-            })
-        );
-
-        return items;
-    }
-
-    navItems() {
-        const items = new ItemList();
-        const params = this.stickyParams();
-
-        items.add('allDiscussions',
-            LinkButton.component({
-                href: app.route('index', params),
-                children: app.translator.trans('core.forum.index.all_discussions_link'),
-                icon: 'comments-o'
-            }),
-            100
-        );
-      
-        items.add('rankings',
-          LinkButton.component({
-            href: app.route('rankings', {}),
-            children: app.translator.trans('reflar-gamification.forum.nav.name'),
-            icon: 'trophy'
-        }),
-        80
-      )
-
-        return items;
-    }
-
     stickyParams() {
         return {
             sort: m.route.param('sort'),
@@ -196,7 +145,6 @@ export default class RankingsPage extends Page {
 
         return items;
     }
-
 
 
     newDiscussion() {
@@ -234,7 +182,7 @@ export default class RankingsPage extends Page {
             limit: '10'
         };
 
-      return app.store.find('rankings', params);
+        return app.store.find('rankings', params);
     }
 
 
@@ -249,8 +197,8 @@ export default class RankingsPage extends Page {
         [].push.apply(this.users, results);
 
         this.loading = false;
-      
-        this.users.sort(function(a, b) {
+
+        this.users.sort(function (a, b) {
             return parseFloat(b.data.attributes.Points) - parseFloat(a.data.attributes.Points);
         });
 

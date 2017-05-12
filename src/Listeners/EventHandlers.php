@@ -12,13 +12,18 @@
 
 namespace Reflar\gamification\Listeners;
 
+use Flarum\Api\Serializer\PostBasicSerializer;
+use Flarum\Api\Serializer\UserBasicSerializer;
 use Flarum\Core\Notification\NotificationSyncer;
+use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Event\PostWasDeleted;
 use Flarum\Event\PostWasPosted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Events\PostWasDownvoted;
 use Reflar\gamification\Events\PostWasUpvoted;
+use Reflar\gamification\Notification\UpvotedBlueprint;
+use Reflar\gamification\Notification\DownvotedBlueprint;
 use Reflar\gamification\Notification\RankupBlueprint;
 use Reflar\gamification\Gamification;
 use Reflar\gamification\Rank;
@@ -56,6 +61,7 @@ class EventHandlers
      */
     public function subscribe(Dispatcher $events)
     {
+        $events->listen(ConfigureNotificationTypes::class, [$this, 'registerNotificationType']);
         $events->listen(PostWasDownvoted::class, [$this, 'checkDownUser']);
         $events->listen(PostWasUpvoted::class, [$this, 'checkUpUser']);
         $events->listen(PostWasPosted::class, [$this, 'addVote']);
@@ -67,6 +73,7 @@ class EventHandlers
      */
     public function checkUpUser(PostWasUpvoted $event)
     {
+        die('test');
         $this->checkUpUserVotes($event->user, $event->actor);
     }
 
@@ -83,7 +90,7 @@ class EventHandlers
      */
     public function addVote(PostWasPosted $event)
     {
-        if ($this->settings->get('reflar.gamification.autoUpvotePosts') !== false) {
+        if ($this->settings->get('reflar.gamification.autoUpvotePosts') !== '0') {
             $event->actor->increment('votes');
             $event->post->discussion->increment('votes');
             $this->gamification->calculateHotness($event->post->discussion);
@@ -91,6 +98,16 @@ class EventHandlers
 
             $this->checkUpUserVotes($event->actor, $event->actor);
         }
+    }
+
+    /**
+     * @param ConfigureNotificationTypes $event
+     */
+    public function registerNotificationType(ConfigureNotificationTypes $event)
+    {
+        $event->add(DownvotedBlueprint::class, PostBasicSerializer::class, ['alert']);
+        $event->add(UpvotedBlueprint::class, PostBasicSerializer::class, ['alert']);
+        $event->add(RankupBlueprint::class, UserBasicSerializer::class, ['alert']);
     }
 
     /**
@@ -108,16 +125,17 @@ class EventHandlers
      */
     protected function checkUpUserVotes($user, $actor)
     {
-        $ranks = Rank::where('points', $user->votes)->get();
+        $ranks = Rank::where('points', '<=', $user->votes)->get();
 
         if ($ranks !== null) {
             foreach($ranks as $rank)
             $user->ranks()->attach($rank->id);
-            /*
-            $this->notifications->sync(
-                new RankupBlueprint($ranks[$user->votes], $actor),
-                [$user]);
-            */
+
+            if ($user->id !== $actor->id) {
+                $this->notifications->sync(
+                    new RankupBlueprint($rank, $actor),
+                    [$user]);
+            }
         }
     }
 

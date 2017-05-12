@@ -18,7 +18,7 @@ export default function () {
     if (post.isHidden()) return;
 
     if (app.forum.attribute('autoUpvote') !== null && app.forum.attribute('autoUpvote') !== '') {
-      color = app.forum.attribute('autoUpvote');
+      color = app.forum.attribute('VoteColor');
     } else {
       color = '#f44336';
     }

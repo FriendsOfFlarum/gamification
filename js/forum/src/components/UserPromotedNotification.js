@@ -1,10 +1,8 @@
 import Notification from 'flarum/components/Notification';
-import username from 'flarum/helpers/username';
-import punctuateSeries from 'flarum/helpers/punctuateSeries';
 
 export default class UserPromotedNotification extends Notification {
   icon() {
-    return 'thumbs-o-up';
+    return 'arrow-up';
   }
 
   href() {
@@ -13,16 +11,8 @@ export default class UserPromotedNotification extends Notification {
 
   content() {
     const notification = this.props.notification;
-    const user = notification.sender();
-    const auc = notification.additionalUnreadCount();
 
-    return app.translator.transChoice('flarum-likes.forum.notifications.post_liked_text', auc + 1, {
-      user,
-      username: auc ? punctuateSeries([
-        username(user),
-        app.translator.transChoice('flarum-likes.forum.notifications.others_text', auc, {count: auc})
-      ]) : undefined
-    });
+    return app.translator.trans('reflar-gamification.forum.notification.promoted', {rank: notification.content().rank});
   }
 
   excerpt() {

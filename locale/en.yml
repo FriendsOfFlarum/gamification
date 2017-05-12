@@ -5,6 +5,20 @@ core:
       
 reflar-gamification:
   forum:
+    nav:
+      name: Rankings
+    ranking:
+      rank: Place
+      name: User
+      amount: Points
+    notification:
+      upvote: Someone upvoted your post
+      downvote: Someone downvoted your post
+      promoted: 'You have been promoted to {rank}'
+      grid:
+        userPromoted: I got promoted
+        upvoted: Someone upvoted one of my posts
+        downvoted: Someone downvoted one of my posts
     user:
       points: "Points: {points}"
       rank: "{rank}"

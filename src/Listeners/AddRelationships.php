@@ -27,6 +27,7 @@ use Flarum\Event\PrepareApiAttributes;
 use Flarum\Event\PrepareApiData;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
+use Reflar\gamification\Api\Controllers\OrderByPointsController;
 use Reflar\gamification\Rank;
 use Reflar\gamification\Api\Serializers\RankSerializer;
 
@@ -115,7 +116,8 @@ class AddRelationships
         }
         if ($event->isSerializer(ForumSerializer::class)) {
             $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
-            $event->attributes['autoUpvote'] = $this->settings->get('reflar.gamification.voteColor');
+            $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
+            $event->attributes['VoteColor'] = $this->settings->get('reflar.gamification.voteColor');
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
@@ -131,6 +133,7 @@ class AddRelationships
         if ($event->isController(Controller\ListUsersController::class)
             || $event->isController(Controller\ShowUserController::class)
             || $event->isController(Controller\CreateUserController::class)
+            || $event->isController(OrderByPointsController::class)
             || $event->isController(Controller\UpdateUserController::class)) {
             $event->addInclude('ranks');
         }

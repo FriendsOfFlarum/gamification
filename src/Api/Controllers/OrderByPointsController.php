@@ -22,6 +22,11 @@ class OrderByPointsController extends AbstractCollectionController
     public $serializer = 'Flarum\Api\Serializer\UserSerializer';
 
     /**
+     * @var array
+     */
+    public $include = ['ranks'];
+
+    /**
      * @var Gamification
      */
     protected $gamification;

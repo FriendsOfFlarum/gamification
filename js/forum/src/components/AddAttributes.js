@@ -1,14 +1,14 @@
-import avatar from 'flarum/helpers/avatar';
-import username from 'flarum/helpers/username';
-import Discussion from 'flarum/models/Discussion';
-import { extend } from 'flarum/extend';
-import Model from 'flarum/Model';
-import Post from 'flarum/models/Post';
-import PostUser from 'flarum/components/PostUser';
-import User from 'flarum/models/User';
-import UserCard from 'flarum/components/UserCard';
-import userOnline from 'flarum/helpers/userOnline';
-import listItems from 'flarum/helpers/listItems';
+import avatar from "flarum/helpers/avatar";
+import username from "flarum/helpers/username";
+import Discussion from "flarum/models/Discussion";
+import {extend} from "flarum/extend";
+import Model from "flarum/Model";
+import Post from "flarum/models/Post";
+import PostUser from "flarum/components/PostUser";
+import User from "flarum/models/User";
+import UserCard from "flarum/components/UserCard";
+import userOnline from "flarum/helpers/userOnline";
+import listItems from "flarum/helpers/listItems";
 
 export default function () {    
     Discussion.prototype.canVote = Model.attribute('canVote');
@@ -73,11 +73,11 @@ export default function () {
                         {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
                     </a>
                     {user.ranks().map(rank => {
-                      return (
-                       <span className="Post-Rank" style={"color: " + rank.color()}>
+                        return (
+                            <span className="Post-Rank" style={"color: " + rank.color()}>
                             {rank.name()}
                         </span>
-                      );
+                        );
                     })}
                 </h3>
                 <ul className="PostUser-badges badges">
