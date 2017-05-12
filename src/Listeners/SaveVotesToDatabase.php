@@ -158,6 +158,7 @@ class SaveVotesToDatabase
                     new PostWasUpvoted($post, $user, $actor)
                 );
             }
+            $user->save();
             $this->gamification->calculateHotness($post->discussion);
         }
     }

@@ -351,27 +351,43 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
 });;
 'use strict';
 
-System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/avatar', 'flarum/Component', 'flarum/components/IndexPage', 'flarum/helpers/listItems', 'flarum/helpers/icon', 'flarum/helpers/username'], function (_export, _context) {
+System.register('Reflar/gamification/components/RankingsPage', ['flarum/extend', 'flarum/helpers/avatar', 'flarum/components/Page', 'flarum/components/IndexPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flarum/components/LogInModal', 'flarum/components/LoadingIndicator', 'flarum/components/Select', 'flarum/components/LinkButton', 'flarum/helpers/listItems', 'flarum/helpers/icon', 'flarum/helpers/username', 'flarum/components/SelectDropdown'], function (_export, _context) {
     "use strict";
 
-    var avatar, Component, IndexPage, listItems, icon, username, RankingsPage;
+    var extend, avatar, Page, IndexPage, Button, ItemList, LogInModal, LoadingIndicator, Select, LinkButton, listItems, icon, username, SelectDropdown, RankingsPage;
     return {
-        setters: [function (_flarumHelpersAvatar) {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumHelpersAvatar) {
             avatar = _flarumHelpersAvatar.default;
-        }, function (_flarumComponent) {
-            Component = _flarumComponent.default;
+        }, function (_flarumComponentsPage) {
+            Page = _flarumComponentsPage.default;
         }, function (_flarumComponentsIndexPage) {
             IndexPage = _flarumComponentsIndexPage.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flarumUtilsItemList) {
+            ItemList = _flarumUtilsItemList.default;
+        }, function (_flarumComponentsLogInModal) {
+            LogInModal = _flarumComponentsLogInModal.default;
+        }, function (_flarumComponentsLoadingIndicator) {
+            LoadingIndicator = _flarumComponentsLoadingIndicator.default;
+        }, function (_flarumComponentsSelect) {
+            Select = _flarumComponentsSelect.default;
+        }, function (_flarumComponentsLinkButton) {
+            LinkButton = _flarumComponentsLinkButton.default;
         }, function (_flarumHelpersListItems) {
             listItems = _flarumHelpersListItems.default;
         }, function (_flarumHelpersIcon) {
             icon = _flarumHelpersIcon.default;
         }, function (_flarumHelpersUsername) {
             username = _flarumHelpersUsername.default;
+        }, function (_flarumComponentsSelectDropdown) {
+            SelectDropdown = _flarumComponentsSelectDropdown.default;
         }],
         execute: function () {
-            RankingsPage = function (_Component) {
-                babelHelpers.inherits(RankingsPage, _Component);
+            RankingsPage = function (_Page) {
+                babelHelpers.inherits(RankingsPage, _Page);
 
                 function RankingsPage() {
                     babelHelpers.classCallCheck(this, RankingsPage);
@@ -381,93 +397,132 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
                 babelHelpers.createClass(RankingsPage, [{
                     key: 'init',
                     value: function init() {
+                        babelHelpers.get(RankingsPage.prototype.__proto__ || Object.getPrototypeOf(RankingsPage.prototype), 'init', this).call(this);
+
                         this.loading = true;
-                        this.moreResults = false;
                         this.users = [];
                         this.refresh();
                     }
                 }, {
                     key: 'view',
                     value: function view() {
+                        var _this2 = this;
+
+                        var loading = void 0;
+
+                        if (this.loading) {
+                            loading = LoadingIndicator.component();
+                        } else {
+                            loading = Button.component({
+                                children: app.translator.trans('core.forum.discussion_list.load_more_button'),
+                                className: 'Button',
+                                onclick: this.loadMore.bind(this)
+                            });
+                        }
                         return m(
                             'div',
-                            { className: 'RankingPage' },
+                            { className: 'IndexPage' },
                             IndexPage.prototype.hero(),
                             m(
                                 'div',
                                 { className: 'container' },
                                 m(
-                                    'nav',
-                                    { className: 'IndexPage- nav sideNav', config: IndexPage.prototype.affixSidebar },
-                                    m(
-                                        'ul',
-                                        null,
-                                        listItems(IndexPage.prototype.sidebarItems().toArray())
-                                    )
-                                ),
-                                m(
                                     'div',
-                                    { className: 'sideNavOffset' },
+                                    { className: 'IndexPage-results' },
                                     m(
-                                        'table',
-                                        { 'class': 'rankings' },
+                                        'div',
+                                        { className: 'RankingPage' },
                                         m(
-                                            'tr',
-                                            null,
+                                            'div',
+                                            { className: 'container' },
                                             m(
-                                                'th',
-                                                null,
-                                                app.translator.trans('reflar-gamification.forum.ranking.rank')
-                                            ),
-                                            m(
-                                                'th',
-                                                null,
-                                                app.translator.trans('reflar-gamification.forum.ranking.name')
-                                            ),
-                                            m(
-                                                'th',
-                                                null,
-                                                app.translator.trans('reflar-gamification.forum.ranking.amount')
-                                            )
-                                        ),
-                                        this.users.map(function (user, i) {
-                                            console.log(user);
-
-                                            return [m(
-                                                'tr',
-                                                null,
+                                                'nav',
+                                                { className: 'IndexPage-nav sideNav' },
                                                 m(
-                                                    'td',
-                                                    { 'class': "rankings-" + ++i },
-                                                    ' ',
-                                                    icon("trophy")
-                                                ),
-                                                m(
-                                                    'td',
+                                                    'ul',
                                                     null,
-                                                    m(
-                                                        'div',
-                                                        { className: 'PostUser' },
-                                                        m(
-                                                            'h3',
-                                                            { className: 'rankings-info' },
-                                                            m(
-                                                                'a',
-                                                                { href: app.route.user(user), config: m.route },
-                                                                avatar(user, { className: 'info-avatar rankings-' + ++i + '-avatar' }),
-                                                                ' ',
-                                                                username(user)
-                                                            )
-                                                        )
-                                                    )
-                                                ),
-                                                m(
-                                                    'td',
-                                                    null,
-                                                    user.data.attributes.Points
+                                                    listItems(this.sidebarItems().toArray())
                                                 )
-                                            )];
-                                        })
+                                            ),
+                                            m(
+                                                'div',
+                                                { className: 'sideNavOffset' },
+                                                m(
+                                                    'table',
+                                                    { 'class': 'rankings' },
+                                                    m(
+                                                        'tr',
+                                                        null,
+                                                        m(
+                                                            'th',
+                                                            null,
+                                                            app.translator.trans('reflar-gamification.forum.ranking.rank')
+                                                        ),
+                                                        m(
+                                                            'th',
+                                                            null,
+                                                            app.translator.trans('reflar-gamification.forum.ranking.name')
+                                                        ),
+                                                        m(
+                                                            'th',
+                                                            null,
+                                                            app.translator.trans('reflar-gamification.forum.ranking.amount')
+                                                        )
+                                                    ),
+                                                    this.users.map(function (user, i) {
+                                                        ++i;
+                                                        return [m(
+                                                            'tr',
+                                                            { className: "ranking-" + i },
+                                                            i < 4 ? m(
+                                                                'td',
+                                                                { className: "rankings-" + i },
+                                                                ' ',
+                                                                icon("trophy")
+                                                            ) : m(
+                                                                'td',
+                                                                { className: 'rankings-4' },
+                                                                _this2.addOrdinalSuffix(i)
+                                                            ),
+                                                            m(
+                                                                'td',
+                                                                null,
+                                                                m(
+                                                                    'div',
+                                                                    { className: 'PostUser' },
+                                                                    m(
+                                                                        'h3',
+                                                                        { className: 'rankings-info' },
+                                                                        m(
+                                                                            'a',
+                                                                            { href: app.route.user(user), config: m.route },
+                                                                            i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : '',
+                                                                            ' ',
+                                                                            username(user)
+                                                                        )
+                                                                    )
+                                                                )
+                                                            ),
+                                                            i < 4 ? m(
+                                                                'td',
+                                                                { className: "rankings-" + i },
+                                                                user.data.attributes.Points
+                                                            ) : m(
+                                                                'td',
+                                                                { className: 'rankings-4' },
+                                                                user.data.attributes.Points
+                                                            )
+                                                        )];
+                                                    })
+                                                ),
+                                                m(
+                                                    'div',
+                                                    { className: 'rankings-loadmore' },
+                                                    ' ',
+                                                    loading
+                                                )
+                                            )
+                                        )
                                     )
                                 )
                             )
@@ -476,7 +531,7 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
                 }, {
                     key: 'refresh',
                     value: function refresh() {
-                        var _this2 = this;
+                        var _this3 = this;
 
                         var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
@@ -486,27 +541,137 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
                         }
 
                         return this.loadResults().then(function (results) {
-                            _this2.users = [];
-                            _this2.parseResults(results);
+                            _this3.users = [];
+                            _this3.parseResults(results);
                         }, function () {
-                            _this2.loading = false;
+                            _this3.loading = false;
                             m.redraw();
                         });
                     }
                 }, {
+                    key: 'addOrdinalSuffix',
+                    value: function addOrdinalSuffix(i) {
+                        var j = i % 10,
+                            k = i % 100;
+                        if (j == 1 && k != 11) {
+                            return i + "st";
+                        }
+                        if (j == 2 && k != 12) {
+                            return i + "nd";
+                        }
+                        if (j == 3 && k != 13) {
+                            return i + "rd";
+                        }
+                        return i + "th";
+                    }
+                }, {
+                    key: 'sidebarItems',
+                    value: function sidebarItems() {
+                        var items = new ItemList();
+                        var canStartDiscussion = app.forum.attribute('canStartDiscussion') || !app.session.user;
+
+                        items.add('newDiscussion', Button.component({
+                            children: app.translator.trans(canStartDiscussion ? 'core.forum.index.start_discussion_button' : 'core.forum.index.cannot_start_discussion_button'),
+                            icon: 'edit',
+                            className: 'Button Button--primary IndexPage-newDiscussion',
+                            itemClassName: 'App-primaryControl',
+                            onclick: this.newDiscussion.bind(this),
+                            disabled: !canStartDiscussion
+                        }));
+
+                        items.add('nav', SelectDropdown.component({
+                            children: this.navItems(this).toArray(),
+                            buttonClassName: 'Button',
+                            className: 'App-titleControl'
+                        }));
+
+                        return items;
+                    }
+                }, {
+                    key: 'navItems',
+                    value: function navItems() {
+                        var items = new ItemList();
+                        var params = this.stickyParams();
+
+                        items.add('allDiscussions', LinkButton.component({
+                            href: app.route('index', params),
+                            children: app.translator.trans('core.forum.index.all_discussions_link'),
+                            icon: 'comments-o'
+                        }), 100);
+
+                        items.add('rankings', LinkButton.component({
+                            href: app.route('rankings', {}),
+                            children: app.translator.trans('reflar-gamification.forum.nav.name'),
+                            icon: 'trophy'
+                        }), 80);
+
+                        return items;
+                    }
+                }, {
+                    key: 'stickyParams',
+                    value: function stickyParams() {
+                        return {
+                            sort: m.route.param('sort'),
+                            q: m.route.param('q')
+                        };
+                    }
+                }, {
+                    key: 'actionItems',
+                    value: function actionItems() {
+                        var items = new ItemList();
+
+                        items.add('refresh', Button.component({
+                            title: app.translator.trans('core.forum.index.refresh_tooltip'),
+                            icon: 'refresh',
+                            className: 'Button Button--icon',
+                            onclick: function onclick() {
+                                app.cache.discussionList.refresh();
+                                if (app.session.user) {
+                                    app.store.find('users', app.session.user.id());
+                                    m.redraw();
+                                }
+                            }
+                        }));
+
+                        return items;
+                    }
+                }, {
+                    key: 'newDiscussion',
+                    value: function newDiscussion() {
+                        var deferred = m.deferred();
+
+                        if (app.session.user) {
+                            this.composeNewDiscussion(deferred);
+                        } else {
+                            app.modal.show(new LogInModal({
+                                onlogin: this.composeNewDiscussion.bind(this, deferred)
+                            }));
+                        }
+
+                        return deferred.promise;
+                    }
+                }, {
+                    key: 'composeNewDiscussion',
+                    value: function composeNewDiscussion(deferred) {
+                        var component = new DiscussionComposer({ user: app.session.user });
+
+                        app.composer.load(component);
+                        app.composer.show();
+
+                        deferred.resolve(component);
+
+                        return deferred.promise;
+                    }
+                }, {
                     key: 'loadResults',
                     value: function loadResults(offset) {
-                        var data = {};
-                        data.page = {
+                        var params = {};
+                        params.page = {
                             offset: offset,
                             limit: '10'
                         };
 
-                        return app.request({
-                            method: 'GET',
-                            url: app.forum.attribute('apiUrl') + '/rankings',
-                            data: data
-                        });
+                        return app.store.find('rankings', params);
                     }
                 }, {
                     key: 'loadMore',
@@ -518,14 +683,13 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
                 }, {
                     key: 'parseResults',
                     value: function parseResults(results) {
-                        var users = [];
-                        results.data.map(function (user, i) {
-                            users[i] = app.store.getBy('users', 'id', user.id);
-                        });
-
-                        [].push.apply(this.users, users);
+                        [].push.apply(this.users, results);
 
                         this.loading = false;
+
+                        this.users.sort(function (a, b) {
+                            return parseFloat(b.data.attributes.Points) - parseFloat(a.data.attributes.Points);
+                        });
 
                         m.lazyRedraw();
 
@@ -533,7 +697,7 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/helpers/
                     }
                 }]);
                 return RankingsPage;
-            }(Component);
+            }(Page);
 
             _export('default', RankingsPage);
         }
@@ -690,54 +854,66 @@ System.register('Reflar/gamification/components/VotesModal', ['flarum/components
 });;
 'use strict';
 
-System.register('Reflar/gamification/main', ['flarum/extend', 'flarum/app', 'Reflar/gamification/components/AddAttributes', 'Reflar/gamification/components/AddHotnessSort', 'Reflar/gamification/components/AddVoteButtons', 'Reflar/gamification/models/Rank', 'Reflar/gamification/components/RankingsPage'], function (_export, _context) {
-    "use strict";
+System.register('Reflar/gamification/main', ['flarum/extend', 'flarum/app', 'flarum/components/IndexPage', 'flarum/components/LinkButton', 'Reflar/gamification/components/AddAttributes', 'Reflar/gamification/components/AddHotnessSort', 'Reflar/gamification/components/AddVoteButtons', 'Reflar/gamification/models/Rank', 'Reflar/gamification/components/RankingsPage'], function (_export, _context) {
+  "use strict";
 
-    var extend, app, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank, RankingsPage;
-    return {
-        setters: [function (_flarumExtend) {
-            extend = _flarumExtend.extend;
-        }, function (_flarumApp) {
-            app = _flarumApp.default;
-        }, function (_ReflarGamificationComponentsAddAttributes) {
-            AddAttributes = _ReflarGamificationComponentsAddAttributes.default;
-        }, function (_ReflarGamificationComponentsAddHotnessSort) {
-            AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default;
-        }, function (_ReflarGamificationComponentsAddVoteButtons) {
-            AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
-        }, function (_ReflarGamificationModelsRank) {
-            Rank = _ReflarGamificationModelsRank.default;
-        }, function (_ReflarGamificationComponentsRankingsPage) {
-            RankingsPage = _ReflarGamificationComponentsRankingsPage.default;
-        }],
-        execute: function () {
+  var extend, app, IndexPage, LinkButton, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank, RankingsPage;
+  return {
+    setters: [function (_flarumExtend) {
+      extend = _flarumExtend.extend;
+    }, function (_flarumApp) {
+      app = _flarumApp.default;
+    }, function (_flarumComponentsIndexPage) {
+      IndexPage = _flarumComponentsIndexPage.default;
+    }, function (_flarumComponentsLinkButton) {
+      LinkButton = _flarumComponentsLinkButton.default;
+    }, function (_ReflarGamificationComponentsAddAttributes) {
+      AddAttributes = _ReflarGamificationComponentsAddAttributes.default;
+    }, function (_ReflarGamificationComponentsAddHotnessSort) {
+      AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default;
+    }, function (_ReflarGamificationComponentsAddVoteButtons) {
+      AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
+    }, function (_ReflarGamificationModelsRank) {
+      Rank = _ReflarGamificationModelsRank.default;
+    }, function (_ReflarGamificationComponentsRankingsPage) {
+      RankingsPage = _ReflarGamificationComponentsRankingsPage.default;
+    }],
+    execute: function () {
 
-            app.initializers.add('Reflar-gamification', function (app) {
+      app.initializers.add('Reflar-gamification', function (app) {
 
-                app.store.models.ranks = Rank;
+        app.store.models.ranks = Rank;
 
-                // app.notificationComponents.userPromoted = UserPromotedNotification;
+        // app.notificationComponents.userPromoted = UserPromotedNotification;
 
-                app.routes.page = { path: '/rankings', component: RankingsPage.component() };
+        app.routes.rankings = { path: '/rankings', component: RankingsPage.component() };
 
-                AddVoteButtons();
-                AddHotnessFilter();
-                AddAttributes();
+        AddVoteButtons();
+        AddHotnessFilter();
+        AddAttributes();
 
-                /**
-                  extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
-                      items.add('userPromoted', {
-                          name: 'userPromoted',
-                          icon: 'arrow-up',
-                          label: ['hi']
-                      });
-                  });*/
-            });
-            // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
+        extend(IndexPage.prototype, 'navItems', function (items) {
+          items.add('rankings', LinkButton.component({
+            href: app.route('rankings', {}),
+            children: app.translator.trans('reflar-gamification.forum.nav.name'),
+            icon: 'trophy'
+          }), 80);
+        });
 
-            // import NotificationGrid from 'flarum/components/NotificationGrid';
-        }
-    };
+        /**
+          extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+              items.add('userPromoted', {
+                  name: 'userPromoted',
+                  icon: 'arrow-up',
+                  label: ['hi']
+              });
+          });*/
+      });
+      // import UserPromotedNotification from 'Reflar/gamification/components/UserPromotedNotification';
+
+      // import NotificationGrid from 'flarum/components/NotificationGrid';
+    }
+  };
 });;
 'use strict';
 
