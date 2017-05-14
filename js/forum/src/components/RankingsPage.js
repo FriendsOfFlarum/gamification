@@ -31,7 +31,7 @@ export default class RankingsPage extends Page {
         } else {
             loading = Button.component({
                 children: app.translator.trans('core.forum.discussion_list.load_more_button'),
-                className: 'Button rankings-button',
+                className: 'Button',
                 onclick: this.loadMore.bind(this)
             });
         }
@@ -48,7 +48,7 @@ export default class RankingsPage extends Page {
                                 <div className="sideNavOffset">
                                     <table class="rankings">
                                         <tr>
-                                            <th>{app.translator.trans('reflar-gamification.forum.ranking.rank')}</th>
+                                            <th className="rankings-mobile">{app.translator.trans('reflar-gamification.forum.ranking.rank')}</th>
                                             <th>{app.translator.trans('reflar-gamification.forum.ranking.name')}</th>
                                             <th>{app.translator.trans('reflar-gamification.forum.ranking.amount')}</th>
                                         </tr>
@@ -56,8 +56,9 @@ export default class RankingsPage extends Page {
                                             ++i;
                                             return [
                                                 <tr className={"ranking-" + i}>
-                                                    {i < 4 ? (<td className={"rankings-" + i}> {icon("trophy")}</td>)
-                                                        : (<td className="rankings-4">{this.addOrdinalSuffix(i)}</td>)}
+                                                    {i < 4 ? (app.forum.attribute('CustomRankingImages') == '1' ? (<img className="rankings-mobile rankings-image" src={app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i)} />)
+                                                        : (<td className={"rankings-mobile rankings-" + i}> {icon("trophy")}</td>))
+                                                        : (<td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>)}
                                                     <td>
                                                         <div className="PostUser">
                                                             <h3 className="rankings-info">
@@ -104,18 +105,22 @@ export default class RankingsPage extends Page {
     }
 
     addOrdinalSuffix(i) {
-        var j = i % 10,
-            k = i % 100;
-        if (j == 1 && k != 11) {
-            return i + "st";
+        if (app.forum.attribute('DefaultLocale') == 'en') {
+          var j = i % 10,
+              k = i % 100;
+          if (j == 1 && k != 11) {
+              return i + "st";
+          }
+          if (j == 2 && k != 12) {
+              return i + "nd";
+          }
+          if (j == 3 && k != 13) {
+              return i + "rd";
+          }
+          return i + "th";
+        } else {
+          return i;
         }
-        if (j == 2 && k != 12) {
-            return i + "nd";
-        }
-        if (j == 3 && k != 13) {
-            return i + "rd";
-        }
-        return i + "th";
     }
 
     stickyParams() {

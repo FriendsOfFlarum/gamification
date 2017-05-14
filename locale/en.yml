@@ -33,6 +33,12 @@ reflar-gamification:
     nav:
       desc: Gamification for your Flarum community
     page:
+      rankings:
+        title: Rankings Page
+        enable: Enable custom images
+        custom_image_1: 1st place image
+        custom_image_2: 2nd place image
+        custom_image_3: 3rd place image
       votes:
         color_holder: '#ffffff'
         auto_upvote: Auto upvote posts when posted
@@ -49,9 +55,9 @@ reflar-gamification:
       ranks:
         name: Prefix of ranks on profile page
         title: Ranks
-        color: '#ffffff'
         ranks: Custom ranks
         help:
+          color: '#ffffff'
           help: "Input the required number of upvotes, the name of the rank, and the hex color of the rank"
           points: Points
           name: Name

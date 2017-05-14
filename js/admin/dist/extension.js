@@ -37,10 +37,10 @@ System.register("Reflar/gamification/addSettingsPage", ["flarum/extend", "flarum
 });;
 "use strict";
 
-System.register("Reflar/gamification/components/SettingsPage", ["flarum/components/Alert", "flarum/components/Page", "flarum/components/Button", "flarum/utils/saveSettings", "flarum/components/Switch"], function (_export, _context) {
+System.register("Reflar/gamification/components/SettingsPage", ["flarum/components/Alert", "flarum/components/Page", "flarum/components/Button", "flarum/components/UploadImageButton", "flarum/utils/saveSettings", "flarum/components/Switch"], function (_export, _context) {
     "use strict";
 
-    var Alert, Page, Button, saveSettings, Switch, SettingsPage;
+    var Alert, Page, Button, UploadImageButton, saveSettings, Switch, SettingsPage;
     return {
         setters: [function (_flarumComponentsAlert) {
             Alert = _flarumComponentsAlert.default;
@@ -48,6 +48,8 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
             Page = _flarumComponentsPage.default;
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsUploadImageButton) {
+            UploadImageButton = _flarumComponentsUploadImageButton.default;
         }, function (_flarumUtilsSaveSettings) {
             saveSettings = _flarumUtilsSaveSettings.default;
         }, function (_flarumComponentsSwitch) {
@@ -69,7 +71,7 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
 
                         this.fields = ['convertedLikes', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'iconName', 'voteColor'];
 
-                        this.switches = ['autoUpvotePosts'];
+                        this.switches = ['autoUpvotePosts', 'customRankingImages'];
 
                         this.ranks = app.store.all('ranks');
 
@@ -167,7 +169,12 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
                             placeholder: app.translator.trans('reflar-gamification.admin.page.votes.color_holder'),
                             value: this.values.voteColor() || '',
                             oninput: m.withAttr('value', this.values.voteColor)
-                        }), Button.component({
+                        }), m('legend', {}, app.translator.trans('reflar-gamification.admin.page.rankings.title')), Switch.component({
+                            state: this.values.customRankingImages() || false,
+                            children: app.translator.trans('reflar-gamification.admin.page.rankings.enable'),
+                            onchange: this.values.customRankingImages,
+                            className: 'votes-switch'
+                        }), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/1" }), m('br'), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_2')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/2" }), m('br'), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_3')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/3" }), m('br'), Button.component({
                             type: 'submit',
                             className: 'Button Button--primary Ranks-save',
                             children: app.translator.trans('reflar-gamification.admin.page.save_settings'),

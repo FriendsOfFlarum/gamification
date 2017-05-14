@@ -22,6 +22,16 @@
   }
 }
 
+@media only screen and (max-width: 529px) {
+  .rankings-mobile {
+    display: none !important;
+  }
+}
+
+.rankings-mobile {
+  width: 215px;
+}
+
 .Post-upvote {
     margin-right: 5px;
   }
@@ -100,17 +110,16 @@
       font-size: 20px;
       line-height: 40px;
     }
+    &-image {
+      display: block;
+      margin: 0 auto;
+      margin-top: 10%;
+    }
     &-info {
       padding-left: 38.6%;
     }
     &-points {
       font-size: 50px;
-    }
-    &-button {
-      width: 100%;
-      .Button-label {
-        margin-left: 23px;
-      }
     }
     span.username {
       display: block;

@@ -118,8 +118,13 @@ class AddRelationships
             $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
             $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
             $event->attributes['VoteColor'] = $this->settings->get('reflar.gamification.voteColor');
+            $event->attributes['CustomRankingImages'] = $this->settings->get('reflar.gamification.customRankingImages');
+            $event->attributes['TopImage1'] = $this->settings->get('reflar.gamification.topimage.1');
+            $event->attributes['TopImage2'] = $this->settings->get('reflar.gamification.topimage.2');
+            $event->attributes['TopImage3'] = $this->settings->get('reflar.gamification.topimage.3');
         }
         if ($event->isSerializer(DiscussionSerializer::class)) {
+            $event->attributes['votes'] = (int) $event->model->votes;
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
             $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
         }

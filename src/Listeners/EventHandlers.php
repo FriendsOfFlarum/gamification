@@ -20,8 +20,6 @@ use Flarum\Event\PostWasDeleted;
 use Flarum\Event\PostWasPosted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Events\PostWasDownvoted;
-use Reflar\gamification\Events\PostWasUpvoted;
 use Reflar\gamification\Notification\UpvotedBlueprint;
 use Reflar\gamification\Notification\DownvotedBlueprint;
 use Reflar\gamification\Notification\RankupBlueprint;
@@ -62,27 +60,8 @@ class EventHandlers
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureNotificationTypes::class, [$this, 'registerNotificationType']);
-        $events->listen(PostWasDownvoted::class, [$this, 'checkDownUser']);
-        $events->listen(PostWasUpvoted::class, [$this, 'checkUpUser']);
         $events->listen(PostWasPosted::class, [$this, 'addVote']);
         $events->listen(PostWasDeleted::class, [$this, 'removeVote']);
-    }
-
-    /**
-     * @param PostWasUpvoted $event
-     */
-    public function checkUpUser(PostWasUpvoted $event)
-    {
-        die('test');
-        $this->checkUpUserVotes($event->user, $event->actor);
-    }
-
-    /**
-     * @param PostWasUpvoted $event
-     */
-    public function checkDownUser(PostWasDownvoted $event)
-    {
-        $this->checkDownUserVotes($event->user);
     }
 
     /**
@@ -123,7 +102,7 @@ class EventHandlers
      * @param $user
      * @param $actor
      */
-    protected function checkUpUserVotes($user, $actor)
+    private function checkUpUserVotes($user, $actor)
     {
         $ranks = Rank::where('points', '<=', $user->votes)->get();
 
@@ -142,7 +121,7 @@ class EventHandlers
     /**
      * @param $user
      */
-    protected function checkDownUserVotes($user)
+    private function checkDownUserVotes($user)
     {
         $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 

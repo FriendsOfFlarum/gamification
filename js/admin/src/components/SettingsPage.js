@@ -1,6 +1,7 @@
 import Alert from "flarum/components/Alert";
 import Page from 'flarum/components/Page';
 import Button from "flarum/components/Button";
+import UploadImageButton from 'flarum/components/UploadImageButton';
 import saveSettings from "flarum/utils/saveSettings";
 import Switch from "flarum/components/Switch";
 
@@ -18,7 +19,8 @@ export default class SettingsPage extends Page {
         ];
 
         this.switches = [
-            'autoUpvotePosts'
+            'autoUpvotePosts',
+            'customRankingImages'
         ];
 
         this.ranks = app.store.all('ranks');
@@ -155,6 +157,22 @@ export default class SettingsPage extends Page {
                                 value: this.values.voteColor() || '',
                                 oninput: m.withAttr('value', this.values.voteColor)
                             }),
+                            m('legend', {}, app.translator.trans('reflar-gamification.admin.page.rankings.title')),
+                            Switch.component({
+                                state: this.values.customRankingImages() || false,
+                                children: app.translator.trans('reflar-gamification.admin.page.rankings.enable'),
+                                onchange: this.values.customRankingImages,
+                                className: 'votes-switch'
+                            }),
+                            m('label', {className: "Upload-label"}, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')),
+                            <UploadImageButton className="Upload-button" name="reflar/topimage/1"/>,
+                            m('br'),
+                            m('label', {className: "Upload-label"}, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_2')),
+                            <UploadImageButton className="Upload-button" name="reflar/topimage/2"/>,
+                            m('br'),
+                            m('label', {className: "Upload-label"}, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_3')),
+                            <UploadImageButton className="Upload-button" name="reflar/topimage/3"/>,
+                            m('br'),
                             Button.component({
                                 type: 'submit',
                                 className: 'Button Button--primary Ranks-save',
@@ -162,7 +180,7 @@ export default class SettingsPage extends Page {
                                 loading: this.loading,
                                 disabled: !this.changed()
                             })
-                        ]),
+                        ])
                     ])
                 ])
             ])

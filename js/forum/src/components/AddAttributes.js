@@ -13,6 +13,7 @@ import listItems from "flarum/helpers/listItems";
 export default function () {    
     Discussion.prototype.canVote = Model.attribute('canVote');
     Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
+    Discussion.prototype.votes = Model.attribute('votes');
 
     User.prototype.points = Model.attribute('points');
     User.prototype.ranks = Model.hasMany('ranks');

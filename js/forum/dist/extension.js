@@ -8,6 +8,7 @@ System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers
     _export("default", function () {
         Discussion.prototype.canVote = Model.attribute('canVote');
         Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
+        Discussion.prototype.votes = Model.attribute('votes');
 
         User.prototype.points = Model.attribute('points');
         User.prototype.ranks = Model.hasMany('ranks');
@@ -462,7 +463,7 @@ System.register("Reflar/gamification/components/RankingsPage", ["flarum/extend",
                         } else {
                             loading = Button.component({
                                 children: app.translator.trans('core.forum.discussion_list.load_more_button'),
-                                className: 'Button rankings-button',
+                                className: 'Button',
                                 onclick: this.loadMore.bind(this)
                             });
                         }
@@ -502,7 +503,7 @@ System.register("Reflar/gamification/components/RankingsPage", ["flarum/extend",
                                                         null,
                                                         m(
                                                             "th",
-                                                            null,
+                                                            { className: "rankings-mobile" },
                                                             app.translator.trans('reflar-gamification.forum.ranking.rank')
                                                         ),
                                                         m(
@@ -521,14 +522,14 @@ System.register("Reflar/gamification/components/RankingsPage", ["flarum/extend",
                                                         return [m(
                                                             "tr",
                                                             { className: "ranking-" + i },
-                                                            i < 4 ? m(
+                                                            i < 4 ? app.forum.attribute('CustomRankingImages') == '1' ? m("img", { className: "rankings-mobile rankings-image", src: app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i) }) : m(
                                                                 "td",
-                                                                { className: "rankings-" + i },
+                                                                { className: "rankings-mobile rankings-" + i },
                                                                 " ",
                                                                 icon("trophy")
                                                             ) : m(
                                                                 "td",
-                                                                { className: "rankings-4" },
+                                                                { className: "rankings-4 rankings-mobile" },
                                                                 _this2.addOrdinalSuffix(i)
                                                             ),
                                                             m(
@@ -598,18 +599,22 @@ System.register("Reflar/gamification/components/RankingsPage", ["flarum/extend",
                 }, {
                     key: "addOrdinalSuffix",
                     value: function addOrdinalSuffix(i) {
-                        var j = i % 10,
-                            k = i % 100;
-                        if (j == 1 && k != 11) {
-                            return i + "st";
+                        if (app.forum.attribute('DefaultLocale') == 'en') {
+                            var j = i % 10,
+                                k = i % 100;
+                            if (j == 1 && k != 11) {
+                                return i + "st";
+                            }
+                            if (j == 2 && k != 12) {
+                                return i + "nd";
+                            }
+                            if (j == 3 && k != 13) {
+                                return i + "rd";
+                            }
+                            return i + "th";
+                        } else {
+                            return i;
                         }
-                        if (j == 2 && k != 12) {
-                            return i + "nd";
-                        }
-                        if (j == 3 && k != 13) {
-                            return i + "rd";
-                        }
-                        return i + "th";
                     }
                 }, {
                     key: "stickyParams",
