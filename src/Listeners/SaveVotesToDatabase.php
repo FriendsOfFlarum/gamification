@@ -21,6 +21,7 @@ use Reflar\gamification\Events\PostWasDownvoted;
 use Reflar\gamification\Events\PostWasUpvoted;
 use Reflar\gamification\Gamification;
 use Reflar\gamification\Notification\DownvotedBlueprint;
+use Reflar\gamification\Notification\RankupBlueprint;
 use Reflar\gamification\Notification\UpvotedBlueprint;
 use Reflar\gamification\Rank;
 
@@ -94,13 +95,13 @@ class SaveVotesToDatabase
             if (isset($vote)) {
                 if ($isUpvoted == false && $isDownvoted == false) {
                     if ($vote->type == 'Up') {
-                        $post->user->decrement('votes');
+                        $user->decrement('votes');
 
                         if ($post->number == 1) {
                             $discussion->decrement('votes');
                         }
                     } else {
-                        $post->user->increment('votes');
+                        $user->increment('votes');
 
                         if ($post->number == 1) {
                             $discussion->increment('votes');
@@ -112,7 +113,7 @@ class SaveVotesToDatabase
 
                     $vote->save();
 
-                    $post->user->votes = $post->user->votes - 2;
+                    $user->votes = $user->votes - 2;
 
                     if ($post->number == 1) {
                         $discussion->votes = $discussion->votes - 2;
@@ -124,7 +125,7 @@ class SaveVotesToDatabase
 
                     $vote->save();
 
-                    $post->user->votes = $post->user->votes + 2;
+                    $user->votes = $user->votes + 2;
 
                     if ($post->number == 1) {
                         $discussion->votes = $discussion->votes + 2;
@@ -135,7 +136,7 @@ class SaveVotesToDatabase
             } elseif ($isDownvoted == true) {
                 $this->gamification->downvote($post->id, $actor);
 
-                $post->user->decrement('votes');
+                $user->decrement('votes');
 
                 if ($post->number == 1) {
                     $discussion->decrement('votes');
@@ -146,7 +147,7 @@ class SaveVotesToDatabase
             } elseif ($isUpvoted == true) {
                 $this->gamification->upvote($post->id, $actor);
 
-                $post->user->increment('votes');
+                $user->increment('votes');
 
                 if ($post->number == 1) {
                     $discussion->increment('votes');
@@ -164,18 +165,18 @@ class SaveVotesToDatabase
     public function sendDownvotedData($post, $user, $actor)
     {
         $oldVote = Notification::where([
-            'sender_id' => $actor->id,
+            'data' => $actor->id,
             'subject_id' => $post->id,
             'type' => 'upvoted'
         ])->first();
 
-        if($oldVote !== null) {
+        if ($oldVote !== null) {
             $oldVote->type = 'downvoted';
             $oldVote->save();
-        } else {
+        } else if ($user->id !== $actor->id) {
 
             $this->notifications->sync(
-                new DownvotedBlueprint($post, $actor),
+                new DownvotedBlueprint($post, $actor, $user),
                 [$user]);
         }
 
@@ -189,7 +190,7 @@ class SaveVotesToDatabase
     public function sendUpvotedData($post, $user, $actor)
     {
         $oldVote = Notification::where([
-            'sender_id' => $actor->id,
+            'data' => $actor->id,
             'subject_id' => $post->id,
             'type' => 'downvoted'
         ])->first();
@@ -197,9 +198,9 @@ class SaveVotesToDatabase
         if($oldVote !== null) {
             $oldVote->type = 'upvoted';
             $oldVote->save();
-        } else {
+        } elseif ($user->id !== $actor->id) {
             $this->notifications->sync(
-                new UpvotedBlueprint($post, $actor),
+                new UpvotedBlueprint($post, $actor, $user),
                 [$user]);
         }
 
@@ -207,25 +208,24 @@ class SaveVotesToDatabase
             new PostWasDownvoted($post, $user, $actor)
         );
       
-        $this->checkUpUserVotes($user, $actor);
+        $this->checkUpUserVotes($user);
     }
   
       /**
      * @param $user
      * @param $actor
      */
-    private function checkUpUserVotes($user, $actor)
-    {
-        $ranks = Rank::where('points', '<=', $user->votes)->get();
-
+    private function checkUpUserVotes($user)
+    {      
+        $ranks = Rank::where('points', $user->votes)->get();
+      
         if ($ranks !== null) {
-            foreach($ranks as $rank)
-            $user->ranks()->attach($rank->id);
+            foreach ($ranks as $rank) {
+                $user->ranks()->attach($rank->id);
 
-            if ($user->id !== $actor->id) {
                 $this->notifications->sync(
-                    new RankupBlueprint($rank, $actor),
-                    [$user]);
+                        new RankupBlueprint($rank, $user),
+                        [$user]);
             }
         }
     }

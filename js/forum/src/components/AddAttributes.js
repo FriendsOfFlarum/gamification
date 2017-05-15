@@ -10,6 +10,8 @@ import UserCard from "flarum/components/UserCard";
 import userOnline from "flarum/helpers/userOnline";
 import listItems from "flarum/helpers/listItems";
 
+import rankLabel from "Reflar/gamification/helpers/rankLabel";
+
 export default function () {    
     Discussion.prototype.canVote = Model.attribute('canVote');
     Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
@@ -36,9 +38,7 @@ export default function () {
 
         this.props.user.ranks().map((rank) => {
           items.add(rank.name(), (
-            <span style={"color: " + rank.color()}>
-              {rank.name()}
-            </span>
+            rankLabel(rank)
           ));
         });
       }
@@ -74,11 +74,9 @@ export default function () {
                         {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
                     </a>
                     {user.ranks().map(rank => {
-                        return (
-                            <span className="Post-Rank" style={"color: " + rank.color()}>
-                            {rank.name()}
-                        </span>
-                        );
+                        return (<span className="Post-Rank">
+                          {rankLabel(rank)}
+                        </span>);
                     })}
                 </h3>
                 <ul className="PostUser-badges badges">

@@ -14,11 +14,12 @@ namespace Reflar\gamification\Notification;
 
 use Flarum\Core\Notification\BlueprintInterface;
 use Flarum\Core\User;
+use Reflar\gamification\Rank;
 
 class RankupBlueprint implements BlueprintInterface
 {
     /**
-     * @var string
+     * @var Rank
      */
     public $rank;
 
@@ -28,10 +29,10 @@ class RankupBlueprint implements BlueprintInterface
     public $user;
 
     /**
-     * @param $rank
+     * @param Rank $rank
      * @param User $user
      */
-    public function __construct($rank, User $user)
+    public function __construct(Rank $rank, User $user)
     {
         $this->rank = $rank;
         $this->user = $user;

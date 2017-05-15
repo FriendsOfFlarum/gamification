@@ -22,6 +22,11 @@ class UpvotedBlueprint implements BlueprintInterface
      * @var Post
      */
     public $post;
+  
+    /**
+     * @var User
+     */
+    public $actor;
 
     /**
      * @var User
@@ -31,9 +36,10 @@ class UpvotedBlueprint implements BlueprintInterface
     /**
      * @param Post $post
      */
-    public function __construct(Post $post, User $user)
+    public function __construct(Post $post, User $actor, User $user)
     {
         $this->post = $post;
+        $this->actor = $actor;
         $this->user = $user;
     }
 
@@ -58,6 +64,7 @@ class UpvotedBlueprint implements BlueprintInterface
      */
     public function getData()
     {
+        return $this->actor->id;
     }
 
     /**

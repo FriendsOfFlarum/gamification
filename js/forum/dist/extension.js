@@ -1,9 +1,9 @@
 "use strict";
 
-System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers/avatar", "flarum/helpers/username", "flarum/models/Discussion", "flarum/extend", "flarum/Model", "flarum/models/Post", "flarum/components/PostUser", "flarum/models/User", "flarum/components/UserCard", "flarum/helpers/userOnline", "flarum/helpers/listItems"], function (_export, _context) {
+System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers/avatar", "flarum/helpers/username", "flarum/models/Discussion", "flarum/extend", "flarum/Model", "flarum/models/Post", "flarum/components/PostUser", "flarum/models/User", "flarum/components/UserCard", "flarum/helpers/userOnline", "flarum/helpers/listItems", "Reflar/gamification/helpers/rankLabel"], function (_export, _context) {
     "use strict";
 
-    var avatar, username, Discussion, extend, Model, Post, PostUser, User, UserCard, userOnline, listItems;
+    var avatar, username, Discussion, extend, Model, Post, PostUser, User, UserCard, userOnline, listItems, rankLabel;
 
     _export("default", function () {
         Discussion.prototype.canVote = Model.attribute('canVote');
@@ -28,11 +28,7 @@ System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers
             if (this.props.user.ranks() !== false) {
 
                 this.props.user.ranks().map(function (rank) {
-                    items.add(rank.name(), m(
-                        "span",
-                        { style: "color: " + rank.color() },
-                        rank.name()
-                    ));
+                    items.add(rank.name(), rankLabel(rank));
                 });
             }
         });
@@ -84,8 +80,8 @@ System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers
                     user.ranks().map(function (rank) {
                         return m(
                             "span",
-                            { className: "Post-Rank", style: "color: " + rank.color() },
-                            rank.name()
+                            { className: "Post-Rank" },
+                            rankLabel(rank)
                         );
                     })
                 ),
@@ -122,6 +118,8 @@ System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers
             userOnline = _flarumHelpersUserOnline.default;
         }, function (_flarumHelpersListItems) {
             listItems = _flarumHelpersListItems.default;
+        }, function (_ReflarGamificationHelpersRankLabel) {
+            rankLabel = _ReflarGamificationHelpersRankLabel.default;
         }],
         execute: function () {}
     };
@@ -899,6 +897,35 @@ System.register('Reflar/gamification/components/VotesModal', ['flarum/components
 
       _export('default', VotesModal);
     }
+  };
+});;
+'use strict';
+
+System.register('Reflar/gamification/helpers/rankLabel', [], function (_export, _context) {
+  "use strict";
+
+  function rankLabel(rank) {
+    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    attrs.style = attrs.style || {};
+    attrs.className = 'rankLabel ' + (attrs.className || '');
+
+    var color = rank.color();
+    attrs.style.backgroundColor = attrs.style.color = color;
+    attrs.className += ' colored';
+
+    return m('span', attrs, m(
+      'span',
+      { className: 'rankLabel-text' },
+      rank.name()
+    ));
+  }
+
+  _export('default', rankLabel);
+
+  return {
+    setters: [],
+    execute: function () {}
   };
 });;
 "use strict";

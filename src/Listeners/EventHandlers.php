@@ -107,14 +107,13 @@ class EventHandlers
         $ranks = Rank::where('points', '<=', $user->votes)->get();
 
         if ($ranks !== null) {
+            $user->ranks()->detach();
             foreach($ranks as $rank)
             $user->ranks()->attach($rank->id);
 
-            if ($user->id !== $actor->id) {
                 $this->notifications->sync(
-                    new RankupBlueprint($rank, $actor),
+                    new RankupBlueprint($rank, $user),
                     [$user]);
-            }
         }
     }
 
