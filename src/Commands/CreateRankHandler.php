@@ -20,12 +20,12 @@ use Reflar\gamification\Validator\RankValidator;
 class CreateRankHandler
 {
     use AssertPermissionTrait;
-  
+
     /**
      * @var RankValidator
      */
     protected $validator;
-  
+
     /**
      * @param RankValidator $validator
      */
@@ -36,8 +36,10 @@ class CreateRankHandler
 
     /**
      * @param CreateRank $command
-     * @return Rank
+     *
      * @throws PermissionDeniedException
+     *
+     * @return Rank
      */
     public function handle(CreateRank $command)
     {

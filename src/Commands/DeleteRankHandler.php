@@ -22,13 +22,15 @@ class DeleteRankHandler
 
     /**
      * @param DeleteRank $command
-     * @return Rank
+     *
      * @throws PermissionDeniedException
+     *
+     * @return Rank
      */
     public function handle(DeleteRank $command)
     {
         $actor = $command->actor;
-      
+
         $this->assertAdmin($actor);
 
         $rank = Rank::where('id', $command->rankId)->firstOrFail();

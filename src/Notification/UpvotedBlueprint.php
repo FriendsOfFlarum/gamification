@@ -22,7 +22,7 @@ class UpvotedBlueprint implements BlueprintInterface
      * @var Post
      */
     public $post;
-  
+
     /**
      * @var User
      */

@@ -24,14 +24,20 @@ export default function () {
     Post.prototype.downvotes = Model.hasMany('downvotes');
 
     extend(UserCard.prototype, 'infoItems', function (items, user) {
-        let points = this.props.user.data.attributes.Points;
+        let points = '';
 
         if (points == 0) {
             points = '0';
         }
+      
+        if (app.forum.attribute('PointsPlaceholder')) {
+            points = app.forum.attribute('PointsPlaceholder').replace('{points}', this.props.user.data.attributes.Points);
+        } else {
+            points = app.translator.trans('reflar-gamification.forum.user.points', {points: this.props.user.data.attributes.Points});
+        }
 
         items.add('points',
-          app.translator.trans('reflar-gamification.forum.user.points', {points})
+          points
         );
       
       if (this.props.user.ranks() !== false) {

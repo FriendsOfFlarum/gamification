@@ -15,9 +15,9 @@ namespace Reflar\gamification\Api\Controllers;
 use Flarum\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 use Reflar\gamification\Api\Serializers\RankSerializer;
 use Reflar\gamification\Commands\CreateRank;
+use Tobscure\JsonApi\Document;
 
 class CreateRankController extends AbstractCreateController
 {
@@ -38,7 +38,8 @@ class CreateRankController extends AbstractCreateController
 
     /**
      * @param ServerRequestInterface $request
-     * @param Document $document
+     * @param Document               $document
+     *
      * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)

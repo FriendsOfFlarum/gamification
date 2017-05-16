@@ -69,7 +69,7 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
                     value: function init() {
                         var _this2 = this;
 
-                        this.fields = ['convertedLikes', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'iconName', 'voteColor', 'blockedUsers'];
+                        this.fields = ['convertedLikes', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'iconName', 'voteColor', 'blockedUsers', 'pointsPlaceholder'];
 
                         this.switches = ['autoUpvotePosts', 'customRankingImages'];
 
@@ -164,6 +164,11 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
                             children: app.translator.trans('reflar-gamification.admin.page.votes.auto_upvote'),
                             onchange: this.values.autoUpvotePosts,
                             className: 'votes-switch'
+                        }), m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.points_title')), m('input', {
+                            className: 'FormControl Ranks-default',
+                            value: this.values.pointsPlaceholder() || '',
+                            placeholder: app.translator.trans('reflar-gamification.admin.page.votes.points_placeholder') + '{points}',
+                            oninput: m.withAttr('value', this.values.pointsPlaceholder)
                         }), m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.vote_color')), m('input', {
                             className: 'FormControl Ranks-default',
                             placeholder: app.translator.trans('reflar-gamification.admin.page.votes.color_holder'),

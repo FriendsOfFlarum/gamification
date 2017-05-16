@@ -24,9 +24,10 @@ class DeleteRank
      * @var User
      */
     public $actor;
+
     /**
-     * @param int $rankId
-     * @param User $actor 
+     * @param int  $rankId
+     * @param User $actor
      */
     public function __construct($rankId, User $actor)
     {

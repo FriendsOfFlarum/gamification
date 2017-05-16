@@ -20,12 +20,12 @@ use Reflar\gamification\Validator\RankValidator;
 class EditRankHandler
 {
     use AssertPermissionTrait;
-  
+
     /**
      * @var RankValidator
      */
     protected $validator;
-  
+
     /**
      * @param RankValidator $validator
      */
@@ -36,8 +36,10 @@ class EditRankHandler
 
     /**
      * @param EditRank $command
-     * @return Rank
+     *
      * @throws PermissionDeniedException
+     *
+     * @return Rank
      */
     public function handle(EditRank $command)
     {
@@ -46,26 +48,26 @@ class EditRankHandler
         $attributes = array_get($data, 'attributes', []);
 
         $validate = [];
-      
+
         $this->assertAdmin($actor);
 
         $rank = Rank::where('id', $command->rankId)->firstOrFail();
 
-        if(isset($attributes['points']) && $attributes['points'] !== '') {
+        if (isset($attributes['points']) && $attributes['points'] !== '') {
             $validate['points'] = $attributes['points'];
             $rank->updatePoints($attributes['points']);
         }
 
-        if(isset($attributes['name']) && $attributes['name'] !== '') {
+        if (isset($attributes['name']) && $attributes['name'] !== '') {
             $validate['name'] = $attributes['name'];
             $rank->updateName($attributes['name']);
         }
 
-        if(isset($attributes['color']) && $attributes['color'] !== '') {
+        if (isset($attributes['color']) && $attributes['color'] !== '') {
             $validate['color'] = $attributes['color'];
             $rank->updateColor($attributes['color']);
         }
-      
+
         $this->validator->assertValid(array_merge($rank->getDirty(), $validate));
 
         $rank->save();

@@ -12,10 +12,10 @@
 
 namespace Reflar\gamification\Listeners;
 
+use Flarum\Core\Notification;
 use Flarum\Core\Notification\NotificationSyncer;
 use Flarum\Core\Post\Floodgate;
 use Flarum\Event\PostWillBeSaved;
-use Flarum\Core\Notification;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Events\PostWasDownvoted;
 use Reflar\gamification\Events\PostWasUpvoted;
@@ -143,7 +143,6 @@ class SaveVotesToDatabase
                 }
 
                 $this->sendDownvotedData($post, $user, $actor);
-
             } elseif ($isUpvoted == true) {
                 $this->gamification->upvote($post->id, $actor);
 
@@ -165,16 +164,15 @@ class SaveVotesToDatabase
     public function sendDownvotedData($post, $user, $actor)
     {
         $oldVote = Notification::where([
-            'data' => $actor->id,
+            'data'       => $actor->id,
             'subject_id' => $post->id,
-            'type' => 'upvoted'
+            'type'       => 'upvoted',
         ])->first();
 
         if ($oldVote !== null) {
             $oldVote->type = 'downvoted';
             $oldVote->save();
-        } else if ($user->id !== $actor->id) {
-
+        } elseif ($user->id !== $actor->id) {
             $this->notifications->sync(
                 new DownvotedBlueprint($post, $actor, $user),
                 [$user]);
@@ -183,19 +181,19 @@ class SaveVotesToDatabase
         $this->events->fire(
             new PostWasUpvoted($post, $user, $actor)
         );
-      
+
         $this->checkDownUserVotes($user);
     }
 
     public function sendUpvotedData($post, $user, $actor)
     {
         $oldVote = Notification::where([
-            'data' => $actor->id,
+            'data'       => $actor->id,
             'subject_id' => $post->id,
-            'type' => 'downvoted'
+            'type'       => 'downvoted',
         ])->first();
 
-        if($oldVote !== null) {
+        if ($oldVote !== null) {
             $oldVote->type = 'upvoted';
             $oldVote->save();
         } elseif ($user->id !== $actor->id) {
@@ -207,7 +205,7 @@ class SaveVotesToDatabase
         $this->events->fire(
             new PostWasDownvoted($post, $user, $actor)
         );
-      
+
         $this->checkUpUserVotes($user);
     }
 
@@ -234,8 +232,9 @@ class SaveVotesToDatabase
         $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
         if ($ranks !== null) {
-            foreach($ranks as $rank)
+            foreach ($ranks as $rank) {
                 $user->ranks()->detach($rank->id);
+            }
         }
     }
 }

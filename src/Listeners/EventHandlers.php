@@ -13,7 +13,6 @@
 namespace Reflar\gamification\Listeners;
 
 use Flarum\Api\Serializer\PostBasicSerializer;
-use Flarum\Api\Serializer\UserBasicSerializer;
 use Flarum\Core\Notification\NotificationSyncer;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Event\PostWasDeleted;
@@ -44,7 +43,7 @@ class EventHandlers
 
     /**
      * @param SettingsRepositoryInterface $settings
-     * @param NotificationSyncer $notifications
+     * @param NotificationSyncer          $notifications
      */
     public function __construct(SettingsRepositoryInterface $settings, NotificationSyncer $notifications, Gamification $gamification)
     {
@@ -119,8 +118,9 @@ class EventHandlers
         $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
         if ($ranks !== null) {
-            foreach ($ranks as $rank)
+            foreach ($ranks as $rank) {
                 $user->ranks()->detach($rank->id);
+            }
         }
     }
 }

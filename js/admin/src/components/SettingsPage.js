@@ -16,7 +16,8 @@ export default class SettingsPage extends Page {
             'postStartAmount',
             'iconName',
             'voteColor',
-            'blockedUsers'
+            'blockedUsers',
+            'pointsPlaceholder'
         ];
 
         this.switches = [
@@ -149,6 +150,13 @@ export default class SettingsPage extends Page {
                                 children: app.translator.trans('reflar-gamification.admin.page.votes.auto_upvote'),
                                 onchange: this.values.autoUpvotePosts,
                                 className: 'votes-switch'
+                            }),
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.points_title')),
+                            m('input', {
+                                className: 'FormControl Ranks-default',
+                                value: this.values.pointsPlaceholder() || '',
+                                placeholder: app.translator.trans('reflar-gamification.admin.page.votes.points_placeholder') + '{points}',
+                                oninput: m.withAttr('value', this.values.pointsPlaceholder)
                             }),
                             m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.vote_color')),
                             m('input', {

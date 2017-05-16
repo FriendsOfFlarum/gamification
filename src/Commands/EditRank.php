@@ -32,8 +32,8 @@ class EditRank
     public $data;
 
     /**
-     * @param int $rankId
-     * @param User $actor
+     * @param int   $rankId
+     * @param User  $actor
      * @param array $data
      */
     public function __construct($rankId, User $actor, array $data)

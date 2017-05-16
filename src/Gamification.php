@@ -16,7 +16,6 @@ use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;
 use Flarum\Core\User;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Reflar\gamification\Vote;
 
 class Gamification
 {
@@ -36,8 +35,8 @@ class Gamification
     protected $settings;
 
     /**
-     * @param PostRepository $posts
-     * @param UserRepository $users
+     * @param PostRepository              $posts
+     * @param UserRepository              $users
      * @param SettingsRepositoryInterface $settings
      */
     public function __construct(PostRepository $posts, UserRepository $users, SettingsRepositoryInterface $settings)

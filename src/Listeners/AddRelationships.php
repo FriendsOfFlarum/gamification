@@ -28,8 +28,8 @@ use Flarum\Event\PrepareApiData;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Api\Controllers\OrderByPointsController;
-use Reflar\gamification\Rank;
 use Reflar\gamification\Api\Serializers\RankSerializer;
+use Reflar\gamification\Rank;
 
 class AddRelationships
 {
@@ -95,7 +95,6 @@ class AddRelationships
         }
     }
 
-
     /**
      * @param PrepareApiData $event
      */
@@ -116,6 +115,7 @@ class AddRelationships
         }
         if ($event->isSerializer(ForumSerializer::class)) {
             $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
+            $event->attributes['PointsPlaceholder'] = $this->settings->get('reflar.gamification.pointsPlaceholder');
             $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
             $event->attributes['VoteColor'] = $this->settings->get('reflar.gamification.voteColor');
             $event->attributes['CustomRankingImages'] = $this->settings->get('reflar.gamification.customRankingImages');

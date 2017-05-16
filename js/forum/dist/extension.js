@@ -17,13 +17,19 @@ System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers
         Post.prototype.downvotes = Model.hasMany('downvotes');
 
         extend(UserCard.prototype, 'infoItems', function (items, user) {
-            var points = this.props.user.data.attributes.Points;
+            var points = '';
 
             if (points == 0) {
                 points = '0';
             }
 
-            items.add('points', app.translator.trans('reflar-gamification.forum.user.points', { points: points }));
+            if (app.forum.attribute('PointsPlaceholder')) {
+                points = app.forum.attribute('PointsPlaceholder').replace('{points}', this.props.user.data.attributes.Points);
+            } else {
+                points = app.translator.trans('reflar-gamification.forum.user.points', { points: this.props.user.data.attributes.Points });
+            }
+
+            items.add('points', points);
 
             if (this.props.user.ranks() !== false) {
 

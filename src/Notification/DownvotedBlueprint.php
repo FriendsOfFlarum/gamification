@@ -22,7 +22,7 @@ class DownvotedBlueprint implements BlueprintInterface
      * @var Post
      */
     public $post;
-  
+
     /**
      * @var User
      */

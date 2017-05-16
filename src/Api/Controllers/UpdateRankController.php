@@ -15,9 +15,9 @@ namespace Reflar\gamification\Api\Controllers;
 use Flarum\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 use Reflar\gamification\Api\Serializers\RankSerializer;
 use Reflar\gamification\Commands\EditRank;
+use Tobscure\JsonApi\Document;
 
 class UpdateRankController extends AbstractResourceController
 {
@@ -38,7 +38,8 @@ class UpdateRankController extends AbstractResourceController
 
     /**
      * @param ServerRequestInterface $request
-     * @param Document $document
+     * @param Document               $document
+     *
      * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)

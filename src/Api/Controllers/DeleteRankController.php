@@ -19,12 +19,11 @@ use Reflar\gamification\Commands\DeleteRank;
 
 class DeleteRankController extends AbstractDeleteController
 {
-
     /**
      * @var Dispatcher
      */
     protected $bus;
-  
+
     /**
      * @param Dispatcher $bus
      */

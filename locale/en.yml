@@ -43,6 +43,8 @@ reflar-gamification:
         custom_image_2: 2nd place image
         custom_image_3: 3rd place image
       votes:
+        points_title: Points Placeholder
+        points_placeholder: "Points: "
         color_holder: '#ffffff'
         auto_upvote: Auto upvote posts when posted
         title: Votes

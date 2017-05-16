@@ -20,14 +20,14 @@ class CreateRank
      * @var User
      */
     public $actor;
-  
+
     /**
      * @var array
      */
     public $data;
-  
+
     /**
-     * @param User $actor
+     * @param User  $actor
      * @param array $data
      */
     public function __construct(User $actor, array $data)

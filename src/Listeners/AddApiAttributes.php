@@ -38,7 +38,7 @@ class AddApiAttributes
         $event->get('/ranks', 'ranks.index', Controllers\ListRanksController::class);
 
         $event->post('/ranks', 'ranks.create', Controllers\CreateRankController::class);
-      
+
         $event->post('/reflar/topimage/{id}', 'reflar.topImage', Controllers\UploadTopImageController::class);
 
         $event->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class);

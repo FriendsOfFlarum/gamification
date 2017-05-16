@@ -14,9 +14,9 @@ namespace Reflar\gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractCollectionController;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 use Reflar\gamification\Api\Serializers\RankSerializer;
 use Reflar\gamification\Rank;
+use Tobscure\JsonApi\Document;
 
 class ListRanksController extends AbstractCollectionController
 {
@@ -27,7 +27,8 @@ class ListRanksController extends AbstractCollectionController
 
     /**
      * @param ServerRequestInterface $request
-     * @param Document $document
+     * @param Document               $document
+     *
      * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)

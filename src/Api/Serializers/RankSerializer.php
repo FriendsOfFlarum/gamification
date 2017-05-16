@@ -13,7 +13,6 @@
 namespace Reflar\gamification\Api\Serializers;
 
 use Flarum\Api\Serializer\AbstractSerializer;
-use Flarum\Api\Serializer\UserBasicSerializer;
 use Reflar\gamification\Rank;
 
 class RankSerializer extends AbstractSerializer
@@ -25,11 +24,12 @@ class RankSerializer extends AbstractSerializer
 
     /**
      * @param $group
+     *
      * @return array
      */
     protected function getDefaultAttributes($rank)
     {
-        if (! ($rank instanceof Rank)) {
+        if (!($rank instanceof Rank)) {
             throw new InvalidArgumentException(
                 get_class($this).' can only serialize instances of '.Rank::class
             );
