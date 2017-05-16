@@ -69,7 +69,7 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
                     value: function init() {
                         var _this2 = this;
 
-                        this.fields = ['convertedLikes', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'iconName', 'voteColor'];
+                        this.fields = ['convertedLikes', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'iconName', 'voteColor', 'blockedUsers'];
 
                         this.switches = ['autoUpvotePosts', 'customRankingImages'];
 
@@ -174,7 +174,12 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
                             children: app.translator.trans('reflar-gamification.admin.page.rankings.enable'),
                             onchange: this.values.customRankingImages,
                             className: 'votes-switch'
-                        }), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/1" }), m('br'), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_2')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/2" }), m('br'), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_3')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/3" }), m('br'), Button.component({
+                        }), m('label', {}, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.title')), m('input', {
+                            className: 'FormControl Ranks-blocked',
+                            placeholder: app.translator.trans('reflar-gamification.admin.page.rankings.blocked.placeholder'),
+                            value: this.values.blockedUsers() || '',
+                            oninput: m.withAttr('value', this.values.blockedUsers)
+                        }), m('div', { className: 'helpText' }, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.help')), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/1" }), m('br'), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_2')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/2" }), m('br'), m('label', { className: "Upload-label" }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_3')), m(UploadImageButton, { className: "Upload-button", name: "reflar/topimage/3" }), m('br'), Button.component({
                             type: 'submit',
                             className: 'Button Button--primary Ranks-save',
                             children: app.translator.trans('reflar-gamification.admin.page.save_settings'),
@@ -284,6 +289,35 @@ System.register("Reflar/gamification/components/SettingsPage", ["flarum/componen
             _export("default", SettingsPage);
         }
     };
+});;
+'use strict';
+
+System.register('Reflar/gamification/helpers/rankLabel', [], function (_export, _context) {
+  "use strict";
+
+  function rankLabel(rank) {
+    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    attrs.style = attrs.style || {};
+    attrs.className = 'rankLabel ' + (attrs.className || '');
+
+    var color = rank.color();
+    attrs.style.backgroundColor = attrs.style.color = color;
+    attrs.className += ' colored';
+
+    return m('span', attrs, m(
+      'span',
+      { className: 'rankLabel-text' },
+      rank.name()
+    ));
+  }
+
+  _export('default', rankLabel);
+
+  return {
+    setters: [],
+    execute: function () {}
+  };
 });;
 'use strict';
 

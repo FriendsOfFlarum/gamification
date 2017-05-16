@@ -21,7 +21,6 @@ use Reflar\gamification\Events\PostWasDownvoted;
 use Reflar\gamification\Events\PostWasUpvoted;
 use Reflar\gamification\Gamification;
 use Reflar\gamification\Notification\DownvotedBlueprint;
-use Reflar\gamification\Notification\RankupBlueprint;
 use Reflar\gamification\Notification\UpvotedBlueprint;
 use Reflar\gamification\Rank;
 
@@ -107,6 +106,7 @@ class SaveVotesToDatabase
                             $discussion->increment('votes');
                         }
                     }
+                    $this->checkDownUserVotes($user);
                     $vote->delete();
                 } elseif ($vote->type == 'Up') {
                     $vote->type = 'Down';
@@ -210,22 +210,18 @@ class SaveVotesToDatabase
       
         $this->checkUpUserVotes($user);
     }
-  
-      /**
+
+    /**
      * @param $user
-     * @param $actor
      */
     private function checkUpUserVotes($user)
-    {      
-        $ranks = Rank::where('points', $user->votes)->get();
-      
+    {
+        $ranks = Rank::where('points', '<=', $user->votes)->get();
+
         if ($ranks !== null) {
+            $user->ranks()->detach();
             foreach ($ranks as $rank) {
                 $user->ranks()->attach($rank->id);
-
-                $this->notifications->sync(
-                        new RankupBlueprint($rank, $user),
-                        [$user]);
             }
         }
     }

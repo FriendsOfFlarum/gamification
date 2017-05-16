@@ -77,10 +77,8 @@ export default function () {
     );
 
       items.add('points',
-        <button className="Post-points" onclick={() => {
-          console.log('hi');
+        <button title={app.translator.trans('reflar-gamification.forum.vote_title')} className="Post-points" onclick={() => {
           if (!post.discussion().canSeeVotes()) return;
-          console.log('wow');
           app.modal.show(new VotesModal({post}))
         }}>
           {post.data.relationships.upvotes.data.length - post.data.relationships.downvotes.data.length}

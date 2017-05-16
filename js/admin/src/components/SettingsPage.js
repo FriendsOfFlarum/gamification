@@ -15,7 +15,8 @@ export default class SettingsPage extends Page {
             'amountPerDiscussion',
             'postStartAmount',
             'iconName',
-            'voteColor'
+            'voteColor',
+            'blockedUsers'
         ];
 
         this.switches = [
@@ -164,6 +165,14 @@ export default class SettingsPage extends Page {
                                 onchange: this.values.customRankingImages,
                                 className: 'votes-switch'
                             }),
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.title')),
+                            m('input', {
+                                className: 'FormControl Ranks-blocked',
+                                placeholder: app.translator.trans('reflar-gamification.admin.page.rankings.blocked.placeholder'),
+                                value: this.values.blockedUsers() || '',
+                                oninput: m.withAttr('value', this.values.blockedUsers)
+                            }),
+                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.help')),
                             m('label', {className: "Upload-label"}, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')),
                             <UploadImageButton className="Upload-button" name="reflar/topimage/1"/>,
                             m('br'),

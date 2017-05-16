@@ -1,5 +1,4 @@
 import Notification from 'flarum/components/Notification';
-import punctuateSeries from 'flarum/helpers/punctuateSeries';
 
 export default class DownvotedNotification extends Notification {
     icon() {

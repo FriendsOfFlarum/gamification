@@ -20,10 +20,9 @@ use Flarum\Event\PostWasDeleted;
 use Flarum\Event\PostWasPosted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Notification\UpvotedBlueprint;
-use Reflar\gamification\Notification\DownvotedBlueprint;
-use Reflar\gamification\Notification\RankupBlueprint;
 use Reflar\gamification\Gamification;
+use Reflar\gamification\Notification\DownvotedBlueprint;
+use Reflar\gamification\Notification\UpvotedBlueprint;
 use Reflar\gamification\Rank;
 
 class EventHandlers
@@ -45,7 +44,7 @@ class EventHandlers
 
     /**
      * @param SettingsRepositoryInterface $settings
-     * @param NotificationSyncer          $notifications
+     * @param NotificationSyncer $notifications
      */
     public function __construct(SettingsRepositoryInterface $settings, NotificationSyncer $notifications, Gamification $gamification)
     {
@@ -75,7 +74,7 @@ class EventHandlers
             $this->gamification->calculateHotness($event->post->discussion);
             $this->gamification->upvote($event->post->id, $event->actor);
 
-            $this->checkUpUserVotes($event->actor, $event->actor);
+            $this->checkUpUserVotes($event->actor);
         }
     }
 
@@ -86,7 +85,6 @@ class EventHandlers
     {
         $event->add(DownvotedBlueprint::class, PostBasicSerializer::class, ['alert']);
         $event->add(UpvotedBlueprint::class, PostBasicSerializer::class, ['alert']);
-        $event->add(RankupBlueprint::class, UserBasicSerializer::class, ['alert']);
     }
 
     /**
@@ -100,20 +98,16 @@ class EventHandlers
 
     /**
      * @param $user
-     * @param $actor
      */
-    private function checkUpUserVotes($user, $actor)
+    private function checkUpUserVotes($user)
     {
         $ranks = Rank::where('points', '<=', $user->votes)->get();
 
         if ($ranks !== null) {
             $user->ranks()->detach();
-            foreach($ranks as $rank)
-            $user->ranks()->attach($rank->id);
-
-                $this->notifications->sync(
-                    new RankupBlueprint($rank, $user),
-                    [$user]);
+            foreach ($ranks as $rank) {
+                $user->ranks()->attach($rank->id);
+            }
         }
     }
 
@@ -125,7 +119,7 @@ class EventHandlers
         $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
         if ($ranks !== null) {
-            foreach($ranks as $rank)
+            foreach ($ranks as $rank)
                 $user->ranks()->detach($rank->id);
         }
     }

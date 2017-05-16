@@ -140,7 +140,10 @@ class Gamification
      */
     public function orderByPoints($limit, $offset)
     {
+        $blockedUsers = explode(', ', $this->settings->get('reflar.gamification.blockedUsers'));
+
         $query = User::query()
+            ->whereNotIn('username', $blockedUsers)
             ->orderBy('votes', 'desc')
             ->offset($offset)
             ->take($limit)

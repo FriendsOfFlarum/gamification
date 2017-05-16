@@ -281,10 +281,8 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
 
       items.add('points', m(
         'button',
-        { className: 'Post-points', onclick: function onclick() {
-            console.log('hi');
+        { title: app.translator.trans('reflar-gamification.forum.vote_title'), className: 'Post-points', onclick: function onclick() {
             if (!post.discussion().canSeeVotes()) return;
-            console.log('wow');
             app.modal.show(new VotesModal({ post: post }));
           } },
         post.data.relationships.upvotes.data.length - post.data.relationships.downvotes.data.length
@@ -350,15 +348,13 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
 });;
 'use strict';
 
-System.register('Reflar/gamification/components/DownvotedNotification', ['flarum/components/Notification', 'flarum/helpers/punctuateSeries'], function (_export, _context) {
+System.register('Reflar/gamification/components/DownvotedNotification', ['flarum/components/Notification'], function (_export, _context) {
     "use strict";
 
-    var Notification, punctuateSeries, DownvotedNotification;
+    var Notification, DownvotedNotification;
     return {
         setters: [function (_flarumComponentsNotification) {
             Notification = _flarumComponentsNotification.default;
-        }, function (_flarumHelpersPunctuateSeries) {
-            punctuateSeries = _flarumHelpersPunctuateSeries.default;
         }],
         execute: function () {
             DownvotedNotification = function (_Notification) {
@@ -712,15 +708,13 @@ System.register("Reflar/gamification/components/RankingsPage", ["flarum/extend",
 });;
 'use strict';
 
-System.register('Reflar/gamification/components/UpvotedNotification', ['flarum/components/Notification', 'flarum/helpers/punctuateSeries'], function (_export, _context) {
+System.register('Reflar/gamification/components/UpvotedNotification', ['flarum/components/Notification'], function (_export, _context) {
     "use strict";
 
-    var Notification, punctuateSeries, UpvotedNotification;
+    var Notification, UpvotedNotification;
     return {
         setters: [function (_flarumComponentsNotification) {
             Notification = _flarumComponentsNotification.default;
-        }, function (_flarumHelpersPunctuateSeries) {
-            punctuateSeries = _flarumHelpersPunctuateSeries.default;
         }],
         execute: function () {
             UpvotedNotification = function (_Notification) {
@@ -758,55 +752,6 @@ System.register('Reflar/gamification/components/UpvotedNotification', ['flarum/c
             _export('default', UpvotedNotification);
         }
     };
-});;
-'use strict';
-
-System.register('Reflar/gamification/components/UserPromotedNotification', ['flarum/components/Notification'], function (_export, _context) {
-  "use strict";
-
-  var Notification, UserPromotedNotification;
-  return {
-    setters: [function (_flarumComponentsNotification) {
-      Notification = _flarumComponentsNotification.default;
-    }],
-    execute: function () {
-      UserPromotedNotification = function (_Notification) {
-        babelHelpers.inherits(UserPromotedNotification, _Notification);
-
-        function UserPromotedNotification() {
-          babelHelpers.classCallCheck(this, UserPromotedNotification);
-          return babelHelpers.possibleConstructorReturn(this, (UserPromotedNotification.__proto__ || Object.getPrototypeOf(UserPromotedNotification)).apply(this, arguments));
-        }
-
-        babelHelpers.createClass(UserPromotedNotification, [{
-          key: 'icon',
-          value: function icon() {
-            return 'arrow-up';
-          }
-        }, {
-          key: 'href',
-          value: function href() {
-            return app.route.post(this.props.notification.subject());
-          }
-        }, {
-          key: 'content',
-          value: function content() {
-            var notification = this.props.notification;
-
-            return app.translator.trans('reflar-gamification.forum.notification.promoted', { rank: notification.content().rank });
-          }
-        }, {
-          key: 'excerpt',
-          value: function excerpt() {
-            return this.props.notification.subject().contentPlain();
-          }
-        }]);
-        return UserPromotedNotification;
-      }(Notification);
-
-      _export('default', UserPromotedNotification);
-    }
-  };
 });;
 'use strict';
 
@@ -930,10 +875,10 @@ System.register('Reflar/gamification/helpers/rankLabel', [], function (_export, 
 });;
 "use strict";
 
-System.register("Reflar/gamification/main", ["flarum/extend", "flarum/app", "flarum/components/IndexPage", "flarum/components/LinkButton", "flarum/components/NotificationGrid", "Reflar/gamification/components/AddAttributes", "Reflar/gamification/components/AddHotnessSort", "Reflar/gamification/components/AddVoteButtons", "Reflar/gamification/models/Rank", "Reflar/gamification/components/UserPromotedNotification", "Reflar/gamification/components/DownvotedNotification", "Reflar/gamification/components/UpvotedNotification", "Reflar/gamification/components/RankingsPage"], function (_export, _context) {
+System.register("Reflar/gamification/main", ["flarum/extend", "flarum/app", "flarum/components/IndexPage", "flarum/components/LinkButton", "flarum/components/NotificationGrid", "Reflar/gamification/components/AddAttributes", "Reflar/gamification/components/AddHotnessSort", "Reflar/gamification/components/AddVoteButtons", "Reflar/gamification/models/Rank", "Reflar/gamification/components/DownvotedNotification", "Reflar/gamification/components/UpvotedNotification", "Reflar/gamification/components/RankingsPage"], function (_export, _context) {
     "use strict";
 
-    var extend, app, IndexPage, LinkButton, NotificationGrid, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank, UserPromotedNotification, DownvotedNotification, UpvotedNotification, RankingsPage;
+    var extend, app, IndexPage, LinkButton, NotificationGrid, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank, DownvotedNotification, UpvotedNotification, RankingsPage;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
@@ -953,8 +898,6 @@ System.register("Reflar/gamification/main", ["flarum/extend", "flarum/app", "fla
             AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
         }, function (_ReflarGamificationModelsRank) {
             Rank = _ReflarGamificationModelsRank.default;
-        }, function (_ReflarGamificationComponentsUserPromotedNotification) {
-            UserPromotedNotification = _ReflarGamificationComponentsUserPromotedNotification.default;
         }, function (_ReflarGamificationComponentsDownvotedNotification) {
             DownvotedNotification = _ReflarGamificationComponentsDownvotedNotification.default;
         }, function (_ReflarGamificationComponentsUpvotedNotification) {
@@ -967,7 +910,6 @@ System.register("Reflar/gamification/main", ["flarum/extend", "flarum/app", "fla
             app.initializers.add('Reflar-gamification', function (app) {
                 app.store.models.ranks = Rank;
 
-                app.notificationComponents.userPromoted = UserPromotedNotification;
                 app.notificationComponents.downvoted = DownvotedNotification;
                 app.notificationComponents.upvoted = UpvotedNotification;
 
@@ -986,12 +928,6 @@ System.register("Reflar/gamification/main", ["flarum/extend", "flarum/app", "fla
                 });
 
                 extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
-                    items.add('userPromoted', {
-                        name: 'userPromoted',
-                        icon: 'arrow-up',
-                        label: app.translator.trans('reflar-gamification.forum.notification.grid.userPromoted')
-                    });
-
                     items.add('upvoted', {
                         name: 'upvoted',
                         icon: 'thumbs-up',
