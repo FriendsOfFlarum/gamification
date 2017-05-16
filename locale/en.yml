@@ -56,7 +56,6 @@ reflar-gamification:
         converting: Your likes are now being converted. Refresh your site after a few minutes to see the process finished. (Conversion time might take a while depending on your total forum likes)
         converted: "Successfully converted all {number} likes"
       ranks:
-        name: Prefix of ranks on profile page
         title: Ranks
         ranks: Custom ranks
         help:

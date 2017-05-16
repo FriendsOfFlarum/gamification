@@ -135,7 +135,6 @@ export default class SettingsPage extends Page {
                                     }),
                                 ])
                             ),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.name')),
                             m('legend', {}, app.translator.trans('reflar-gamification.admin.page.votes.title')),
                             m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.icon_name')),
                             m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.votes.icon_help')),
