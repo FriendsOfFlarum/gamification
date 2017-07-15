@@ -80,12 +80,16 @@ export default function () {
                                     <ul className="UserCard-badges badges">
                                         {listItems(badges)}
                                         {user.ranks() !== false ? (
-                                                user.ranks().map(rank => {
-                                                    return (
-                                                        <li className="User-Rank">
-                                                            {rankLabel(rank)}
-                                                        </li>
-                                                    );
+                                                user.ranks().map((rank, i) => {
+                                                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
+
+                                                    } else {
+                                                        return (
+                                                            <li className="User-Rank">
+                                                                {rankLabel(rank)}
+                                                            </li>
+                                                        );
+                                                    }
                                                 })
                                             ) : '' }
                                     </ul>
@@ -130,10 +134,14 @@ export default function () {
                     <a href={app.route.user(user)} config={m.route}>
                         {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
                     </a>
-                    {user.ranks().map(rank => {
-                        return (<span className="Post-Rank">
-                          {rankLabel(rank)}
-                        </span>);
+                    {user.ranks().map((rank, i) => {
+                        if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
+
+                        } else {
+                            return (<span className="Post-Rank">
+                              {rankLabel(rank)}
+                            </span>);
+                        }
                     })}
                 </h3>
                 <ul className="PostUser-badges badges">

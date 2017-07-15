@@ -77,12 +77,14 @@ System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers
                                 "ul",
                                 { className: "UserCard-badges badges" },
                                 listItems(badges),
-                                user.ranks() !== false ? user.ranks().map(function (rank) {
-                                    return m(
-                                        "li",
-                                        { className: "User-Rank" },
-                                        rankLabel(rank)
-                                    );
+                                user.ranks() !== false ? user.ranks().map(function (rank, i) {
+                                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+                                        return m(
+                                            "li",
+                                            { className: "User-Rank" },
+                                            rankLabel(rank)
+                                        );
+                                    }
                                 }) : ''
                             ) : '',
                             m(
@@ -140,12 +142,14 @@ System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers
                         ' ',
                         username(user)
                     ),
-                    user.ranks().map(function (rank) {
-                        return m(
-                            "span",
-                            { className: "Post-Rank" },
-                            rankLabel(rank)
-                        );
+                    user.ranks().map(function (rank, i) {
+                        if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+                            return m(
+                                "span",
+                                { className: "Post-Rank" },
+                                rankLabel(rank)
+                            );
+                        }
                     })
                 ),
                 m(
