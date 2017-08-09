@@ -1,6 +1,6 @@
 {
     "name": "reflar/gamification",
-    "description": "Manage your users with style",
+    "description":  "Upvotes and downvotes for your Flarum community",
     "keywords": [
         "misc",
         "settings",
