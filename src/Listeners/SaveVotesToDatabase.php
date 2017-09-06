@@ -110,6 +110,7 @@ class SaveVotesToDatabase
                     }
                 }
                 $this->checkDownUserVotes($user);
+                $vote->delete();
             } elseif ($vote->type == 'Up') {
                 $vote->type = 'Down';
 
