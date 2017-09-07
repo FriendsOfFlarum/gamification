@@ -16,7 +16,7 @@ use Flarum\Core\Notification\BlueprintInterface;
 use Flarum\Core\Post;
 use Flarum\Core\User;
 
-class UpvotedBlueprint implements BlueprintInterface
+class VoteBlueprint implements BlueprintInterface
 {
     /**
      * @var Post
@@ -29,18 +29,21 @@ class UpvotedBlueprint implements BlueprintInterface
     public $actor;
 
     /**
-     * @var User
+     * @var String
      */
-    public $user;
+    public $type;
 
     /**
+     * VoteBlueprint constructor.
      * @param Post $post
+     * @param User $actor
+     * @param $type
      */
-    public function __construct(Post $post, User $actor, User $user)
+    public function __construct(Post $post, User $actor, $type)
     {
         $this->post = $post;
         $this->actor = $actor;
-        $this->user = $user;
+        $this->type = $type;
     }
 
     /**
@@ -56,7 +59,7 @@ class UpvotedBlueprint implements BlueprintInterface
      */
     public function getSender()
     {
-        return $this->user;
+        return $this->actor;
     }
 
     /**
@@ -64,7 +67,7 @@ class UpvotedBlueprint implements BlueprintInterface
      */
     public function getData()
     {
-        return $this->actor->id;
+        return $this->type;
     }
 
     /**
@@ -72,7 +75,7 @@ class UpvotedBlueprint implements BlueprintInterface
      */
     public static function getType()
     {
-        return 'upvoted';
+        return 'vote';
     }
 
     /**

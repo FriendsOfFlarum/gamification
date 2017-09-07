@@ -13,21 +13,22 @@
 namespace Reflar\gamification\Listeners;
 
 use DateTime;
+use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Exception\FloodingException;
 use Flarum\Core\Notification;
 use Flarum\Core\Notification\NotificationSyncer;
 use Flarum\Event\PostWillBeSaved;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Events\PostWasDownvoted;
-use Reflar\gamification\Events\PostWasUpvoted;
-use Reflar\gamification\Notification\DownvotedBlueprint;
-use Reflar\gamification\Notification\UpvotedBlueprint;
+use Reflar\gamification\Events\PostWasVoted;
 use Reflar\gamification\Gamification;
+use Reflar\gamification\Notification\VoteBlueprint;
 use Reflar\gamification\Rank;
 use Reflar\gamification\Vote;
 
 class SaveVotesToDatabase
 {
+    use AssertPermissionTrait;
+
     /**
      * @var Dispatcher
      */
@@ -69,6 +70,7 @@ class SaveVotesToDatabase
         $actor = $event->actor;
         $user = $post->user;
 
+        $this->assertCan($actor, 'vote', $post->discussion);
         $this->assertNotFlooding($actor);
 
         $isUpvoted = false;
@@ -87,157 +89,116 @@ class SaveVotesToDatabase
 
     public function vote($post, $isDownvoted, $isUpvoted, $actor, $user)
     {
-        $discussion = $post->discussion;
-
         $vote = Vote::where([
             'post_id' => $post->id,
-            'user_id' => $user->id,
+            'user_id' => $actor->id,
         ])->first();
 
         if ($vote) {
             if (!$isUpvoted && !$isDownvoted) {
                 if ($vote->type == 'Up') {
-                    $user->decrement('votes');
-
-                    if ($post->number == 1) {
-                        $discussion->decrement('votes');
-                    }
+                    $this->changePoints($user, $post, -1);
                 } else {
-                    $user->increment('votes');
-
-                    if ($post->number == 1) {
-                        $discussion->increment('votes');
-                    }
+                    $this->changePoints($user, $post, 1);
                 }
-                $this->checkDownUserVotes($user);
+                $this->sendData($post, $user, $actor, 'None', $vote->type);
                 $vote->delete();
-            } elseif ($vote->type == 'Up') {
+            } else {
+                if ($vote->type == 'Up') {
+                    $vote->type = 'Down';
+                    $this->changePoints($user, $post, -2);
+
+                    $this->sendData($post, $user, $actor, 'Down', 'Up');
+                } else {
+                    $vote->type = 'Up';
+                    $this->changePoints($user, $post, 2);
+
+                    $this->sendData($post, $user, $actor, 'Up', 'Down');
+                }
+                $vote->save();
+            }
+        } else {
+            $vote = Vote::build($post, $actor);
+            if ($isDownvoted) {
                 $vote->type = 'Down';
-
-                $user->votes = $user->votes - 2;
-
-                if ($post->number == 1) {
-                    $discussion->votes = $discussion->votes - 2;
-                }
-
-                $this->sendDownvotedData($post, $user, $actor);
-            } elseif ($vote->type == 'Down') {
+                $this->changePoints($user, $post, -1);
+            } elseif ($isUpvoted) {
                 $vote->type = 'Up';
-
-                $user->votes = $user->votes + 2;
-
-                if ($post->number == 1) {
-                    $discussion->votes = $discussion->votes + 2;
-                }
-
-                $this->sendUpvotedData($post, $user, $actor);
+                $this->changePoints($user, $post, 1);
             }
-
-            $vote->time = new DateTime();
-        } elseif ($isDownvoted) {
-            $vote = Vote::build($post, $actor, 'Down');
-
-            $user->decrement('votes');
-
-            if ($post->number == 1) {
-                $discussion->decrement('votes');
-            }
-
-            $this->sendDownvotedData($post, $user, $actor);
-        } elseif ($isUpvoted) {
-            $vote = Vote::build($post, $actor, 'Up');
-
-            $user->increment('votes');
-
-            if ($post->number == 1) {
-                $discussion->increment('votes');
-            }
-
-            $this->sendUpvotedData($post, $user, $actor);
+            $this->sendData($post, $user, $actor, $vote->type, ' ');
+            $vote->save();
         }
         $actor->last_vote_time = new DateTime();
         $actor->save();
+    }
 
-        $user->save();
-        $discussion->save();
+    /**
+     * @param $user
+     * @param $post
+     * @param $number
+     */
+    public function changePoints($user, $post, $number)
+    {
+        $user->votes = $user->votes + $number;
+        $discussion = $post->discussion;
+
+        if ($post->number == 1) {
+            $discussion->votes = $discussion->votes + $number;
+            $discussion->save();
+            $this->gamification->calculateHotness($discussion);
+        }
         $post->save();
-        $vote->save();
-        $this->gamification->calculateHotness($post->discussion);
+        $user->save();
     }
 
     /**
+     * @param $post
      * @param $user
+     * @param $actor
+     * @param $type
      */
-    private function checkUpUserVotes($user)
+    public function sendData($post, $user, $actor, $type, $before)
     {
-        $ranks = Rank::where('points', '<=', $user->votes)->get();
+        $oldVote = Notification::where([
+            'sender_id' => $actor->id,
+            'subject_id' => $post->id,
+            'data' => '"'.$before.'"',
+        ])->first();
 
-        if ($ranks !== null) {
-            $user->ranks()->detach();
-            foreach ($ranks as $rank) {
-                $user->ranks()->attach($rank->id);
+        if ($oldVote) {
+            if ($type === 'None') {
+                $oldVote->delete();
+            } else {
+                $oldVote->data = $type;
+                $oldVote->save();
             }
-        }
-    }
-
-    public function sendDownvotedData($post, $user, $actor)
-    {
-        $oldVote = Notification::where([
-            'data' => $actor->id,
-            'subject_id' => $post->id,
-            'type' => 'upvoted',
-        ])->first();
-
-        if ($oldVote !== null) {
-            $oldVote->type = 'downvoted';
-            $oldVote->save();
         } elseif ($user->id !== $actor->id) {
             $this->notifications->sync(
-                new DownvotedBlueprint($post, $actor, $user),
+                new VoteBlueprint($post, $actor, $type),
                 [$user]);
         }
 
         $this->events->fire(
-            new PostWasUpvoted($post, $user, $actor)
+            new PostWasVoted($post, $user, $actor, $type)
         );
 
-        $this->checkDownUserVotes($user);
-    }
+        if ($type === 'Up') {
+            $ranks = Rank::where('points', '<=', $user->votes)->get();
 
-    public function sendUpvotedData($post, $user, $actor)
-    {
-        $oldVote = Notification::where([
-            'data' => $actor->id,
-            'subject_id' => $post->id,
-            'type' => 'downvoted',
-        ])->first();
+            if ($ranks !== null) {
+                $user->ranks()->detach();
+                foreach ($ranks as $rank) {
+                    $user->ranks()->attach($rank->id);
+                }
+            }
+        } elseif ($type === 'Down') {
+            $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
-        if ($oldVote !== null) {
-            $oldVote->type = 'upvoted';
-            $oldVote->save();
-        } elseif ($user->id !== $actor->id) {
-            $this->notifications->sync(
-                new UpvotedBlueprint($post, $actor, $user),
-                [$user]);
-        }
-
-        $this->events->fire(
-            new PostWasDownvoted($post, $user, $actor)
-        );
-
-        $this->checkUpUserVotes($user);
-    }
-
-    /**
-     * @param $user
-     */
-    private function checkDownUserVotes($user)
-    {
-        $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
-
-        if ($ranks !== null) {
-            foreach ($ranks as $rank) {
-                $user->ranks()->detach($rank->id);
+            if ($ranks !== null) {
+                foreach ($ranks as $rank) {
+                    $user->ranks()->detach($rank->id);
+                }
             }
         }
     }

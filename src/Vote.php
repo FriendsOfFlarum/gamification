@@ -25,13 +25,12 @@ class Vote extends AbstractModel
      * @param $user_id
      * @param $type
      */
-    public static function build(Post $post, User $user, $type)
+    public static function build(Post $post, User $user)
     {
         $vote = new static();
 
         $vote->post_id = $post->id;
         $vote->user_id = $user->id;
-        $vote->type = $type;
 
         return $vote;
     }

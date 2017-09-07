@@ -20,8 +20,7 @@ use Flarum\Event\PostWasPosted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Gamification;
-use Reflar\gamification\Notification\DownvotedBlueprint;
-use Reflar\gamification\Notification\UpvotedBlueprint;
+use Reflar\gamification\Notification\VoteBlueprint;
 use Reflar\gamification\Rank;
 
 class EventHandlers
@@ -82,8 +81,7 @@ class EventHandlers
      */
     public function registerNotificationType(ConfigureNotificationTypes $event)
     {
-        $event->add(DownvotedBlueprint::class, PostBasicSerializer::class, ['alert']);
-        $event->add(UpvotedBlueprint::class, PostBasicSerializer::class, ['alert']);
+        $event->add(VoteBlueprint::class, PostBasicSerializer::class, ['alert']);
     }
 
     /**

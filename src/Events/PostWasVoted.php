@@ -15,7 +15,7 @@ namespace Reflar\gamification\Events;
 use Flarum\Core\Post;
 use Flarum\Core\User;
 
-class PostWasDownvoted
+class PostWasVoted
 {
     /**
      * @var Post
@@ -33,14 +33,22 @@ class PostWasDownvoted
     public $actor;
 
     /**
-     * @param Post $post
-     * @param User $user
-     * @param User $actor
+     * @var String
      */
-    public function __construct(Post $post, User $user, User $actor)
+    public $type;
+
+    /**
+     * PostWasVoted constructor.
+     * @param Post   $post
+     * @param User   $user
+     * @param User   $actor
+     * @param String $type
+     */
+    public function __construct(Post $post, User $user, User $actor, $type)
     {
         $this->post = $post;
         $this->user = $user;
         $this->actor = $actor;
+        $this->type = $type;
     }
 }
