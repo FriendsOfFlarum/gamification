@@ -1,316 +1,316 @@
-'use strict'
+"use strict";
 
-System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers/avatar', 'flarum/components/AvatarEditor', 'flarum/helpers/username', 'flarum/models/Discussion', 'flarum/components/Dropdown', 'flarum/extend', 'flarum/Model', 'flarum/models/Post', 'flarum/components/PostUser', 'flarum/models/User', 'flarum/components/UserCard', 'flarum/utils/UserControls', 'flarum/helpers/userOnline', 'flarum/helpers/listItems', 'Reflar/gamification/helpers/rankLabel'], function (_export, _context) {
-  'use strict'
+System.register("Reflar/gamification/components/AddAttributes", ["flarum/helpers/avatar", "flarum/components/AvatarEditor", "flarum/helpers/username", "flarum/models/Discussion", "flarum/components/Dropdown", "flarum/extend", "flarum/Model", "flarum/models/Post", "flarum/components/PostUser", "flarum/models/User", "flarum/components/UserCard", "flarum/utils/UserControls", "flarum/helpers/userOnline", "flarum/helpers/listItems", "Reflar/gamification/helpers/rankLabel"], function (_export, _context) {
+    "use strict";
 
-  var avatar, AvatarEditor, username, Discussion, Dropdown, extend, Model, Post, PostUser, User, UserCard, UserControls, userOnline, listItems, rankLabel
+    var avatar, AvatarEditor, username, Discussion, Dropdown, extend, Model, Post, PostUser, User, UserCard, UserControls, userOnline, listItems, rankLabel;
 
-  _export('default', function () {
-    Discussion.prototype.canVote = Model.attribute('canVote')
-    Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes')
-    Discussion.prototype.votes = Model.attribute('votes')
+    _export("default", function () {
+        Discussion.prototype.canVote = Model.attribute('canVote');
+        Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
+        Discussion.prototype.votes = Model.attribute('votes');
 
-    User.prototype.points = Model.attribute('points')
-    User.prototype.ranks = Model.hasMany('ranks')
+        User.prototype.points = Model.attribute('points');
+        User.prototype.ranks = Model.hasMany('ranks');
 
-    Post.prototype.upvotes = Model.hasMany('upvotes')
-    Post.prototype.downvotes = Model.hasMany('downvotes')
+        Post.prototype.upvotes = Model.hasMany('upvotes');
+        Post.prototype.downvotes = Model.hasMany('downvotes');
 
-    extend(UserCard.prototype, 'infoItems', function (items, user) {
-      var points = ''
+        extend(UserCard.prototype, 'infoItems', function (items, user) {
+            var points = '';
 
-      if (points == 0) {
-        points = '0'
-      }
+            if (points == 0) {
+                points = '0';
+            }
 
-      if (app.forum.attribute('PointsPlaceholder')) {
-        points = app.forum.attribute('PointsPlaceholder').replace('{points}', this.props.user.data.attributes.Points)
-      } else {
-        points = app.translator.trans('reflar-gamification.forum.user.points', { points: this.props.user.data.attributes.Points })
-      }
+            if (app.forum.attribute('PointsPlaceholder')) {
+                points = app.forum.attribute('PointsPlaceholder').replace('{points}', this.props.user.data.attributes.Points);
+            } else {
+                points = app.translator.trans('reflar-gamification.forum.user.points', { points: this.props.user.data.attributes.Points });
+            }
 
-      items.add('points', points)
-    })
+            items.add('points', points);
+        });
 
-    UserCard.prototype.view = function () {
-      var user = this.props.user
-      var controls = UserControls.controls(user, this).toArray()
-      var color = user.color()
-      var badges = user.badges().toArray()
+        UserCard.prototype.view = function () {
+            var user = this.props.user;
+            var controls = UserControls.controls(user, this).toArray();
+            var color = user.color();
+            var badges = user.badges().toArray();
 
-      return m(
-                'div',
-        { className: 'UserCard ' + (this.props.className || ''),
-          style: color ? { backgroundColor: color } : '' },
+            return m(
+                "div",
+                { className: 'UserCard ' + (this.props.className || ''),
+                    style: color ? { backgroundColor: color } : '' },
                 m(
-                    'div',
-                    { className: 'darkenBackground' },
+                    "div",
+                    { className: "darkenBackground" },
                     m(
-                        'div',
-                        { className: 'container' },
+                        "div",
+                        { className: "container" },
                         controls.length ? Dropdown.component({
-                          children: controls,
-                          className: 'UserCard-controls App-primaryControl',
-                          menuClassName: 'Dropdown-menu--right',
-                          buttonClassName: this.props.controlsButtonClassName,
-                          label: app.translator.trans('core.forum.user_controls.button'),
-                          icon: 'ellipsis-v'
+                            children: controls,
+                            className: 'UserCard-controls App-primaryControl',
+                            menuClassName: 'Dropdown-menu--right',
+                            buttonClassName: this.props.controlsButtonClassName,
+                            label: app.translator.trans('core.forum.user_controls.button'),
+                            icon: 'ellipsis-v'
                         }) : '',
                         m(
-                            'div',
-                            { className: 'UserCard-profile' },
+                            "div",
+                            { className: "UserCard-profile" },
                             m(
-                                'h2',
-                                { className: 'UserCard-identity' },
+                                "h2",
+                                { className: "UserCard-identity" },
                                 this.props.editable ? [AvatarEditor.component({ user: user, className: 'UserCard-avatar' }), username(user)] : m(
-                                    'a',
+                                    "a",
                                     { href: app.route.user(user), config: m.route },
                                     m(
-                                        'div',
-                                        { className: 'UserCard-avatar' },
+                                        "div",
+                                        { className: "UserCard-avatar" },
                                         avatar(user)
                                     ),
                                     username(user)
                                 )
                             ),
                             badges.length ? m(
-                                'ul',
-                                { className: 'UserCard-badges badges' },
+                                "ul",
+                                { className: "UserCard-badges badges" },
                                 listItems(badges),
                                 user.ranks() !== false ? user.ranks().map(function (rank, i) {
-                                  if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
-                                    return m(
-                                            'li',
-                                            { className: 'User-Rank' },
+                                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+                                        return m(
+                                            "li",
+                                            { className: "User-Rank" },
                                             rankLabel(rank)
-                                        )
-                                  }
+                                        );
+                                    }
                                 }) : ''
                             ) : '',
                             m(
-                                'ul',
-                                { className: 'UserCard-info' },
+                                "ul",
+                                { className: "UserCard-info" },
                                 listItems(this.infoItems().toArray())
                             )
                         )
                     )
                 )
-            )
-    }
+            );
+        };
 
-    PostUser.prototype.view = function () {
-      var post = this.props.post
-      var user = post.user()
+        PostUser.prototype.view = function () {
+            var post = this.props.post;
+            var user = post.user();
 
-      if (!user) {
-        return m(
-                    'div',
-                    { className: 'PostUser' },
+            if (!user) {
+                return m(
+                    "div",
+                    { className: "PostUser" },
                     m(
-                        'h3',
+                        "h3",
                         null,
                         avatar(user, { className: 'PostUser-avatar' }),
-                        ' ',
+                        " ",
                         username(user),
-                        ' ',
+                        " ",
                         rank[0]
                     )
-                )
-      }
+                );
+            }
 
-      var card = ''
+            var card = '';
 
-      if (!post.isHidden() && this.cardVisible) {
-        card = UserCard.component({
-          user: user,
-          className: 'UserCard--popover',
-          controlsButtonClassName: 'Button Button--icon Button--flat'
-        })
-      }
+            if (!post.isHidden() && this.cardVisible) {
+                card = UserCard.component({
+                    user: user,
+                    className: 'UserCard--popover',
+                    controlsButtonClassName: 'Button Button--icon Button--flat'
+                });
+            }
 
-      return m(
-                'div',
-                { className: 'PostUser' },
+            return m(
+                "div",
+                { className: "PostUser" },
                 userOnline(user),
                 m(
-                    'h3',
+                    "h3",
                     null,
                     m(
-                        'a',
+                        "a",
                         { href: app.route.user(user), config: m.route },
                         avatar(user, { className: 'PostUser-avatar' }),
                         ' ',
                         username(user)
                     ),
                     user.ranks().map(function (rank, i) {
-                      if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
-                        return m(
-                                'span',
-                                { className: 'Post-Rank' },
+                        if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+                            return m(
+                                "span",
+                                { className: "Post-Rank" },
                                 rankLabel(rank)
-                            )
-                      }
+                            );
+                        }
                     })
                 ),
                 m(
-                    'ul',
-                    { className: 'PostUser-badges badges' },
+                    "ul",
+                    { className: "PostUser-badges badges" },
                     listItems(user.badges().toArray())
                 ),
                 card
-            )
-    }
-  })
+            );
+        };
+    });
 
-  return {
-    setters: [function (_flarumHelpersAvatar) {
-      avatar = _flarumHelpersAvatar.default
-    }, function (_flarumComponentsAvatarEditor) {
-      AvatarEditor = _flarumComponentsAvatarEditor.default
-    }, function (_flarumHelpersUsername) {
-      username = _flarumHelpersUsername.default
-    }, function (_flarumModelsDiscussion) {
-      Discussion = _flarumModelsDiscussion.default
-    }, function (_flarumComponentsDropdown) {
-      Dropdown = _flarumComponentsDropdown.default
-    }, function (_flarumExtend) {
-      extend = _flarumExtend.extend
-    }, function (_flarumModel) {
-      Model = _flarumModel.default
-    }, function (_flarumModelsPost) {
-        Post = _flarumModelsPost.default
-      }, function (_flarumComponentsPostUser) {
-        PostUser = _flarumComponentsPostUser.default
-      }, function (_flarumModelsUser) {
-          User = _flarumModelsUser.default
+    return {
+        setters: [function (_flarumHelpersAvatar) {
+            avatar = _flarumHelpersAvatar.default;
+        }, function (_flarumComponentsAvatarEditor) {
+            AvatarEditor = _flarumComponentsAvatarEditor.default;
+        }, function (_flarumHelpersUsername) {
+            username = _flarumHelpersUsername.default;
+        }, function (_flarumModelsDiscussion) {
+            Discussion = _flarumModelsDiscussion.default;
+        }, function (_flarumComponentsDropdown) {
+            Dropdown = _flarumComponentsDropdown.default;
+        }, function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumModel) {
+            Model = _flarumModel.default;
+        }, function (_flarumModelsPost) {
+            Post = _flarumModelsPost.default;
+        }, function (_flarumComponentsPostUser) {
+            PostUser = _flarumComponentsPostUser.default;
+        }, function (_flarumModelsUser) {
+            User = _flarumModelsUser.default;
         }, function (_flarumComponentsUserCard) {
-          UserCard = _flarumComponentsUserCard.default
+            UserCard = _flarumComponentsUserCard.default;
         }, function (_flarumUtilsUserControls) {
-          UserControls = _flarumUtilsUserControls.default
+            UserControls = _flarumUtilsUserControls.default;
         }, function (_flarumHelpersUserOnline) {
-          userOnline = _flarumHelpersUserOnline.default
+            userOnline = _flarumHelpersUserOnline.default;
         }, function (_flarumHelpersListItems) {
-          listItems = _flarumHelpersListItems.default
+            listItems = _flarumHelpersListItems.default;
         }, function (_ReflarGamificationHelpersRankLabel) {
-          rankLabel = _ReflarGamificationHelpersRankLabel.default
+            rankLabel = _ReflarGamificationHelpersRankLabel.default;
         }],
-    execute: function () {}
-  }
-})
-'use strict'
+        execute: function () {}
+    };
+});;
+'use strict';
 
 System.register('Reflar/gamification/components/AddHotnessSort', ['flarum/extend', 'flarum/components/IndexPage', 'flarum/utils/ItemList', 'flarum/components/DiscussionList', 'flarum/components/Select'], function (_export, _context) {
-  'use strict'
+    "use strict";
 
-  var extend, IndexPage, ItemList, DiscussionList, Select
+    var extend, IndexPage, ItemList, DiscussionList, Select;
 
-  _export('default', function () {
-    IndexPage.prototype.viewItems = function () {
-      var items = new ItemList()
-      var sortMap = app.cache.discussionList.sortMap()
+    _export('default', function () {
+        IndexPage.prototype.viewItems = function () {
+            var items = new ItemList();
+            var sortMap = app.cache.discussionList.sortMap();
 
-      var sortOptions = {}
-      for (var i in sortMap) {
-        sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button')
-      }
+            var sortOptions = {};
+            for (var i in sortMap) {
+                sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
+            }
 
-      var sort = this.params().sort
+            var sort = this.params().sort;
 
-      if (this.props.routeName == 'index.filter') {
-        sort = 'hot'
-      }
+            if (this.props.routeName == 'index.filter') {
+                sort = 'hot';
+            }
 
-      items.add('sort', Select.component({
-        options: sortOptions,
-        value: sort || Object.keys(sortMap)[0],
-        onchange: this.changeSort.bind(this)
-      }))
+            items.add('sort', Select.component({
+                options: sortOptions,
+                value: sort || Object.keys(sortMap)[0],
+                onchange: this.changeSort.bind(this)
+            }));
 
-      return items
-    }
+            return items;
+        };
 
-    IndexPage.prototype.changeSort = function (sort) {
-      var params = this.params()
+        IndexPage.prototype.changeSort = function (sort) {
+            var params = this.params();
 
-      if (sort === 'hot') {
-        m.route(app.route('index'))
-        m.route(m.route() + 'hot')
-      } else {
-        if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
-          delete params.sort
-        } else {
-          params.sort = sort
-        }
-        if (params.filter == 'hot') {
-          delete params.filter
-        }
-        m.route(app.route('index', params))
-      }
-    }
+            if (sort === 'hot') {
+                m.route(app.route('index'));
+                m.route(m.route() + 'hot');
+            } else {
+                if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
+                    delete params.sort;
+                } else {
+                    params.sort = sort;
+                }
+                if (params.filter == 'hot') {
+                    delete params.filter;
+                }
+                m.route(app.route('index', params));
+            }
+        };
 
-    extend(DiscussionList.prototype, 'sortMap', function (map) {
-      map.hot = 'hot'
-    })
+        extend(DiscussionList.prototype, 'sortMap', function (map) {
+            map.hot = 'hot';
+        });
 
-    extend(DiscussionList.prototype, 'requestParams', function (params) {
-      if (this.props.params.filter === 'hot') {
-        params.filter.q = ' is:hot'
-      }
-    })
-  })
+        extend(DiscussionList.prototype, 'requestParams', function (params) {
+            if (this.props.params.filter === 'hot') {
+                params.filter.q = ' is:hot';
+            }
+        });
+    });
 
-  return {
-    setters: [function (_flarumExtend) {
-      extend = _flarumExtend.extend
-    }, function (_flarumComponentsIndexPage) {
-      IndexPage = _flarumComponentsIndexPage.default
-    }, function (_flarumUtilsItemList) {
-      ItemList = _flarumUtilsItemList.default
-    }, function (_flarumComponentsDiscussionList) {
-      DiscussionList = _flarumComponentsDiscussionList.default
-    }, function (_flarumComponentsSelect) {
-      Select = _flarumComponentsSelect.default
-    }],
-    execute: function () {}
-  }
-})
-'use strict'
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumComponentsIndexPage) {
+            IndexPage = _flarumComponentsIndexPage.default;
+        }, function (_flarumUtilsItemList) {
+            ItemList = _flarumUtilsItemList.default;
+        }, function (_flarumComponentsDiscussionList) {
+            DiscussionList = _flarumComponentsDiscussionList.default;
+        }, function (_flarumComponentsSelect) {
+            Select = _flarumComponentsSelect.default;
+        }],
+        execute: function () {}
+    };
+});;
+'use strict';
 
 System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/LogInModal', 'flarum/components/CommentPost', 'Reflar/gamification/components/VotesModal'], function (_export, _context) {
-  'use strict'
+  "use strict";
 
-  var extend, app, Button, LogInModal, CommentPost, VotesModal
+  var extend, app, Button, LogInModal, CommentPost, VotesModal;
 
   _export('default', function () {
     extend(CommentPost.prototype, 'actionItems', function (items) {
-      var post = this.props.post
+      var post = this.props.post;
 
       var isUpvoted = app.session.user && post.upvotes().some(function (user) {
-        return user === app.session.user
-      })
+        return user === app.session.user;
+      });
       var isDownvoted = app.session.user && post.downvotes().some(function (user) {
-        return user === app.session.user
-      })
+        return user === app.session.user;
+      });
 
-      var color = ''
+      var color = '';
 
-      if (post.isHidden()) return
+      if (post.isHidden()) return;
 
       if (app.forum.attribute('autoUpvote') !== null && app.forum.attribute('autoUpvote') !== '') {
-        color = app.forum.attribute('VoteColor')
+        color = app.forum.attribute('VoteColor');
       } else {
-        color = '#f44336'
+        color = '#f44336';
       }
 
       if (!app.session.user) {
-        isDownvoted = false
-        isUpvoted = false
+        isDownvoted = false;
+        isUpvoted = false;
       }
 
-      var icon = app.forum.attribute('IconName')
+      var icon = app.forum.attribute('IconName');
 
       if (icon === null || icon === '') {
-        icon = 'thumbs'
+        icon = 'thumbs';
       }
 
       items.add('upvote', Button.component({
@@ -318,229 +318,180 @@ System.register('Reflar/gamification/components/AddVoteButtons', ['flarum/extend
         className: 'Post-vote Post-upvote',
         style: isUpvoted !== false ? 'color:' + color : 'color:',
         disabled: !post.discussion().canVote(),
-        onclick: function onclick () {
+        onclick: function onclick() {
           if (!app.session.user) {
-            app.modal.show(new LogInModal())
-            return
+            app.modal.show(new LogInModal());
+            return;
           }
-          if (!post.discussion().canVote()) return
-          var upData = post.data.relationships.upvotes.data
-          var downData = post.data.relationships.downvotes.data
+          if (!post.discussion().canVote()) return;
+          var upData = post.data.relationships.upvotes.data;
+          var downData = post.data.relationships.downvotes.data;
 
-          isUpvoted = !isUpvoted
+          isUpvoted = !isUpvoted;
 
-          isDownvoted = false
+          isDownvoted = false;
 
-          post.save({ isUpvoted: isUpvoted, isDownvoted: isDownvoted })
+          post.save({ isUpvoted: isUpvoted, isDownvoted: isDownvoted });
 
           upData.some(function (upvote, i) {
             if (upvote.id === app.session.user.id()) {
-              upData.splice(i, 1)
-              return true
+              upData.splice(i, 1);
+              return true;
             }
-          })
+          });
 
           downData.some(function (downvote, i) {
             if (downvote.id === app.session.user.id()) {
-              downData.splice(i, 1)
-              return true
+              downData.splice(i, 1);
+              return true;
             }
-          })
+          });
 
           if (isUpvoted) {
-            upData.unshift({ type: 'users', id: app.session.user.id() })
+            upData.unshift({ type: 'users', id: app.session.user.id() });
           }
         }
-      }))
+      }));
 
       items.add('points', m(
         'button',
-        { disabled: !post.discussion().canSeeVotes(),
-          className: 'Post-points',
-          onclick: function onclick () {
-            if (!post.discussion().canSeeVotes()) return
-            app.modal.show(new VotesModal({ post: post }))
+        { disabled: !post.discussion().canSeeVotes(), className: 'Post-points', onclick: function onclick() {
+            if (!post.discussion().canSeeVotes()) return;
+            app.modal.show(new VotesModal({ post: post }));
           } },
         post.data.relationships.upvotes.data.length - post.data.relationships.downvotes.data.length
-      ))
+      ));
 
       items.add('downvote', Button.component({
         icon: icon + '-down',
         className: 'Post-vote Post-downvote',
         style: isDownvoted !== false ? 'color:' + color : '',
         disabled: !post.discussion().canVote(),
-        onclick: function onclick () {
+        onclick: function onclick() {
           if (!app.session.user) {
-            app.modal.show(new LogInModal())
-            return
+            app.modal.show(new LogInModal());
+            return;
           }
-          if (!post.discussion().canVote()) return
-          var upData = post.data.relationships.upvotes.data
-          var downData = post.data.relationships.downvotes.data
+          if (!post.discussion().canVote()) return;
+          var upData = post.data.relationships.upvotes.data;
+          var downData = post.data.relationships.downvotes.data;
 
-          isDownvoted = !isDownvoted
+          isDownvoted = !isDownvoted;
 
-          isUpvoted = false
+          isUpvoted = false;
 
-          post.save({ isUpvoted: isUpvoted, isDownvoted: isDownvoted })
+          post.save({ isUpvoted: isUpvoted, isDownvoted: isDownvoted });
 
           upData.some(function (upvote, i) {
             if (upvote.id === app.session.user.id()) {
-              upData.splice(i, 1)
-              return true
+              upData.splice(i, 1);
+              return true;
             }
-          })
+          });
 
           downData.some(function (downvote, i) {
             if (downvote.id === app.session.user.id()) {
-              downData.splice(i, 1)
-              return true
+              downData.splice(i, 1);
+              return true;
             }
-          })
+          });
 
           if (isDownvoted) {
-            downData.unshift({ type: 'users', id: app.session.user.id() })
+            downData.unshift({ type: 'users', id: app.session.user.id() });
           }
         }
-      }))
-    })
-  })
+      }));
+    });
+  });
 
   return {
     setters: [function (_flarumExtend) {
-      extend = _flarumExtend.extend
+      extend = _flarumExtend.extend;
     }, function (_flarumApp) {
-      app = _flarumApp.default
+      app = _flarumApp.default;
     }, function (_flarumComponentsButton) {
-      Button = _flarumComponentsButton.default
+      Button = _flarumComponentsButton.default;
     }, function (_flarumComponentsLogInModal) {
-      LogInModal = _flarumComponentsLogInModal.default
+      LogInModal = _flarumComponentsLogInModal.default;
     }, function (_flarumComponentsCommentPost) {
-      CommentPost = _flarumComponentsCommentPost.default
+      CommentPost = _flarumComponentsCommentPost.default;
     }, function (_ReflarGamificationComponentsVotesModal) {
-      VotesModal = _ReflarGamificationComponentsVotesModal.default
+      VotesModal = _ReflarGamificationComponentsVotesModal.default;
     }],
     execute: function () {}
-  }
-})
-'use strict'
-
-System.register('Reflar/gamification/components/DownvotedNotification', ['flarum/components/Notification'], function (_export, _context) {
-  'use strict'
-
-  var Notification, DownvotedNotification
-  return {
-    setters: [function (_flarumComponentsNotification) {
-      Notification = _flarumComponentsNotification.default
-    }],
-    execute: function () {
-      DownvotedNotification = (function (_Notification) {
-        babelHelpers.inherits(DownvotedNotification, _Notification)
-
-        function DownvotedNotification () {
-          babelHelpers.classCallCheck(this, DownvotedNotification)
-          return babelHelpers.possibleConstructorReturn(this, (DownvotedNotification.__proto__ || Object.getPrototypeOf(DownvotedNotification)).apply(this, arguments))
-        }
-
-        babelHelpers.createClass(DownvotedNotification, [{
-          key: 'icon',
-          value: function icon () {
-            return 'thumbs-down'
-          }
-        }, {
-          key: 'href',
-          value: function href () {
-            return app.route.post(this.props.notification.subject())
-          }
-        }, {
-          key: 'content',
-          value: function content () {
-            return app.translator.trans('reflar-gamification.forum.notification.downvote')
-          }
-        }, {
-          key: 'excerpt',
-          value: function excerpt () {
-            return this.props.notification.subject().contentPlain()
-          }
-        }])
-        return DownvotedNotification
-      }(Notification))
-
-      _export('default', DownvotedNotification)
-    }
-  }
-})
-'use strict'
+  };
+});;
+'use strict';
 
 System.register('Reflar/gamification/components/RankingsPage', ['flarum/extend', 'flarum/helpers/avatar', 'flarum/components/Page', 'flarum/components/IndexPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flarum/components/LogInModal', 'flarum/components/LoadingIndicator', 'flarum/components/LinkButton', 'flarum/helpers/listItems', 'flarum/helpers/icon', 'flarum/helpers/username', 'flarum/components/SelectDropdown'], function (_export, _context) {
-  'use strict'
+  "use strict";
 
-  var extend, avatar, Page, IndexPage, Button, ItemList, LogInModal, LoadingIndicator, LinkButton, listItems, icon, username, SelectDropdown, RankingsPage
+  var extend, avatar, Page, IndexPage, Button, ItemList, LogInModal, LoadingIndicator, LinkButton, listItems, icon, username, SelectDropdown, RankingsPage;
   return {
     setters: [function (_flarumExtend) {
-      extend = _flarumExtend.extend
+      extend = _flarumExtend.extend;
     }, function (_flarumHelpersAvatar) {
-      avatar = _flarumHelpersAvatar.default
+      avatar = _flarumHelpersAvatar.default;
     }, function (_flarumComponentsPage) {
-      Page = _flarumComponentsPage.default
+      Page = _flarumComponentsPage.default;
     }, function (_flarumComponentsIndexPage) {
-      IndexPage = _flarumComponentsIndexPage.default
+      IndexPage = _flarumComponentsIndexPage.default;
     }, function (_flarumComponentsButton) {
-      Button = _flarumComponentsButton.default
+      Button = _flarumComponentsButton.default;
     }, function (_flarumUtilsItemList) {
-      ItemList = _flarumUtilsItemList.default
+      ItemList = _flarumUtilsItemList.default;
     }, function (_flarumComponentsLogInModal) {
-      LogInModal = _flarumComponentsLogInModal.default
+      LogInModal = _flarumComponentsLogInModal.default;
     }, function (_flarumComponentsLoadingIndicator) {
-      LoadingIndicator = _flarumComponentsLoadingIndicator.default
+      LoadingIndicator = _flarumComponentsLoadingIndicator.default;
     }, function (_flarumComponentsLinkButton) {
-      LinkButton = _flarumComponentsLinkButton.default
+      LinkButton = _flarumComponentsLinkButton.default;
     }, function (_flarumHelpersListItems) {
-      listItems = _flarumHelpersListItems.default
+      listItems = _flarumHelpersListItems.default;
     }, function (_flarumHelpersIcon) {
-      icon = _flarumHelpersIcon.default
+      icon = _flarumHelpersIcon.default;
     }, function (_flarumHelpersUsername) {
-      username = _flarumHelpersUsername.default
+      username = _flarumHelpersUsername.default;
     }, function (_flarumComponentsSelectDropdown) {
-      SelectDropdown = _flarumComponentsSelectDropdown.default
+      SelectDropdown = _flarumComponentsSelectDropdown.default;
     }],
     execute: function () {
-      RankingsPage = (function (_Page) {
-        babelHelpers.inherits(RankingsPage, _Page)
+      RankingsPage = function (_Page) {
+        babelHelpers.inherits(RankingsPage, _Page);
 
-        function RankingsPage () {
-          babelHelpers.classCallCheck(this, RankingsPage)
-          return babelHelpers.possibleConstructorReturn(this, (RankingsPage.__proto__ || Object.getPrototypeOf(RankingsPage)).apply(this, arguments))
+        function RankingsPage() {
+          babelHelpers.classCallCheck(this, RankingsPage);
+          return babelHelpers.possibleConstructorReturn(this, (RankingsPage.__proto__ || Object.getPrototypeOf(RankingsPage)).apply(this, arguments));
         }
 
         babelHelpers.createClass(RankingsPage, [{
           key: 'init',
-          value: function init () {
-            babelHelpers.get(RankingsPage.prototype.__proto__ || Object.getPrototypeOf(RankingsPage.prototype), 'init', this).call(this)
+          value: function init() {
+            babelHelpers.get(RankingsPage.prototype.__proto__ || Object.getPrototypeOf(RankingsPage.prototype), 'init', this).call(this);
 
             if (!app.session.user || app.session.user.data.attributes.canViewRankingPage !== true) {
-              m.route('/')
+              m.route('/');
             }
 
-            this.loading = true
-            this.users = []
-            this.refresh()
+            this.loading = true;
+            this.users = [];
+            this.refresh();
           }
         }, {
           key: 'view',
-          value: function view () {
-            var _this2 = this
+          value: function view() {
+            var _this2 = this;
 
-            var loading = void 0
+            var loading = void 0;
 
             if (this.loading) {
-              loading = LoadingIndicator.component()
+              loading = LoadingIndicator.component();
             } else {
               loading = Button.component({
                 children: app.translator.trans('core.forum.discussion_list.load_more_button'),
                 className: 'Button',
                 onclick: this.loadMore.bind(this)
-              })
+              });
             }
             return m(
               'div',
@@ -593,7 +544,7 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/extend',
                             )
                           ),
                           this.users.map(function (user, i) {
-                            ++i
+                            ++i;
                             return [m(
                               'tr',
                               { className: 'ranking-' + i },
@@ -636,7 +587,7 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/extend',
                                 { className: 'rankings-4' },
                                 user.data.attributes.Points
                               )
-                            )]
+                            )];
                           })
                         ),
                         m(
@@ -650,235 +601,235 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/extend',
                   )
                 )
               )
-            )
+            );
           }
         }, {
           key: 'refresh',
-          value: function refresh () {
-            var _this3 = this
+          value: function refresh() {
+            var _this3 = this;
 
-            var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true
+            var clear = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
             if (clear) {
-              this.loading = true
-              this.users = []
+              this.loading = true;
+              this.users = [];
             }
 
             return this.loadResults().then(function (results) {
-              _this3.users = []
-              _this3.parseResults(results)
+              _this3.users = [];
+              _this3.parseResults(results);
             }, function () {
-              _this3.loading = false
-              m.redraw()
-            })
+              _this3.loading = false;
+              m.redraw();
+            });
           }
         }, {
           key: 'addOrdinalSuffix',
-          value: function addOrdinalSuffix (i) {
+          value: function addOrdinalSuffix(i) {
             if (app.forum.attribute('DefaultLocale') == 'en') {
               var j = i % 10,
-                k = i % 100
+                  k = i % 100;
               if (j == 1 && k != 11) {
-                return i + 'st'
+                return i + 'st';
               }
               if (j == 2 && k != 12) {
-                return i + 'nd'
+                return i + 'nd';
               }
               if (j == 3 && k != 13) {
-                return i + 'rd'
+                return i + 'rd';
               }
-              return i + 'th'
+              return i + 'th';
             } else {
-              return i
+              return i;
             }
           }
         }, {
           key: 'stickyParams',
-          value: function stickyParams () {
+          value: function stickyParams() {
             return {
               sort: m.route.param('sort'),
               q: m.route.param('q')
-            }
+            };
           }
         }, {
           key: 'actionItems',
-          value: function actionItems () {
-            var items = new ItemList()
+          value: function actionItems() {
+            var items = new ItemList();
 
             items.add('refresh', Button.component({
               title: app.translator.trans('core.forum.index.refresh_tooltip'),
               icon: 'refresh',
               className: 'Button Button--icon',
-              onclick: function onclick () {
-                app.cache.discussionList.refresh()
+              onclick: function onclick() {
+                app.cache.discussionList.refresh();
                 if (app.session.user) {
-                  app.store.find('users', app.session.user.id())
-                  m.redraw()
+                  app.store.find('users', app.session.user.id());
+                  m.redraw();
                 }
               }
-            }))
+            }));
 
-            return items
+            return items;
           }
         }, {
           key: 'newDiscussion',
-          value: function newDiscussion () {
-            var deferred = m.deferred()
+          value: function newDiscussion() {
+            var deferred = m.deferred();
 
             if (app.session.user) {
-              this.composeNewDiscussion(deferred)
+              this.composeNewDiscussion(deferred);
             } else {
               app.modal.show(new LogInModal({
                 onlogin: this.composeNewDiscussion.bind(this, deferred)
-              }))
+              }));
             }
 
-            return deferred.promise
+            return deferred.promise;
           }
         }, {
           key: 'composeNewDiscussion',
-          value: function composeNewDiscussion (deferred) {
-            var component = new DiscussionComposer({ user: app.session.user })
+          value: function composeNewDiscussion(deferred) {
+            var component = new DiscussionComposer({ user: app.session.user });
 
-            app.composer.load(component)
-            app.composer.show()
+            app.composer.load(component);
+            app.composer.show();
 
-            deferred.resolve(component)
+            deferred.resolve(component);
 
-            return deferred.promise
+            return deferred.promise;
           }
         }, {
           key: 'loadResults',
-          value: function loadResults (offset) {
-            var params = {}
+          value: function loadResults(offset) {
+            var params = {};
             params.page = {
               offset: offset,
               limit: '10'
-            }
+            };
 
-            return app.store.find('rankings', params)
+            return app.store.find('rankings', params);
           }
         }, {
           key: 'loadMore',
-          value: function loadMore () {
-            this.loading = true
+          value: function loadMore() {
+            this.loading = true;
 
-            this.loadResults(this.users.length).then(this.parseResults.bind(this))
+            this.loadResults(this.users.length).then(this.parseResults.bind(this));
           }
         }, {
           key: 'parseResults',
-          value: function parseResults (results) {
-            [].push.apply(this.users, results)
+          value: function parseResults(results) {
+            [].push.apply(this.users, results);
 
-            this.loading = false
+            this.loading = false;
 
             this.users.sort(function (a, b) {
-              return parseFloat(b.data.attributes.Points) - parseFloat(a.data.attributes.Points)
-            })
+              return parseFloat(b.data.attributes.Points) - parseFloat(a.data.attributes.Points);
+            });
 
-            m.lazyRedraw()
+            m.lazyRedraw();
 
-            return results
+            return results;
           }
-        }])
-        return RankingsPage
-      }(Page))
+        }]);
+        return RankingsPage;
+      }(Page);
 
-      _export('default', RankingsPage)
+      _export('default', RankingsPage);
     }
-  }
-})
-'use strict'
+  };
+});;
+'use strict';
 
 System.register('Reflar/gamification/components/VoteNotification', ['flarum/components/Notification'], function (_export, _context) {
-  'use strict'
+  "use strict";
 
-  var Notification, UpvotedNotification
+  var Notification, UpvotedNotification;
   return {
     setters: [function (_flarumComponentsNotification) {
-      Notification = _flarumComponentsNotification.default
+      Notification = _flarumComponentsNotification.default;
     }],
     execute: function () {
-      UpvotedNotification = (function (_Notification) {
-        babelHelpers.inherits(UpvotedNotification, _Notification)
+      UpvotedNotification = function (_Notification) {
+        babelHelpers.inherits(UpvotedNotification, _Notification);
 
-        function UpvotedNotification () {
-          babelHelpers.classCallCheck(this, UpvotedNotification)
-          return babelHelpers.possibleConstructorReturn(this, (UpvotedNotification.__proto__ || Object.getPrototypeOf(UpvotedNotification)).apply(this, arguments))
+        function UpvotedNotification() {
+          babelHelpers.classCallCheck(this, UpvotedNotification);
+          return babelHelpers.possibleConstructorReturn(this, (UpvotedNotification.__proto__ || Object.getPrototypeOf(UpvotedNotification)).apply(this, arguments));
         }
 
         babelHelpers.createClass(UpvotedNotification, [{
           key: 'icon',
-          value: function icon () {
+          value: function icon() {
             if (this.props.notification.content() === 'Up') {
-              return 'thumbs-up'
+              return 'thumbs-up';
             } else {
-              return 'thumbs-down'
+              return 'thumbs-down';
             }
           }
         }, {
           key: 'href',
-          value: function href () {
-            return app.route.post(this.props.notification.subject())
+          value: function href() {
+            return app.route.post(this.props.notification.subject());
           }
         }, {
           key: 'content',
-          value: function content () {
+          value: function content() {
             if (this.props.notification.content() === 'Up') {
-              return app.translator.trans('reflar-gamification.forum.notification.upvote', { username: this.props.notification.sender().username() })
+              return app.translator.trans('reflar-gamification.forum.notification.upvote', { username: this.props.notification.sender().username() });
             } else {
-              return app.translator.trans('reflar-gamification.forum.notification.downvote', { username: this.props.notification.sender().username() })
+              return app.translator.trans('reflar-gamification.forum.notification.downvote', { username: this.props.notification.sender().username() });
             }
           }
         }, {
           key: 'excerpt',
-          value: function excerpt () {
-            return this.props.notification.subject().contentPlain()
+          value: function excerpt() {
+            return this.props.notification.subject().contentPlain();
           }
-        }])
-        return UpvotedNotification
-      }(Notification))
+        }]);
+        return UpvotedNotification;
+      }(Notification);
 
-      _export('default', UpvotedNotification)
+      _export('default', UpvotedNotification);
     }
-  }
-})
-'use strict'
+  };
+});;
+'use strict';
 
 System.register('Reflar/gamification/components/VotesModal', ['flarum/components/Modal', 'flarum/helpers/avatar', 'flarum/helpers/username'], function (_export, _context) {
-  'use strict'
+  "use strict";
 
-  var Modal, avatar, username, VotesModal
+  var Modal, avatar, username, VotesModal;
   return {
     setters: [function (_flarumComponentsModal) {
-      Modal = _flarumComponentsModal.default
+      Modal = _flarumComponentsModal.default;
     }, function (_flarumHelpersAvatar) {
-      avatar = _flarumHelpersAvatar.default
+      avatar = _flarumHelpersAvatar.default;
     }, function (_flarumHelpersUsername) {
-      username = _flarumHelpersUsername.default
+      username = _flarumHelpersUsername.default;
     }],
     execute: function () {
-      VotesModal = (function (_Modal) {
-        babelHelpers.inherits(VotesModal, _Modal)
+      VotesModal = function (_Modal) {
+        babelHelpers.inherits(VotesModal, _Modal);
 
-        function VotesModal () {
-          babelHelpers.classCallCheck(this, VotesModal)
-          return babelHelpers.possibleConstructorReturn(this, (VotesModal.__proto__ || Object.getPrototypeOf(VotesModal)).apply(this, arguments))
+        function VotesModal() {
+          babelHelpers.classCallCheck(this, VotesModal);
+          return babelHelpers.possibleConstructorReturn(this, (VotesModal.__proto__ || Object.getPrototypeOf(VotesModal)).apply(this, arguments));
         }
 
         babelHelpers.createClass(VotesModal, [{
           key: 'className',
-          value: function className () {
-            return 'VotesModal Modal--small'
+          value: function className() {
+            return 'VotesModal Modal--small';
           }
         }, {
           key: 'title',
-          value: function title () {
-            return app.translator.trans('reflar-gamification.forum.modal.title')
+          value: function title() {
+            return app.translator.trans('reflar-gamification.forum.modal.title');
           }
         }, {
           key: 'content',
-          value: function content () {
+          value: function content() {
             return m(
               'div',
               { className: 'Modal-body' },
@@ -902,7 +853,7 @@ System.register('Reflar/gamification/components/VotesModal', ['flarum/components
                       ' ',
                       username(user)
                     )
-                  )
+                  );
                 }),
                 m(
                   'legend',
@@ -921,130 +872,131 @@ System.register('Reflar/gamification/components/VotesModal', ['flarum/components
                       ' ',
                       username(user)
                     )
-                  )
+                  );
                 })
               )
-            )
+            );
           }
-        }])
-        return VotesModal
-      }(Modal))
+        }]);
+        return VotesModal;
+      }(Modal);
 
-      _export('default', VotesModal)
+      _export('default', VotesModal);
     }
-  }
-})
-'use strict'
+  };
+});;
+'use strict';
 
 System.register('Reflar/gamification/helpers/rankLabel', [], function (_export, _context) {
-  'use strict'
+  "use strict";
 
-  function rankLabel (rank) {
-    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
+  function rankLabel(rank) {
+    var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    attrs.style = attrs.style || {}
-    attrs.className = 'rankLabel ' + (attrs.className || '')
+    attrs.style = attrs.style || {};
+    attrs.className = 'rankLabel ' + (attrs.className || '');
 
-    var color = rank.color()
-    attrs.style.backgroundColor = attrs.style.color = color
-    attrs.className += ' colored'
+    var color = rank.color();
+    attrs.style.backgroundColor = attrs.style.color = color;
+    attrs.className += ' colored';
 
     return m('span', attrs, m(
       'span',
       { className: 'rankLabel-text' },
       rank.name()
-    ))
+    ));
   }
 
-  _export('default', rankLabel)
+  _export('default', rankLabel);
 
   return {
     setters: [],
     execute: function () {}
-  }
-})
-'use strict'
+  };
+});;
+'use strict';
 
 System.register('Reflar/gamification/main', ['flarum/extend', 'flarum/app', 'flarum/components/IndexPage', 'flarum/components/LinkButton', 'flarum/components/NotificationGrid', 'Reflar/gamification/components/AddAttributes', 'Reflar/gamification/components/AddHotnessSort', 'Reflar/gamification/components/AddVoteButtons', 'Reflar/gamification/models/Rank', 'Reflar/gamification/components/RankingsPage', 'Reflar/gamification/components/VoteNotification'], function (_export, _context) {
-  'use strict'
+  "use strict";
 
-  var extend, app, IndexPage, LinkButton, NotificationGrid, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank, RankingsPage, VoteNotification
+  var extend, app, IndexPage, LinkButton, NotificationGrid, AddAttributes, AddHotnessFilter, AddVoteButtons, Rank, RankingsPage, VoteNotification;
   return {
     setters: [function (_flarumExtend) {
-      extend = _flarumExtend.extend
+      extend = _flarumExtend.extend;
     }, function (_flarumApp) {
-      app = _flarumApp.default
+      app = _flarumApp.default;
     }, function (_flarumComponentsIndexPage) {
-      IndexPage = _flarumComponentsIndexPage.default
+      IndexPage = _flarumComponentsIndexPage.default;
     }, function (_flarumComponentsLinkButton) {
-      LinkButton = _flarumComponentsLinkButton.default
+      LinkButton = _flarumComponentsLinkButton.default;
     }, function (_flarumComponentsNotificationGrid) {
-      NotificationGrid = _flarumComponentsNotificationGrid.default
+      NotificationGrid = _flarumComponentsNotificationGrid.default;
     }, function (_ReflarGamificationComponentsAddAttributes) {
-      AddAttributes = _ReflarGamificationComponentsAddAttributes.default
+      AddAttributes = _ReflarGamificationComponentsAddAttributes.default;
     }, function (_ReflarGamificationComponentsAddHotnessSort) {
-      AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default
+      AddHotnessFilter = _ReflarGamificationComponentsAddHotnessSort.default;
     }, function (_ReflarGamificationComponentsAddVoteButtons) {
-        AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default
-      }, function (_ReflarGamificationModelsRank) {
-        Rank = _ReflarGamificationModelsRank.default
-      }, function (_ReflarGamificationComponentsRankingsPage) {
-          RankingsPage = _ReflarGamificationComponentsRankingsPage.default
-        }, function (_ReflarGamificationComponentsVoteNotification) {
-          VoteNotification = _ReflarGamificationComponentsVoteNotification.default
-        }],
+      AddVoteButtons = _ReflarGamificationComponentsAddVoteButtons.default;
+    }, function (_ReflarGamificationModelsRank) {
+      Rank = _ReflarGamificationModelsRank.default;
+    }, function (_ReflarGamificationComponentsRankingsPage) {
+      RankingsPage = _ReflarGamificationComponentsRankingsPage.default;
+    }, function (_ReflarGamificationComponentsVoteNotification) {
+      VoteNotification = _ReflarGamificationComponentsVoteNotification.default;
+    }],
     execute: function () {
+
       app.initializers.add('Reflar-gamification', function (app) {
-        app.store.models.ranks = Rank
+        app.store.models.ranks = Rank;
 
-        app.notificationComponents.vote = VoteNotification
+        app.notificationComponents.vote = VoteNotification;
 
-        app.routes.rankings = { path: '/rankings', component: RankingsPage.component() }
+        app.routes.rankings = { path: '/rankings', component: RankingsPage.component() };
 
-        AddVoteButtons()
-        AddHotnessFilter()
-        AddAttributes()
+        AddVoteButtons();
+        AddHotnessFilter();
+        AddAttributes();
 
         extend(IndexPage.prototype, 'navItems', function (items) {
           items.add('rankings', LinkButton.component({
             href: app.route('rankings', {}),
             children: app.translator.trans('reflar-gamification.forum.nav.name'),
             icon: 'trophy'
-          }), 80)
-        })
-      })
+          }), 80);
+        });
+      });
     }
-  }
-})
-'use strict'
+  };
+});;
+'use strict';
 
 System.register('Reflar/gamification/models/Rank', ['flarum/Model', 'flarum/utils/mixin'], function (_export, _context) {
-  'use strict'
+  "use strict";
 
-  var Model, mixin, Rank
+  var Model, mixin, Rank;
   return {
     setters: [function (_flarumModel) {
-      Model = _flarumModel.default
+      Model = _flarumModel.default;
     }, function (_flarumUtilsMixin) {
-      mixin = _flarumUtilsMixin.default
+      mixin = _flarumUtilsMixin.default;
     }],
     execute: function () {
-      Rank = (function (_mixin) {
-        babelHelpers.inherits(Rank, _mixin)
+      Rank = function (_mixin) {
+        babelHelpers.inherits(Rank, _mixin);
 
-        function Rank () {
-          babelHelpers.classCallCheck(this, Rank)
-          return babelHelpers.possibleConstructorReturn(this, (Rank.__proto__ || Object.getPrototypeOf(Rank)).apply(this, arguments))
+        function Rank() {
+          babelHelpers.classCallCheck(this, Rank);
+          return babelHelpers.possibleConstructorReturn(this, (Rank.__proto__ || Object.getPrototypeOf(Rank)).apply(this, arguments));
         }
 
-        return Rank
+        return Rank;
       }(mixin(Model, {
         points: Model.attribute('points'),
         name: Model.attribute('name'),
         color: Model.attribute('color')
-      })))
+      }));
 
-      _export('default', Rank)
+      _export('default', Rank);
     }
-  }
-})
+  };
+});
