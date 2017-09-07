@@ -29,18 +29,10 @@ The total amount of hotness is got between the amount of votes on the discussion
 
 ### Developer Guide
 
-You have 2 events to listen for "PostWasUpvoted" as well as "PostWasDownvoted" which both contain the post, post's user, and the upvoter/downvoter.
+You have 1 event to listen for `PostWasVoted` it contains the post, post's user, the actor, and the vote type (up or down).
 
 ### To Do
 
-- ~~Add ranking page~~ - Done
-- ~~Add notifications~~ - Done
-- ~~Add a Modal for non-logged users trying to upvote/downvote~~ - Done
-- ~~Add a hover popup to the vote count number~~ - Done
-- Allow Mods to change user rank
-- ~~Add customization to the word "Points" on the profile page.~~ - Done
-- ~~Add the ability to change the icons of upvotes/downvotes as well as the word "Points"~~ - Done
-- ~~Fix buttoms background.~~ - Done
 - Requests?
 
 ### Important
