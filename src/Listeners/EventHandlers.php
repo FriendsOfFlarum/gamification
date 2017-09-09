@@ -121,19 +121,4 @@ class EventHandlers
             }
         }
     }
-
-    /**
-     * @param $user
-     */
-    private function checkUpUserVotes($user)
-    {
-        $ranks = Rank::where('points', '<=', $user->votes)->get();
-
-        if ($ranks !== null) {
-            $user->ranks()->detach();
-            foreach ($ranks as $rank) {
-                $user->ranks()->attach($rank->id);
-            }
-        }
-    }
 }
