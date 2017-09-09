@@ -66,25 +66,27 @@ class SaveVotesToDatabase
     public function whenPostWillBeSaved(PostWillBeSaved $event)
     {
         $post = $event->post;
-        $data = $event->data;
-        $actor = $event->actor;
-        $user = $post->user;
+        if ($post->id) {
+            $data = $event->data;
+            $actor = $event->actor;
+            $user = $post->user;
 
-        $this->assertCan($actor, 'vote', $post->discussion);
-        $this->assertNotFlooding($actor);
+            $this->assertCan($actor, 'vote', $post->discussion);
+            $this->assertNotFlooding($actor);
 
-        $isUpvoted = false;
-        $isDownvoted = false;
+            $isUpvoted = false;
+            $isDownvoted = false;
 
-        if ($data['attributes']['isUpvoted']) {
-            $isUpvoted = true;
+            if ($data['attributes']['isUpvoted']) {
+                $isUpvoted = true;
+            }
+
+            if ($data['attributes']['isDownvoted']) {
+                $isDownvoted = true;
+            }
+
+            $this->vote($post, $isDownvoted, $isUpvoted, $actor, $user);
         }
-
-        if ($data['attributes']['isDownvoted']) {
-            $isDownvoted = true;
-        }
-
-        $this->vote($post, $isDownvoted, $isUpvoted, $actor, $user);
     }
 
     public function vote($post, $isDownvoted, $isUpvoted, $actor, $user)

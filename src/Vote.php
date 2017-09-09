@@ -21,9 +21,10 @@ class Vote extends AbstractModel
     protected $table = 'posts_votes';
 
     /**
-     * @param $post_id
-     * @param $user_id
-     * @param $type
+     * @param Post $post
+     * @param User $user
+     *
+     * @return static
      */
     public static function build(Post $post, User $user)
     {

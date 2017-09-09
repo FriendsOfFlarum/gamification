@@ -22,6 +22,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\gamification\Gamification;
 use Reflar\gamification\Notification\VoteBlueprint;
 use Reflar\gamification\Rank;
+use Reflar\gamification\Vote;
 
 class EventHandlers
 {
@@ -41,8 +42,16 @@ class EventHandlers
     protected $gamification;
 
     /**
+     * @var Vote
+     */
+    protected $vote;
+
+    /**
+     * EventHandlers constructor.
+     *
      * @param SettingsRepositoryInterface $settings
      * @param NotificationSyncer          $notifications
+     * @param Gamification                $gamification
      */
     public function __construct(SettingsRepositoryInterface $settings, NotificationSyncer $notifications, Gamification $gamification)
     {
@@ -67,12 +76,24 @@ class EventHandlers
     public function addVote(PostWasPosted $event)
     {
         if ($this->settings->get('reflar.gamification.autoUpvotePosts') !== '0') {
-            $event->actor->increment('votes');
+            $actor = $event->actor;
+
+            $actor->increment('votes');
             $event->post->discussion->increment('votes');
             $this->gamification->calculateHotness($event->post->discussion);
-            $this->gamification->upvote($event->post->id, $event->actor);
 
-            $this->checkUpUserVotes($event->actor);
+            $vote = Vote::build($event->post, $actor);
+            $vote->type = 'Up';
+            $vote->save();
+
+            $ranks = Rank::where('points', '<=', $actor->votes)->get();
+
+            if ($ranks !== null) {
+                $actor->ranks()->detach();
+                foreach ($ranks as $rank) {
+                    $actor->ranks()->attach($rank->id);
+                }
+            }
         }
     }
 
@@ -89,8 +110,16 @@ class EventHandlers
      */
     public function removeVote(PostWasDeleted $event)
     {
+        $user = $event->post->user;
         $event->post->user->decrement('votes');
-        $this->checkDownUserVotes($event->post->user);
+
+        $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
+
+        if ($ranks !== null) {
+            foreach ($ranks as $rank) {
+                $user->ranks()->detach($rank->id);
+            }
+        }
     }
 
     /**
@@ -104,20 +133,6 @@ class EventHandlers
             $user->ranks()->detach();
             foreach ($ranks as $rank) {
                 $user->ranks()->attach($rank->id);
-            }
-        }
-    }
-
-    /**
-     * @param $user
-     */
-    private function checkDownUserVotes($user)
-    {
-        $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
-
-        if ($ranks !== null) {
-            foreach ($ranks as $rank) {
-                $user->ranks()->detach($rank->id);
             }
         }
     }
