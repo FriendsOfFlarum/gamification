@@ -59,12 +59,23 @@ export default function () {
     items.add('allDiscussions',
             LinkButton.component({
               href: app.route('index', params),
-              active: (m.route() === '/'),
+              active: (m.route() === '/' || /^.*?\/(\?sort=.*|hot)/.test(m.route())),
               children: app.translator.trans('core.forum.index.all_discussions_link'),
               icon: 'comments-o'
             }),
             100
         )
+
+    if (app.session.user !== undefined) {
+      items.add('rankings',
+              LinkButton.component({
+                href: app.route('rankings', {}),
+                children: app.translator.trans('reflar-gamification.forum.nav.name'),
+                icon: 'trophy'
+              }),
+              80
+          )
+    }
 
     return items
   }

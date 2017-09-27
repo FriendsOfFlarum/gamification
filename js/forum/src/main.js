@@ -1,8 +1,5 @@
 import {extend} from 'flarum/extend'
 import app from 'flarum/app'
-import IndexPage from 'flarum/components/IndexPage'
-import LinkButton from 'flarum/components/LinkButton'
-import NotificationGrid from 'flarum/components/NotificationGrid'
 import AddAttributes from 'Reflar/gamification/components/AddAttributes'
 import AddHotnessFilter from 'Reflar/gamification/components/AddHotnessSort'
 import AddVoteButtons from 'Reflar/gamification/components/AddVoteButtons'
@@ -20,15 +17,4 @@ app.initializers.add('Reflar-gamification', app => {
   AddVoteButtons()
   AddHotnessFilter()
   AddAttributes()
-
-  extend(IndexPage.prototype, 'navItems', function (items) {
-    items.add('rankings',
-            LinkButton.component({
-              href: app.route('rankings', {}),
-              children: app.translator.trans('reflar-gamification.forum.nav.name'),
-              icon: 'trophy'
-            }),
-            80
-        )
-  })
 })
