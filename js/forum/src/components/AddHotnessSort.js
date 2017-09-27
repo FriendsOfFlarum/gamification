@@ -66,7 +66,8 @@ export default function () {
             100
         )
 
-    if (app.session.user !== undefined) {
+    if (app.session.user === undefined || app.session.user.data.attributes.canViewRankingPage === false) {
+    } else {
       items.add('rankings',
               LinkButton.component({
                 href: app.route('rankings', {}),

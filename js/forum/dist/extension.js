@@ -178,22 +178,22 @@ System.register('Reflar/gamification/components/AddAttributes', ['flarum/helpers
     }, function (_flarumModel) {
       Model = _flarumModel.default
     }, function (_flarumModelsPost) {
-      Post = _flarumModelsPost.default
-    }, function (_flarumComponentsPostUser) {
-      PostUser = _flarumComponentsPostUser.default
-    }, function (_flarumModelsUser) {
-      User = _flarumModelsUser.default
-    }, function (_flarumComponentsUserCard) {
-      UserCard = _flarumComponentsUserCard.default
-    }, function (_flarumUtilsUserControls) {
-      UserControls = _flarumUtilsUserControls.default
-    }, function (_flarumHelpersUserOnline) {
-      userOnline = _flarumHelpersUserOnline.default
-    }, function (_flarumHelpersListItems) {
-      listItems = _flarumHelpersListItems.default
-    }, function (_ReflarGamificationHelpersRankLabel) {
-      rankLabel = _ReflarGamificationHelpersRankLabel.default
-    }],
+        Post = _flarumModelsPost.default
+      }, function (_flarumComponentsPostUser) {
+        PostUser = _flarumComponentsPostUser.default
+      }, function (_flarumModelsUser) {
+          User = _flarumModelsUser.default
+        }, function (_flarumComponentsUserCard) {
+          UserCard = _flarumComponentsUserCard.default
+        }, function (_flarumUtilsUserControls) {
+          UserControls = _flarumUtilsUserControls.default
+        }, function (_flarumHelpersUserOnline) {
+          userOnline = _flarumHelpersUserOnline.default
+        }, function (_flarumHelpersListItems) {
+          listItems = _flarumHelpersListItems.default
+        }, function (_ReflarGamificationHelpersRankLabel) {
+          rankLabel = _ReflarGamificationHelpersRankLabel.default
+        }],
     execute: function () {}
   }
 })
@@ -263,7 +263,7 @@ System.register('Reflar/gamification/components/AddHotnessSort', ['flarum/extend
         icon: 'comments-o'
       }), 100)
 
-      if (app.session.user !== undefined) {
+      if (app.session.user === undefined || app.session.user.data.attributes.canViewRankingPage === false) {} else {
         items.add('rankings', LinkButton.component({
           href: app.route('rankings', {}),
           children: app.translator.trans('reflar-gamification.forum.nav.name'),
@@ -541,114 +541,114 @@ System.register('Reflar/gamification/components/RankingsPage', ['flarum/extend',
               })
             }
             return m(
-                            'div',
-                            { className: 'IndexPage' },
-                            IndexPage.prototype.hero(),
-                            m(
-                                'div',
-                                { className: 'container' },
-                                m(
-                                    'div',
-                                    { className: 'IndexPage-results' },
-                                    m(
-                                        'div',
-                                        { className: 'RankingPage' },
-                                        m(
-                                            'div',
-                                            { className: 'container' },
-                                            m(
-                                                'nav',
-                                                { className: 'IndexPage-nav sideNav' },
-                                                m(
-                                                    'ul',
-                                                    null,
-                                                    listItems(IndexPage.prototype.sidebarItems().toArray())
-                                                )
-                                            ),
-                                            m(
-                                                'div',
-                                                { className: 'sideNavOffset' },
-                                                m(
-                                                    'table',
-                                                    { 'class': 'rankings' },
-                                                    m(
-                                                        'tr',
-                                                        null,
-                                                        m(
-                                                            'th',
-                                                            { className: 'rankings-mobile' },
-                                                            app.translator.trans('reflar-gamification.forum.ranking.rank')
-                                                        ),
-                                                        m(
-                                                            'th',
-                                                            null,
-                                                            app.translator.trans('reflar-gamification.forum.ranking.name')
-                                                        ),
-                                                        m(
-                                                            'th',
-                                                            null,
-                                                            app.translator.trans('reflar-gamification.forum.ranking.amount')
-                                                        )
-                                                    ),
-                                                    this.users.map(function (user, i) {
-                                                      ++i
-                                                      return [m(
-                                                            'tr',
-                                                            { className: 'ranking-' + i },
-                                                            i < 4 ? app.forum.attribute('CustomRankingImages') == '1' ? m('img', { className: 'rankings-mobile rankings-image',
-                                                              src: app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i) }) : m(
-                                                                'td',
-                                                                { className: 'rankings-mobile rankings-' + i },
-                                                                ' ',
-                                                                icon('trophy')
-                                                            ) : m(
-                                                                'td',
-                                                                { className: 'rankings-4 rankings-mobile' },
-                                                                _this2.addOrdinalSuffix(i)
-                                                            ),
-                                                            m(
-                                                                'td',
-                                                                null,
-                                                                m(
-                                                                    'div',
-                                                                    { className: 'PostUser' },
-                                                                    m(
-                                                                        'h3',
-                                                                        { className: 'rankings-info' },
-                                                                        m(
-                                                                            'a',
-                                                                            { href: app.route.user(user), config: m.route },
-                                                                            i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : '',
-                                                                            ' ',
-                                                                            username(user)
-                                                                        )
-                                                                    )
-                                                                )
-                                                            ),
-                                                            i < 4 ? m(
-                                                                'td',
-                                                                { className: 'rankings-' + i },
-                                                                user.data.attributes.Points
-                                                            ) : m(
-                                                                'td',
-                                                                { className: 'rankings-4' },
-                                                                user.data.attributes.Points
-                                                            )
-                                                        )]
-                                                    })
-                                                ),
-                                                m(
-                                                    'div',
-                                                    { className: 'rankings-loadmore' },
-                                                    ' ',
-                                                    loading
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
+              'div',
+              { className: 'IndexPage' },
+              IndexPage.prototype.hero(),
+              m(
+                'div',
+                { className: 'container' },
+                m(
+                  'div',
+                  { className: 'IndexPage-results' },
+                  m(
+                    'div',
+                    { className: 'RankingPage' },
+                    m(
+                      'div',
+                      { className: 'container' },
+                      m(
+                        'nav',
+                        { className: 'IndexPage-nav sideNav' },
+                        m(
+                          'ul',
+                          null,
+                          listItems(IndexPage.prototype.sidebarItems().toArray())
                         )
+                      ),
+                      m(
+                        'div',
+                        { className: 'sideNavOffset' },
+                        m(
+                          'table',
+                          { 'class': 'rankings' },
+                          m(
+                            'tr',
+                            null,
+                            m(
+                              'th',
+                              { className: 'rankings-mobile' },
+                              app.translator.trans('reflar-gamification.forum.ranking.rank')
+                            ),
+                            m(
+                              'th',
+                              null,
+                              app.translator.trans('reflar-gamification.forum.ranking.name')
+                            ),
+                            m(
+                              'th',
+                              null,
+                              app.translator.trans('reflar-gamification.forum.ranking.amount')
+                            )
+                          ),
+                          this.users.map(function (user, i) {
+                            ++i
+                            return [m(
+                              'tr',
+                              { className: 'ranking-' + i },
+                              i < 4 ? app.forum.attribute('CustomRankingImages') == '1' ? m('img', { className: 'rankings-mobile rankings-image',
+                                src: app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i) }) : m(
+                                'td',
+                                { className: 'rankings-mobile rankings-' + i },
+                                ' ',
+                                icon('trophy')
+                              ) : m(
+                                'td',
+                                { className: 'rankings-4 rankings-mobile' },
+                                _this2.addOrdinalSuffix(i)
+                              ),
+                              m(
+                                'td',
+                                null,
+                                m(
+                                  'div',
+                                  { className: 'PostUser' },
+                                  m(
+                                    'h3',
+                                    { className: 'rankings-info' },
+                                    m(
+                                      'a',
+                                      { href: app.route.user(user), config: m.route },
+                                      i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : '',
+                                      ' ',
+                                      username(user)
+                                    )
+                                  )
+                                )
+                              ),
+                              i < 4 ? m(
+                                'td',
+                                { className: 'rankings-' + i },
+                                user.data.attributes.Points
+                              ) : m(
+                                'td',
+                                { className: 'rankings-4' },
+                                user.data.attributes.Points
+                              )
+                            )]
+                          })
+                        ),
+                        m(
+                          'div',
+                          { className: 'rankings-loadmore' },
+                          ' ',
+                          loading
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
           }
         }, {
           key: 'refresh',
