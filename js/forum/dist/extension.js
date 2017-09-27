@@ -258,7 +258,7 @@ System.register('Reflar/gamification/components/AddHotnessSort', ['flarum/extend
 
       items.add('allDiscussions', LinkButton.component({
         href: app.route('index', params),
-        active: this.props.routeName === 'index.filter' || this.props.routeName === 'index',
+        active: m.route() === '/',
         children: app.translator.trans('core.forum.index.all_discussions_link'),
         icon: 'comments-o'
       }), 100)
