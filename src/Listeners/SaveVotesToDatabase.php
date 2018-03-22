@@ -76,12 +76,12 @@ class SaveVotesToDatabase
 
             $isUpvoted = false;
             $isDownvoted = false;
-
-            if ($data['attributes']['isUpvoted']) {
+			
+            if (array_key_exists('isUpvoted', $data['attributes'])) {
                 $isUpvoted = true;
             }
 
-            if ($data['attributes']['isDownvoted']) {
+            if (array_key_exists('isDownvoted', $data['attributes'])) {
                 $isDownvoted = true;
             }
 
