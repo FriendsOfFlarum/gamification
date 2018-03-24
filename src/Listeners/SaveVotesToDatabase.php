@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Listeners;
+namespace Reflar\Gamification\Listeners;
 
 use DateTime;
 use Flarum\Core\Access\AssertPermissionTrait;
@@ -19,11 +19,11 @@ use Flarum\Core\Notification;
 use Flarum\Core\Notification\NotificationSyncer;
 use Flarum\Event\PostWillBeSaved;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Events\PostWasVoted;
-use Reflar\gamification\Gamification;
-use Reflar\gamification\Notification\VoteBlueprint;
-use Reflar\gamification\Rank;
-use Reflar\gamification\Vote;
+use Reflar\Gamification\Events\PostWasVoted;
+use Reflar\Gamification\Gamification;
+use Reflar\Gamification\Notification\VoteBlueprint;
+use Reflar\Gamification\Rank;
+use Reflar\Gamification\Vote;
 
 class SaveVotesToDatabase
 {
@@ -68,24 +68,20 @@ class SaveVotesToDatabase
         $post = $event->post;
         if ($post->id) {
             $data = $event->data;
-            $actor = $event->actor;
-            $user = $post->user;
 
-            $this->assertCan($actor, 'vote', $post->discussion);
-            $this->assertNotFlooding($actor);
+            if (array_key_exists(2, ['attributes'])) {
+                $actor = $event->actor;
+                $user = $post->user;
 
-            $isUpvoted = false;
-            $isDownvoted = false;
-			
-            if (array_key_exists('isUpvoted', $data['attributes'])) {
-                $isUpvoted = true;
+                $this->assertCan($actor, 'vote', $post->discussion);
+                $this->assertNotFlooding($actor);
+
+                $isUpvoted = $data['attributes'][0];
+
+                $isDownvoted = $data['attributes'][1];
+
+                $this->vote($post, $isDownvoted, $isUpvoted, $actor, $user);
             }
-
-            if (array_key_exists('isDownvoted', $data['attributes'])) {
-                $isDownvoted = true;
-            }
-
-            $this->vote($post, $isDownvoted, $isUpvoted, $actor, $user);
         }
     }
 
@@ -98,7 +94,7 @@ class SaveVotesToDatabase
 
         if ($vote) {
             if (!$isUpvoted && !$isDownvoted) {
-                if ($vote->type == 'Up') {
+                if ('Up' == $vote->type) {
                     $this->changePoints($user, $post, -1);
                 } else {
                     $this->changePoints($user, $post, 1);
@@ -106,7 +102,7 @@ class SaveVotesToDatabase
                 $this->sendData($post, $user, $actor, 'None', $vote->type);
                 $vote->delete();
             } else {
-                if ($vote->type == 'Up') {
+                if ('Up' == $vote->type) {
                     $vote->type = 'Down';
                     $this->changePoints($user, $post, -2);
 
@@ -145,7 +141,7 @@ class SaveVotesToDatabase
         $user->votes = $user->votes + $number;
         $discussion = $post->discussion;
 
-        if ($post->number == 1) {
+        if (1 == $post->number) {
             $discussion->votes = $discussion->votes + $number;
             $discussion->save();
             $this->gamification->calculateHotness($discussion);
@@ -169,7 +165,7 @@ class SaveVotesToDatabase
         ])->first();
 
         if ($oldVote) {
-            if ($type === 'None') {
+            if ('None' === $type) {
                 $oldVote->delete();
             } else {
                 $oldVote->data = $type;
@@ -185,19 +181,19 @@ class SaveVotesToDatabase
             new PostWasVoted($post, $user, $actor, $type)
         );
 
-        if ($type === 'Up') {
+        if ('Up' === $type) {
             $ranks = Rank::where('points', '<=', $user->votes)->get();
 
-            if ($ranks !== null) {
+            if (null !== $ranks) {
                 $user->ranks()->detach();
                 foreach ($ranks as $rank) {
                     $user->ranks()->attach($rank->id);
                 }
             }
-        } elseif ($type === 'Down') {
+        } elseif ('Down' === $type) {
             $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
-            if ($ranks !== null) {
+            if (null !== $ranks) {
                 foreach ($ranks as $rank) {
                     $user->ranks()->detach($rank->id);
                 }

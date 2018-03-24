@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Notification;
+namespace Reflar\Gamification\Notification;
 
 use Flarum\Core\Notification\BlueprintInterface;
 use Flarum\Core\Post;
@@ -35,6 +35,7 @@ class VoteBlueprint implements BlueprintInterface
 
     /**
      * VoteBlueprint constructor.
+     *
      * @param Post $post
      * @param User $actor
      * @param $type

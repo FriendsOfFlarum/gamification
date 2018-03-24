@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Access;
+namespace Reflar\Gamification\Access;
 
 use Flarum\Core\Access\AbstractPolicy;
 use Flarum\Core\Discussion;

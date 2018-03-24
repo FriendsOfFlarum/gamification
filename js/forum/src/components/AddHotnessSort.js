@@ -7,6 +7,9 @@ import Button from 'flarum/components/Button'
 import LinkButton from 'flarum/components/LinkButton'
 
 export default function () {
+
+
+
   IndexPage.prototype.viewItems = function () {
     const items = new ItemList()
     const sortMap = app.cache.discussionList.sortMap()

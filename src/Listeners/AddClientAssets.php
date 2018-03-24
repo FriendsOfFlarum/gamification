@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Listeners;
+namespace Reflar\Gamification\Listeners;
 
 use DirectoryIterator;
 use Flarum\Event\ConfigureWebApp;
@@ -38,14 +38,14 @@ class AddClientAssets
                 __DIR__.'/../../js/admin/dist/extension.js',
                 __DIR__.'/../../less/admin/extension.less',
             ]);
-            $event->addBootstrapper('Reflar/gamification/main');
+            $event->addBootstrapper('Reflar/Gamification/main');
         }
         if ($event->isForum()) {
             $event->addAssets([
                 __DIR__.'/../../js/forum/dist/extension.js',
                 __DIR__.'/../../less/forum/extension.less',
             ]);
-            $event->addBootstrapper('Reflar/gamification/main');
+            $event->addBootstrapper('Reflar/Gamification/main');
         }
     }
 

@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Events;
+namespace Reflar\Gamification\Events;
 
 use Flarum\Core\Post;
 use Flarum\Core\User;
@@ -39,10 +39,11 @@ class PostWasVoted
 
     /**
      * PostWasVoted constructor.
+     *
      * @param Post   $post
      * @param User   $user
      * @param User   $actor
-     * @param String $type
+     * @param string $type
      */
     public function __construct(Post $post, User $user, User $actor, $type)
     {

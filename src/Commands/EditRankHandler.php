@@ -10,12 +10,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Commands;
+namespace Reflar\Gamification\Commands;
 
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Exception\PermissionDeniedException;
-use Reflar\gamification\Rank;
-use Reflar\gamification\Validator\RankValidator;
+use Reflar\Gamification\Rank;
+use Reflar\Gamification\Validator\RankValidator;
 
 class EditRankHandler
 {
@@ -53,17 +53,17 @@ class EditRankHandler
 
         $rank = Rank::where('id', $command->rankId)->firstOrFail();
 
-        if (isset($attributes['points']) && $attributes['points'] !== '') {
+        if (isset($attributes['points']) && '' !== $attributes['points']) {
             $validate['points'] = $attributes['points'];
             $rank->updatePoints($attributes['points']);
         }
 
-        if (isset($attributes['name']) && $attributes['name'] !== '') {
+        if (isset($attributes['name']) && '' !== $attributes['name']) {
             $validate['name'] = $attributes['name'];
             $rank->updateName($attributes['name']);
         }
 
-        if (isset($attributes['color']) && $attributes['color'] !== '') {
+        if (isset($attributes['color']) && '' !== $attributes['color']) {
             $validate['color'] = $attributes['color'];
             $rank->updateColor($attributes['color']);
         }

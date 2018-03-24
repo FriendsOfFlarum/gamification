@@ -10,12 +10,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Listeners;
+namespace Reflar\Gamification\Listeners;
 
 use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Event\ConfigureForumRoutes;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Gambit\HotGambit;
+use Reflar\Gamification\Gambit\HotGambit;
 
 class FilterDiscussionListByHotness
 {

@@ -33,7 +33,7 @@
     },
       "autoload": {
         "psr-4": {
-            "Reflar\\gamification\\": "src/"
+            "Reflar\\Gamification\\": "src/"
         }
     },
     "extra": {

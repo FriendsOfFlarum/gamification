@@ -4,24 +4,26 @@ import Button from 'flarum/components/Button'
 import LogInModal from 'flarum/components/LogInModal'
 import CommentPost from 'flarum/components/CommentPost'
 
-import VotesModal from 'Reflar/gamification/components/VotesModal'
+import VotesModal from 'Reflar/Gamification/components/VotesModal'
 
 export default function () {
+
+  extend(CommentPost.prototype, 'config', function (x, isInitialized) {
+      if (isInitialized) return
+
+          $('.Post-vote').unbind().on('click touchend', function () {
+              $(this).addClass('cbutton--click')
+              setTimeout(function () {
+                  $('.Post-vote').removeClass('cbutton--click');
+              }, 600);
+          })
+      })
+
   extend(CommentPost.prototype, 'actionItems', function (items) {
     const post = this.props.post
 
     let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user)
     let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user)
-
-    let color = ''
-
-    if (post.isHidden()) return
-
-    if (app.forum.attribute('autoUpvote') !== null && app.forum.attribute('autoUpvote') !== '') {
-      color = app.forum.attribute('VoteColor')
-    } else {
-      color = '#f44336'
-    }
 
     if (!app.session.user) {
       isDownvoted = false
@@ -38,7 +40,7 @@ export default function () {
       Button.component({
         icon: icon + '-up',
         className: 'Post-vote Post-upvote',
-        style: isUpvoted !== false ? 'color:' + color : 'color:',
+        style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
         disabled: !post.discussion().canVote(),
         onclick: () => {
           if (!app.session.user) {
@@ -53,7 +55,7 @@ export default function () {
 
           isDownvoted = false
 
-          post.save({isUpvoted, isDownvoted})
+          post.save([isUpvoted, isDownvoted, 'vote'])
 
           upData.some((upvote, i) => {
             if (upvote.id === app.session.user.id()) {
@@ -89,7 +91,7 @@ export default function () {
       Button.component({
         icon: icon + '-down',
         className: 'Post-vote Post-downvote',
-        style: isDownvoted !== false ? 'color:' + color : '',
+        style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
         disabled: !post.discussion().canVote(),
         onclick: () => {
           if (!app.session.user) {
@@ -104,7 +106,7 @@ export default function () {
 
           isUpvoted = false
 
-          post.save({isUpvoted, isDownvoted})
+          post.save([isUpvoted, isDownvoted, 'vote'])
 
           upData.some((upvote, i) => {
             if (upvote.id === app.session.user.id()) {

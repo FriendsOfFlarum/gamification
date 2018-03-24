@@ -10,11 +10,11 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Commands;
+namespace Reflar\Gamification\Commands;
 
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Exception\PermissionDeniedException;
-use Reflar\gamification\Rank;
+use Reflar\Gamification\Rank;
 
 class DeleteRankHandler
 {

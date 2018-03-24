@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Api\Controllers;
+namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\UploadFaviconController;
 use Illuminate\Support\Str;
@@ -36,9 +36,9 @@ class UploadTopImageController extends UploadFaviconController
 
         $extension = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
 
-        if ($id == '1') {
+        if ('1' == $id) {
             $size = 125;
-        } elseif ($id == '2') {
+        } elseif ('2' == $id) {
             $size = 100;
         } else {
             $size = 75;

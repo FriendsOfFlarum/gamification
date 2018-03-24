@@ -10,12 +10,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Api\Controllers;
+namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractDeleteController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\gamification\Commands\DeleteRank;
+use Reflar\Gamification\Commands\DeleteRank;
 
 class DeleteRankController extends AbstractDeleteController
 {

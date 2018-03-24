@@ -16,7 +16,6 @@ export default class SettingsPage extends Page {
             'postStartAmount',
             'rankAmt',
             'iconName',
-            'voteColor',
             'blockedUsers',
             'pointsPlaceholder'
         ];
@@ -165,13 +164,6 @@ export default class SettingsPage extends Page {
                                 value: this.values.pointsPlaceholder() || '',
                                 placeholder: app.translator.trans('reflar-gamification.admin.page.votes.points_placeholder') + '{points}',
                                 oninput: m.withAttr('value', this.values.pointsPlaceholder)
-                            }),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.vote_color')),
-                            m('input', {
-                                className: 'FormControl Ranks-default',
-                                placeholder: app.translator.trans('reflar-gamification.admin.page.votes.color_holder'),
-                                value: this.values.voteColor() || '',
-                                oninput: m.withAttr('value', this.values.voteColor)
                             }),
                             m('legend', {}, app.translator.trans('reflar-gamification.admin.page.rankings.title')),
                             Switch.component({

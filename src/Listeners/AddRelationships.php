@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Listeners;
+namespace Reflar\Gamification\Listeners;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer\DiscussionSerializer;
@@ -27,9 +27,9 @@ use Flarum\Event\PrepareApiAttributes;
 use Flarum\Event\PrepareApiData;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Api\Controllers\OrderByPointsController;
-use Reflar\gamification\Api\Serializers\RankSerializer;
-use Reflar\gamification\Rank;
+use Reflar\Gamification\Api\Controllers\OrderByPointsController;
+use Reflar\Gamification\Api\Serializers\RankSerializer;
+use Reflar\Gamification\Rank;
 
 class AddRelationships
 {
@@ -118,7 +118,6 @@ class AddRelationships
             $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
             $event->attributes['PointsPlaceholder'] = $this->settings->get('reflar.gamification.pointsPlaceholder');
             $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
-            $event->attributes['VoteColor'] = $this->settings->get('reflar.gamification.voteColor');
             $event->attributes['CustomRankingImages'] = $this->settings->get('reflar.gamification.customRankingImages');
             $event->attributes['TopImage1'] = $this->settings->get('reflar.gamification.topimage.1');
             $event->attributes['TopImage2'] = $this->settings->get('reflar.gamification.topimage.2');

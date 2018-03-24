@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Listeners;
+namespace Reflar\Gamification\Listeners;
 
 use Flarum\Api\Serializer\PostBasicSerializer;
 use Flarum\Core\Notification\NotificationSyncer;
@@ -19,10 +19,10 @@ use Flarum\Event\PostWasDeleted;
 use Flarum\Event\PostWasPosted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Gamification;
-use Reflar\gamification\Notification\VoteBlueprint;
-use Reflar\gamification\Rank;
-use Reflar\gamification\Vote;
+use Reflar\Gamification\Gamification;
+use Reflar\Gamification\Notification\VoteBlueprint;
+use Reflar\Gamification\Rank;
+use Reflar\Gamification\Vote;
 
 class EventHandlers
 {
@@ -75,7 +75,7 @@ class EventHandlers
      */
     public function addVote(PostWasPosted $event)
     {
-        if ($this->settings->get('reflar.gamification.autoUpvotePosts') !== '0') {
+        if ('0' !== $this->settings->get('reflar.gamification.autoUpvotePosts')) {
             $actor = $event->actor;
 
             $actor->increment('votes');
@@ -88,7 +88,7 @@ class EventHandlers
 
             $ranks = Rank::where('points', '<=', $actor->votes)->get();
 
-            if ($ranks !== null) {
+            if (null !== $ranks) {
                 $actor->ranks()->detach();
                 foreach ($ranks as $rank) {
                     $actor->ranks()->attach($rank->id);
@@ -115,7 +115,7 @@ class EventHandlers
 
         $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
-        if ($ranks !== null) {
+        if (null !== $ranks) {
             foreach ($ranks as $rank) {
                 $user->ranks()->detach($rank->id);
             }

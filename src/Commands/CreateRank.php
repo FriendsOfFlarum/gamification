@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Commands;
+namespace Reflar\Gamification\Commands;
 
 use Flarum\Core\User;
 

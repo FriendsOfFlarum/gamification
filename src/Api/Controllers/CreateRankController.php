@@ -10,13 +10,13 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Api\Controllers;
+namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractCreateController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\gamification\Api\Serializers\RankSerializer;
-use Reflar\gamification\Commands\CreateRank;
+use Reflar\Gamification\Api\Serializers\RankSerializer;
+use Reflar\Gamification\Commands\CreateRank;
 use Tobscure\JsonApi\Document;
 
 class CreateRankController extends AbstractCreateController

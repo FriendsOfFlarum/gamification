@@ -10,10 +10,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Api\Serializers;
+namespace Reflar\Gamification\Api\Serializers;
 
 use Flarum\Api\Serializer\AbstractSerializer;
-use Reflar\gamification\Rank;
+use Reflar\Gamification\Rank;
 
 class RankSerializer extends AbstractSerializer
 {
@@ -37,8 +37,8 @@ class RankSerializer extends AbstractSerializer
 
         return [
             'points' => $rank->points,
-            'name'   => $rank->name,
-            'color'  => $rank->color,
+            'name' => $rank->name,
+            'color' => $rank->color,
         ];
     }
 }

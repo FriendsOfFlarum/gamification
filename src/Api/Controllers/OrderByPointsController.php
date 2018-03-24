@@ -10,12 +10,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Api\Controllers;
+namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractCollectionController;
 use Flarum\Core\Exception\PermissionDeniedException;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\gamification\Gamification;
+use Reflar\Gamification\Gamification;
 use Tobscure\JsonApi\Document;
 
 class OrderByPointsController extends AbstractCollectionController

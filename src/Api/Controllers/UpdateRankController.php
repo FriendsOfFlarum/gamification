@@ -10,13 +10,13 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Api\Controllers;
+namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\gamification\Api\Serializers\RankSerializer;
-use Reflar\gamification\Commands\EditRank;
+use Reflar\Gamification\Api\Serializers\RankSerializer;
+use Reflar\Gamification\Commands\EditRank;
 use Tobscure\JsonApi\Document;
 
 class UpdateRankController extends AbstractResourceController

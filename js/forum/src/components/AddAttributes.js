@@ -12,7 +12,7 @@ import UserCard from "flarum/components/UserCard";
 import UserControls from "flarum/utils/UserControls";
 import userOnline from "flarum/helpers/userOnline";
 import listItems from "flarum/helpers/listItems";
-import rankLabel from "Reflar/gamification/helpers/rankLabel";
+import rankLabel from "Reflar/Gamification/helpers/rankLabel";
 
 export default function () {
     Discussion.prototype.canVote = Model.attribute('canVote');

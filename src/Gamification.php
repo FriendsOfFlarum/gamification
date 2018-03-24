@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification;
+namespace Reflar\Gamification;
 
 use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;
@@ -100,7 +100,7 @@ class Gamification
         $user = $this->users->query()->where('id', $user_id)->first();
         $post = $this->posts->query()->where('id', $post_id)->first();
 
-        if ($post !== null && $post->user !== null && $user !== null) {
+        if (null !== $post && null !== $post->user && null !== $user) {
             $post->user->increment('votes');
 
             if ($post->number = 1) {

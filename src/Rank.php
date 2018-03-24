@@ -10,7 +10,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification;
+namespace Reflar\Gamification;
 
 use Flarum\Database\AbstractModel;
 

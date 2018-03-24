@@ -1,13 +1,13 @@
 import {extend} from 'flarum/extend'
 import app from 'flarum/app'
-import AddAttributes from 'Reflar/gamification/components/AddAttributes'
-import AddHotnessFilter from 'Reflar/gamification/components/AddHotnessSort'
-import AddVoteButtons from 'Reflar/gamification/components/AddVoteButtons'
-import Rank from 'Reflar/gamification/models/Rank'
-import RankingsPage from 'Reflar/gamification/components/RankingsPage'
-import VoteNotification from 'Reflar/gamification/components/VoteNotification'
+import AddAttributes from 'Reflar/Gamification/components/AddAttributes'
+import AddHotnessFilter from 'Reflar/Gamification/components/AddHotnessSort'
+import AddVoteButtons from 'Reflar/Gamification/components/AddVoteButtons'
+import Rank from 'Reflar/Gamification/models/Rank'
+import RankingsPage from 'Reflar/Gamification/components/RankingsPage'
+import VoteNotification from 'Reflar/Gamification/components/VoteNotification'
 
-app.initializers.add('Reflar-gamification', app => {
+app.initializers.add('Reflar-Gamification', app => {
   app.store.models.ranks = Rank
 
   app.notificationComponents.vote = VoteNotification

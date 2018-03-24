@@ -10,15 +10,15 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Api\Controllers;
+namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Discussion;
 use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\gamification\Gamification;
-use Reflar\gamification\Likes;
+use Reflar\Gamification\Gamification;
+use Reflar\Gamification\Likes;
 use Zend\Diactoros\Response\JsonResponse;
 
 class ConvertLikesController implements ControllerInterface
@@ -54,7 +54,7 @@ class ConvertLikesController implements ControllerInterface
     {
         $actor = $request->getAttribute('actor');
 
-        if ($actor !== null && $actor->isAdmin() && $request->getMethod() === 'POST' && $this->settings->get('reflar.gamification.convertedLikes') == false) {
+        if (null !== $actor && $actor->isAdmin() && 'POST' === $request->getMethod() && false == $this->settings->get('reflar.gamification.convertedLikes')) {
             $likes = Likes::all();
 
             $this->settings->set('reflar.gamification.convertedLikes', 'converting');
@@ -63,7 +63,7 @@ class ConvertLikesController implements ControllerInterface
 
             foreach ($likes as $like) {
                 $this->gamification->convertLike($like->post_id, $like->user_id);
-                $counter++;
+                ++$counter;
             }
 
             $discussions = Discussion::all();

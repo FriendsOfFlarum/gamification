@@ -10,12 +10,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\gamification\Listeners;
+namespace Reflar\Gamification\Listeners;
 
 use Flarum\Event\ConfigureApiRoutes;
 use Flarum\Event\ConfigureForumRoutes;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\gamification\Api\Controllers;
+use Reflar\Gamification\Api\Controllers;
 
 class AddApiAttributes
 {
