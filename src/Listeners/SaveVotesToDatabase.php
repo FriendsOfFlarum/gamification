@@ -18,7 +18,9 @@ use Flarum\Core\Exception\FloodingException;
 use Flarum\Core\Notification;
 use Flarum\Core\Notification\NotificationSyncer;
 use Flarum\Event\PostWillBeSaved;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
+use Pusher;
 use Reflar\Gamification\Events\PostWasVoted;
 use Reflar\Gamification\Gamification;
 use Reflar\Gamification\Notification\VoteBlueprint;
@@ -44,11 +46,23 @@ class SaveVotesToDatabase
      */
     protected $gamification;
 
-    public function __construct(Dispatcher $events, NotificationSyncer $notifications, Gamification $gamification)
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    protected $settings;
+
+    /**
+     * @param Dispatcher                  $events
+     * @param NotificationSyncer          $notifications
+     * @param Gamification                $gamification
+     * @param SettingsRepositoryInterface $settings
+     */
+    public function __construct(Dispatcher $events, NotificationSyncer $notifications, Gamification $gamification, SettingsRepositoryInterface $settings)
     {
         $this->events = $events;
         $this->notifications = $notifications;
         $this->gamification = $gamification;
+        $this->settings = $settings;
     }
 
     /**
@@ -69,12 +83,12 @@ class SaveVotesToDatabase
         if ($post->id) {
             $data = $event->data;
 
-            if (array_key_exists(2, ['attributes'])) {
+            if (array_key_exists(2, $data['attributes'])) {
                 $actor = $event->actor;
                 $user = $post->user;
 
                 $this->assertCan($actor, 'vote', $post->discussion);
-                $this->assertNotFlooding($actor);
+                // $this->assertNotFlooding($actor);
 
                 $isUpvoted = $data['attributes'][0];
 
@@ -96,8 +110,10 @@ class SaveVotesToDatabase
             if (!$isUpvoted && !$isDownvoted) {
                 if ('Up' == $vote->type) {
                     $this->changePoints($user, $post, -1);
+                    $this->pushNewVote('up2none', $post, $actor);
                 } else {
                     $this->changePoints($user, $post, 1);
+                    $this->pushNewVote('down2none', $post, $actor);
                 }
                 $this->sendData($post, $user, $actor, 'None', $vote->type);
                 $vote->delete();
@@ -105,11 +121,13 @@ class SaveVotesToDatabase
                 if ('Up' == $vote->type) {
                     $vote->type = 'Down';
                     $this->changePoints($user, $post, -2);
+                    $this->pushNewVote('up2down', $post, $actor);
 
                     $this->sendData($post, $user, $actor, 'Down', 'Up');
                 } else {
                     $vote->type = 'Up';
                     $this->changePoints($user, $post, 2);
+                    $this->pushNewVote('down2up', $post, $actor);
 
                     $this->sendData($post, $user, $actor, 'Up', 'Down');
                 }
@@ -120,9 +138,11 @@ class SaveVotesToDatabase
             if ($isDownvoted) {
                 $vote->type = 'Down';
                 $this->changePoints($user, $post, -1);
+                $this->pushNewVote('none2down', $post, $actor);
             } elseif ($isUpvoted) {
                 $vote->type = 'Up';
                 $this->changePoints($user, $post, 1);
+                $this->pushNewVote('none2up', $post, $actor);
             }
             $this->sendData($post, $user, $actor, $vote->type, ' ');
             $vote->save();
@@ -201,6 +221,16 @@ class SaveVotesToDatabase
         }
     }
 
+    public function pushNewVote($type, $post, $actor)
+    {
+        $pusher = $this->getPusher();
+        $pusher->trigger('public', 'newVote', [
+            'postId' => $post->id,
+            'type' => $type,
+            'userId' => $actor->id,
+        ]);
+    }
+
     /**
      * @param $user
      *
@@ -211,5 +241,23 @@ class SaveVotesToDatabase
         if (new DateTime($actor->last_vote_time) >= new DateTime('-10 seconds')) {
             throw new FloodingException();
         }
+    }
+
+    /**
+     * @return Pusher
+     */
+    protected function getPusher()
+    {
+        $options = [];
+        if ($cluster = $this->settings->get('flarum-pusher.app_cluster')) {
+            $options['cluster'] = $cluster;
+        }
+
+        return new Pusher(
+            $this->settings->get('flarum-pusher.app_key'),
+            $this->settings->get('flarum-pusher.app_secret'),
+            $this->settings->get('flarum-pusher.app_id'),
+            $options
+        );
     }
 }

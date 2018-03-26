@@ -327,151 +327,222 @@ System.register('Reflar/Gamification/components/AddHotnessSort', ['flarum/extend
 'use strict';
 
 System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/LogInModal', 'flarum/components/CommentPost', 'Reflar/Gamification/components/VotesModal'], function (_export, _context) {
-  "use strict";
+    "use strict";
 
-  var extend, app, Button, LogInModal, CommentPost, VotesModal;
+    var extend, app, Button, LogInModal, CommentPost, VotesModal;
 
-  _export('default', function () {
+    _export('default', function () {
 
-    extend(CommentPost.prototype, 'config', function (x, isInitialized) {
-      if (isInitialized) return;
+        extend(CommentPost.prototype, 'config', function (x, isInitialized, context) {
+            var _this = this;
 
-      $('.Post-vote').unbind().on('click touchend', function () {
-        $(this).addClass('cbutton--click');
-        setTimeout(function () {
-          $('.Post-vote').removeClass('cbutton--click');
-        }, 600);
-      });
+            if (isInitialized) return;
+
+            app.pusher.then(function (channels) {
+                channels.main.bind('newVote', function (data) {
+
+                    if (_this.postId() == data.postId) {
+
+                        var userId = parseInt(data.userId);
+
+                        var upData = _this.upvotedata();
+                        var downData = _this.downvotedata();
+
+                        console.log(_this.upvotedata());
+                        console.log(_this.downvotedata());
+
+                        switch (data.type) {
+                            case 'none2up':
+                                upData.unshift({ type: 'users', id: userId });
+                                break;
+                            case 'none2down':
+                                downData.unshift({ type: 'users', id: userId });
+                                break;
+                            case 'down2up':
+                                upData.unshift({ type: 'users', id: userId });
+                                downData.some(function (downvote, i) {
+                                    if (downvote.id == userId) {
+                                        downData.splice(i, 1);
+                                    }
+                                });
+                                break;
+                            case 'up2down':
+                                upData.some(function (upvote, i) {
+                                    if (upvote.id == userId) {
+                                        upData.splice(i, 1);
+                                    }
+                                });
+                                downData.unshift({ type: 'users', id: userId });
+                                break;
+                            case 'down2none':
+                                downData.some(function (downvote, i) {
+                                    if (downvote.id == userId) {
+                                        downData.splice(i, 1);
+                                    }
+                                });
+                                break;
+                            case 'up2none':
+                                upData.some(function (upvote, i) {
+                                    if (upvote.id == userId) {
+                                        upData.splice(i, 1);
+                                    }
+                                });
+                                break;
+                        }
+                        _this.upvotedata(upData);
+                        _this.downvotedata(downData);
+
+                        console.log(_this.upvotedata());
+                        console.log(_this.downvotedata());
+                    }
+                });
+
+                extend(context, 'onunload', function () {
+                    return channels.main.unbind('newVote');
+                });
+            });
+
+            $('.Post-vote').unbind().on('click touchend', function () {
+                $(this).addClass('cbutton--click');
+                setTimeout(function () {
+                    $('.Post-vote').removeClass('cbutton--click');
+                }, 600);
+            });
+        });
+
+        extend(CommentPost.prototype, 'actionItems', function (items) {
+            var post = this.props.post;
+
+            this.postId = m.prop(post.data.id);
+
+            this.downvotedata = m.prop(post.data.relationships.downvotes.data);
+            this.upvotedata = m.prop(post.data.relationships.upvotes.data);
+
+            var isUpvoted = app.session.user && post.upvotes().some(function (user) {
+                return user === app.session.user;
+            });
+            var isDownvoted = app.session.user && post.downvotes().some(function (user) {
+                return user === app.session.user;
+            });
+
+            if (!app.session.user) {
+                isDownvoted = false;
+                isUpvoted = false;
+            }
+
+            var icon = app.forum.attribute('IconName');
+
+            if (icon === null || icon === '') {
+                icon = 'thumbs';
+            }
+
+            items.add('upvote', Button.component({
+                icon: icon + '-up',
+                className: 'Post-vote Post-upvote',
+                style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
+                disabled: !post.discussion().canVote(),
+                onclick: function onclick() {
+                    if (!app.session.user) {
+                        app.modal.show(new LogInModal());
+                        return;
+                    }
+                    if (!post.discussion().canVote()) return;
+                    var upData = post.data.relationships.upvotes.data;
+                    var downData = post.data.relationships.downvotes.data;
+
+                    isUpvoted = !isUpvoted;
+
+                    isDownvoted = false;
+
+                    post.save([isUpvoted, isDownvoted, 'vote']);
+
+                    upData.some(function (upvote, i) {
+                        if (upvote.id === app.session.user.id()) {
+                            upData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    downData.some(function (downvote, i) {
+                        if (downvote.id === app.session.user.id()) {
+                            downData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    if (isUpvoted) {
+                        upData.unshift({ type: 'users', id: app.session.user.id() });
+                    }
+                }
+            }));
+
+            items.add('points', m(
+                'button',
+                { disabled: !post.discussion().canSeeVotes(), className: 'Post-points', onclick: function onclick() {
+                        if (!post.discussion().canSeeVotes()) return;
+                        app.modal.show(new VotesModal({ post: post }));
+                    } },
+                this.upvotedata().length - this.downvotedata().length
+            ));
+
+            items.add('downvote', Button.component({
+                icon: icon + '-down',
+                className: 'Post-vote Post-downvote',
+                style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
+                disabled: !post.discussion().canVote(),
+                onclick: function onclick() {
+                    if (!app.session.user) {
+                        app.modal.show(new LogInModal());
+                        return;
+                    }
+                    if (!post.discussion().canVote()) return;
+                    var upData = post.data.relationships.upvotes.data;
+                    var downData = post.data.relationships.downvotes.data;
+
+                    isDownvoted = !isDownvoted;
+
+                    isUpvoted = false;
+
+                    post.save([isUpvoted, isDownvoted, 'vote']);
+
+                    upData.some(function (upvote, i) {
+                        if (upvote.id === app.session.user.id()) {
+                            upData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    downData.some(function (downvote, i) {
+                        if (downvote.id === app.session.user.id()) {
+                            downData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    if (isDownvoted) {
+                        downData.unshift({ type: 'users', id: app.session.user.id() });
+                    }
+                }
+            }));
+        });
     });
 
-    extend(CommentPost.prototype, 'actionItems', function (items) {
-      var post = this.props.post;
-
-      var isUpvoted = app.session.user && post.upvotes().some(function (user) {
-        return user === app.session.user;
-      });
-      var isDownvoted = app.session.user && post.downvotes().some(function (user) {
-        return user === app.session.user;
-      });
-
-      if (!app.session.user) {
-        isDownvoted = false;
-        isUpvoted = false;
-      }
-
-      var icon = app.forum.attribute('IconName');
-
-      if (icon === null || icon === '') {
-        icon = 'thumbs';
-      }
-
-      items.add('upvote', Button.component({
-        icon: icon + '-up',
-        className: 'Post-vote Post-upvote',
-        style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
-        disabled: !post.discussion().canVote(),
-        onclick: function onclick() {
-          if (!app.session.user) {
-            app.modal.show(new LogInModal());
-            return;
-          }
-          if (!post.discussion().canVote()) return;
-          var upData = post.data.relationships.upvotes.data;
-          var downData = post.data.relationships.downvotes.data;
-
-          isUpvoted = !isUpvoted;
-
-          isDownvoted = false;
-
-          post.save([isUpvoted, isDownvoted, 'vote']);
-
-          upData.some(function (upvote, i) {
-            if (upvote.id === app.session.user.id()) {
-              upData.splice(i, 1);
-              return true;
-            }
-          });
-
-          downData.some(function (downvote, i) {
-            if (downvote.id === app.session.user.id()) {
-              downData.splice(i, 1);
-              return true;
-            }
-          });
-
-          if (isUpvoted) {
-            upData.unshift({ type: 'users', id: app.session.user.id() });
-          }
-        }
-      }));
-
-      items.add('points', m(
-        'button',
-        { disabled: !post.discussion().canSeeVotes(), className: 'Post-points', onclick: function onclick() {
-            if (!post.discussion().canSeeVotes()) return;
-            app.modal.show(new VotesModal({ post: post }));
-          } },
-        post.data.relationships.upvotes.data.length - post.data.relationships.downvotes.data.length
-      ));
-
-      items.add('downvote', Button.component({
-        icon: icon + '-down',
-        className: 'Post-vote Post-downvote',
-        style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
-        disabled: !post.discussion().canVote(),
-        onclick: function onclick() {
-          if (!app.session.user) {
-            app.modal.show(new LogInModal());
-            return;
-          }
-          if (!post.discussion().canVote()) return;
-          var upData = post.data.relationships.upvotes.data;
-          var downData = post.data.relationships.downvotes.data;
-
-          isDownvoted = !isDownvoted;
-
-          isUpvoted = false;
-
-          post.save([isUpvoted, isDownvoted, 'vote']);
-
-          upData.some(function (upvote, i) {
-            if (upvote.id === app.session.user.id()) {
-              upData.splice(i, 1);
-              return true;
-            }
-          });
-
-          downData.some(function (downvote, i) {
-            if (downvote.id === app.session.user.id()) {
-              downData.splice(i, 1);
-              return true;
-            }
-          });
-
-          if (isDownvoted) {
-            downData.unshift({ type: 'users', id: app.session.user.id() });
-          }
-        }
-      }));
-    });
-  });
-
-  return {
-    setters: [function (_flarumExtend) {
-      extend = _flarumExtend.extend;
-    }, function (_flarumApp) {
-      app = _flarumApp.default;
-    }, function (_flarumComponentsButton) {
-      Button = _flarumComponentsButton.default;
-    }, function (_flarumComponentsLogInModal) {
-      LogInModal = _flarumComponentsLogInModal.default;
-    }, function (_flarumComponentsCommentPost) {
-      CommentPost = _flarumComponentsCommentPost.default;
-    }, function (_ReflarGamificationComponentsVotesModal) {
-      VotesModal = _ReflarGamificationComponentsVotesModal.default;
-    }],
-    execute: function () {}
-  };
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_flarumComponentsButton) {
+            Button = _flarumComponentsButton.default;
+        }, function (_flarumComponentsLogInModal) {
+            LogInModal = _flarumComponentsLogInModal.default;
+        }, function (_flarumComponentsCommentPost) {
+            CommentPost = _flarumComponentsCommentPost.default;
+        }, function (_ReflarGamificationComponentsVotesModal) {
+            VotesModal = _ReflarGamificationComponentsVotesModal.default;
+        }],
+        execute: function () {}
+    };
 });;
 'use strict';
 
