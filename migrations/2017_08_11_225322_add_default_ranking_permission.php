@@ -13,7 +13,7 @@
 use Illuminate\Database\ConnectionInterface;
 
 $permissionAttributes = [
-    'group_id' => 2, // Default group ID of guests
+    'group_id'   => 2, // Default group ID of guests
     'permission' => 'reflar.gamification.viewRankingPage',
 ];
 

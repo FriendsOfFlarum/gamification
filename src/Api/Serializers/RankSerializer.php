@@ -37,8 +37,8 @@ class RankSerializer extends AbstractSerializer
 
         return [
             'points' => $rank->points,
-            'name' => $rank->name,
-            'color' => $rank->color,
+            'name'   => $rank->name,
+            'color'  => $rank->color,
         ];
     }
 }

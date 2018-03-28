@@ -29,7 +29,7 @@ class VoteBlueprint implements BlueprintInterface
     public $actor;
 
     /**
-     * @var String
+     * @var string
      */
     public $type;
 

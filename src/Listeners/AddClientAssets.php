@@ -13,8 +13,8 @@
 namespace Reflar\Gamification\Listeners;
 
 use DirectoryIterator;
-use Flarum\Event\ConfigureWebApp;
 use Flarum\Event\ConfigureLocales;
+use Flarum\Event\ConfigureWebApp;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddClientAssets

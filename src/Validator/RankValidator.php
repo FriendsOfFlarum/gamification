@@ -17,8 +17,8 @@ use Flarum\Core\Validator\AbstractValidator;
 class RankValidator extends AbstractValidator
 {
     protected $rules = [
-        'name' => ['required', 'string'],
-        'color' => ['required', 'string'],
+        'name'   => ['required', 'string'],
+        'color'  => ['required', 'string'],
         'points' => ['required', 'integer'],
     ];
 }

@@ -33,7 +33,7 @@ class PostWasVoted
     public $actor;
 
     /**
-     * @var String
+     * @var string
      */
     public $type;
 

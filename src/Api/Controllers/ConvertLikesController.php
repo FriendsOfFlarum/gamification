@@ -63,7 +63,7 @@ class ConvertLikesController implements ControllerInterface
 
             foreach ($likes as $like) {
                 $this->gamification->convertLike($like->post_id, $like->user_id);
-                ++$counter;
+                $counter++;
             }
 
             $discussions = Discussion::all();

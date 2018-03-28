@@ -179,9 +179,9 @@ class SaveVotesToDatabase
     public function sendData($post, $user, $actor, $type, $before)
     {
         $oldVote = Notification::where([
-            'sender_id' => $actor->id,
+            'sender_id'  => $actor->id,
             'subject_id' => $post->id,
-            'data' => '"'.$before.'"',
+            'data'       => '"'.$before.'"',
         ])->first();
 
         if ($oldVote) {
@@ -227,11 +227,11 @@ class SaveVotesToDatabase
 
         $pusher = $this->getPusher();
         $pusher->trigger('public', 'newVote', [
-            'postId' => $post->id,
-            'before' => $type[0],
-            'after' => $type[1],
+            'postId'  => $post->id,
+            'before'  => $type[0],
+            'after'   => $type[1],
             'clicked' => $clicked,
-            'userId' => $actor->id,
+            'userId'  => $actor->id,
         ]);
     }
 

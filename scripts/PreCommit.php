@@ -11,7 +11,7 @@ foreach ($output as $file) {
         /**
          * Check for error.
          */
-        $lint_output = array();
+        $lint_output = [];
         exec('php -l '.$fileName, $lint_output, $return);
         if ($return === 0) {
             /*
