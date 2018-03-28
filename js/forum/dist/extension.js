@@ -338,69 +338,58 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
 
             if (isInitialized) return;
 
-            app.pusher.then(function (channels) {
-                channels.main.bind('newVote', function (data) {
-
-                    if (_this.postId() == data.postId) {
+            if (app.pusher) {
+                app.pusher.then(function (channels) {
+                    channels.main.bind('newVote', function (data) {
 
                         var userId = parseInt(data.userId);
 
-                        var upData = _this.upvotedata();
-                        var downData = _this.downvotedata();
+                        if (userId == app.session.user.id()) return;
 
-                        console.log(_this.upvotedata());
-                        console.log(_this.downvotedata());
+                        m.startComputation();
 
-                        switch (data.type) {
-                            case 'none2up':
-                                upData.unshift({ type: 'users', id: userId });
-                                break;
-                            case 'none2down':
-                                downData.unshift({ type: 'users', id: userId });
-                                break;
-                            case 'down2up':
-                                upData.unshift({ type: 'users', id: userId });
-                                downData.some(function (downvote, i) {
-                                    if (downvote.id == userId) {
-                                        downData.splice(i, 1);
-                                    }
-                                });
-                                break;
-                            case 'up2down':
-                                upData.some(function (upvote, i) {
-                                    if (upvote.id == userId) {
-                                        upData.splice(i, 1);
-                                    }
-                                });
-                                downData.unshift({ type: 'users', id: userId });
-                                break;
-                            case 'down2none':
-                                downData.some(function (downvote, i) {
-                                    if (downvote.id == userId) {
-                                        downData.splice(i, 1);
-                                    }
-                                });
-                                break;
-                            case 'up2none':
-                                upData.some(function (upvote, i) {
-                                    if (upvote.id == userId) {
-                                        upData.splice(i, 1);
-                                    }
-                                });
-                                break;
+                        if (_this.postId() == data.postId) {
+
+                            var upData = _this.upvotedata();
+                            var downData = _this.downvotedata();
+
+                            switch (data.before) {
+                                case 'up':
+                                    upData = _this.removeVote(upData, userId);
+                                    break;
+                                case 'down':
+                                    downData = _this.removeVote(downData, userId);
+                                    break;
+
+                            }
+
+                            switch (data.after) {
+                                case 'up':
+                                    upData.unshift({ type: 'users', id: userId });
+                                    break;
+                                case 'down':
+                                    downData.unshift({ type: 'users', id: userId });
+                                    break;
+                                case 'none':
+                                    downData = _this.removeVote(downData, userId);
+                                    upData = _this.removeVote(upData, userId);
+                                    break;
+                            }
+
+                            _this.downvotedata(downData);
+                            _this.upvotedata(upData);
+
+                            m.redraw.strategy('all');
                         }
-                        _this.upvotedata(upData);
-                        _this.downvotedata(downData);
 
-                        console.log(_this.upvotedata());
-                        console.log(_this.downvotedata());
-                    }
-                });
+                        m.endComputation();
+                    });
 
-                extend(context, 'onunload', function () {
-                    return channels.main.unbind('newVote');
+                    extend(context, 'onunload', function () {
+                        return channels.main.unbind('newVote');
+                    });
                 });
-            });
+            }
 
             $('.Post-vote').unbind().on('click touchend', function () {
                 $(this).addClass('cbutton--click');
@@ -411,6 +400,8 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
         });
 
         extend(CommentPost.prototype, 'actionItems', function (items) {
+            var _this2 = this;
+
             var post = this.props.post;
 
             this.postId = m.prop(post.data.id);
@@ -436,6 +427,15 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
                 icon = 'thumbs';
             }
 
+            this.removeVote = function (data, userId) {
+                data.some(function (vote, i) {
+                    if (vote.id == userId) {
+                        data.splice(i, 1);
+                    }
+                });
+                return data;
+            };
+
             items.add('upvote', Button.component({
                 icon: icon + '-up',
                 className: 'Post-vote Post-upvote',
@@ -456,19 +456,9 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
 
                     post.save([isUpvoted, isDownvoted, 'vote']);
 
-                    upData.some(function (upvote, i) {
-                        if (upvote.id === app.session.user.id()) {
-                            upData.splice(i, 1);
-                            return true;
-                        }
-                    });
+                    upData = _this2.removeVote(upData, app.session.user.id());
 
-                    downData.some(function (downvote, i) {
-                        if (downvote.id === app.session.user.id()) {
-                            downData.splice(i, 1);
-                            return true;
-                        }
-                    });
+                    downData = _this2.removeVote(downData, app.session.user.id());
 
                     if (isUpvoted) {
                         upData.unshift({ type: 'users', id: app.session.user.id() });
@@ -505,19 +495,9 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
 
                     post.save([isUpvoted, isDownvoted, 'vote']);
 
-                    upData.some(function (upvote, i) {
-                        if (upvote.id === app.session.user.id()) {
-                            upData.splice(i, 1);
-                            return true;
-                        }
-                    });
+                    upData = _this2.removeVote(upData, app.session.user.id());
 
-                    downData.some(function (downvote, i) {
-                        if (downvote.id === app.session.user.id()) {
-                            downData.splice(i, 1);
-                            return true;
-                        }
-                    });
+                    downData = _this2.removeVote(downData, app.session.user.id());
 
                     if (isDownvoted) {
                         downData.unshift({ type: 'users', id: app.session.user.id() });

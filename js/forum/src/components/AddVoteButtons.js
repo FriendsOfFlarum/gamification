@@ -11,72 +11,59 @@ export default function () {
     extend(CommentPost.prototype, 'config', function (x, isInitialized, context) {
         if (isInitialized) return
 
-        app.pusher.then(channels => {
-            channels.main.bind('newVote', data => {
-
-
-                if (this.postId() == data.postId) {
+        if (app.pusher) {
+            app.pusher.then(channels => {
+                channels.main.bind('newVote', data => {
 
                     var userId = parseInt(data.userId)
 
-                    var upData = this.upvotedata()
-                    var downData = this.downvotedata()
+                    if (userId == app.session.user.id()) return
 
-                    console.log(this.upvotedata())
-                    console.log(this.downvotedata())
+                    m.startComputation()
 
-                    switch (data.type) {
-                        case 'none2up':
-                            upData.unshift({type: 'users', id: userId})
-                            break;
-                        case 'none2down':
-                            downData.unshift({type: 'users', id: userId})
-                            break;
-                        case 'down2up':
-                            upData.unshift({type: 'users', id: userId})
-                            downData.some((downvote, i) => {
-                                if (downvote.id == userId) {
-                                    downData.splice(i, 1)
-                                }
-                            })
-                            break;
-                        case 'up2down':
-                            upData.some((upvote, i) => {
-                                if (upvote.id == userId) {
-                                    upData.splice(i, 1)
-                                }
-                            })
-                            downData.unshift({type: 'users', id: userId})
-                            break;
-                        case 'down2none':
-                            downData.some((downvote, i) => {
-                                if (downvote.id == userId) {
-                                    downData.splice(i, 1)
-                                }
-                            })
-                            break;
-                        case 'up2none':
-                            upData.some((upvote, i) => {
-                                if (upvote.id == userId) {
-                                    upData.splice(i, 1)
-                                }
-                            })
-                            break;
+                    if (this.postId() == data.postId) {
+
+                        var upData = this.upvotedata()
+                        var downData = this.downvotedata()
+
+                        switch (data.before) {
+                            case 'up':
+                                upData = this.removeVote(upData, userId)
+                                break;
+                            case 'down':
+                                downData = this.removeVote(downData, userId)
+                                break;
+
+                        }
+
+                        switch (data.after) {
+                            case 'up':
+                                upData.unshift({type: 'users', id: userId})
+                                break;
+                            case 'down':
+                                downData.unshift({type: 'users', id: userId})
+                                break;
+                            case 'none':
+                                downData = this.removeVote(downData, userId)
+                                upData = this.removeVote(upData, userId)
+                                break;
+                        }
+
+                        this.downvotedata(downData)
+                        this.upvotedata(upData)
+
+                        m.redraw.strategy('all');
+
                     }
-                    this.upvotedata(upData)
-                    this.downvotedata(downData)
 
-                    console.log(this.upvotedata())
-                    console.log(this.downvotedata())
+                    m.endComputation()
 
-
-                }
-
-            })
+                })
 
 
-            extend(context, 'onunload', () => channels.main.unbind('newVote'));
-        });
+                extend(context, 'onunload', () => channels.main.unbind('newVote'));
+            });
+        }
 
         $('.Post-vote').unbind().on('click touchend', function () {
             $(this).addClass('cbutton--click')
@@ -85,6 +72,7 @@ export default function () {
             }, 600);
         })
     })
+
 
     extend(CommentPost.prototype, 'actionItems', function (items) {
         const post = this.props.post
@@ -108,6 +96,15 @@ export default function () {
             icon = 'thumbs'
         }
 
+        this.removeVote = function (data, userId) {
+            data.some((vote, i) => {
+                if (vote.id == userId) {
+                    data.splice(i, 1)
+                }
+            })
+            return data
+        }
+
         items.add('upvote',
             Button.component({
                 icon: icon + '-up',
@@ -129,19 +126,9 @@ export default function () {
 
                     post.save([isUpvoted, isDownvoted, 'vote'])
 
-                    upData.some((upvote, i) => {
-                        if (upvote.id === app.session.user.id()) {
-                            upData.splice(i, 1)
-                            return true
-                        }
-                    })
+                    upData = this.removeVote(upData, app.session.user.id())
 
-                    downData.some((downvote, i) => {
-                        if (downvote.id === app.session.user.id()) {
-                            downData.splice(i, 1)
-                            return true
-                        }
-                    })
+                    downData = this.removeVote(downData, app.session.user.id())
 
                     if (isUpvoted) {
                         upData.unshift({type: 'users', id: app.session.user.id()})
@@ -180,19 +167,9 @@ export default function () {
 
                     post.save([isUpvoted, isDownvoted, 'vote'])
 
-                    upData.some((upvote, i) => {
-                        if (upvote.id === app.session.user.id()) {
-                            upData.splice(i, 1)
-                            return true
-                        }
-                    })
+                    upData = this.removeVote(upData, app.session.user.id())
 
-                    downData.some((downvote, i) => {
-                        if (downvote.id === app.session.user.id()) {
-                            downData.splice(i, 1)
-                            return true
-                        }
-                    })
+                    downData = this.removeVote(downData, app.session.user.id())
 
                     if (isDownvoted) {
                         downData.unshift({type: 'users', id: app.session.user.id()})

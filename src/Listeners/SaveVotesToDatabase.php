@@ -110,10 +110,10 @@ class SaveVotesToDatabase
             if (!$isUpvoted && !$isDownvoted) {
                 if ('Up' == $vote->type) {
                     $this->changePoints($user, $post, -1);
-                    $this->pushNewVote('up2none', $post, $actor);
+                    $this->pushNewVote('up2none', $post, 'up', $actor);
                 } else {
                     $this->changePoints($user, $post, 1);
-                    $this->pushNewVote('down2none', $post, $actor);
+                    $this->pushNewVote('down2none', $post, 'down', $actor);
                 }
                 $this->sendData($post, $user, $actor, 'None', $vote->type);
                 $vote->delete();
@@ -121,13 +121,13 @@ class SaveVotesToDatabase
                 if ('Up' == $vote->type) {
                     $vote->type = 'Down';
                     $this->changePoints($user, $post, -2);
-                    $this->pushNewVote('up2down', $post, $actor);
+                    $this->pushNewVote('up2down', $post, 'down', $actor);
 
                     $this->sendData($post, $user, $actor, 'Down', 'Up');
                 } else {
                     $vote->type = 'Up';
                     $this->changePoints($user, $post, 2);
-                    $this->pushNewVote('down2up', $post, $actor);
+                    $this->pushNewVote('down2up', $post, 'up', $actor);
 
                     $this->sendData($post, $user, $actor, 'Up', 'Down');
                 }
@@ -138,11 +138,11 @@ class SaveVotesToDatabase
             if ($isDownvoted) {
                 $vote->type = 'Down';
                 $this->changePoints($user, $post, -1);
-                $this->pushNewVote('none2down', $post, $actor);
+                $this->pushNewVote('none2down', $post, 'down', $actor);
             } elseif ($isUpvoted) {
                 $vote->type = 'Up';
                 $this->changePoints($user, $post, 1);
-                $this->pushNewVote('none2up', $post, $actor);
+                $this->pushNewVote('none2up', $post, 'up', $actor);
             }
             $this->sendData($post, $user, $actor, $vote->type, ' ');
             $vote->save();
@@ -221,12 +221,16 @@ class SaveVotesToDatabase
         }
     }
 
-    public function pushNewVote($type, $post, $actor)
+    public function pushNewVote($type, $post, $clicked, $actor)
     {
+        $type = explode('2', $type);
+
         $pusher = $this->getPusher();
         $pusher->trigger('public', 'newVote', [
             'postId' => $post->id,
-            'type' => $type,
+            'before' => $type[0],
+            'after' => $type[1],
+            'clicked' => $clicked,
             'userId' => $actor->id,
         ]);
     }
