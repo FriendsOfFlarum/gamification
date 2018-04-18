@@ -4,11 +4,11 @@ Before we can address your issues and concerns with the behavior of our work, we
 
 * [x] By agreeing to these terms, you can simply leave this checkbox checked.
 
-### Prerequisites (Check these AFTER you create your issue)
+### Please Mentally Go Over the Following Items Before Filling Out this Form:
 
-* [ ] Can you reproduce this problem in debug mode?
-* [ ] Are you running the latest version of this extension?
-* [ ] Is your Flarum up-to-date?
+* Can you reproduce this problem in debug mode?
+* Are you running the latest version of this extension?
+* Is your Flarum up-to-date?
 
 ### Description
 
@@ -30,7 +30,7 @@ Before we can address your issues and concerns with the behavior of our work, we
 
 - Version of Flarum (x.y.z):
 - Version of extension (x.y.z):
-- Website URL where the bug is visible (https://example.com):
+- [OPTIONAL] Website URL where the bug is visible (https://example.com):
 - The webserver you are running (Apache, Nginx, etc):
 - PHP version (x.y.z):
 - Hosted environment (Shared, VPS, etc):
