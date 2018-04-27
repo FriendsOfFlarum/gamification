@@ -12,8 +12,8 @@
 
 namespace Reflar\Gamification\Api\Controllers;
 
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Core\Discussion;
+use Flarum\User\AssertPermissionTrait;
+use Flarum\Discussion\Discussion;
 use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;

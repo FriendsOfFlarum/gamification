@@ -13,7 +13,7 @@
 namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractCollectionController;
-use Flarum\Core\Exception\PermissionDeniedException;
+use Flarum\User\Exception\PermissionDeniedException;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\Gamification\Gamification;
 use Tobscure\JsonApi\Document;

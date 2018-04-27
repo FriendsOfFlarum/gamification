@@ -1,20 +1,20 @@
 "use strict";
 
-System.register("Reflar/Gamification/addSettingsPage", ["flarum/extend", "flarum/components/AdminNav", "flarum/components/AdminLinkButton", "Reflar/Gamification/components/SettingsPage"], function (_export, _context) {
+System.register("reflar/gamification/addSettingsPage", ["flarum/extend", "flarum/components/AdminNav", "flarum/components/AdminLinkButton", "./components/SettingsPage"], function (_export, _context) {
     "use strict";
 
     var extend, AdminNav, AdminLinkButton, SettingsPage;
 
     _export("default", function () {
-        app.routes['Reflar-Gamification'] = { path: '/reflar/gamification', component: SettingsPage.component() };
+        app.routes['reflar-gamification'] = { path: '/reflar/gamification', component: SettingsPage.component() };
 
-        app.extensionSettings['Reflar-Gamification'] = function () {
-            return m.route(app.route('Reflar-Gamification'));
+        app.extensionSettings['reflar-gamification'] = function () {
+            return m.route(app.route('reflar-gamification'));
         };
 
         extend(AdminNav.prototype, 'items', function (items) {
-            items.add('Reflar-Gamification', AdminLinkButton.component({
-                href: app.route('Reflar-Gamification'),
+            items.add('reflar-gamification', AdminLinkButton.component({
+                href: app.route('reflar-gamification'),
                 icon: 'thumbs-up',
                 children: 'Gamification',
                 description: app.translator.trans('reflar-gamification.admin.nav.desc')
@@ -29,15 +29,15 @@ System.register("Reflar/Gamification/addSettingsPage", ["flarum/extend", "flarum
             AdminNav = _flarumComponentsAdminNav.default;
         }, function (_flarumComponentsAdminLinkButton) {
             AdminLinkButton = _flarumComponentsAdminLinkButton.default;
-        }, function (_ReflarGamificationComponentsSettingsPage) {
-            SettingsPage = _ReflarGamificationComponentsSettingsPage.default;
+        }, function (_componentsSettingsPage) {
+            SettingsPage = _componentsSettingsPage.default;
         }],
         execute: function () {}
     };
 });;
 "use strict";
 
-System.register("Reflar/Gamification/components/SettingsPage", ["flarum/components/Alert", "flarum/components/Page", "flarum/components/Button", "flarum/components/UploadImageButton", "flarum/utils/saveSettings", "flarum/components/Switch"], function (_export, _context) {
+System.register("reflar/gamification/components/SettingsPage", ["flarum/components/Alert", "flarum/components/Page", "flarum/components/Button", "flarum/components/UploadImageButton", "flarum/utils/saveSettings", "flarum/components/Switch"], function (_export, _context) {
     "use strict";
 
     var Alert, Page, Button, UploadImageButton, saveSettings, Switch, SettingsPage;
@@ -297,7 +297,7 @@ System.register("Reflar/Gamification/components/SettingsPage", ["flarum/componen
 });;
 'use strict';
 
-System.register('Reflar/Gamification/helpers/rankLabel', [], function (_export, _context) {
+System.register('reflar/gamification/helpers/rankLabel', [], function (_export, _context) {
   "use strict";
 
   function rankLabel(rank) {
@@ -326,57 +326,57 @@ System.register('Reflar/Gamification/helpers/rankLabel', [], function (_export, 
 });;
 'use strict';
 
-System.register('Reflar/Gamification/main', ['flarum/app', 'flarum/extend', 'flarum/components/PermissionGrid', 'Reflar/Gamification/addSettingsPage', 'Reflar/Gamification/models/Rank'], function (_export, _context) {
-  "use strict";
+System.register('reflar/gamification/main', ['flarum/app', 'flarum/extend', 'flarum/components/PermissionGrid', './addSettingsPage', 'reflar/gamification/models/Rank'], function (_export, _context) {
+    "use strict";
 
-  var app, extend, PermissionGrid, addSettingsPage, Rank;
-  return {
-    setters: [function (_flarumApp) {
-      app = _flarumApp.default;
-    }, function (_flarumExtend) {
-      extend = _flarumExtend.extend;
-    }, function (_flarumComponentsPermissionGrid) {
-      PermissionGrid = _flarumComponentsPermissionGrid.default;
-    }, function (_ReflarGamificationAddSettingsPage) {
-      addSettingsPage = _ReflarGamificationAddSettingsPage.default;
-    }, function (_ReflarGamificationModelsRank) {
-      Rank = _ReflarGamificationModelsRank.default;
-    }],
-    execute: function () {
+    var app, extend, PermissionGrid, addSettingsPage, Rank;
+    return {
+        setters: [function (_flarumApp) {
+            app = _flarumApp.default;
+        }, function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumComponentsPermissionGrid) {
+            PermissionGrid = _flarumComponentsPermissionGrid.default;
+        }, function (_addSettingsPage) {
+            addSettingsPage = _addSettingsPage.default;
+        }, function (_reflarGamificationModelsRank) {
+            Rank = _reflarGamificationModelsRank.default;
+        }],
+        execute: function () {
 
-      app.initializers.add('Reflar-Gamification', function (app) {
-        app.store.models.ranks = Rank;
+            app.initializers.add('reflar-gamification', function (app) {
+                app.store.models.ranks = Rank;
 
-        extend(PermissionGrid.prototype, 'replyItems', function (items) {
-          items.add('Vote', {
-            icon: 'thumbs-up',
-            label: app.translator.trans('reflar-gamification.admin.permissions.vote_label'),
-            permission: 'discussion.vote'
-          });
-        });
+                extend(PermissionGrid.prototype, 'replyItems', function (items) {
+                    items.add('Vote', {
+                        icon: 'thumbs-up',
+                        label: app.translator.trans('reflar-gamification.admin.permissions.vote_label'),
+                        permission: 'discussion.vote'
+                    });
+                });
 
-        extend(PermissionGrid.prototype, 'viewItems', function (items) {
-          items.add('canSeeVotes', {
-            icon: 'info-circle',
-            label: app.translator.trans('reflar-gamification.admin.permissions.see_votes_label'),
-            permission: 'discussion.canSeeVotes'
-          });
-          items.add('canViewRankingPage', {
-            icon: 'trophy',
-            label: app.translator.trans('reflar-gamification.admin.permissions.see_ranking_page'),
-            permission: 'reflar.gamification.viewRankingPage',
-            allowGuest: true
-          });
-        });
+                extend(PermissionGrid.prototype, 'viewItems', function (items) {
+                    items.add('canSeeVotes', {
+                        icon: 'info-circle',
+                        label: app.translator.trans('reflar-gamification.admin.permissions.see_votes_label'),
+                        permission: 'discussion.canSeeVotes'
+                    });
+                    items.add('canViewRankingPage', {
+                        icon: 'trophy',
+                        label: app.translator.trans('reflar-gamification.admin.permissions.see_ranking_page'),
+                        permission: 'reflar.gamification.viewRankingPage',
+                        allowGuest: true
+                    });
+                });
 
-        addSettingsPage();
-      });
-    }
-  };
+                addSettingsPage();
+            });
+        }
+    };
 });;
 'use strict';
 
-System.register('Reflar/Gamification/models/Rank', ['flarum/Model', 'flarum/utils/mixin'], function (_export, _context) {
+System.register('reflar/gamification/models/Rank', ['flarum/Model', 'flarum/utils/mixin'], function (_export, _context) {
   "use strict";
 
   var Model, mixin, Rank;

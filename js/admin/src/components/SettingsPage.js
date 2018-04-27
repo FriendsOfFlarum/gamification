@@ -58,20 +58,20 @@ export default class SettingsPage extends Page {
                     m('form', {onsubmit: this.onsubmit.bind(this)}, [
                         m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.convert.help')),
                         (this.values.convertedLikes() === undefined ? (
-                                Button.component({
-                                    type: 'button',
-                                    className: 'Button Button--warning Ranks-button',
-                                    children: app.translator.trans('reflar-gamification.admin.page.convert.button'),
-                                    onclick: () => {
-                                        app.request({
-                                            url: app.forum.attribute('apiUrl') + '/reflar/gamification/convert',
-                                            method: 'POST'
-                                        }).then(this.values.convertedLikes('converting'));
-                                    }
-                                })
-                            ) : (this.values.convertedLikes() === 'converting' ? (
-                                    m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converting'))
-                                ) : (m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converted', {number: this.values.convertedLikes()}))))),
+                            Button.component({
+                                type: 'button',
+                                className: 'Button Button--warning Ranks-button',
+                                children: app.translator.trans('reflar-gamification.admin.page.convert.button'),
+                                onclick: () => {
+                                    app.request({
+                                        url: app.forum.attribute('apiUrl') + '/reflar/gamification/convert',
+                                        method: 'POST'
+                                    }).then(this.values.convertedLikes('converting'));
+                                }
+                            })
+                        ) : (this.values.convertedLikes() === 'converting' ? (
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converting'))
+                        ) : (m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converted', {number: this.values.convertedLikes()}))))),
 
                         m('fieldset', {className: 'SettingsPage-ranks'}, [
                             m('legend', {}, app.translator.trans('reflar-gamification.admin.page.ranks.title')),
@@ -121,7 +121,7 @@ export default class SettingsPage extends Page {
                                         placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.name'),
                                         oninput: m.withAttr('value', this.newRank.name)
                                     }),
-                                        m('input', {
+                                    m('input', {
                                             className: 'FormControl Ranks-color',
                                             value: this.newRank.color(),
                                             placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.color'),

@@ -1,9 +1,10 @@
+import {extend} from "flarum/extend";
 import avatar from "flarum/helpers/avatar";
 import AvatarEditor from "flarum/components/AvatarEditor";
 import username from "flarum/helpers/username";
 import Discussion from "flarum/models/Discussion";
 import Dropdown from "flarum/components/Dropdown";
-import {extend} from "flarum/extend";
+import listItems from 'flarum/helpers/listItems';
 import Model from "flarum/Model";
 import Post from "flarum/models/Post";
 import PostUser from "flarum/components/PostUser";
@@ -11,8 +12,6 @@ import User from "flarum/models/User";
 import UserCard from "flarum/components/UserCard";
 import UserControls from "flarum/utils/UserControls";
 import userOnline from "flarum/helpers/userOnline";
-import listItems from "flarum/helpers/listItems";
-import rankLabel from "Reflar/Gamification/helpers/rankLabel";
 
 export default function () {
     Discussion.prototype.canVote = Model.attribute('canVote');
@@ -56,13 +55,13 @@ export default function () {
 
                     <div className="container">
                         {controls.length ? Dropdown.component({
-                                children: controls,
-                                className: 'UserCard-controls App-primaryControl',
-                                menuClassName: 'Dropdown-menu--right',
-                                buttonClassName: this.props.controlsButtonClassName,
-                                label: app.translator.trans('core.forum.user_controls.button'),
-                                icon: 'ellipsis-v'
-                            }) : ''}
+                            children: controls,
+                            className: 'UserCard-controls App-primaryControl',
+                            menuClassName: 'Dropdown-menu--right',
+                            buttonClassName: this.props.controlsButtonClassName,
+                            label: app.translator.trans('core.forum.user_controls.button'),
+                            icon: 'ellipsis-v'
+                        }) : ''}
 
                         <div className="UserCard-profile">
                             <h2 className="UserCard-identity">
@@ -77,23 +76,23 @@ export default function () {
                             </h2>
 
                             {badges.length ? (
-                                    <ul className="UserCard-badges badges">
-                                        {listItems(badges)}
-                                        {user.ranks() !== false ? (
-                                                user.ranks().map((rank, i) => {
-                                                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
+                                <ul className="UserCard-badges badges">
+                                    {listItems(badges)}
+                                    {user.ranks() !== false ? (
+                                        user.ranks().map((rank, i) => {
+                                            if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
-                                                    } else {
-                                                        return (
-                                                            <li className="User-Rank">
-                                                                {rankLabel(rank)}
-                                                            </li>
-                                                        );
-                                                    }
-                                                })
-                                            ) : '' }
-                                    </ul>
-                                ) : ''}
+                                            } else {
+                                                return (
+                                                    <li className="User-Rank">
+                                                        {rankLabel(rank)}
+                                                    </li>
+                                                );
+                                            }
+                                        })
+                                    ) : ''}
+                                </ul>
+                            ) : ''}
 
                             <ul className="UserCard-info">
                                 {listItems(this.infoItems().toArray())}

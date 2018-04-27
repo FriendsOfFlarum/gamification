@@ -13,11 +13,11 @@
 namespace Reflar\Gamification\Listeners;
 
 use DateTime;
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Core\Exception\FloodingException;
-use Flarum\Core\Notification;
-use Flarum\Core\Notification\NotificationSyncer;
-use Flarum\Event\PostWillBeSaved;
+use Flarum\User\AssertPermissionTrait;
+use Flarum\Post\Exception\FloodingException;
+use Flarum\Notification\Notification;
+use Flarum\Notification\NotificationSyncer;
+use Flarum\Post\Event\Saving;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Pusher;
@@ -70,14 +70,14 @@ class SaveVotesToDatabase
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(PostWillBeSaved::class, [$this, 'whenPostWillBeSaved']);
-        $events->listen(PostWasDeleted::class, [$this, 'whenPostWasDeleted']);
+        $events->listen(Saving::class, [$this, 'whenSaving']);
+        $events->listen(Deleted::class, [$this, 'whenDeleted']);
     }
 
     /**
-     * @param PostWillBeSaved $event
+     * @param Saving $event
      */
-    public function whenPostWillBeSaved(PostWillBeSaved $event)
+    public function whenSaving(Saving $event)
     {
         $post = $event->post;
         if ($post->id) {

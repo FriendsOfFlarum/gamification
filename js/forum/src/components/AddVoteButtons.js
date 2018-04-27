@@ -3,8 +3,7 @@ import app from 'flarum/app'
 import Button from 'flarum/components/Button'
 import LogInModal from 'flarum/components/LogInModal'
 import CommentPost from 'flarum/components/CommentPost'
-
-import VotesModal from 'Reflar/Gamification/components/VotesModal'
+import VotesModal from './VotesModal'
 
 export default function () {
 
@@ -118,7 +117,6 @@ export default function () {
                     }
                     if (!post.discussion().canVote()) return
                     var upData = post.data.relationships.upvotes.data
-                    var downData = post.data.relationships.downvotes.data
 
                     isUpvoted = !isUpvoted
 
@@ -127,8 +125,6 @@ export default function () {
                     post.save([isUpvoted, isDownvoted, 'vote'])
 
                     upData = this.removeVote(upData, app.session.user.id())
-
-                    downData = this.removeVote(downData, app.session.user.id())
 
                     if (isUpvoted) {
                         upData.unshift({type: 'users', id: app.session.user.id()})
@@ -158,7 +154,6 @@ export default function () {
                         return
                     }
                     if (!post.discussion().canVote()) return
-                    var upData = post.data.relationships.upvotes.data
                     var downData = post.data.relationships.downvotes.data
 
                     isDownvoted = !isDownvoted
@@ -166,8 +161,6 @@ export default function () {
                     isUpvoted = false
 
                     post.save([isUpvoted, isDownvoted, 'vote'])
-
-                    upData = this.removeVote(upData, app.session.user.id())
 
                     downData = this.removeVote(downData, app.session.user.id())
 

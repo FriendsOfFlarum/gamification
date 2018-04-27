@@ -12,8 +12,8 @@
 
 namespace Reflar\Gamification\Events;
 
-use Flarum\Core\Post;
-use Flarum\Core\User;
+use Flarum\Post\Post;
+use Flarum\User\User;
 
 class PostWasVoted
 {

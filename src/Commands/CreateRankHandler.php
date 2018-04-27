@@ -12,8 +12,8 @@
 
 namespace Reflar\Gamification\Commands;
 
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Core\Exception\PermissionDeniedException;
+use Flarum\User\AssertPermissionTrait;
+use Flarum\User\Exception\PermissionDeniedException;
 use Reflar\Gamification\Rank;
 use Reflar\Gamification\Validator\RankValidator;
 

@@ -12,7 +12,7 @@
 
 namespace Reflar\Gamification\Commands;
 
-use Flarum\Core\User;
+use Flarum\User\User;
 
 class DeleteRank
 {

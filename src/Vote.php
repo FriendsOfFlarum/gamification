@@ -12,8 +12,8 @@
 
 namespace Reflar\Gamification;
 
-use Flarum\Core\Post;
-use Flarum\Core\User;
+use Flarum\Post\Post;
+use Flarum\User\User;
 use Flarum\Database\AbstractModel;
 
 class Vote extends AbstractModel

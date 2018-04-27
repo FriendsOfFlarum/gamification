@@ -13,7 +13,6 @@
 namespace Reflar\Gamification\Listeners;
 
 use Flarum\Event\ConfigureDiscussionGambits;
-use Flarum\Event\ConfigureForumRoutes;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\Gamification\Gambit\HotGambit;
 
@@ -25,7 +24,6 @@ class FilterDiscussionListByHotness
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureDiscussionGambits::class, [$this, 'ConfigureDiscussionGambits']);
-        $events->listen(ConfigureForumRoutes::class, [$this, 'ConfigureForumRoutes']);
     }
 
     /**
@@ -34,13 +32,5 @@ class FilterDiscussionListByHotness
     public function ConfigureDiscussionGambits(ConfigureDiscussionGambits $event)
     {
         $event->gambits->add(HotGambit::class);
-    }
-
-    /**
-     * @param ConfigureForumRoutes $event
-     */
-    public function ConfigureForumRoutes(ConfigureForumRoutes $event)
-    {
-        $event->get('/hot', 'hot');
     }
 }
