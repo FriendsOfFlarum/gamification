@@ -518,10 +518,10 @@ System.register('reflar/gamification/components/AddVoteButtons', ['flarum/extend
 });;
 'use strict';
 
-System.register('reflar/gamification/components/RankingsPage', ['flarum/extend', 'flarum/helpers/avatar', 'flarum/components/Page', 'flarum/components/IndexPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flarum/components/LogInModal', 'flarum/components/LoadingIndicator', 'flarum/helpers/listItems', 'flarum/helpers/icon', 'flarum/helpers/username'], function (_export, _context) {
+System.register('reflar/gamification/components/RankingsPage', ['flarum/extend', 'flarum/helpers/avatar', 'flarum/components/Page', 'flarum/components/IndexPage', 'flarum/components/Button', 'flarum/utils/ItemList', 'flarum/components/LogInModal', 'flarum/components/LoadingIndicator', 'flarum/helpers/listItems', 'flarum/helpers/username'], function (_export, _context) {
     "use strict";
 
-    var extend, avatar, Page, IndexPage, Button, ItemList, LogInModal, LoadingIndicator, listItems, icon, username, RankingsPage;
+    var extend, avatar, Page, IndexPage, Button, ItemList, LogInModal, LoadingIndicator, listItems, username, RankingsPage;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
@@ -541,8 +541,6 @@ System.register('reflar/gamification/components/RankingsPage', ['flarum/extend',
             LoadingIndicator = _flarumComponentsLoadingIndicator.default;
         }, function (_flarumHelpersListItems) {
             listItems = _flarumHelpersListItems.default;
-        }, function (_flarumHelpersIcon) {
-            icon = _flarumHelpersIcon.default;
         }, function (_flarumHelpersUsername) {
             username = _flarumHelpersUsername.default;
         }],
@@ -644,7 +642,7 @@ System.register('reflar/gamification/components/RankingsPage', ['flarum/extend',
                                                                 'td',
                                                                 { className: 'rankings-mobile rankings-' + i },
                                                                 ' ',
-                                                                icon('trophy')
+                                                                m('i', { className: 'icon fa fa-trophy' })
                                                             ) : m(
                                                                 'td',
                                                                 { className: 'rankings-4 rankings-mobile' },

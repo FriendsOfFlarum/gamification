@@ -13,6 +13,8 @@
 namespace Reflar\Gamification;
 
 use Flarum\Extend;
+use Flarum\Forum\Controller\FrontendController;
+use Flarum\Forum\Controller\IndexController;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\Gamification\Api\Controllers;
 
@@ -35,8 +37,8 @@ return [
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
     (new Extend\Routes('forum'))
-        ->get('/rankings', 'rankings', null)
-        ->get('/hot', 'hot', null),
+        ->get('/rankings', 'rankings', FrontendController::class)
+        ->get('/hot', 'hot', IndexController::class),
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddRelationships::class);
         $events->subscribe(Listeners\EventHandlers::class);

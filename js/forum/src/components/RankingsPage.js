@@ -7,7 +7,6 @@ import ItemList from 'flarum/utils/ItemList'
 import LogInModal from 'flarum/components/LogInModal'
 import LoadingIndicator from 'flarum/components/LoadingIndicator'
 import listItems from 'flarum/helpers/listItems'
-import icon from 'flarum/helpers/icon'
 import username from 'flarum/helpers/username'
 
 export default class RankingsPage extends Page {
@@ -60,7 +59,7 @@ export default class RankingsPage extends Page {
                                                             <img className='rankings-mobile rankings-image'
                                                                  src={app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i)}/>)
                                                         : (
-                                                            <td className={'rankings-mobile rankings-' + i}> {icon('trophy')}</td>))
+                                                            <td className={'rankings-mobile rankings-' + i}> <i className="icon fa fa-trophy"></i></td>))
                                                         : (
                                                             <td className='rankings-4 rankings-mobile'>{this.addOrdinalSuffix(i)}</td>)}
                                                     <td>
