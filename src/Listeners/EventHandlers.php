@@ -12,9 +12,8 @@
 
 namespace Reflar\Gamification\Listeners;
 
-use Flarum\Api\Serializer\BasicPostSerializer;
-use Flarum\Notification\NotificationSyncer;
 use Flarum\Event\ConfigureNotificationTypes;
+use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
 use Flarum\Settings\SettingsRepositoryInterface;

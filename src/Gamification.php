@@ -13,9 +13,9 @@
 namespace Reflar\Gamification;
 
 use Flarum\Post\PostRepository;
-use Flarum\User\UserRepository;
-use Flarum\User\User;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\User;
+use Flarum\User\UserRepository;
 
 class Gamification
 {

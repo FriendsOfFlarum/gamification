@@ -12,9 +12,9 @@
 
 namespace Reflar\Gamification;
 
+use Flarum\Database\AbstractModel;
 use Flarum\Post\Post;
 use Flarum\User\User;
-use Flarum\Database\AbstractModel;
 
 class Vote extends AbstractModel
 {

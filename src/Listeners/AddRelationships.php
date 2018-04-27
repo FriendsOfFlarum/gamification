@@ -13,15 +13,15 @@
 namespace Reflar\Gamification\Listeners;
 
 use Flarum\Api\Controller;
-use Flarum\Api\Serializer;
-use Flarum\Post\Post;
-use Flarum\User\User;
+use Flarum\Api\Event\Serializing;
 use Flarum\Api\Event\WillGetData;
+use Flarum\Api\Event\WillSerializeData;
+use Flarum\Api\Serializer;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
-use Flarum\Api\Event\Serializing;
-use Flarum\Api\Event\WillSerializeData;
+use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\Gamification\Api\Controllers\OrderByPointsController;
 use Reflar\Gamification\Api\Serializers\RankSerializer;

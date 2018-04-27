@@ -13,12 +13,12 @@
 namespace Reflar\Gamification\Listeners;
 
 use DateTime;
-use Flarum\User\AssertPermissionTrait;
-use Flarum\Post\Exception\FloodingException;
 use Flarum\Notification\Notification;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Saving;
+use Flarum\Post\Exception\FloodingException;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\AssertPermissionTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Pusher;
 use Reflar\Gamification\Events\PostWasVoted;

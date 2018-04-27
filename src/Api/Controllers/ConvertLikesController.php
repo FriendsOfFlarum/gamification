@@ -12,10 +12,10 @@
 
 namespace Reflar\Gamification\Api\Controllers;
 
-use Flarum\User\AssertPermissionTrait;
 use Flarum\Discussion\Discussion;
 use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\Gamification\Gamification;
 use Reflar\Gamification\Likes;

@@ -18,14 +18,14 @@ use Reflar\Gamification\Api\Controllers;
 
 return [
     (new Extend\Assets('admin'))
-        ->asset(__DIR__ . '/less/admin/extension.less')
-        ->asset(__DIR__ . '/js/admin/dist/extension.js')
+        ->asset(__DIR__.'/less/admin/extension.less')
+        ->asset(__DIR__.'/js/admin/dist/extension.js')
         ->bootstrapper('reflar/gamification/main'),
     (new Extend\Assets('forum'))
-        ->asset(__DIR__ . '/js/forum/dist/extension.js')
-        ->asset(__DIR__ . '/less/forum/extension.less')
+        ->asset(__DIR__.'/js/forum/dist/extension.js')
+        ->asset(__DIR__.'/less/forum/extension.less')
         ->bootstrapper('reflar/gamification/main'),
-    new Extend\Locales(__DIR__ . '/locale'),
+    new Extend\Locales(__DIR__.'/locale'),
     (new Extend\Routes('api'))
         ->post('/reflar/gamification/convert', 'reflar.gamification.convert', Controllers\ConvertLikesController::class)
         ->get('/ranks', 'ranks.index', Controllers\ListRanksController::class)
@@ -44,5 +44,5 @@ return [
         $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
-    }
+    },
 ];

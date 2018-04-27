@@ -12,8 +12,8 @@
 
 namespace Reflar\Gamification\Access;
 
-use Flarum\User\AbstractPolicy;
 use Flarum\Discussion\Discussion;
+use Flarum\User\AbstractPolicy;
 use Flarum\User\User;
 
 class DiscussionPolicy extends AbstractPolicy
