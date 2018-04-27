@@ -42,7 +42,7 @@ export default function () {
 
                     return Button.component({
                         children: label,
-                        icon: active ? 'check' : true,
+                        icon: active ? 'fa fa-check' : true,
                         onclick: this.changeSort.bind(this, value),
                         active: active
                     })
@@ -62,7 +62,7 @@ export default function () {
                 href: app.route('index', params),
                 active: (m.route() === '/' || /^.*?\/(\?sort=.*|hot)/.test(m.route())),
                 children: app.translator.trans('core.forum.index.all_discussions_link'),
-                icon: 'comments-o'
+                icon: 'fa fa-comments-o'
             }),
             100
         )
@@ -73,7 +73,7 @@ export default function () {
                 LinkButton.component({
                     href: app.route('rankings', {}),
                     children: app.translator.trans('reflar-gamification.forum.nav.name'),
-                    icon: 'trophy'
+                    icon: 'fa fa-trophy'
                 }),
                 80
             )

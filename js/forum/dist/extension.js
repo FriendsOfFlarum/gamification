@@ -54,7 +54,7 @@ System.register("reflar/gamification/components/AddAttributes", ["flarum/extend"
                             menuClassName: 'Dropdown-menu--right',
                             buttonClassName: this.props.controlsButtonClassName,
                             label: app.translator.trans('core.forum.user_controls.button'),
-                            icon: 'ellipsis-v'
+                            icon: 'fa fa-ellipsis-v'
                         }) : '',
                         m(
                             "div",
@@ -241,7 +241,7 @@ System.register('reflar/gamification/components/AddHotnessSort', ['flarum/extend
 
                     return Button.component({
                         children: label,
-                        icon: active ? 'check' : true,
+                        icon: active ? 'fa fa-check' : true,
                         onclick: _this.changeSort.bind(_this, value),
                         active: active
                     });
@@ -259,14 +259,14 @@ System.register('reflar/gamification/components/AddHotnessSort', ['flarum/extend
                 href: app.route('index', params),
                 active: m.route() === '/' || /^.*?\/(\?sort=.*|hot)/.test(m.route()),
                 children: app.translator.trans('core.forum.index.all_discussions_link'),
-                icon: 'comments-o'
+                icon: 'fa fa-comments-o'
             }), 100);
 
             if (app.session.user === undefined || app.session.user.data.attributes.canViewRankingPage === false) {} else {
                 items.add('rankings', LinkButton.component({
                     href: app.route('rankings', {}),
                     children: app.translator.trans('reflar-gamification.forum.nav.name'),
-                    icon: 'trophy'
+                    icon: 'fa fa-trophy'
                 }), 80);
             }
 
@@ -435,7 +435,7 @@ System.register('reflar/gamification/components/AddVoteButtons', ['flarum/extend
             };
 
             items.add('upvote', Button.component({
-                icon: 'up',
+                icon: 'fa fa-' + icon + '-up',
                 className: 'Post-vote Post-upvote',
                 style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
                 disabled: !post.discussion().canVote(),
@@ -471,7 +471,7 @@ System.register('reflar/gamification/components/AddVoteButtons', ['flarum/extend
             ));
 
             items.add('downvote', Button.component({
-                icon: 'down',
+                icon: 'fa fa-' + icon + '-down',
                 className: 'Post-vote Post-downvote',
                 style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
                 disabled: !post.discussion().canVote(),
@@ -749,7 +749,7 @@ System.register('reflar/gamification/components/RankingsPage', ['flarum/extend',
 
                         items.add('refresh', Button.component({
                             title: app.translator.trans('core.forum.index.refresh_tooltip'),
-                            icon: 'refresh',
+                            icon: 'fa fa-refresh',
                             className: 'Button Button--icon',
                             onclick: function onclick() {
                                 app.cache.discussionList.refresh();

@@ -102,7 +102,7 @@ export default class SettingsPage extends Page {
                                         Button.component({
                                             type: 'button',
                                             className: 'Button Button--warning Ranks-button',
-                                            icon: 'times',
+                                            icon: 'fa fa-times',
                                             onclick: this.deleteRank.bind(this, rank)
                                         }),
                                     ])
@@ -131,7 +131,7 @@ export default class SettingsPage extends Page {
                                     Button.component({
                                         type: 'button',
                                         className: 'Button Button--warning Ranks-button',
-                                        icon: 'plus',
+                                        icon: 'fa fa-plus',
                                         onclick: this.addRank.bind(this)
                                     }),
                                 ])

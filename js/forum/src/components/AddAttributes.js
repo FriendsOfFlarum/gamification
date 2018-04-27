@@ -60,7 +60,7 @@ export default function () {
                             menuClassName: 'Dropdown-menu--right',
                             buttonClassName: this.props.controlsButtonClassName,
                             label: app.translator.trans('core.forum.user_controls.button'),
-                            icon: 'ellipsis-v'
+                            icon: 'fa fa-ellipsis-v'
                         }) : ''}
 
                         <div className="UserCard-profile">

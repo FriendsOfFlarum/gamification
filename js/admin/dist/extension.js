@@ -15,7 +15,7 @@ System.register("reflar/gamification/addSettingsPage", ["flarum/extend", "flarum
         extend(AdminNav.prototype, 'items', function (items) {
             items.add('reflar-gamification', AdminLinkButton.component({
                 href: app.route('reflar-gamification'),
-                icon: 'thumbs-up',
+                icon: 'fa fa-thumbs-up',
                 children: 'Gamification',
                 description: app.translator.trans('reflar-gamification.admin.nav.desc')
             }));
@@ -130,7 +130,7 @@ System.register("reflar/gamification/components/SettingsPage", ["flarum/componen
                             }), Button.component({
                                 type: 'button',
                                 className: 'Button Button--warning Ranks-button',
-                                icon: 'times',
+                                icon: 'fa fa-times',
                                 onclick: _this3.deleteRank.bind(_this3, rank)
                             })]);
                         }), m('div', {}, [m('input', {
@@ -152,7 +152,7 @@ System.register("reflar/gamification/components/SettingsPage", ["flarum/componen
                         }), Button.component({
                             type: 'button',
                             className: 'Button Button--warning Ranks-button',
-                            icon: 'plus',
+                            icon: 'fa fa-plus',
                             onclick: this.addRank.bind(this)
                         })])), m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.number_title')), m('input', {
                             className: 'FormControl Ranks-default',
@@ -349,7 +349,7 @@ System.register('reflar/gamification/main', ['flarum/app', 'flarum/extend', 'fla
 
                 extend(PermissionGrid.prototype, 'replyItems', function (items) {
                     items.add('Vote', {
-                        icon: 'thumbs-up',
+                        icon: 'fa fa-thumbs-up',
                         label: app.translator.trans('reflar-gamification.admin.permissions.vote_label'),
                         permission: 'discussion.vote'
                     });
@@ -357,12 +357,12 @@ System.register('reflar/gamification/main', ['flarum/app', 'flarum/extend', 'fla
 
                 extend(PermissionGrid.prototype, 'viewItems', function (items) {
                     items.add('canSeeVotes', {
-                        icon: 'info-circle',
+                        icon: 'fa fa-info-circle',
                         label: app.translator.trans('reflar-gamification.admin.permissions.see_votes_label'),
                         permission: 'discussion.canSeeVotes'
                     });
                     items.add('canViewRankingPage', {
-                        icon: 'trophy',
+                        icon: 'fa fa-trophy',
                         label: app.translator.trans('reflar-gamification.admin.permissions.see_ranking_page'),
                         permission: 'reflar.gamification.viewRankingPage',
                         allowGuest: true

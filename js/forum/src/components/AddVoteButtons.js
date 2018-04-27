@@ -106,7 +106,7 @@ export default function () {
 
         items.add('upvote',
             Button.component({
-                icon: icon + '-up',
+                icon: 'fa fa-' + icon + '-up',
                 className: 'Post-vote Post-upvote',
                 style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
                 disabled: !post.discussion().canVote(),
@@ -144,7 +144,7 @@ export default function () {
 
         items.add('downvote',
             Button.component({
-                icon: icon + '-down',
+                icon: 'fa fa-' + icon + '-down',
                 className: 'Post-vote Post-downvote',
                 style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
                 disabled: !post.discussion().canVote(),
