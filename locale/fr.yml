@@ -1,0 +1,66 @@
+core:
+  forum:
+    index_sort:
+      hot_button: Tendance
+      
+reflar-gamification:
+  forum:
+    vote_title: Afficher qui a voté
+    nav:
+      name: Classements
+    ranking:
+      rank: Placer
+      name: Utilisateur
+      amount: Points
+    notification:
+      upvote: "{username} a upvoter votre message"
+      downvote: "{username} a downvoter votre message"
+    user:
+      points: "Points: {points}"
+      rank: "{rank}"
+    modal:
+      title: Votes
+      upvotes_label: Upvotes
+      downvotes_label: Downvotes
+  admin:
+    permissions:
+      vote_label: Upvoter/Downvoter messages
+      see_votes_label: Voir les upvotes/downvotes des messages
+      see_ranking_page: Voir la page de classement
+    nav:
+      desc: Gamification for your Flarum community
+    page:
+      rankings:
+        blocked:
+          placeholder: CDK2020, Ralkage, AngelAvila
+          title: Utilisateurs ignorés
+          help: Ces utilisateurs ne seront pas affichés sur la page de classement. Les noms d'utilisateur doivent être séparés par une virgule suivie d'un espace.
+        title: Page de classement
+        enable: Activer les images personnalisées
+        custom_image_1: 1ère place image
+        custom_image_2: 2ème place image
+        custom_image_3: 3ème place image
+      votes:
+        points_title: Points Placeholder
+        points_placeholder: "Points: "
+        color_holder: '#ffffff'
+        auto_upvote: AutoUpvote les messages lors de la publication
+        title: Votes
+        vote_color: Couleur votée
+        icon_name: Upvote/downvote icon
+        icon_help: "Entrez n'importe quelle icône Font-Awesome qui est suffixée avec -up and -down. Examples: arrow, thumbs, chevron"
+      save_settings: Enregistrer les paramètres
+      convert:
+        button: Convertir les likes en upvotes
+        help: Convertissez vos paramètres antérieurs de Flarum-ext-likes en upvotes, et calculez le classements pour toutes les discussions en cours.
+        converting: Vos paramètres sont en cours de conversion. Actualisez votre site après quelques minutes pour voir le processus terminé. (Le temps de conversion peut prendre un certain temps en fonction de vos préférences de forum)
+        converted: "Transformé avec succès tous {number} votes"
+      ranks:
+        title: Classements
+        ranks: Classements personnalisés
+        number_title: Combien de badges de rang devraient être affichés?
+        help:
+          color: '#ffffff'
+          help: "Entrez le nombre requis de votes upvotes, le nom du rang et la couleur hexadécimale du rang"
+          points: Points
+          name: Nom
