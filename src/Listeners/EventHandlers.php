@@ -110,8 +110,18 @@ class EventHandlers
      */
     public function removeVote(PostWasDeleted $event)
     {
+        $post = $event->post;
+
+        foreach ($post->upvotes() as $upvote) {
+            $upvote->delete();
+        }
+        foreach ($post->downvotes() as $downvote) {
+            $downvote->delete();
+        }
+
+        $voteNumber = $post->upvotes()->count() - $post->downvotes()->count();
         $user = $event->post->user;
-        $event->post->user->decrement('votes');
+        $user->votes = $user->votes - $voteNumber;
 
         $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 

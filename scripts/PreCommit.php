@@ -7,35 +7,31 @@ foreach ($output as $file) {
      * PHP file.
      */
     $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-    if ($ext === 'php') {
+    if ('php' === $ext) {
         /**
          * Check for error.
          */
         $lint_output = [];
         exec('php -l '.$fileName, $lint_output, $return);
-        if ($return === 0) {
+        if (0 === $return) {
             /*
              * PHP-CS-Fixer && add it back
              */
             echo 'Checking PSR-2 & Symfony conformity of '.trim(substr($file, 1))."\n";
             exec("php-cs-fixer fix {$fileName} --rules=@PSR2,@Symfony --using-cache=no");
-            exec("git add {$fileName}");
+            exec("git add $fileName");
         } else {
             echo "\nYour commit has php syntax error(s).\nYou MUST fix them before you commit.\n";
             echo "See the error massage(s) below.\n\n---------------------";
             echo implode("\n", $lint_output), "\n---------------------\n";
             exit(1);
         }
-        /*
-         * JS file
-         */
-    } elseif ($ext === 'js') {
-        /*
-         * JS Standard && add it back
-         */
+        // * JS file
+    } elseif ('js' === $ext && !strpos($fileName, 'dist/')) {
+        // * JS Standard && add it back
         echo 'Formatting '.trim(substr($file, 1))."\n";
-        exec("standard --fix {$fileName}");
-        exec("git add {$fileName}");
+        exec("npx semistandard --fix $fileName");
+        exec("git add $fileName");
     }
     echo "\n";
 }
