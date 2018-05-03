@@ -77,7 +77,7 @@ System.register("Reflar/Gamification/components/AddAttributes", ["flarum/helpers
                                 "ul",
                                 { className: "UserCard-badges badges" },
                                 listItems(badges),
-                                user.ranks() !== false ? user.ranks().map(function (rank, i) {
+                                user.ranks() !== false ? user.ranks().reverse().map(function (rank, i) {
                                     if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
                                         return m(
                                             "li",
@@ -142,7 +142,7 @@ System.register("Reflar/Gamification/components/AddAttributes", ["flarum/helpers
                         ' ',
                         username(user)
                     ),
-                    user.ranks().map(function (rank, i) {
+                    user.ranks().reverse().map(function (rank, i) {
                         if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
                             return m(
                                 "span",
@@ -326,10 +326,10 @@ System.register('Reflar/Gamification/components/AddHotnessSort', ['flarum/extend
 });;
 'use strict';
 
-System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/LogInModal', 'flarum/components/CommentPost', 'Reflar/Gamification/components/VotesModal'], function (_export, _context) {
+System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend', 'flarum/app', 'flarum/components/Button', 'flarum/components/LogInModal', 'flarum/components/CommentPost', 'flarum/utils/PostControls', 'Reflar/Gamification/components/VotesModal'], function (_export, _context) {
     "use strict";
 
-    var extend, app, Button, LogInModal, CommentPost, VotesModal;
+    var extend, app, Button, LogInModal, CommentPost, PostControls, VotesModal;
 
     _export('default', function () {
 
@@ -399,6 +399,17 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
             });
         });
 
+        extend(PostControls, 'moderationControls', function (items, post) {
+            if (post.discussion().canSeeVotes()) {
+                items.add('viewVotes', [m(Button, {
+                    icon: 'thumbs-up',
+                    onclick: function onclick() {
+                        app.modal.show(new VotesModal({ post: post }));
+                    }
+                }, app.translator.trans('reflar-gamification.forum.mod_item'))]);
+            }
+        });
+
         extend(CommentPost.prototype, 'actionItems', function (items) {
             var _this2 = this;
 
@@ -448,7 +459,6 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
                     }
                     if (!post.discussion().canVote()) return;
                     var upData = post.data.relationships.upvotes.data;
-                    var downData = post.data.relationships.downvotes.data;
 
                     isUpvoted = !isUpvoted;
 
@@ -458,8 +468,6 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
 
                     upData = _this2.removeVote(upData, app.session.user.id());
 
-                    downData = _this2.removeVote(downData, app.session.user.id());
-
                     if (isUpvoted) {
                         upData.unshift({ type: 'users', id: app.session.user.id() });
                     }
@@ -467,11 +475,8 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
             }));
 
             items.add('points', m(
-                'button',
-                { disabled: !post.discussion().canSeeVotes(), className: 'Post-points', onclick: function onclick() {
-                        if (!post.discussion().canSeeVotes()) return;
-                        app.modal.show(new VotesModal({ post: post }));
-                    } },
+                'label',
+                { className: 'Post-points' },
                 this.upvotedata().length - this.downvotedata().length
             ));
 
@@ -486,7 +491,6 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
                         return;
                     }
                     if (!post.discussion().canVote()) return;
-                    var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data;
 
                     isDownvoted = !isDownvoted;
@@ -494,8 +498,6 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
                     isUpvoted = false;
 
                     post.save([isUpvoted, isDownvoted, 'vote']);
-
-                    upData = _this2.removeVote(upData, app.session.user.id());
 
                     downData = _this2.removeVote(downData, app.session.user.id());
 
@@ -518,6 +520,8 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
             LogInModal = _flarumComponentsLogInModal.default;
         }, function (_flarumComponentsCommentPost) {
             CommentPost = _flarumComponentsCommentPost.default;
+        }, function (_flarumUtilsPostControls) {
+            PostControls = _flarumUtilsPostControls.default;
         }, function (_ReflarGamificationComponentsVotesModal) {
             VotesModal = _ReflarGamificationComponentsVotesModal.default;
         }],

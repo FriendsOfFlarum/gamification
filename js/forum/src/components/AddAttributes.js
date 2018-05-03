@@ -80,7 +80,7 @@ export default function () {
                                     <ul className="UserCard-badges badges">
                                         {listItems(badges)}
                                         {user.ranks() !== false ? (
-                                                user.ranks().map((rank, i) => {
+                                                user.ranks().reverse().map((rank, i) => {
                                                     if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
                                                     } else {
@@ -134,7 +134,7 @@ export default function () {
                     <a href={app.route.user(user)} config={m.route}>
                         {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
                     </a>
-                    {user.ranks().map((rank, i) => {
+                    {user.ranks().reverse().map((rank, i) => {
                         if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
                         } else {

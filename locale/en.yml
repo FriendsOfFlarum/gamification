@@ -19,9 +19,10 @@ reflar-gamification:
       points: "Points: {points}"
       rank: "{rank}"
     modal:
-      title: Votes
-      upvotes_label: Upvotes
-      downvotes_label: Downvotes
+      title: Voters
+      upvotes_label: 'Upvoters:'
+      downvotes_label: 'Downvoters:'
+    mod_item: View Voters
   admin:
     permissions:
       vote_label: Upvote/Downvote posts

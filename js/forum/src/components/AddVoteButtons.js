@@ -3,6 +3,7 @@ import app from 'flarum/app'
 import Button from 'flarum/components/Button'
 import LogInModal from 'flarum/components/LogInModal'
 import CommentPost from 'flarum/components/CommentPost'
+import PostControls from 'flarum/utils/PostControls';
 
 import VotesModal from 'Reflar/Gamification/components/VotesModal'
 
@@ -73,6 +74,19 @@ export default function () {
         })
     })
 
+    extend(PostControls, 'moderationControls', function (items, post) {
+        if (post.discussion().canSeeVotes()) {
+            items.add('viewVotes', [
+                m(Button, {
+                    icon: 'thumbs-up',
+                    onclick: () => {
+                        app.modal.show(new VotesModal({post}))
+                    }
+                }, app.translator.trans('reflar-gamification.forum.mod_item'))
+            ]);
+        }
+    });
+
 
     extend(CommentPost.prototype, 'actionItems', function (items) {
         const post = this.props.post
@@ -118,7 +132,6 @@ export default function () {
                     }
                     if (!post.discussion().canVote()) return
                     var upData = post.data.relationships.upvotes.data
-                    var downData = post.data.relationships.downvotes.data
 
                     isUpvoted = !isUpvoted
 
@@ -128,8 +141,6 @@ export default function () {
 
                     upData = this.removeVote(upData, app.session.user.id())
 
-                    downData = this.removeVote(downData, app.session.user.id())
-
                     if (isUpvoted) {
                         upData.unshift({type: 'users', id: app.session.user.id()})
                     }
@@ -138,12 +149,9 @@ export default function () {
         )
 
         items.add('points',
-            <button disabled={!post.discussion().canSeeVotes()} className='Post-points' onclick={() => {
-                if (!post.discussion().canSeeVotes()) return
-                app.modal.show(new VotesModal({post}))
-            }}>
+            <label className='Post-points'>
                 {this.upvotedata().length - this.downvotedata().length}
-            </button>
+            </label>
         )
 
         items.add('downvote',
@@ -158,7 +166,6 @@ export default function () {
                         return
                     }
                     if (!post.discussion().canVote()) return
-                    var upData = post.data.relationships.upvotes.data
                     var downData = post.data.relationships.downvotes.data
 
                     isDownvoted = !isDownvoted
@@ -166,8 +173,6 @@ export default function () {
                     isUpvoted = false
 
                     post.save([isUpvoted, isDownvoted, 'vote'])
-
-                    upData = this.removeVote(upData, app.session.user.id())
 
                     downData = this.removeVote(downData, app.session.user.id())
 
