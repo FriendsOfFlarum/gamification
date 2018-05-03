@@ -65,13 +65,6 @@ export default function () {
                 extend(context, 'onunload', () => channels.main.unbind('newVote'));
             });
         }
-
-        $('.Post-vote').unbind().on('click touchend', function () {
-            $(this).addClass('cbutton--click')
-            setTimeout(function () {
-                $('.Post-vote').removeClass('cbutton--click');
-            }, 600);
-        })
     })
 
     extend(PostControls, 'moderationControls', function (items, post) {
@@ -131,18 +124,31 @@ export default function () {
                         return
                     }
                     if (!post.discussion().canVote()) return
-                    var upData = post.data.relationships.upvotes.data
+                    var upData = post.data.relationships.upvotes.data;
+                    var downData = post.data.relationships.downvotes.data;
 
-                    isUpvoted = !isUpvoted
+                    isUpvoted = !isUpvoted;
 
-                    isDownvoted = false
+                    isDownvoted = false;
 
-                    post.save([isUpvoted, isDownvoted, 'vote'])
+                    post.save([isUpvoted, isDownvoted, 'vote']);
 
-                    upData = this.removeVote(upData, app.session.user.id())
+                    upData.some((upvote, i) => {
+                        if (upvote.id === app.session.user.id()) {
+                            upData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    downData.some((downvote, i) => {
+                        if (downvote.id === app.session.user.id()) {
+                            downData.splice(i, 1);
+                            return true;
+                        }
+                    });
 
                     if (isUpvoted) {
-                        upData.unshift({type: 'users', id: app.session.user.id()})
+                        upData.unshift({type: 'users', id: app.session.user.id()});
                     }
                 }
             })
@@ -166,18 +172,31 @@ export default function () {
                         return
                     }
                     if (!post.discussion().canVote()) return
+                    var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data
 
-                    isDownvoted = !isDownvoted
+                    isDownvoted = !isDownvoted;
 
-                    isUpvoted = false
+                    isUpvoted = false;
 
-                    post.save([isUpvoted, isDownvoted, 'vote'])
+                    post.save([isUpvoted, isDownvoted, 'vote']);
 
-                    downData = this.removeVote(downData, app.session.user.id())
+                    upData.some((upvote, i) => {
+                        if (upvote.id === app.session.user.id()) {
+                            upData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    downData.some((downvote, i) => {
+                        if (downvote.id === app.session.user.id()) {
+                            downData.splice(i, 1);
+                            return true;
+                        }
+                    });
 
                     if (isDownvoted) {
-                        downData.unshift({type: 'users', id: app.session.user.id()})
+                        downData.unshift({type: 'users', id: app.session.user.id()});
                     }
                 }
             })

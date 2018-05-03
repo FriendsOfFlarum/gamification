@@ -390,13 +390,6 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
                     });
                 });
             }
-
-            $('.Post-vote').unbind().on('click touchend', function () {
-                $(this).addClass('cbutton--click');
-                setTimeout(function () {
-                    $('.Post-vote').removeClass('cbutton--click');
-                }, 600);
-            });
         });
 
         extend(PostControls, 'moderationControls', function (items, post) {
@@ -411,8 +404,6 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
         });
 
         extend(CommentPost.prototype, 'actionItems', function (items) {
-            var _this2 = this;
-
             var post = this.props.post;
 
             this.postId = m.prop(post.data.id);
@@ -459,6 +450,7 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
                     }
                     if (!post.discussion().canVote()) return;
                     var upData = post.data.relationships.upvotes.data;
+                    var downData = post.data.relationships.downvotes.data;
 
                     isUpvoted = !isUpvoted;
 
@@ -466,7 +458,19 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
 
                     post.save([isUpvoted, isDownvoted, 'vote']);
 
-                    upData = _this2.removeVote(upData, app.session.user.id());
+                    upData.some(function (upvote, i) {
+                        if (upvote.id === app.session.user.id()) {
+                            upData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    downData.some(function (downvote, i) {
+                        if (downvote.id === app.session.user.id()) {
+                            downData.splice(i, 1);
+                            return true;
+                        }
+                    });
 
                     if (isUpvoted) {
                         upData.unshift({ type: 'users', id: app.session.user.id() });
@@ -491,6 +495,7 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
                         return;
                     }
                     if (!post.discussion().canVote()) return;
+                    var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data;
 
                     isDownvoted = !isDownvoted;
@@ -499,7 +504,19 @@ System.register('Reflar/Gamification/components/AddVoteButtons', ['flarum/extend
 
                     post.save([isUpvoted, isDownvoted, 'vote']);
 
-                    downData = _this2.removeVote(downData, app.session.user.id());
+                    upData.some(function (upvote, i) {
+                        if (upvote.id === app.session.user.id()) {
+                            upData.splice(i, 1);
+                            return true;
+                        }
+                    });
+
+                    downData.some(function (downvote, i) {
+                        if (downvote.id === app.session.user.id()) {
+                            downData.splice(i, 1);
+                            return true;
+                        }
+                    });
 
                     if (isDownvoted) {
                         downData.unshift({ type: 'users', id: app.session.user.id() });
