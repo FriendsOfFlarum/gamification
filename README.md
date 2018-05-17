@@ -41,9 +41,9 @@ This Extension is meant as a replacement for the Flarum Likes Extension. Therefo
 
 ### Issues
 
-- [Open an issue on Gitlab](https://github.com/ReFlar/gamification/issues) 
+- [Open an issue on GitHub](https://github.com/ReFlar/gamification/issues) 
 
 ### Links
 
-- [on gitlab](https://github.com/ReFlar/gamification)
+- [on github](https://github.com/ReFlar/gamification)
 - [on packagist](https://packagist.org/packages/ReFlar/gamification)
