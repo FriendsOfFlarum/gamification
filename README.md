@@ -1,6 +1,6 @@
 # Gamification by ReFlar
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://gitlab.com/ReFlar/gamification/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/reflar/gamification.svg)](https://gitlab.com/ReFlar/gamification)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/reflar/gamification/blob/master/LICENSE.md) [![Latest Stable Version](https://img.shields.io/packagist/v/reflar/gamification.svg)](https://packagist.org/packages/reflar/gamification) [![Total Downloads](https://img.shields.io/packagist/dt/reflar/gamification.svg)](https://packagist.org/packages/reflar/gamification)  
 
 A [Flarum](http://flarum.org) extension that adds upvotes, downvotes, and ranks to your Flarum Community!
 
@@ -41,9 +41,9 @@ This Extension is meant as a replacement for the Flarum Likes Extension. Therefo
 
 ### Issues
 
-- [Open an issue on Gitlab](https://gitlab.com/ReFlar/gamification/issues) 
+- [Open an issue on Gitlab](https://github.com/ReFlar/gamification/issues) 
 
 ### Links
 
-- [on gitlab](https://gitlab.com/ReFlar/gamification)
+- [on gitlab](https://github.com/ReFlar/gamification)
 - [on packagist](https://packagist.org/packages/ReFlar/gamification)
