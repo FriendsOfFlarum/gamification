@@ -55,40 +55,22 @@ export default function () {
     return items
   }
 
-  IndexPage.prototype.navItems = function () {
-    const items = new ItemList()
-    const params = this.stickyParams()
-
-    items.add('allDiscussions',
+    extend(IndexPage.prototype, 'navItems', function (items) {
+        items.add('rankings',
             LinkButton.component({
-              href: app.route('index', params),
-              active: (m.route() === '/' || /^.*?\/(\?sort=.*|hot)/.test(m.route())),
-              children: app.translator.trans('core.forum.index.all_discussions_link'),
-              icon: 'comments-o'
-            }),
-            100
-        )
-
-    if (app.session.user === undefined || app.session.user.data.attributes.canViewRankingPage === false) {
-    } else {
-      items.add('rankings',
-              LinkButton.component({
-                href: app.route('rankings', {}),
+                href: app.route('rankings'),
                 children: app.translator.trans('reflar-gamification.forum.nav.name'),
                 icon: 'trophy'
-              }),
-              80
-          )
-    }
-
-    return items
-  }
+            }),
+            80
+        )
+    });
 
   IndexPage.prototype.changeSort = function (sort) {
     const params = this.params()
 
     if (sort === 'hot') {
-      m.route(app.route('index'))
+        m.route('/')
       m.route(m.route() + 'hot')
     } else {
       if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
