@@ -14,9 +14,11 @@ use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
-        $schema->table('users', function (Blueprint $table) {
-            $table->dateTime('last_vote_time');
-        });
+        if (!$schema->hasColumn('users', 'last_vote_time')) {
+            $schema->table('users', function (Blueprint $table) {
+                $table->dateTime('last_vote_time');
+            });
+        }
     },
     'down' => function (Builder $schema) {
         $schema->table('users', function (Blueprint $table) {
