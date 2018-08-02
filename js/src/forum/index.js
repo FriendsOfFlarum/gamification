@@ -3,7 +3,7 @@ import app from 'flarum/app'
 import AddAttributes from './components/AddAttributes'
 import AddHotnessFilter from './components/AddHotnessSort'
 import AddVoteButtons from './components/AddVoteButtons'
-import Rank from 'reflar/gamification/models/Rank'
+import Rank from '../common/models/Rank'
 import RankingsPage from './components/RankingsPage'
 import VoteNotification from './components/VoteNotification'
 

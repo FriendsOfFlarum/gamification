@@ -19,14 +19,12 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\Gamification\Api\Controllers;
 
 return [
-    (new Extend\Assets('admin'))
-        ->asset(__DIR__.'/less/admin/extension.less')
-        ->asset(__DIR__.'/js/admin/dist/extension.js')
-        ->bootstrapper('reflar/gamification/main'),
-    (new Extend\Assets('forum'))
-        ->asset(__DIR__.'/js/forum/dist/extension.js')
-        ->asset(__DIR__.'/less/forum/extension.less')
-        ->bootstrapper('reflar/gamification/main'),
+    (new Extend\Frontend('admin'))
+        ->css(__DIR__.'/less/admin/extension.less')
+        ->js(__DIR__.'/js/dist/admin.js'),
+    (new Extend\Frontend('forum'))
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->css(__DIR__.'/less/forum/extension.less'),
     new Extend\Locales(__DIR__.'/locale'),
     (new Extend\Routes('api'))
         ->post('/reflar/gamification/convert', 'reflar.gamification.convert', Controllers\ConvertLikesController::class)

@@ -2,7 +2,7 @@ import app from 'flarum/app'
 import {extend} from 'flarum/extend'
 import PermissionGrid from 'flarum/components/PermissionGrid'
 import addSettingsPage from './addSettingsPage'
-import Rank from 'reflar/gamification/models/Rank'
+import Rank from '../common/models/Rank'
 
 app.initializers.add('reflar-gamification', app => {
     app.store.models.ranks = Rank
