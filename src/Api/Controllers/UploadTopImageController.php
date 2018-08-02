@@ -12,7 +12,10 @@
 
 namespace Reflar\Gamification\Api\Controllers;
 
-use Flarum\Api\Controller\UploadFaviconController;
+use Flarum\Api\Controller\ShowForumController;
+use Flarum\Foundation\Application;
+use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\AssertPermissionTrait;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use League\Flysystem\Adapter\Local;
@@ -21,8 +24,29 @@ use League\Flysystem\MountManager;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class UploadTopImageController extends UploadFaviconController
+class UploadTopImageController extends ShowForumController
 {
+	use AssertPermissionTrait;
+	
+	/**
+     * @var SettingsRepositoryInterface
+     */
+    protected $settings;
+	
+    /**
+     * @var Application
+     */
+    protected $app;
+	
+    /**
+     * @param SettingsRepositoryInterface $settings
+     */
+    public function __construct(SettingsRepositoryInterface $settings, Application $app)
+    {
+        $this->settings = $settings;
+        $this->app = $app;
+    }
+	
     public function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));
@@ -63,10 +87,10 @@ class UploadTopImageController extends UploadFaviconController
             $mount->delete($file);
         }
 
-        $uploadName = 'topimage-'.Str::lower(Str::quickRandom(8)).'.'.$extension;
+        $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.'.$extension;
 
         $mount->move('source://'.pathinfo($tmpFile, PATHINFO_BASENAME), "target://$uploadName");
 
-        return $this->settings->set('reflar.gamification.topimage.'.$id, $uploadName);
+        return parent::data($request, $document);
     }
 }

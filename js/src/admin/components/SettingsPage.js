@@ -107,7 +107,7 @@ export default class SettingsPage extends Page {
                                         }),
                                     ])
                                 }),
-                                m('div', {}, [
+                                m('div', {style: "float: left; margin-bottom: 15px"}, [
                                     m('input', {
                                         className: 'FormControl Ranks-number',
                                         value: this.newRank.points(),
