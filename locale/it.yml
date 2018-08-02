@@ -1,0 +1,67 @@
+core:
+  forum:
+    index_sort:
+      hot_button: Tendenze
+
+reflar-gamification:
+  forum:
+    vote_title: Mostra Chi Ha Votato
+    nav:
+      name: Classifiche
+    ranking:
+      rank: Posizione
+      name: Utente
+      amount: Punteggio
+    notification:
+      upvote: "{username} ha votato positivamente il tuo messaggio"
+      downvote: "{username} ha votato negativamente il tuo messaggio"
+    user:
+      points: "Punteggio: {points}"
+      rank: "{rank}"
+    modal:
+      title: Votanti
+      upvotes_label: 'Positivi:'
+      downvotes_label: 'Negativi:'
+    mod_item: Visualizza Votanti
+  admin:
+    permissions:
+      vote_label: Vota positivamente/negativamente i messaggi
+      see_votes_label: Visualizza i voti positivi/negativi
+      see_ranking_page: Visualizza la classifica
+    nav:
+      desc: Ludicizzazione per la tua comunità Flarum
+    page:
+      rankings:
+        blocked:
+          placeholder: CDK2020, Ralkage, AngelAvila
+          title: Utenti Ignorati
+          help: Questi utenti non saranno mostrati nella classificha. I nomi utente devono essere separati da una virgola seguita da uno spazio.
+        title: Classifica
+        enable: Abilita immagini personalizzate
+        custom_image_1: 1ª posizione
+        custom_image_2: 2ª posizione
+        custom_image_3: 3ª posizione
+      votes:
+        points_title: Segnaposto Punteggio
+        points_placeholder: "Punteggio: "
+        color_holder: '#ffffff'
+        auto_upvote: Vota in automatico e positivamente i messaggi quando pubblicati
+        title: Voti
+        vote_color: Colore votato
+        icon_name: Icona voto positivo/negativo
+        icon_help: "Inserisci qualsiasi icona Font-Awesome che termina con -up e -down. Esempi: arrow, thumbs, chevron"
+      save_settings: Salva impostazioni
+      convert:
+        button: Converti Mi Piace in voti positivi
+        help: Converti i tuoi Mi Piace precedenti di flarum-ext-likes in voti positivi, così come calcola il gradimento per tutte le discussioni correnti.
+        converting: I tuoi Mi Piace sono in conversione. Ricarica il tuo sito tra qualche minuto per vedere i risultati. (I tempi di conversione potrebbero durare un po' a seconda del numero totale dei Mi Piace nel tuo forum)
+        converted: "Conversione con successo di {number} Mi Piace"
+      ranks:
+        title: Posizioni
+        ranks: Posizioni Personalizzate
+        number_title: Quanti distintivi di posizione devono essere mostrati?
+        help:
+          color: '#ffffff'
+          help: "Inserisci il numero richiesto di voti positivi, il nome della posizione, e il colore in esadecimale della posizione"
+          points: Punteggio
+          name: Nome

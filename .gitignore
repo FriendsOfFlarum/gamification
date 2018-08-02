@@ -4,4 +4,6 @@ composer.phar
 Thumbs.db
 node_modules
 bower_components
-.idea/
+.idea
+.floo*
+package-lock.json

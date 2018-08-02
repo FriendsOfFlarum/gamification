@@ -14,19 +14,19 @@
     "authors": [
         {
             "name": "Christian Lopez",
-            "email": "ralkage@reflar.email",
-            "homepage": "https://reflar.io"
+            "email": "Christian.Lopez@redevs.org",
+            "homepage": "https://redevs.org"
         },
 
         {
           "name": "Charlie K",
-          "email": "issyrocks12@reflar.email",
-          "homepage": "https://reflar.io"
+          "email": "Charlie.K@redevs.org",
+          "homepage": "https://redevs.org"
         }
     ],
     "support": {
-        "issues": "https://gitlab.com/ReDevelopers/ReFlar/gamification/issues",
-        "source": "https://gitlab.com/ReDevelopers/ReFlar/gamification"
+        "issues": "https://github.com/ReDevelopers/ReFlar/gamification/issues",
+        "source": "https://github.com/ReDevelopers/ReFlar/gamification"
     },
     "require": {
         "flarum/core": "^0.1.0-beta.8"
@@ -44,6 +44,9 @@
                 "backgroundColor": "#263238",
                 "color": "#fff"
             }
+        },
+        "flagrow": {
+            "discuss": "https://discuss.flarum.org/d/5588-gamification-by-reflar"
         }
     }
 }

@@ -45,95 +45,6 @@
     margin: 7px 1em 0px 1em;
 }
 
-.Post-upvote::after {
-   position: absolute;
-   width: 70px;
-   height: 70px;
-   border-radius: 50%;
-   content: '';
-   left: 33%;
-   top: -50%;
-   opacity: 0
- }
-
-.Post-downvote::after {
-  position: absolute;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  content: '';
-  left: 62%;
-  top: -50%;
-  opacity: 0
-}
-
-.Post-vote::before,
-.Post-vote::after {
-  box-shadow: 0 0 0 2px @config-primary-color;
-}
-
-.Post-vote.cbutton--click::before {
-  -webkit-animation: anim-effect-Post-vote-1 0.5s forwards;
-  animation: anim-effect-Post-vote-1 0.5s forwards;
-}
-
-.Post-vote.cbutton--click::after {
-  -webkit-animation: anim-effect-Post-vote-2 0.5s forwards;
-  animation: anim-effect-Post-vote-2 0.5s forwards;
-}
-
-@-webkit-keyframes anim-effect-Post-vote-1 {
-  0% {
-    opacity: 1;
-    -webkit-transform: scale3d(0.5, 0.5, 1);
-    transform: scale3d(0.5, 0.5, 1);
-  }
-  100% {
-    opacity: 0;
-    -webkit-transform: scale3d(1.1, 1.1, 1);
-    transform: scale3d(1.1, 1.1, 1);
-  }
-}
-
-@keyframes anim-effect-Post-vote-1 {
-  0% {
-    opacity: 1;
-    -webkit-transform: scale3d(0.5, 0.5, 1);
-    transform: scale3d(0.5, 0.5, 1);
-  }
-  100% {
-    opacity: 0;
-    -webkit-transform: scale3d(1.1, 1.1, 1);
-    transform: scale3d(1.1, 1.1, 1);
-  }
-}
-
-@-webkit-keyframes anim-effect-Post-vote-2 {
-  0% {
-    opacity: 1;
-    -webkit-transform: scale3d(0.5, 0.5, 1);
-    transform: scale3d(0.5, 0.5, 1);
-  }
-  50%, 100% {
-    opacity: 0;
-    -webkit-transform: scale3d(1.2, 1.2, 1);
-    transform: scale3d(1.2, 1.2, 1);
-  }
-}
-
-@keyframes anim-effect-Post-vote-2 {
-  0% {
-    opacity: 1;
-    -webkit-transform: scale3d(0.5, 0.5, 1);
-    transform: scale3d(0.5, 0.5, 1);
-  }
-  50%, 100% {
-    opacity: 0;
-    -webkit-transform: scale3d(1.2, 1.2, 1);
-    transform: scale3d(1.2, 1.2, 1);
-  }
-}
-
 .Post-Rank {
   color: gray;
   font-size: 10px;
@@ -144,11 +55,11 @@
     outline:0;
 }
 
-.Post-points {
+.item-points {
     margin-top: 7px;
     background-color: rgba(0,0,0,0);
     border: none;
-    margin-right: 0.5em;
+    margin-right: 0.5em !important;
 }
 
 .User-Rank {

@@ -8,6 +8,8 @@ import LinkButton from 'flarum/components/LinkButton'
 
 export default function () {
 
+
+
     IndexPage.prototype.viewItems = function () {
         const items = new ItemList()
         const sortMap = app.cache.discussionList.sortMap()
@@ -42,7 +44,7 @@ export default function () {
 
                     return Button.component({
                         children: label,
-                        icon: active ? 'fa fa-check' : true,
+                        icon: active ? 'check' : true,
                         onclick: this.changeSort.bind(this, value),
                         active: active
                     })
@@ -53,40 +55,22 @@ export default function () {
         return items
     }
 
-    IndexPage.prototype.navItems = function () {
-        const items = new ItemList()
-        const params = this.stickyParams()
-
-        items.add('allDiscussions',
+    extend(IndexPage.prototype, 'navItems', function (items) {
+        items.add('rankings',
             LinkButton.component({
-                href: app.route('index', params),
-                active: (m.route() === '/' || /^.*?\/(\?sort=.*|hot)/.test(m.route())),
-                children: app.translator.trans('core.forum.index.all_discussions_link'),
-                icon: 'fa fa-comments-o'
+                href: app.route('rankings'),
+                children: app.translator.trans('reflar-gamification.forum.nav.name'),
+                icon: 'trophy'
             }),
-            100
+            80
         )
-
-        if (app.session.user === undefined || app.session.user.data.attributes.canViewRankingPage === false) {
-        } else {
-            items.add('rankings',
-                LinkButton.component({
-                    href: app.route('rankings', {}),
-                    children: app.translator.trans('reflar-gamification.forum.nav.name'),
-                    icon: 'fa fa-trophy'
-                }),
-                80
-            )
-        }
-
-        return items
-    }
+    });
 
     IndexPage.prototype.changeSort = function (sort) {
         const params = this.params()
 
         if (sort === 'hot') {
-            m.route(app.route('index'))
+            m.route('/')
             m.route(m.route() + 'hot')
         } else {
             if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {

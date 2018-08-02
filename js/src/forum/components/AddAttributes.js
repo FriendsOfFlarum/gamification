@@ -77,24 +77,23 @@ export default function () {
                             </h2>
 
                             {badges.length ? (
-                                <ul className="UserCard-badges badges">
-                                    {listItems(badges)}
-                                    {user.ranks() !== false ? (
-                                        user.ranks().map((rank, i) => {
-                                            if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
+                                    <ul className="UserCard-badges badges">
+                                        {listItems(badges)}
+                                        {user.ranks() !== false ? (
+                                                user.ranks().reverse().map((rank, i) => {
+                                                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
-                                            } else {
-                                                return (
-                                                    <li className="User-Rank">
-                                                        {rankLabel(rank)}
-                                                    </li>
-                                                );
-                                            }
-                                        })
-                                    ) : ''}
-                                </ul>
-                            ) : ''}
-
+                                                    } else {
+                                                        return (
+                                                            <li className="User-Rank">
+                                                                {rankLabel(rank)}
+                                                            </li>
+                                                        );
+                                                    }
+                                                })
+                                            ) : '' }
+                                    </ul>
+                                ) : ''}
                             <ul className="UserCard-info">
                                 {listItems(this.infoItems().toArray())}
                             </ul>
@@ -134,7 +133,7 @@ export default function () {
                     <a href={app.route.user(user)} config={m.route}>
                         {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
                     </a>
-                    {user.ranks().map((rank, i) => {
+                    {user.ranks().reverse().map((rank, i) => {
                         if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
                         } else {
