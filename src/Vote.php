@@ -18,7 +18,7 @@ use Flarum\User\User;
 
 class Vote extends AbstractModel
 {
-    protected $table = 'posts_votes';
+    protected $table = 'post_votes';
 
     /**
      * @param Post $post

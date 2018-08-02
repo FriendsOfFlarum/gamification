@@ -59,15 +59,15 @@ class AddRelationships
     public function getModelRelationship(GetModelRelationship $event)
     {
         if ($event->isRelationship(Post::class, 'upvotes')) {
-            return $event->model->belongsToMany(User::class, 'posts_votes', 'post_id', 'user_id', null, null, 'upvotes')->where('type', 'Up');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')->where('type', 'Up');
         }
 
         if ($event->isRelationship(Post::class, 'downvotes')) {
-            return $event->model->belongsToMany(User::class, 'posts_votes', 'post_id', 'user_id', null, null, 'downvotes')->where('type', 'Down');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'downvotes')->where('type', 'Down');
         }
 
         if ($event->isRelationship(User::class, 'ranks')) {
-            return $event->model->belongsToMany(Rank::class, 'users_ranks', null, null, null, null, 'ranks');
+            return $event->model->belongsToMany(Rank::class, 'rank_user', null, null, null, null, 'ranks');
         }
     }
 

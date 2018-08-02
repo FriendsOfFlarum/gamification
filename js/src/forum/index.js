@@ -8,13 +8,13 @@ import RankingsPage from './components/RankingsPage'
 import VoteNotification from './components/VoteNotification'
 
 app.initializers.add('reflar-gamification', app => {
-    app.store.models.ranks = Rank
+    app.store.models.ranks = Rank;
 
-    app.notificationComponents.vote = VoteNotification
+    app.notificationComponents.vote = VoteNotification;
 
-    app.routes.rankings = {path: '/rankings', component: RankingsPage.component()}
+    app.routes.rankings = {path: '/rankings', component: RankingsPage.component()};
 
-    AddVoteButtons()
-    AddHotnessFilter()
-    AddAttributes()
-})
+    AddVoteButtons();
+    AddHotnessFilter();
+    AddAttributes();
+});

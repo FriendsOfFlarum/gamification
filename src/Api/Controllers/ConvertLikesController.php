@@ -13,15 +13,15 @@
 namespace Reflar\Gamification\Api\Controllers;
 
 use Flarum\Discussion\Discussion;
-use Flarum\Http\Controller\ControllerInterface;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\AssertPermissionTrait;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\Gamification\Gamification;
 use Reflar\Gamification\Likes;
 use Zend\Diactoros\Response\JsonResponse;
 
-class ConvertLikesController implements ControllerInterface
+class ConvertLikesController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
 

@@ -5,7 +5,7 @@ import addSettingsPage from './addSettingsPage'
 import Rank from '../common/models/Rank'
 
 app.initializers.add('reflar-gamification', app => {
-    app.store.models.ranks = Rank
+    app.store.models.ranks = Rank;
 
     extend(PermissionGrid.prototype, 'replyItems', items => {
         items.add('Vote', {
@@ -13,21 +13,21 @@ app.initializers.add('reflar-gamification', app => {
             label: app.translator.trans('reflar-gamification.admin.permissions.vote_label'),
             permission: 'discussion.vote'
         })
-    })
+    });
 
     extend(PermissionGrid.prototype, 'viewItems', items => {
         items.add('canSeeVotes', {
             icon: 'fa fa-info-circle',
             label: app.translator.trans('reflar-gamification.admin.permissions.see_votes_label'),
             permission: 'discussion.canSeeVotes'
-        })
+        });
         items.add('canViewRankingPage', {
             icon: 'fa fa-trophy',
             label: app.translator.trans('reflar-gamification.admin.permissions.see_ranking_page'),
             permission: 'reflar.gamification.viewRankingPage',
             allowGuest: true
         })
-    })
+    });
 
-    addSettingsPage()
-})
+    addSettingsPage();
+});

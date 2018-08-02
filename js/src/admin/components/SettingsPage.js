@@ -79,7 +79,7 @@ export default class SettingsPage extends Page {
                             m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.help.help')),
                             m('div', {className: 'Ranks--Container'},
                                 this.ranks.map(rank => {
-                                    return m('div', {}, [
+                                    return m('div', {style: "float: left;"}, [
                                         m('input', {
                                             className: 'FormControl Ranks-number',
                                             type: 'number',
