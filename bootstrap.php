@@ -24,7 +24,9 @@ return [
         ->js(__DIR__.'/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/less/forum/extension.less'),
+        ->css(__DIR__.'/less/forum/extension.less')
+		->route('/rankings', 'rankings')
+        ->route('/hot', 'hot'),
     new Extend\Locales(__DIR__.'/locale'),
     (new Extend\Routes('api'))
         ->post('/reflar/gamification/convert', 'reflar.gamification.convert', Controllers\ConvertLikesController::class)
@@ -34,9 +36,6 @@ return [
         ->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class)
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
-    (new Extend\Routes('forum'))
-        ->get('/rankings', 'rankings', FrontendController::class)
-        ->get('/hot', 'hot', IndexController::class),
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddRelationships::class);
         $events->subscribe(Listeners\EventHandlers::class);

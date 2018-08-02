@@ -35,15 +35,13 @@ export default class RankingsPage extends Page {
             })
         }
         return (
-            <div className='IndexPage'>
+            <div className='RankingPage'>
                 {IndexPage.prototype.hero()}
                 <div className='container'>
-                    <div className='IndexPage-results'>
+					<nav className="RankingPage-nav IndexPage-nav sideNav" config={IndexPage.prototype.affixSidebar}>
+						<ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
+					</nav>
                         <div className='RankingPage'>
-                            <div className='container'>
-                                <nav className='IndexPage-nav sideNav'>
-                                    <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
-                                </nav>
                                 <div className='sideNavOffset'>
                                     <table class='rankings'>
                                         <tr>
@@ -81,9 +79,7 @@ export default class RankingsPage extends Page {
                                     </table>
                                     <div className='rankings-loadmore'> {loading}</div>
                                 </div>
-                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
         )
