@@ -180,8 +180,8 @@ class SaveVotesToDatabase
     {
         $oldVote = Notification::where([
             'from_user_id'  => $actor->id,
-            'subject_id' => $post->id,
-            'data'       => '"'.$before.'"',
+            'subject_id'    => $post->id,
+            'data'          => '"'.$before.'"',
         ])->first();
 
         if ($oldVote) {

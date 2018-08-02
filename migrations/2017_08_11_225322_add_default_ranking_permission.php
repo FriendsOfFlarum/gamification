@@ -14,5 +14,5 @@ use Flarum\Database\Migration;
 use Flarum\Group\Group;
 
 return Migration::addPermissions([
-    'reflar.gamification.viewRankingPage' => Group::GUEST_ID
+    'reflar.gamification.viewRankingPage' => Group::GUEST_ID,
 ]);

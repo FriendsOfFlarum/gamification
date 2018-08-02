@@ -13,8 +13,6 @@
 namespace Reflar\Gamification;
 
 use Flarum\Extend;
-use Flarum\Forum\Controller\FrontendController;
-use Flarum\Forum\Controller\IndexController;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\Gamification\Api\Controllers;
 
@@ -25,7 +23,7 @@ return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/less/forum/extension.less')
-		->route('/rankings', 'rankings')
+        ->route('/rankings', 'rankings')
         ->route('/hot', 'hot'),
     new Extend\Locales(__DIR__.'/locale'),
     (new Extend\Routes('api'))

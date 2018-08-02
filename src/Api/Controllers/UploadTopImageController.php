@@ -26,18 +26,18 @@ use Tobscure\JsonApi\Document;
 
 class UploadTopImageController extends ShowForumController
 {
-	use AssertPermissionTrait;
-	
-	/**
+    use AssertPermissionTrait;
+
+    /**
      * @var SettingsRepositoryInterface
      */
     protected $settings;
-	
+
     /**
      * @var Application
      */
     protected $app;
-	
+
     /**
      * @param SettingsRepositoryInterface $settings
      */
@@ -46,7 +46,7 @@ class UploadTopImageController extends ShowForumController
         $this->settings = $settings;
         $this->app = $app;
     }
-	
+
     public function data(ServerRequestInterface $request, Document $document)
     {
         $this->assertAdmin($request->getAttribute('actor'));

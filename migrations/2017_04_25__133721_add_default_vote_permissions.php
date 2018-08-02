@@ -13,5 +13,5 @@ use Flarum\Database\Migration;
 use Flarum\Group\Group;
 
 return Migration::addPermissions([
-    'discussion.vote' => Group::MEMBER_ID
+    'discussion.vote' => Group::MEMBER_ID,
 ]);
