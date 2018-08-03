@@ -60,7 +60,7 @@ export default function () {
             LinkButton.component({
                 href: app.route('rankings'),
                 children: app.translator.trans('reflar-gamification.forum.nav.name'),
-                icon: 'trophy'
+                icon: 'fa fa-trophy'
             }),
             80
         )
