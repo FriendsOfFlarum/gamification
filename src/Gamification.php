@@ -107,7 +107,9 @@ class Gamification
                 $post->discussion->increment('votes');
             }
 
-            $this->upvote($post_id, $user);
+            $vote = vote::build($post, $user);
+            $vote->type = 'Up';
+            $vote->save();
 
             $ranks = json_decode($this->settings->get('reflar.gamification.ranks'), true);
 
