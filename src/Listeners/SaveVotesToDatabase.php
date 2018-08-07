@@ -88,7 +88,7 @@ class SaveVotesToDatabase
                 $user = $post->user;
 
                 $this->assertCan($actor, 'vote', $post->discussion);
-                // $this->assertNotFlooding($actor);
+                $this->assertNotFlooding($actor);
 
                 $isUpvoted = $data['attributes'][0];
 
