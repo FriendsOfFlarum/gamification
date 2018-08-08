@@ -169,12 +169,12 @@ System.register("Reflar/Gamification/components/SettingsPage", ["flarum/componen
                             children: app.translator.trans('reflar-gamification.admin.page.votes.auto_upvote'),
                             onchange: this.values.autoUpvotePosts,
                             className: 'votes-switch'
-                        }), m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.points_title')), m('input', {
+                        }), m('a', { href: "https://imgur.com/a/9aylQQL", style: "color: #000;" }, m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.points_title')), m('input', {
                             className: 'FormControl Ranks-default',
                             value: this.values.pointsPlaceholder() || '',
                             placeholder: app.translator.trans('reflar-gamification.admin.page.votes.points_placeholder') + '{points}',
                             oninput: m.withAttr('value', this.values.pointsPlaceholder)
-                        }), m('legend', {}, app.translator.trans('reflar-gamification.admin.page.rankings.title')), Switch.component({
+                        })), m('legend', {}, app.translator.trans('reflar-gamification.admin.page.rankings.title')), Switch.component({
                             state: this.values.customRankingImages() || false,
                             children: app.translator.trans('reflar-gamification.admin.page.rankings.enable'),
                             onchange: this.values.customRankingImages,
