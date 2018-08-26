@@ -1,9 +1,9 @@
 "use strict";
 
-System.register("Reflar/Gamification/components/AddAttributes", ["flarum/helpers/avatar", "flarum/components/AvatarEditor", "flarum/helpers/username", "flarum/models/Discussion", "flarum/components/Dropdown", "flarum/extend", "flarum/Model", "flarum/models/Post", "flarum/components/PostUser", "flarum/models/User", "flarum/components/UserCard", "flarum/utils/UserControls", "flarum/helpers/userOnline", "flarum/helpers/listItems", "Reflar/Gamification/helpers/rankLabel"], function (_export, _context) {
+System.register("Reflar/Gamification/components/AddAttributes", ["flarum/models/Discussion", "flarum/extend", "flarum/Model", "flarum/models/Post", "flarum/components/PostUser", "flarum/models/User", "flarum/components/UserCard", "Reflar/Gamification/helpers/rankLabel"], function (_export, _context) {
     "use strict";
 
-    var avatar, AvatarEditor, username, Discussion, Dropdown, extend, Model, Post, PostUser, User, UserCard, UserControls, userOnline, listItems, rankLabel;
+    var Discussion, extend, Model, Post, PostUser, User, UserCard, rankLabel;
 
     _export("default", function () {
         Discussion.prototype.canVote = Model.attribute('canVote');
@@ -15,6 +15,32 @@ System.register("Reflar/Gamification/components/AddAttributes", ["flarum/helpers
 
         Post.prototype.upvotes = Model.hasMany('upvotes');
         Post.prototype.downvotes = Model.hasMany('downvotes');
+
+        var matchClass = function matchClass(className) {
+            return function (node) {
+                return node && node.attrs && node.attrs.className && node.attrs.className === className;
+            };
+        };
+
+        var matchTag = function matchTag(tagName) {
+            return function (node) {
+                return node && node.tag && node.tag === tagName;
+            };
+        };
+
+        var findMatchClass = function findMatchClass(node, className) {
+            var newArray = [];
+            if (node.children) {
+                var nodeInChildren = node.children.find(matchClass(className));
+                if (nodeInChildren !== undefined) {
+                    newArray = newArray.concat(nodeInChildren);
+                }
+                node.children.forEach(function (currentValue) {
+                    newArray = newArray.concat(findMatchClass(currentValue, className));
+                });
+            }
+            return newArray;
+        };
 
         extend(UserCard.prototype, 'infoItems', function (items, user) {
             var points = '';
@@ -32,147 +58,67 @@ System.register("Reflar/Gamification/components/AddAttributes", ["flarum/helpers
             items.add('points', points);
         });
 
-        UserCard.prototype.view = function () {
+        extend(UserCard.prototype, 'view', function (vnode) {
             var user = this.props.user;
-            var controls = UserControls.controls(user, this).toArray();
-            var color = user.color();
-            var badges = user.badges().toArray();
+            var profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
+            var badges_node = profile_node.children.find(matchClass('UserCard-badges'));
+            if (user.ranks()) {
+                if (badges_node === undefined || badges_node === "") {
+                    profile_node.children.splice(1, 0, m(
+                        "ul",
+                        { className: "UserCard-badges badges" },
+                        user.ranks().reverse().map(function (rank, i) {
+                            if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+                                return m(
+                                    "li",
+                                    { className: "User-Rank" },
+                                    rankLabel(rank)
+                                );
+                            }
+                        })
+                    ));
+                } else {
+                    badges_node.children.push(user.ranks().reverse().map(function (rank, i) {
+                        if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+                            return m(
+                                "li",
+                                { className: "User-Rank" },
+                                rankLabel(rank)
+                            );
+                        }
+                    }));
+                }
+            }
 
-            return m(
-                "div",
-                { className: 'UserCard ' + (this.props.className || ''),
-                    style: color ? { backgroundColor: color } : '' },
-                m(
-                    "div",
-                    { className: "darkenBackground" },
-                    m(
-                        "div",
-                        { className: "container" },
-                        controls.length ? Dropdown.component({
-                            children: controls,
-                            className: 'UserCard-controls App-primaryControl',
-                            menuClassName: 'Dropdown-menu--right',
-                            buttonClassName: this.props.controlsButtonClassName,
-                            label: app.translator.trans('core.forum.user_controls.button'),
-                            icon: 'ellipsis-v'
-                        }) : '',
-                        m(
-                            "div",
-                            { className: "UserCard-profile" },
-                            m(
-                                "h2",
-                                { className: "UserCard-identity" },
-                                this.props.editable ? [AvatarEditor.component({ user: user, className: 'UserCard-avatar' }), username(user)] : m(
-                                    "a",
-                                    { href: app.route.user(user), config: m.route },
-                                    m(
-                                        "div",
-                                        { className: "UserCard-avatar" },
-                                        avatar(user)
-                                    ),
-                                    username(user)
-                                )
-                            ),
-                            badges.length ? m(
-                                "ul",
-                                { className: "UserCard-badges badges" },
-                                listItems(badges),
-                                user.ranks() !== false ? user.ranks().reverse().map(function (rank, i) {
-                                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
-                                        return m(
-                                            "li",
-                                            { className: "User-Rank" },
-                                            rankLabel(rank)
-                                        );
-                                    }
-                                }) : ''
-                            ) : '',
-                            m(
-                                "ul",
-                                { className: "UserCard-info" },
-                                listItems(this.infoItems().toArray())
-                            )
-                        )
-                    )
-                )
-            );
-        };
+            return vnode;
+        });
 
-        PostUser.prototype.view = function () {
+        extend(PostUser.prototype, 'view', function (vnode) {
             var post = this.props.post;
             var user = post.user();
 
             if (!user) {
-                return m(
-                    "div",
-                    { className: "PostUser" },
-                    m(
-                        "h3",
-                        null,
-                        avatar(user, { className: 'PostUser-avatar' }),
-                        " ",
-                        username(user),
-                        " ",
-                        rank[0]
-                    )
-                );
+                return vnode;
             }
 
-            var card = '';
+            var header_node = vnode.children.find(matchTag('h3'));
+            header_node.children.push(user.ranks().reverse().map(function (rank, i) {
+                if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+                    return m(
+                        "span",
+                        { className: "Post-Rank" },
+                        rankLabel(rank)
+                    );
+                }
+            }));
 
-            if (!post.isHidden() && this.cardVisible) {
-                card = UserCard.component({
-                    user: user,
-                    className: 'UserCard--popover',
-                    controlsButtonClassName: 'Button Button--icon Button--flat'
-                });
-            }
-
-            return m(
-                "div",
-                { className: "PostUser" },
-                userOnline(user),
-                m(
-                    "h3",
-                    null,
-                    m(
-                        "a",
-                        { href: app.route.user(user), config: m.route },
-                        avatar(user, { className: 'PostUser-avatar' }),
-                        ' ',
-                        username(user)
-                    ),
-                    user.ranks().reverse().map(function (rank, i) {
-                        if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
-                            return m(
-                                "span",
-                                { className: "Post-Rank" },
-                                rankLabel(rank)
-                            );
-                        }
-                    })
-                ),
-                m(
-                    "ul",
-                    { className: "PostUser-badges badges" },
-                    listItems(user.badges().toArray())
-                ),
-                card
-            );
-        };
+            return vnode;
+        });
     });
 
     return {
-        setters: [function (_flarumHelpersAvatar) {
-            avatar = _flarumHelpersAvatar.default;
-        }, function (_flarumComponentsAvatarEditor) {
-            AvatarEditor = _flarumComponentsAvatarEditor.default;
-        }, function (_flarumHelpersUsername) {
-            username = _flarumHelpersUsername.default;
-        }, function (_flarumModelsDiscussion) {
+        setters: [function (_flarumModelsDiscussion) {
             Discussion = _flarumModelsDiscussion.default;
-        }, function (_flarumComponentsDropdown) {
-            Dropdown = _flarumComponentsDropdown.default;
         }, function (_flarumExtend) {
             extend = _flarumExtend.extend;
         }, function (_flarumModel) {
@@ -185,12 +131,6 @@ System.register("Reflar/Gamification/components/AddAttributes", ["flarum/helpers
             User = _flarumModelsUser.default;
         }, function (_flarumComponentsUserCard) {
             UserCard = _flarumComponentsUserCard.default;
-        }, function (_flarumUtilsUserControls) {
-            UserControls = _flarumUtilsUserControls.default;
-        }, function (_flarumHelpersUserOnline) {
-            userOnline = _flarumHelpersUserOnline.default;
-        }, function (_flarumHelpersListItems) {
-            listItems = _flarumHelpersListItems.default;
         }, function (_ReflarGamificationHelpersRankLabel) {
             rankLabel = _ReflarGamificationHelpersRankLabel.default;
         }],

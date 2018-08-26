@@ -1,17 +1,10 @@
-import avatar from "flarum/helpers/avatar";
-import AvatarEditor from "flarum/components/AvatarEditor";
-import username from "flarum/helpers/username";
 import Discussion from "flarum/models/Discussion";
-import Dropdown from "flarum/components/Dropdown";
 import {extend} from "flarum/extend";
 import Model from "flarum/Model";
 import Post from "flarum/models/Post";
 import PostUser from "flarum/components/PostUser";
 import User from "flarum/models/User";
 import UserCard from "flarum/components/UserCard";
-import UserControls from "flarum/utils/UserControls";
-import userOnline from "flarum/helpers/userOnline";
-import listItems from "flarum/helpers/listItems";
 import rankLabel from "Reflar/Gamification/helpers/rankLabel";
 
 export default function () {
@@ -24,6 +17,28 @@ export default function () {
 
     Post.prototype.upvotes = Model.hasMany('upvotes');
     Post.prototype.downvotes = Model.hasMany('downvotes');
+
+    const matchClass = className => {
+        return node => node && node.attrs && node.attrs.className && node.attrs.className === className;
+    };
+
+    const matchTag = tagName => {
+        return node => node && node.tag && node.tag === tagName;
+    };
+
+    const findMatchClass = function(node, className) {
+        var newArray = [];
+        if(node.children) {
+            var nodeInChildren = node.children.find(matchClass(className));
+            if(nodeInChildren !== undefined) {
+                newArray = newArray.concat(nodeInChildren);
+            }
+            node.children.forEach(function(currentValue) {
+                newArray = newArray.concat(findMatchClass(currentValue, className));
+            });
+        }
+        return newArray;
+    };
 
     extend(UserCard.prototype, 'infoItems', function (items, user) {
         let points = '';
@@ -43,112 +58,64 @@ export default function () {
         );
     });
 
-    UserCard.prototype.view = function () {
+    extend(UserCard.prototype, 'view', function (vnode) {
         const user = this.props.user;
-        const controls = UserControls.controls(user, this).toArray();
-        const color = user.color();
-        const badges = user.badges().toArray();
+        let profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
+        let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
+        if(user.ranks()) {
+            if(badges_node === undefined || badges_node === "") {
+                profile_node.children.splice(1, 0, (
+                    <ul className="UserCard-badges badges">
+                        {user.ranks().reverse().map((rank, i) => {
+                            if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
-        return (
-            <div className={'UserCard ' + (this.props.className || '')}
-                 style={color ? {backgroundColor: color} : ''}>
-                <div className="darkenBackground">
+                            } else {
+                                return (
+                                    <li className="User-Rank">
+                                        {rankLabel(rank)}
+                                    </li>
+                                );
+                            }
+                        })}
+                    </ul>
+                ))
+            } else {
+                badges_node.children.push(user.ranks().reverse().map((rank, i) => {
+                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
-                    <div className="container">
-                        {controls.length ? Dropdown.component({
-                                children: controls,
-                                className: 'UserCard-controls App-primaryControl',
-                                menuClassName: 'Dropdown-menu--right',
-                                buttonClassName: this.props.controlsButtonClassName,
-                                label: app.translator.trans('core.forum.user_controls.button'),
-                                icon: 'ellipsis-v'
-                            }) : ''}
+                    } else {
+                        return (
+                            <li className="User-Rank">
+                                {rankLabel(rank)}
+                            </li>
+                        );
+                    }
+                }));
+            }
+        }
 
-                        <div className="UserCard-profile">
-                            <h2 className="UserCard-identity">
-                                {this.props.editable
-                                    ? [AvatarEditor.component({user, className: 'UserCard-avatar'}), username(user)]
-                                    : (
-                                        <a href={app.route.user(user)} config={m.route}>
-                                            <div className="UserCard-avatar">{avatar(user)}</div>
-                                            {username(user)}
-                                        </a>
-                                    )}
-                            </h2>
+        return vnode;
+    });
 
-                            {badges.length ? (
-                                    <ul className="UserCard-badges badges">
-                                        {listItems(badges)}
-                                        {user.ranks() !== false ? (
-                                                user.ranks().reverse().map((rank, i) => {
-                                                    if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
-
-                                                    } else {
-                                                        return (
-                                                            <li className="User-Rank">
-                                                                {rankLabel(rank)}
-                                                            </li>
-                                                        );
-                                                    }
-                                                })
-                                            ) : '' }
-                                    </ul>
-                                ) : ''}
-
-                            <ul className="UserCard-info">
-                                {listItems(this.infoItems().toArray())}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-    PostUser.prototype.view = function () {
+    extend(PostUser.prototype, 'view', function(vnode) {
         const post = this.props.post;
         const user = post.user();
 
         if (!user) {
-            return (
-                <div className="PostUser">
-                    <h3>{avatar(user, {className: 'PostUser-avatar'})} {username(user)} {rank[0]}</h3>
-                </div>
-            );
+            return vnode;
         }
 
-        let card = '';
+        const header_node = vnode.children.find(matchTag('h3'));
+        header_node.children.push(user.ranks().reverse().map((rank, i) => {
+            if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
 
-        if (!post.isHidden() && this.cardVisible) {
-            card = UserCard.component({
-                user,
-                className: 'UserCard--popover',
-                controlsButtonClassName: 'Button Button--icon Button--flat'
-            });
-        }
-
-        return (
-            <div className="PostUser">
-                {userOnline(user)}
-                <h3>
-                    <a href={app.route.user(user)} config={m.route}>
-                        {avatar(user, {className: 'PostUser-avatar'})}{' '}{username(user)}
-                    </a>
-                    {user.ranks().reverse().map((rank, i) => {
-                        if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {
-
-                        } else {
-                            return (<span className="Post-Rank">
+            } else {
+                return (<span className="Post-Rank">
                               {rankLabel(rank)}
                             </span>);
-                        }
-                    })}
-                </h3>
-                <ul className="PostUser-badges badges">
-                    {listItems(user.badges().toArray())}
-                </ul>
-                {card}
-            </div>
-        );
-    }
+            }
+        }));
+
+        return vnode;
+    });
 }
