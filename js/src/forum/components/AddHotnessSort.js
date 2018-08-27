@@ -44,7 +44,7 @@ export default function () {
 
                     return Button.component({
                         children: label,
-                        icon: active ? 'check' : true,
+                        icon: active ? 'fas fa-check' : true,
                         onclick: this.changeSort.bind(this, value),
                         active: active
                     })
@@ -60,7 +60,7 @@ export default function () {
             LinkButton.component({
                 href: app.route('rankings'),
                 children: app.translator.trans('reflar-gamification.forum.nav.name'),
-                icon: 'fa fa-trophy'
+                icon: 'fas fa-trophy'
             }),
             80
         )

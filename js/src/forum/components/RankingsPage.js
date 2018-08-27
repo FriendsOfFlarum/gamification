@@ -57,7 +57,7 @@ export default class RankingsPage extends Page {
                                                             <img className='rankings-mobile rankings-image'
                                                                  src={app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i)}/>)
                                                         : (
-                                                            <td className={'rankings-mobile rankings-' + i}> <i className="icon fa fa-trophy"></i></td>))
+                                                            <td className={'rankings-mobile rankings-' + i}> <i className="icon fas fa-trophy"></i></td>))
                                                         : (
                                                             <td className='rankings-4 rankings-mobile'>{this.addOrdinalSuffix(i)}</td>)}
                                                     <td>
@@ -135,7 +135,7 @@ export default class RankingsPage extends Page {
         items.add('refresh',
             Button.component({
                 title: app.translator.trans('core.forum.index.refresh_tooltip'),
-                icon: 'fa fa-refresh',
+                icon: 'fas fa-refresh',
                 className: 'Button Button--icon',
                 onclick: () => {
                     app.cache.discussionList.refresh()

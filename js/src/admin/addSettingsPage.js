@@ -11,7 +11,7 @@ export default function () {
     extend(AdminNav.prototype, 'items', items => {
         items.add('reflar-gamification', AdminLinkButton.component({
             href: app.route('reflar-gamification'),
-            icon: 'fa fa-thumbs-up',
+            icon: 'fas fa-thumbs-up',
             children: 'Gamification',
             description: app.translator.trans('reflar-gamification.admin.nav.desc')
         }));

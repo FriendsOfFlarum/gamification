@@ -50,7 +50,7 @@ class VoteBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getFromUser()
     {
         return $this->post;
     }
