@@ -53,7 +53,7 @@ reflar-gamification:
       save_settings: Salvar configurações
       convert:
         button: Converter curtidas para votos positivos
-        help: Converta suas curtidas da extensão flarum-ext-likes em votos negativos, além de calcular a popularidade para todas as discussões atuais.
+        help: Converta suas curtidas da extensão flarum-ext-likes em votos positivos, além de calcular a popularidade para todas as discussões atuais.
         converting: Suas curtidas estão agora sendo convertidas. Recarregue seu site após alguns minutos para ver o processo finalizado. (O tempo de conversão talvez demore dependendo do seu total de curtidas)
         converted: "Foram convertidas {number} curtidas com sucesso"
       ranks:
