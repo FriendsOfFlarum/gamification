@@ -1,4 +1,3 @@
-import {extend} from 'flarum/extend'
 import app from 'flarum/app'
 import AddAttributes from 'Reflar/Gamification/components/AddAttributes'
 import AddHotnessFilter from 'Reflar/Gamification/components/AddHotnessSort'
