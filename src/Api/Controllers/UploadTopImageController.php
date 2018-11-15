@@ -1,6 +1,7 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *
+ *  This file is part of reflar/gamification
  *
  *  Copyright (c) ReFlar.
  *
@@ -8,6 +9,7 @@
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
+ *
  */
 
 namespace Reflar\Gamification\Api\Controllers;
@@ -53,9 +55,9 @@ class UploadTopImageController extends ShowForumController
 
         $id = array_get($request->getQueryParams(), 'id');
 
-        $file = array_get($request->getUploadedFiles(), 'reflar/topimage/'.$id);
+        $file = array_get($request->getUploadedFiles(), 'topimage'.$id);
 
-        $tmpFile = tempnam($this->app->storagePath().'/tmp', 'reflar.topimage.'.$id);
+        $tmpFile = tempnam($this->app->storagePath().'/tmp', 'topimage.'.$id);
         $file->moveTo($tmpFile);
 
         $extension = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
@@ -63,17 +65,14 @@ class UploadTopImageController extends ShowForumController
         if ('1' == $id) {
             $size = 125;
         } elseif ('2' == $id) {
-            $size = 100;
-        } else {
             $size = 75;
+        } else {
+            $size = 50;
         }
 
         $manager = new ImageManager();
 
-        $encodedImage = $manager->make($tmpFile)->resize($size, $size, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        })->encode('png');
+        $encodedImage = $manager->make($tmpFile)->resize($size, $size)->encode('png');
         file_put_contents($tmpFile, $encodedImage);
 
         $extension = 'png';
@@ -83,13 +82,15 @@ class UploadTopImageController extends ShowForumController
             'target' => new Filesystem(new Local($this->app->publicPath().'/assets')),
         ]);
 
-        if (($path = $this->settings->get('reflar.gamification.topimage.'.$id)) && $mount->has($file = "target://$path")) {
+        if (($path = $this->settings->get('topimage'.$id.'_path')) && $mount->has($file = "target://$path")) {
             $mount->delete($file);
         }
 
         $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.'.$extension;
 
         $mount->move('source://'.pathinfo($tmpFile, PATHINFO_BASENAME), "target://$uploadName");
+
+        $this->settings->set('topimage'.$id.'_path', $uploadName);
 
         return parent::data($request, $document);
     }

@@ -1,2 +1,2293 @@
-module.exports=function(t){var n={};function o(e){if(n[e])return n[e].exports;var r=n[e]={i:e,l:!1,exports:{}};return t[e].call(r.exports,r,r.exports,o),r.l=!0,r.exports}return o.m=t,o.c=n,o.d=function(t,n,e){o.o(t,n)||Object.defineProperty(t,n,{enumerable:!0,get:e})},o.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},o.t=function(t,n){if(1&n&&(t=o(t)),8&n)return t;if(4&n&&"object"==typeof t&&t&&t.__esModule)return t;var e=Object.create(null);if(o.r(e),Object.defineProperty(e,"default",{enumerable:!0,value:t}),2&n&&"string"!=typeof t)for(var r in t)o.d(e,r,function(n){return t[n]}.bind(null,r));return e},o.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return o.d(n,"a",n),n},o.o=function(t,n){return Object.prototype.hasOwnProperty.call(t,n)},o.p="",o(o.s=78)}([function(t,n){t.exports=flarum.core.compat.app},function(t,n){t.exports=flarum.core.compat.extend},function(t,n){t.exports=flarum.core.compat.Model},function(t,n){t.exports=flarum.core.compat["components/Button"]},function(t,n,o){"use strict";o.d(n,"a",function(){return a});var e=o(23),r=o.n(e);function a(t,n){t.prototype=r()(n.prototype),t.prototype.constructor=t,t.__proto__=n}},function(t,n){t.exports=flarum.core.compat["helpers/username"]},function(t,n){var o=t.exports={version:"2.5.7"};"number"==typeof __e&&(__e=o)},function(t,n){var o=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=o)},function(t,n,o){t.exports=!o(13)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n){t.exports=flarum.core.compat["helpers/avatar"]},function(t,n){t.exports=flarum.core.compat["components/IndexPage"]},function(t,n,o){var e=o(12);t.exports=function(t){if(!e(t))throw TypeError(t+" is not an object!");return t}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,n){t.exports=flarum.core.compat["helpers/listItems"]},function(t,n){},function(t,n){var o={}.hasOwnProperty;t.exports=function(t,n){return o.call(t,n)}},function(t,n,o){var e=o(38),r=o(29);t.exports=function(t){return e(r(t))}},function(t,n){var o=Math.ceil,e=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?e:o)(t)}},function(t,n,o){var e=o(43)("keys"),r=o(45);t.exports=function(t){return e[t]||(e[t]=r(t))}},function(t,n){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,n,o){var e=o(11),r=o(49),a=o(50),s=Object.defineProperty;n.f=o(8)?Object.defineProperty:function(t,n,o){if(e(t),n=a(n,!0),e(o),r)try{return s(t,n,o)}catch(t){}if("get"in o||"set"in o)throw TypeError("Accessors not supported!");return"value"in o&&(t[n]=o.value),t}},function(t,n,o){var e=o(12),r=o(7).document,a=e(r)&&e(r.createElement);t.exports=function(t){return a?r.createElement(t):{}}},function(t,n,o){t.exports=o(52)},function(t,n,o){"use strict";o.d(n,"a",function(){return i});var e=o(4),r=o(2),a=o.n(r),s=o(25),i=function(t){function n(){return t.apply(this,arguments)||this}return Object(e.a)(n,t),n}(o.n(s)()(a.a,{points:a.a.attribute("points"),name:a.a.attribute("name"),color:a.a.attribute("color")}))},function(t,n){t.exports=flarum.core.compat["utils/mixin"]},function(t,n){t.exports=flarum.core.compat["components/Page"]},function(t,n){t.exports=flarum.core.compat["components/LogInModal"]},function(t,n,o){t.exports=o(79)},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n,o){var e=o(37),r=o(20);t.exports=Object.keys||function(t){return e(t,r)}},function(t,n,o){var e=o(7),r=o(6),a=o(46),s=o(48),i=o(16),u=function(t,n,o){var c,p,f,l=t&u.F,m=t&u.G,d=t&u.S,h=t&u.P,v=t&u.B,b=t&u.W,y=m?r:r[n]||(r[n]={}),g=y.prototype,x=m?e:d?e[n]:(e[n]||{}).prototype;for(c in m&&(o=n),o)(p=!l&&x&&void 0!==x[c])&&i(y,c)||(f=p?x[c]:o[c],y[c]=m&&"function"!=typeof x[c]?o[c]:v&&p?a(f,e):b&&x[c]==f?function(t){var n=function(n,o,e){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(n);case 2:return new t(n,o)}return new t(n,o,e)}return t.apply(this,arguments)};return n.prototype=t.prototype,n}(f):h&&"function"==typeof f?a(Function.call,f):f,h&&((y.virtual||(y.virtual={}))[c]=f,t&u.R&&g&&!g[c]&&s(g,c,f)))};u.F=1,u.G=2,u.S=4,u.P=8,u.B=16,u.W=32,u.U=64,u.R=128,t.exports=u},function(t,n){t.exports=flarum.core.compat["components/Dropdown"]},function(t,n){t.exports=flarum.core.compat["utils/ItemList"]},function(t,n){t.exports=flarum.core.compat["models/Discussion"]},function(t,n){t.exports=flarum.core.compat["components/UserCard"]},,function(t,n,o){var e=o(16),r=o(17),a=o(40)(!1),s=o(19)("IE_PROTO");t.exports=function(t,n){var o,i=r(t),u=0,c=[];for(o in i)o!=s&&e(i,o)&&c.push(o);for(;n.length>u;)e(i,o=n[u++])&&(~a(c,o)||c.push(o));return c}},function(t,n,o){var e=o(39);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==e(t)?t.split(""):Object(t)}},function(t,n){var o={}.toString;t.exports=function(t){return o.call(t).slice(8,-1)}},function(t,n,o){var e=o(17),r=o(41),a=o(42);t.exports=function(t){return function(n,o,s){var i,u=e(n),c=r(u.length),p=a(s,c);if(t&&o!=o){for(;c>p;)if((i=u[p++])!=i)return!0}else for(;c>p;p++)if((t||p in u)&&u[p]===o)return t||p||0;return!t&&-1}}},function(t,n,o){var e=o(18),r=Math.min;t.exports=function(t){return t>0?r(e(t),9007199254740991):0}},function(t,n,o){var e=o(18),r=Math.max,a=Math.min;t.exports=function(t,n){return(t=e(t))<0?r(t+n,0):a(t,n)}},function(t,n,o){var e=o(6),r=o(7),a=r["__core-js_shared__"]||(r["__core-js_shared__"]={});(t.exports=function(t,n){return a[t]||(a[t]=void 0!==n?n:{})})("versions",[]).push({version:e.version,mode:o(44)?"pure":"global",copyright:"© 2018 Denis Pushkarev (zloirock.ru)"})},function(t,n){t.exports=!0},function(t,n){var o=0,e=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++o+e).toString(36))}},function(t,n,o){var e=o(47);t.exports=function(t,n,o){if(e(t),void 0===n)return t;switch(o){case 1:return function(o){return t.call(n,o)};case 2:return function(o,e){return t.call(n,o,e)};case 3:return function(o,e,r){return t.call(n,o,e,r)}}return function(){return t.apply(n,arguments)}}},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n,o){var e=o(21),r=o(51);t.exports=o(8)?function(t,n,o){return e.f(t,n,r(1,o))}:function(t,n,o){return t[n]=o,t}},function(t,n,o){t.exports=!o(8)&&!o(13)(function(){return 7!=Object.defineProperty(o(22)("div"),"a",{get:function(){return 7}}).a})},function(t,n,o){var e=o(12);t.exports=function(t,n){if(!e(t))return t;var o,r;if(n&&"function"==typeof(o=t.toString)&&!e(r=o.call(t)))return r;if("function"==typeof(o=t.valueOf)&&!e(r=o.call(t)))return r;if(!n&&"function"==typeof(o=t.toString)&&!e(r=o.call(t)))return r;throw TypeError("Can't convert object to primitive value")}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n,o){o(53);var e=o(6).Object;t.exports=function(t,n){return e.create(t,n)}},function(t,n,o){var e=o(31);e(e.S,"Object",{create:o(54)})},function(t,n,o){var e=o(11),r=o(55),a=o(20),s=o(19)("IE_PROTO"),i=function(){},u=function(){var t,n=o(22)("iframe"),e=a.length;for(n.style.display="none",o(56).appendChild(n),n.src="javascript:",(t=n.contentWindow.document).open(),t.write("<script>document.F=Object<\/script>"),t.close(),u=t.F;e--;)delete u.prototype[a[e]];return u()};t.exports=Object.create||function(t,n){var o;return null!==t?(i.prototype=e(t),o=new i,i.prototype=null,o[s]=t):o=u(),void 0===n?o:r(o,n)}},function(t,n,o){var e=o(21),r=o(11),a=o(30);t.exports=o(8)?Object.defineProperties:function(t,n){r(t);for(var o,s=a(n),i=s.length,u=0;i>u;)e.f(t,o=s[u++],n[o]);return t}},function(t,n,o){var e=o(7).document;t.exports=e&&e.documentElement},function(t,n){t.exports=flarum.core.compat["models/Post"]},function(t,n){t.exports=flarum.core.compat["models/User"]},function(t,n){t.exports=flarum.core.compat["components/DiscussionList"]},function(t,n){t.exports=flarum.core.compat["components/CommentPost"]},,,function(t,n,o){"use strict";var e=o(1),r=o(0),a=o.n(r),s=o(9),i=o.n(s),u=o(65),c=o.n(u),p=o(5),f=o.n(p),l=o(34),d=o.n(l),h=o(32),v=o.n(h),b=o(14),y=o.n(b),g=o(2),x=o.n(g),w=o(57),k=o.n(w),N=o(66),P=o.n(N),O=o(58),j=o.n(O),_=o(35),C=o.n(_),M=o(67),I=o.n(M),S=o(68),U=o.n(S);function V(t,n){void 0===n&&(n={}),n.style=n.style||{},n.className="rankLabel "+(n.className||"");var o=t.color();return n.style.backgroundColor=n.style.color=o,n.className+=" colored",m("span",n,m("span",{className:"rankLabel-text"},t.name()))}var R=function(){d.a.prototype.canVote=x.a.attribute("canVote"),d.a.prototype.canSeeVotes=x.a.attribute("canSeeVotes"),d.a.prototype.votes=x.a.attribute("votes"),j.a.prototype.points=x.a.attribute("points"),j.a.prototype.ranks=x.a.hasMany("ranks"),k.a.prototype.upvotes=x.a.hasMany("upvotes"),k.a.prototype.downvotes=x.a.hasMany("downvotes"),Object(e.extend)(C.a.prototype,"infoItems",function(t,n){var o="";0==o&&(o="0"),o=app.forum.attribute("PointsPlaceholder")?app.forum.attribute("PointsPlaceholder").replace("{points}",this.props.user.data.attributes.Points):app.translator.trans("reflar-gamification.forum.user.points",{points:this.props.user.data.attributes.Points}),t.add("points",o)}),C.a.prototype.view=function(){var t=this.props.user,n=I.a.controls(t,this).toArray(),o=t.color(),e=t.badges().toArray();return m("div",{className:"UserCard "+(this.props.className||""),style:o?{backgroundColor:o}:""},m("div",{className:"darkenBackground"},m("div",{className:"container"},n.length?v.a.component({children:n,className:"UserCard-controls App-primaryControl",menuClassName:"Dropdown-menu--right",buttonClassName:this.props.controlsButtonClassName,label:app.translator.trans("core.forum.user_controls.button"),icon:"fas fa-ellipsis-v"}):"",m("div",{className:"UserCard-profile"},m("h2",{className:"UserCard-identity"},this.props.editable?[c.a.component({user:t,className:"UserCard-avatar"}),f()(t)]:m("a",{href:app.route.user(t),config:m.route},m("div",{className:"UserCard-avatar"},i()(t)),f()(t))),e.length?m("ul",{className:"UserCard-badges badges"},y()(e),!1!==t.ranks()?t.ranks().reverse().map(function(t,n){if(!(n>=app.forum.attribute("ranksAmt")&&null!==app.forum.attribute("ranksAmt")))return m("li",{className:"User-Rank"},V(t))}):""):"",m("ul",{className:"UserCard-info"},y()(this.infoItems().toArray()))))))},P.a.prototype.view=function(){var t=this.props.post,n=t.user();if(!n)return m("div",{className:"PostUser"},m("h3",null,i()(n,{className:"PostUser-avatar"})," ",f()(n)," ",rank[0]));var o="";return!t.isHidden()&&this.cardVisible&&(o=C.a.component({user:n,className:"UserCard--popover",controlsButtonClassName:"Button Button--icon Button--flat"})),m("div",{className:"PostUser"},U()(n),m("h3",null,m("a",{href:app.route.user(n),config:m.route},i()(n,{className:"PostUser-avatar"})," ",f()(n)),n.ranks().reverse().map(function(t,n){if(!(n>=app.forum.attribute("ranksAmt")&&null!==app.forum.attribute("ranksAmt")))return m("span",{className:"Post-Rank"},V(t))})),m("ul",{className:"PostUser-badges badges"},y()(n.badges().toArray())),o)}},B=o(28),E=o.n(B),A=o(10),L=o.n(A),D=o(33),T=o.n(D),F=o(59),q=o.n(F),z=o(3),W=o.n(z),G=o(69),H=o.n(G),J=function(){L.a.prototype.viewItems=function(){var t=this,n=new T.a,o=app.cache.discussionList.sortMap(),e={};for(var r in o)e[r]=app.translator.trans("core.forum.index_sort."+r+"_button");var a=e[this.params().sort]||E()(o).map(function(t){return e[t]})[0];return/^.*?\/hot/.test(m.route())&&(a=app.translator.trans("core.forum.index_sort.hot_button")),n.add("sort",v.a.component({buttonClassName:"Button",label:a,children:E()(e).map(function(n){var r=e[n],a=(t.params().sort||E()(o)[0])===n;return/^.*?\/hot/.test(m.route())&&"hot"===n&&(a=!0),/^.*?\/hot/.test(m.route())&&"latest"===n&&(a=!1,m.redraw()),W.a.component({children:r,icon:!a||"fas fa-check",onclick:t.changeSort.bind(t,n),active:a})})})),n},Object(e.extend)(L.a.prototype,"navItems",function(t){t.add("rankings",H.a.component({href:app.route("rankings"),children:app.translator.trans("reflar-gamification.forum.nav.name"),icon:"fas fa-trophy"}),80)}),L.a.prototype.changeSort=function(t){var n=this.params();"hot"===t?(m.route("/"),m.route(m.route()+"hot")):(t===E()(app.cache.discussionList.sortMap())[0]?delete n.sort:n.sort=t,"hot"===n.filter&&delete n.filter,m.route(app.route("index",n)))},Object(e.extend)(q.a.prototype,"sortMap",function(t){t.hot="hot"}),Object(e.extend)(q.a.prototype,"requestParams",function(t){"hot"===this.props.params.filter&&(t.filter.q=" is:hot")})},K=o(27),Q=o.n(K),X=o(60),Y=o.n(X),Z=o(70),$=o.n(Z),tt=o(4),nt=o(71),ot=function(t){function n(){return t.apply(this,arguments)||this}Object(tt.a)(n,t);var o=n.prototype;return o.className=function(){return"VotesModal Modal--small"},o.title=function(){return app.translator.trans("reflar-gamification.forum.modal.title")},o.content=function(){return m("div",{className:"Modal-body"},m("ul",{className:"VotesModal-list"},m("legend",null,app.translator.trans("reflar-gamification.forum.modal.upvotes_label")),this.props.post.upvotes().map(function(t){return m("li",null,m("a",{href:app.route.user(t),config:m.route},i()(t)," "," ",f()(t)))}),m("legend",null,app.translator.trans("reflar-gamification.forum.modal.downvotes_label")),this.props.post.downvotes().map(function(t){return m("li",null,m("a",{href:app.route.user(t),config:m.route},i()(t)," "," ",f()(t)))})))},n}(o.n(nt).a),et=o(24),rt=o(26),at=o.n(rt),st=o(72),it=o.n(st),ut=function(t){function n(){return t.apply(this,arguments)||this}Object(tt.a)(n,t);var o=n.prototype;return o.init=function(){t.prototype.init.call(this),app.session.user&&!0===app.session.user.data.attributes.canViewRankingPage||m.route("/"),this.loading=!0,this.users=[],this.refresh()},o.view=function(){var t,n=this;return t=this.loading?it.a.component():W.a.component({children:app.translator.trans("core.forum.discussion_list.load_more_button"),className:"Button",onclick:this.loadMore.bind(this)}),m("div",{className:"RankingPage"},L.a.prototype.hero(),m("div",{className:"container"},m("nav",{className:"RankingPage-nav IndexPage-nav sideNav",config:L.a.prototype.affixSidebar},m("ul",null,y()(L.a.prototype.sidebarItems().toArray()))),m("div",{className:"RankingPage"},m("div",{className:"sideNavOffset"},m("table",{class:"rankings"},m("tr",null,m("th",{className:"rankings-mobile"},app.translator.trans("reflar-gamification.forum.ranking.rank")),m("th",null,app.translator.trans("reflar-gamification.forum.ranking.name")),m("th",null,app.translator.trans("reflar-gamification.forum.ranking.amount"))),this.users.map(function(t,o){return++o,[m("tr",{className:"ranking-"+o},o<4?"1"==app.forum.attribute("CustomRankingImages")?m("img",{className:"rankings-mobile rankings-image",src:app.forum.attribute("baseUrl")+"/assets/"+app.forum.attribute("TopImage"+o)}):m("td",{className:"rankings-mobile rankings-"+o}," ",m("i",{className:"icon fas fa-trophy"})):m("td",{className:"rankings-4 rankings-mobile"},n.addOrdinalSuffix(o)),m("td",null,m("div",{className:"PostUser"},m("h3",{className:"rankings-info"},m("a",{href:app.route.user(t),config:m.route},o<4?i()(t,{className:"info-avatar rankings-"+o+"-avatar"}):""," ",f()(t))))),o<4?m("td",{className:"rankings-"+o},t.data.attributes.Points):m("td",{className:"rankings-4"},t.data.attributes.Points))]})),m("div",{className:"rankings-loadmore"}," ",t)))))},o.refresh=function(t){var n=this;return void 0===t&&(t=!0),t&&(this.loading=!0,this.users=[]),this.loadResults().then(function(t){n.users=[],n.parseResults(t)},function(){n.loading=!1,m.redraw()})},o.addOrdinalSuffix=function(t){if("en"==app.forum.attribute("DefaultLocale")){var n=t%10,o=t%100;return 1==n&&11!=o?t+"st":2==n&&12!=o?t+"nd":3==n&&13!=o?t+"rd":t+"th"}return t},o.stickyParams=function(){return{sort:m.route.param("sort"),q:m.route.param("q")}},o.actionItems=function(){var t=new T.a;return t.add("refresh",W.a.component({title:app.translator.trans("core.forum.index.refresh_tooltip"),icon:"fas fa-refresh",className:"Button Button--icon",onclick:function(){app.cache.discussionList.refresh(),app.session.user&&(app.store.find("users",app.session.user.id()),m.redraw())}})),t},o.newDiscussion=function(){var t=m.deferred();return app.session.user?this.composeNewDiscussion(t):app.modal.show(new Q.a({onlogin:this.composeNewDiscussion.bind(this,t)})),t.promise},o.composeNewDiscussion=function(t){var n=new DiscussionComposer({user:app.session.user});return app.composer.load(n),app.composer.show(),t.resolve(n),t.promise},o.loadResults=function(t){var n={};return n.page={offset:t,limit:"10"},app.store.find("rankings",n)},o.loadMore=function(){this.loading=!0,this.loadResults(this.users.length).then(this.parseResults.bind(this))},o.parseResults=function(t){return[].push.apply(this.users,t),this.loading=!1,this.users.sort(function(t,n){return parseFloat(n.data.attributes.Points)-parseFloat(t.data.attributes.Points)}),m.lazyRedraw(),t},n}(at.a),ct=o(73),pt=function(t){function n(){return t.apply(this,arguments)||this}Object(tt.a)(n,t);var o=n.prototype;return o.icon=function(){return"Up"===this.props.notification.content()?"fas fa-thumbs-up":"fas fa-thumbs-down"},o.href=function(){return app.route.post(this.props.notification.subject())},o.content=function(){var t=this.props.notification.fromUser().username();return"Up"===this.props.notification.content()?app.translator.trans("reflar-gamification.forum.notification.upvote",{username:t}):app.translator.trans("reflar-gamification.forum.notification.downvote",{username:t})},o.excerpt=function(){return this.props.notification.subject().contentPlain()},n}(o.n(ct).a);a.a.initializers.add("reflar-gamification",function(t){t.store.models.ranks=et.a,t.notificationComponents.vote=pt,t.routes.rankings={path:"/rankings",component:ut.component()},Object(e.extend)(Y.a.prototype,"config",function(t,n,o){var r=this;n||a.a.pusher&&a.a.pusher.then(function(t){t.main.bind("newVote",function(t){var n=parseInt(t.userId);if(n!=a.a.session.user.id()){if(m.startComputation(),r.postId()==t.postId){var o=r.upvotedata(),e=r.downvotedata();switch(t.before){case"up":o=r.removeVote(o,n);break;case"down":e=r.removeVote(e,n)}switch(t.after){case"up":o.unshift({type:"users",id:n});break;case"down":e.unshift({type:"users",id:n});break;case"none":e=r.removeVote(e,n),o=r.removeVote(o,n)}r.downvotedata(e),r.upvotedata(o),m.redraw.strategy("all")}m.endComputation()}}),Object(e.extend)(o,"onunload",function(){return t.main.unbind("newVote")})})}),Object(e.extend)($.a,"moderationControls",function(t,n){n.discussion().canSeeVotes()&&t.add("viewVotes",[m(W.a,{icon:"fas fa-thumbs-up",onclick:function(){a.a.modal.show(new ot({post:n}))}},a.a.translator.trans("reflar-gamification.forum.mod_item"))])}),Object(e.extend)(Y.a.prototype,"actionItems",function(t){var n=this.props.post;this.postId=m.prop(n.data.id),this.downvotedata=m.prop(n.data.relationships.downvotes.data),this.upvotedata=m.prop(n.data.relationships.upvotes.data);var o=a.a.session.user&&n.upvotes().some(function(t){return t===a.a.session.user}),e=a.a.session.user&&n.downvotes().some(function(t){return t===a.a.session.user});a.a.session.user||(e=!1,o=!1);var r=a.a.forum.attribute("IconName");null!==r&&""!==r||(r="thumbs"),this.removeVote=function(t,n){return t.some(function(o,e){o.id==n&&t.splice(e,1)}),t},t.add("upvote",W.a.component({icon:"fas fa-"+r+"-up",className:"Post-vote Post-upvote",style:!1!==o?"color:"+a.a.forum.data.attributes.themePrimaryColor:"color:",disabled:!n.discussion().canVote(),onclick:function(){if(a.a.session.user){if(n.discussion().canVote()){var t=n.data.relationships.upvotes.data,r=n.data.relationships.downvotes.data;o=!o,e=!1,n.save([o,e,"vote"]),t.some(function(n,o){if(n.id===a.a.session.user.id())return t.splice(o,1),!0}),r.some(function(t,n){if(t.id===a.a.session.user.id())return r.splice(n,1),!0}),o&&t.unshift({type:"users",id:a.a.session.user.id()})}}else a.a.modal.show(new Q.a)}})),t.add("points",m("label",{className:"Post-points"},this.upvotedata().length-this.downvotedata().length)),t.add("downvote",W.a.component({icon:"fas fa-"+r+"-down",className:"Post-vote Post-downvote",style:!1!==e?"color:"+a.a.forum.data.attributes.themePrimaryColor:"",disabled:!n.discussion().canVote(),onclick:function(){if(a.a.session.user){if(n.discussion().canVote()){var t=n.data.relationships.upvotes.data,r=n.data.relationships.downvotes.data;e=!e,o=!1,n.save([o,e,"vote"]),t.some(function(n,o){if(n.id===a.a.session.user.id())return t.splice(o,1),!0}),r.some(function(t,n){if(t.id===a.a.session.user.id())return r.splice(n,1),!0}),e&&r.unshift({type:"users",id:a.a.session.user.id()})}}else a.a.modal.show(new Q.a)}}))}),J(),R()})},,function(t,n){t.exports=flarum.core.compat["components/AvatarEditor"]},function(t,n){t.exports=flarum.core.compat["components/PostUser"]},function(t,n){t.exports=flarum.core.compat["utils/UserControls"]},function(t,n){t.exports=flarum.core.compat["helpers/userOnline"]},function(t,n){t.exports=flarum.core.compat["components/LinkButton"]},function(t,n){t.exports=flarum.core.compat["utils/PostControls"]},function(t,n){t.exports=flarum.core.compat["components/Modal"]},function(t,n){t.exports=flarum.core.compat["components/LoadingIndicator"]},function(t,n){t.exports=flarum.core.compat["components/Notification"]},,,,,function(t,n,o){"use strict";o.r(n);var e=o(15);for(var r in e)"default"!==r&&function(t){o.d(n,t,function(){return e[t]})}(r);o(63)},function(t,n,o){o(80),t.exports=o(6).Object.keys},function(t,n,o){var e=o(81),r=o(30);o(82)("keys",function(){return function(t){return r(e(t))}})},function(t,n,o){var e=o(29);t.exports=function(t){return Object(e(t))}},function(t,n,o){var e=o(31),r=o(6),a=o(13);t.exports=function(t,n){var o=(r.Object||{})[t]||Object[t],s={};s[t]=n(o),e(e.S+e.F*a(function(){o(1)}),"Object",s)}}]);
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./forum.js");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./forum.js":
+/*!******************!*\
+  !*** ./forum.js ***!
+  \******************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _src_common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/common */ "./src/common/index.js");
+/* harmony import */ var _src_common__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_src_common__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _src_common__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _src_common__WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _src_forum__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/forum */ "./src/forum/index.js");
+/* empty/unused harmony star reexport *//*
+ * This file is part of Flarum.
+ *
+ * (c) Toby Zerner <toby.zerner@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/core-js/object/create.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@babel/runtime/core-js/object/create.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/object/create */ "./node_modules/core-js/library/fn/object/create.js");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/core-js/object/keys.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@babel/runtime/core-js/object/keys.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/object/keys */ "./node_modules/core-js/library/fn/object/keys.js");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/es6/inheritsLoose.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/es6/inheritsLoose.js ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _inheritsLoose; });
+/* harmony import */ var _core_js_object_create__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/object/create */ "./node_modules/@babel/runtime/core-js/object/create.js");
+/* harmony import */ var _core_js_object_create__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_object_create__WEBPACK_IMPORTED_MODULE_0__);
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = _core_js_object_create__WEBPACK_IMPORTED_MODULE_0___default()(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/fn/object/create.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/library/fn/object/create.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ../../modules/es6.object.create */ "./node_modules/core-js/library/modules/es6.object.create.js");
+var $Object = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object;
+module.exports = function create(P, D) {
+  return $Object.create(P, D);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/fn/object/keys.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/library/fn/object/keys.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ../../modules/es6.object.keys */ "./node_modules/core-js/library/modules/es6.object.keys.js");
+module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.keys;
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_a-function.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_a-function.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_an-object.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_an-object.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_array-includes.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_array-includes.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// false -> Array#indexOf
+// true  -> Array#includes
+var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
+var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/library/modules/_to-length.js");
+var toAbsoluteIndex = __webpack_require__(/*! ./_to-absolute-index */ "./node_modules/core-js/library/modules/_to-absolute-index.js");
+module.exports = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIObject($this);
+    var length = toLength(O.length);
+    var index = toAbsoluteIndex(fromIndex, length);
+    var value;
+    // Array#includes uses SameValueZero equality algorithm
+    // eslint-disable-next-line no-self-compare
+    if (IS_INCLUDES && el != el) while (length > index) {
+      value = O[index++];
+      // eslint-disable-next-line no-self-compare
+      if (value != value) return true;
+    // Array#indexOf ignores holes, Array#includes - not
+    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+      if (O[index] === el) return IS_INCLUDES || index || 0;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_cof.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_cof.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = function (it) {
+  return toString.call(it).slice(8, -1);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_core.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_core.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.5.7' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_ctx.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_ctx.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// optional / simple context binding
+var aFunction = __webpack_require__(/*! ./_a-function */ "./node_modules/core-js/library/modules/_a-function.js");
+module.exports = function (fn, that, length) {
+  aFunction(fn);
+  if (that === undefined) return fn;
+  switch (length) {
+    case 1: return function (a) {
+      return fn.call(that, a);
+    };
+    case 2: return function (a, b) {
+      return fn.call(that, a, b);
+    };
+    case 3: return function (a, b, c) {
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function (/* ...args */) {
+    return fn.apply(that, arguments);
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_defined.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_defined.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_descriptors.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_descriptors.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js")(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_dom-create.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_dom-create.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
+var document = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js").document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function (it) {
+  return is ? document.createElement(it) : {};
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_enum-bug-keys.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_enum-bug-keys.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// IE 8- don't enum bug keys
+module.exports = (
+  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+).split(',');
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_export.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_export.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
+var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
+var ctx = __webpack_require__(/*! ./_ctx */ "./node_modules/core-js/library/modules/_ctx.js");
+var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js");
+var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
+var PROTOTYPE = 'prototype';
+
+var $export = function (type, name, source) {
+  var IS_FORCED = type & $export.F;
+  var IS_GLOBAL = type & $export.G;
+  var IS_STATIC = type & $export.S;
+  var IS_PROTO = type & $export.P;
+  var IS_BIND = type & $export.B;
+  var IS_WRAP = type & $export.W;
+  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+  var expProto = exports[PROTOTYPE];
+  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
+  var key, own, out;
+  if (IS_GLOBAL) source = name;
+  for (key in source) {
+    // contains in native
+    own = !IS_FORCED && target && target[key] !== undefined;
+    if (own && has(exports, key)) continue;
+    // export native or passed
+    out = own ? target[key] : source[key];
+    // prevent global pollution for namespaces
+    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+    // bind timers to global for call from export context
+    : IS_BIND && own ? ctx(out, global)
+    // wrap global constructors for prevent change them in library
+    : IS_WRAP && target[key] == out ? (function (C) {
+      var F = function (a, b, c) {
+        if (this instanceof C) {
+          switch (arguments.length) {
+            case 0: return new C();
+            case 1: return new C(a);
+            case 2: return new C(a, b);
+          } return new C(a, b, c);
+        } return C.apply(this, arguments);
+      };
+      F[PROTOTYPE] = C[PROTOTYPE];
+      return F;
+    // make static versions for prototype methods
+    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+    if (IS_PROTO) {
+      (exports.virtual || (exports.virtual = {}))[key] = out;
+      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
+    }
+  }
+};
+// type bitmap
+$export.F = 1;   // forced
+$export.G = 2;   // global
+$export.S = 4;   // static
+$export.P = 8;   // proto
+$export.B = 16;  // bind
+$export.W = 32;  // wrap
+$export.U = 64;  // safe
+$export.R = 128; // real proto method for `library`
+module.exports = $export;
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_fails.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_fails.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function (exec) {
+  try {
+    return !!exec();
+  } catch (e) {
+    return true;
+  }
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_global.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_global.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_has.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_has.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var hasOwnProperty = {}.hasOwnProperty;
+module.exports = function (it, key) {
+  return hasOwnProperty.call(it, key);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_hide.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_hide.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js");
+var createDesc = __webpack_require__(/*! ./_property-desc */ "./node_modules/core-js/library/modules/_property-desc.js");
+module.exports = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") ? function (object, key, value) {
+  return dP.f(object, key, createDesc(1, value));
+} : function (object, key, value) {
+  object[key] = value;
+  return object;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_html.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_html.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var document = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js").document;
+module.exports = document && document.documentElement;
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_ie8-dom-define.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_ie8-dom-define.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = !__webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") && !__webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js")(function () {
+  return Object.defineProperty(__webpack_require__(/*! ./_dom-create */ "./node_modules/core-js/library/modules/_dom-create.js")('div'), 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_iobject.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_iobject.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+var cof = __webpack_require__(/*! ./_cof */ "./node_modules/core-js/library/modules/_cof.js");
+// eslint-disable-next-line no-prototype-builtins
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
+  return cof(it) == 'String' ? it.split('') : Object(it);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_is-object.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_is-object.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function (it) {
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_library.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_library.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_object-create.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_object-create.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
+var dPs = __webpack_require__(/*! ./_object-dps */ "./node_modules/core-js/library/modules/_object-dps.js");
+var enumBugKeys = __webpack_require__(/*! ./_enum-bug-keys */ "./node_modules/core-js/library/modules/_enum-bug-keys.js");
+var IE_PROTO = __webpack_require__(/*! ./_shared-key */ "./node_modules/core-js/library/modules/_shared-key.js")('IE_PROTO');
+var Empty = function () { /* empty */ };
+var PROTOTYPE = 'prototype';
+
+// Create object with fake `null` prototype: use iframe Object with cleared prototype
+var createDict = function () {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = __webpack_require__(/*! ./_dom-create */ "./node_modules/core-js/library/modules/_dom-create.js")('iframe');
+  var i = enumBugKeys.length;
+  var lt = '<';
+  var gt = '>';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  __webpack_require__(/*! ./_html */ "./node_modules/core-js/library/modules/_html.js").appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
+  return createDict();
+};
+
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+  if (O !== null) {
+    Empty[PROTOTYPE] = anObject(O);
+    result = new Empty();
+    Empty[PROTOTYPE] = null;
+    // add "__proto__" for Object.getPrototypeOf polyfill
+    result[IE_PROTO] = O;
+  } else result = createDict();
+  return Properties === undefined ? result : dPs(result, Properties);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_object-dp.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_object-dp.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
+var IE8_DOM_DEFINE = __webpack_require__(/*! ./_ie8-dom-define */ "./node_modules/core-js/library/modules/_ie8-dom-define.js");
+var toPrimitive = __webpack_require__(/*! ./_to-primitive */ "./node_modules/core-js/library/modules/_to-primitive.js");
+var dP = Object.defineProperty;
+
+exports.f = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if (IE8_DOM_DEFINE) try {
+    return dP(O, P, Attributes);
+  } catch (e) { /* empty */ }
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+  if ('value' in Attributes) O[P] = Attributes.value;
+  return O;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_object-dps.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_object-dps.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js");
+var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
+var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
+
+module.exports = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") ? Object.defineProperties : function defineProperties(O, Properties) {
+  anObject(O);
+  var keys = getKeys(Properties);
+  var length = keys.length;
+  var i = 0;
+  var P;
+  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
+  return O;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_object-keys-internal.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_object-keys-internal.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
+var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
+var arrayIndexOf = __webpack_require__(/*! ./_array-includes */ "./node_modules/core-js/library/modules/_array-includes.js")(false);
+var IE_PROTO = __webpack_require__(/*! ./_shared-key */ "./node_modules/core-js/library/modules/_shared-key.js")('IE_PROTO');
+
+module.exports = function (object, names) {
+  var O = toIObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
+  // Don't enum bug & hidden keys
+  while (names.length > i) if (has(O, key = names[i++])) {
+    ~arrayIndexOf(result, key) || result.push(key);
+  }
+  return result;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_object-keys.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_object-keys.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+var $keys = __webpack_require__(/*! ./_object-keys-internal */ "./node_modules/core-js/library/modules/_object-keys-internal.js");
+var enumBugKeys = __webpack_require__(/*! ./_enum-bug-keys */ "./node_modules/core-js/library/modules/_enum-bug-keys.js");
+
+module.exports = Object.keys || function keys(O) {
+  return $keys(O, enumBugKeys);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_object-sap.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_object-sap.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// most Object methods by ES6 should accept primitives
+var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
+var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
+var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js");
+module.exports = function (KEY, exec) {
+  var fn = (core.Object || {})[KEY] || Object[KEY];
+  var exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_property-desc.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_property-desc.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function (bitmap, value) {
+  return {
+    enumerable: !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable: !(bitmap & 4),
+    value: value
+  };
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_shared-key.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_shared-key.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var shared = __webpack_require__(/*! ./_shared */ "./node_modules/core-js/library/modules/_shared.js")('keys');
+var uid = __webpack_require__(/*! ./_uid */ "./node_modules/core-js/library/modules/_uid.js");
+module.exports = function (key) {
+  return shared[key] || (shared[key] = uid(key));
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_shared.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_shared.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
+var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
+var SHARED = '__core-js_shared__';
+var store = global[SHARED] || (global[SHARED] = {});
+
+(module.exports = function (key, value) {
+  return store[key] || (store[key] = value !== undefined ? value : {});
+})('versions', []).push({
+  version: core.version,
+  mode: __webpack_require__(/*! ./_library */ "./node_modules/core-js/library/modules/_library.js") ? 'pure' : 'global',
+  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_to-absolute-index.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_to-absolute-index.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__(/*! ./_to-integer */ "./node_modules/core-js/library/modules/_to-integer.js");
+var max = Math.max;
+var min = Math.min;
+module.exports = function (index, length) {
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_to-integer.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_to-integer.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// 7.1.4 ToInteger
+var ceil = Math.ceil;
+var floor = Math.floor;
+module.exports = function (it) {
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_to-iobject.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_to-iobject.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+var IObject = __webpack_require__(/*! ./_iobject */ "./node_modules/core-js/library/modules/_iobject.js");
+var defined = __webpack_require__(/*! ./_defined */ "./node_modules/core-js/library/modules/_defined.js");
+module.exports = function (it) {
+  return IObject(defined(it));
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_to-length.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_to-length.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.15 ToLength
+var toInteger = __webpack_require__(/*! ./_to-integer */ "./node_modules/core-js/library/modules/_to-integer.js");
+var min = Math.min;
+module.exports = function (it) {
+  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_to-object.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_to-object.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.13 ToObject(argument)
+var defined = __webpack_require__(/*! ./_defined */ "./node_modules/core-js/library/modules/_defined.js");
+module.exports = function (it) {
+  return Object(defined(it));
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_to-primitive.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_to-primitive.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.1.1 ToPrimitive(input [, PreferredType])
+var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+module.exports = function (it, S) {
+  if (!isObject(it)) return it;
+  var fn, val;
+  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/_uid.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/library/modules/_uid.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var id = 0;
+var px = Math.random();
+module.exports = function (key) {
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/es6.object.create.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/es6.object.create.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', { create: __webpack_require__(/*! ./_object-create */ "./node_modules/core-js/library/modules/_object-create.js") });
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/library/modules/es6.object.keys.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/core-js/library/modules/es6.object.keys.js ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.14 Object.keys(O)
+var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
+var $keys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
+
+__webpack_require__(/*! ./_object-sap */ "./node_modules/core-js/library/modules/_object-sap.js")('keys', function () {
+  return function keys(it) {
+    return $keys(toObject(it));
+  };
+});
+
+
+/***/ }),
+
+/***/ "./src/common/helpers/rankLabel.js":
+/*!*****************************************!*\
+  !*** ./src/common/helpers/rankLabel.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return rankLabel; });
+function rankLabel(rank, attrs) {
+  if (attrs === void 0) {
+    attrs = {};
+  }
+
+  attrs.style = attrs.style || {};
+  attrs.className = 'rankLabel ' + (attrs.className || '');
+  var color = rank.color();
+  attrs.style.backgroundColor = attrs.style.color = color;
+  attrs.className += ' colored';
+  return m('span', attrs, m("span", {
+    className: "rankLabel-text"
+  }, rank.name()));
+}
+
+/***/ }),
+
+/***/ "./src/common/index.js":
+/*!*****************************!*\
+  !*** ./src/common/index.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ "./src/common/models/Rank.js":
+/*!***********************************!*\
+  !*** ./src/common/models/Rank.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Rank; });
+/* harmony import */ var _babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/es6/inheritsLoose */ "./node_modules/@babel/runtime/helpers/es6/inheritsLoose.js");
+/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/Model */ "flarum/Model");
+/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_Model__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_utils_mixin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/utils/mixin */ "flarum/utils/mixin");
+/* harmony import */ var flarum_utils_mixin__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_mixin__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+var Rank =
+/*#__PURE__*/
+function (_mixin) {
+  Object(_babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(Rank, _mixin);
+
+  function Rank() {
+    return _mixin.apply(this, arguments) || this;
+  }
+
+  return Rank;
+}(flarum_utils_mixin__WEBPACK_IMPORTED_MODULE_2___default()(flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a, {
+  points: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('points'),
+  name: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('name'),
+  color: flarum_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('color')
+}));
+
+
+
+/***/ }),
+
+/***/ "./src/forum/components/AddAttributes.js":
+/*!***********************************************!*\
+  !*** ./src/forum/components/AddAttributes.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/helpers/avatar */ "flarum/helpers/avatar");
+/* harmony import */ var flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_components_AvatarEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/components/AvatarEditor */ "flarum/components/AvatarEditor");
+/* harmony import */ var flarum_components_AvatarEditor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_components_AvatarEditor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/helpers/username */ "flarum/helpers/username");
+/* harmony import */ var flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/models/Discussion */ "flarum/models/Discussion");
+/* harmony import */ var flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/components/Dropdown */ "flarum/components/Dropdown");
+/* harmony import */ var flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/helpers/listItems */ "flarum/helpers/listItems");
+/* harmony import */ var flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/Model */ "flarum/Model");
+/* harmony import */ var flarum_Model__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_Model__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var flarum_models_Post__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/models/Post */ "flarum/models/Post");
+/* harmony import */ var flarum_models_Post__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_models_Post__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var flarum_components_PostUser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! flarum/components/PostUser */ "flarum/components/PostUser");
+/* harmony import */ var flarum_components_PostUser__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(flarum_components_PostUser__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var flarum_models_User__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! flarum/models/User */ "flarum/models/User");
+/* harmony import */ var flarum_models_User__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(flarum_models_User__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var flarum_components_UserCard__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! flarum/components/UserCard */ "flarum/components/UserCard");
+/* harmony import */ var flarum_components_UserCard__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(flarum_components_UserCard__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var flarum_utils_UserControls__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! flarum/utils/UserControls */ "flarum/utils/UserControls");
+/* harmony import */ var flarum_utils_UserControls__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_UserControls__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var flarum_helpers_userOnline__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! flarum/helpers/userOnline */ "flarum/helpers/userOnline");
+/* harmony import */ var flarum_helpers_userOnline__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_userOnline__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../common/helpers/rankLabel */ "./src/common/helpers/rankLabel.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.canVote = flarum_Model__WEBPACK_IMPORTED_MODULE_7___default.a.attribute('canVote');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.canSeeVotes = flarum_Model__WEBPACK_IMPORTED_MODULE_7___default.a.attribute('canSeeVotes');
+  flarum_models_Discussion__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.votes = flarum_Model__WEBPACK_IMPORTED_MODULE_7___default.a.attribute('votes');
+  flarum_models_User__WEBPACK_IMPORTED_MODULE_10___default.a.prototype.points = flarum_Model__WEBPACK_IMPORTED_MODULE_7___default.a.attribute('points');
+  flarum_models_User__WEBPACK_IMPORTED_MODULE_10___default.a.prototype.ranks = flarum_Model__WEBPACK_IMPORTED_MODULE_7___default.a.hasMany('ranks');
+  flarum_models_Post__WEBPACK_IMPORTED_MODULE_8___default.a.prototype.upvotes = flarum_Model__WEBPACK_IMPORTED_MODULE_7___default.a.hasMany('upvotes');
+  flarum_models_Post__WEBPACK_IMPORTED_MODULE_8___default.a.prototype.downvotes = flarum_Model__WEBPACK_IMPORTED_MODULE_7___default.a.hasMany('downvotes');
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_UserCard__WEBPACK_IMPORTED_MODULE_11___default.a.prototype, 'infoItems', function (items, user) {
+    var points = '';
+
+    if (points == 0) {
+      points = '0';
+    }
+
+    if (app.forum.attribute('PointsPlaceholder')) {
+      points = app.forum.attribute('PointsPlaceholder').replace('{points}', this.props.user.data.attributes.Points);
+    } else {
+      points = app.translator.trans('reflar-gamification.forum.user.points', {
+        points: this.props.user.data.attributes.Points
+      });
+    }
+
+    items.add('points', points);
+  });
+
+  flarum_components_UserCard__WEBPACK_IMPORTED_MODULE_11___default.a.prototype.view = function () {
+    var user = this.props.user;
+    var controls = flarum_utils_UserControls__WEBPACK_IMPORTED_MODULE_12___default.a.controls(user, this).toArray();
+    var color = user.color();
+    var badges = user.badges().toArray();
+    return m("div", {
+      className: 'UserCard ' + (this.props.className || ''),
+      style: color ? {
+        backgroundColor: color
+      } : ''
+    }, m("div", {
+      className: "darkenBackground"
+    }, m("div", {
+      className: "container"
+    }, controls.length ? flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default.a.component({
+      children: controls,
+      className: 'UserCard-controls App-primaryControl',
+      menuClassName: 'Dropdown-menu--right',
+      buttonClassName: this.props.controlsButtonClassName,
+      label: app.translator.trans('core.forum.user_controls.button'),
+      icon: 'fas fa-ellipsis-v'
+    }) : '', m("div", {
+      className: "UserCard-profile"
+    }, m("h2", {
+      className: "UserCard-identity"
+    }, this.props.editable ? [flarum_components_AvatarEditor__WEBPACK_IMPORTED_MODULE_2___default.a.component({
+      user: user,
+      className: 'UserCard-avatar'
+    }), flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default()(user)] : m("a", {
+      href: app.route.user(user),
+      config: m.route
+    }, m("div", {
+      className: "UserCard-avatar"
+    }, flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_1___default()(user)), flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default()(user))), badges.length ? m("ul", {
+      className: "UserCard-badges badges"
+    }, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_6___default()(badges), user.ranks() !== false ? user.ranks().reverse().map(function (rank, i) {
+      if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+        return m("li", {
+          className: "User-Rank"
+        }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_14__["default"])(rank));
+      }
+    }) : '') : '', m("ul", {
+      className: "UserCard-info"
+    }, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_6___default()(this.infoItems().toArray()))))));
+  };
+
+  flarum_components_PostUser__WEBPACK_IMPORTED_MODULE_9___default.a.prototype.view = function () {
+    var post = this.props.post;
+    var user = post.user();
+
+    if (!user) {
+      return m("div", {
+        className: "PostUser"
+      }, m("h3", null, flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_1___default()(user, {
+        className: 'PostUser-avatar'
+      }), " ", flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default()(user), " ", rank[0]));
+    }
+
+    var card = '';
+
+    if (!post.isHidden() && this.cardVisible) {
+      card = flarum_components_UserCard__WEBPACK_IMPORTED_MODULE_11___default.a.component({
+        user: user,
+        className: 'UserCard--popover',
+        controlsButtonClassName: 'Button Button--icon Button--flat'
+      });
+    }
+
+    return m("div", {
+      className: "PostUser"
+    }, flarum_helpers_userOnline__WEBPACK_IMPORTED_MODULE_13___default()(user), m("h3", null, m("a", {
+      href: app.route.user(user),
+      config: m.route
+    }, flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_1___default()(user, {
+      className: 'PostUser-avatar'
+    }), ' ', flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default()(user)), user.ranks().reverse().map(function (rank, i) {
+      if (i >= app.forum.attribute('ranksAmt') && app.forum.attribute('ranksAmt') !== null) {} else {
+        return m("span", {
+          className: "Post-Rank"
+        }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_14__["default"])(rank));
+      }
+    })), m("ul", {
+      className: "PostUser-badges badges"
+    }, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_6___default()(user.badges().toArray())), card);
+  };
+});
+
+/***/ }),
+
+/***/ "./src/forum/components/AddHotnessSort.js":
+/*!************************************************!*\
+  !*** ./src/forum/components/AddHotnessSort.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/core-js/object/keys */ "./node_modules/@babel/runtime/core-js/object/keys.js");
+/* harmony import */ var _babel_runtime_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/components/IndexPage */ "flarum/components/IndexPage");
+/* harmony import */ var flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/utils/ItemList */ "flarum/utils/ItemList");
+/* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var flarum_components_DiscussionList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/components/DiscussionList */ "flarum/components/DiscussionList");
+/* harmony import */ var flarum_components_DiscussionList__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_DiscussionList__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/components/Dropdown */ "flarum/components/Dropdown");
+/* harmony import */ var flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/components/Button */ "flarum/components/Button");
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var flarum_components_LinkButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/components/LinkButton */ "flarum/components/LinkButton");
+/* harmony import */ var flarum_components_LinkButton__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_components_LinkButton__WEBPACK_IMPORTED_MODULE_7__);
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.viewItems = function () {
+    var _this = this;
+
+    var items = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_3___default.a();
+    var sortMap = app.cache.discussionList.sortMap();
+    var sortOptions = {};
+
+    for (var i in sortMap) {
+      sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
+    }
+
+    var dropDownLabel = sortOptions[this.params().sort] || _babel_runtime_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0___default()(sortMap).map(function (key) {
+      return sortOptions[key];
+    })[0];
+
+    if (/^.*?\/hot/.test(m.route())) {
+      dropDownLabel = app.translator.trans('core.forum.index_sort.hot_button');
+    }
+
+    items.add('sort', flarum_components_Dropdown__WEBPACK_IMPORTED_MODULE_5___default.a.component({
+      buttonClassName: 'Button',
+      label: dropDownLabel,
+      children: _babel_runtime_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0___default()(sortOptions).map(function (value) {
+        var label = sortOptions[value];
+        var active = (_this.params().sort || _babel_runtime_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0___default()(sortMap)[0]) === value;
+
+        if (/^.*?\/hot/.test(m.route()) && value === 'hot') {
+          active = true;
+        }
+
+        if (/^.*?\/hot/.test(m.route()) && value === 'latest') {
+          active = false;
+          m.redraw();
+        }
+
+        return flarum_components_Button__WEBPACK_IMPORTED_MODULE_6___default.a.component({
+          children: label,
+          icon: active ? 'fas fa-check' : true,
+          onclick: _this.changeSort.bind(_this, value),
+          active: active
+        });
+      })
+    }));
+    return items;
+  };
+
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_1__["extend"])(flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_2___default.a.prototype, 'navItems', function (items) {
+    items.add('rankings', flarum_components_LinkButton__WEBPACK_IMPORTED_MODULE_7___default.a.component({
+      href: app.route('rankings'),
+      children: app.translator.trans('reflar-gamification.forum.nav.name'),
+      icon: 'fas fa-trophy'
+    }), 80);
+  });
+
+  flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.changeSort = function (sort) {
+    var params = this.params();
+
+    if (sort === 'hot') {
+      m.route('/');
+      m.route(m.route() + 'hot');
+    } else {
+      if (sort === _babel_runtime_core_js_object_keys__WEBPACK_IMPORTED_MODULE_0___default()(app.cache.discussionList.sortMap())[0]) {
+        delete params.sort;
+      } else {
+        params.sort = sort;
+      }
+
+      if (params.filter === 'hot') {
+        delete params.filter;
+      }
+
+      m.route(app.route('index', params));
+    }
+  };
+
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_1__["extend"])(flarum_components_DiscussionList__WEBPACK_IMPORTED_MODULE_4___default.a.prototype, 'sortMap', function (map) {
+    map.hot = 'hot';
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_1__["extend"])(flarum_components_DiscussionList__WEBPACK_IMPORTED_MODULE_4___default.a.prototype, 'requestParams', function (params) {
+    if (this.props.params.filter === 'hot') {
+      params.filter.q = ' is:hot';
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./src/forum/components/AddVoteButtons.js":
+/*!************************************************!*\
+  !*** ./src/forum/components/AddVoteButtons.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/app */ "flarum/app");
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_app__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/components/Button */ "flarum/components/Button");
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/components/LogInModal */ "flarum/components/LogInModal");
+/* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/components/CommentPost */ "flarum/components/CommentPost");
+/* harmony import */ var flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var flarum_utils_PostControls__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/utils/PostControls */ "flarum/utils/PostControls");
+/* harmony import */ var flarum_utils_PostControls__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_PostControls__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _VotesModal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./VotesModal */ "./src/forum/components/VotesModal.js");
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_4___default.a.prototype, 'config', function (x, isInitialized, context) {
+    var _this = this;
+
+    if (isInitialized) return;
+
+    if (flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.pusher) {
+      flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.pusher.then(function (channels) {
+        channels.main.bind('newVote', function (data) {
+          var userId = parseInt(data.userId);
+          if (userId == flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()) return;
+          m.startComputation();
+
+          if (_this.postId() == data.postId) {
+            var upData = _this.upvotedata();
+
+            var downData = _this.downvotedata();
+
+            switch (data.before) {
+              case 'up':
+                upData = _this.removeVote(upData, userId);
+                break;
+
+              case 'down':
+                downData = _this.removeVote(downData, userId);
+                break;
+            }
+
+            switch (data.after) {
+              case 'up':
+                upData.unshift({
+                  type: 'users',
+                  id: userId
+                });
+                break;
+
+              case 'down':
+                downData.unshift({
+                  type: 'users',
+                  id: userId
+                });
+                break;
+
+              case 'none':
+                downData = _this.removeVote(downData, userId);
+                upData = _this.removeVote(upData, userId);
+                break;
+            }
+
+            _this.downvotedata(downData);
+
+            _this.upvotedata(upData);
+
+            m.redraw.strategy('all');
+          }
+
+          m.endComputation();
+        });
+        Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(context, 'onunload', function () {
+          return channels.main.unbind('newVote');
+        });
+      });
+    }
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_utils_PostControls__WEBPACK_IMPORTED_MODULE_5___default.a, 'moderationControls', function (items, post) {
+    if (post.discussion().canSeeVotes()) {
+      items.add('viewVotes', [m(flarum_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        icon: 'fas fa-thumbs-up',
+        onclick: function onclick() {
+          flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.modal.show(new _VotesModal__WEBPACK_IMPORTED_MODULE_6__["default"]({
+            post: post
+          }));
+        }
+      }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('reflar-gamification.forum.mod_item'))]);
+    }
+  });
+  Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_4___default.a.prototype, 'actionItems', function (items) {
+    var post = this.props.post;
+    this.postId = m.prop(post.data.id);
+    this.downvotedata = m.prop(post.data.relationships.downvotes.data);
+    this.upvotedata = m.prop(post.data.relationships.upvotes.data);
+    var isUpvoted = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user && post.upvotes().some(function (user) {
+      return user === flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user;
+    });
+    var isDownvoted = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user && post.downvotes().some(function (user) {
+      return user === flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user;
+    });
+
+    if (!flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user) {
+      isDownvoted = false;
+      isUpvoted = false;
+    }
+
+    var icon = flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('IconName');
+
+    if (icon === null || icon === '') {
+      icon = 'thumbs';
+    }
+
+    this.removeVote = function (data, userId) {
+      data.some(function (vote, i) {
+        if (vote.id == userId) {
+          data.splice(i, 1);
+        }
+      });
+      return data;
+    };
+
+    items.add('upvote', flarum_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a.component({
+      icon: 'fas fa-' + icon + '-up',
+      className: 'Post-vote Post-upvote',
+      style: isUpvoted !== false ? 'color:' + flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.data.attributes.themePrimaryColor : 'color:',
+      disabled: !post.discussion().canVote(),
+      onclick: function onclick() {
+        if (!flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user) {
+          flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.modal.show(new flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_3___default.a());
+          return;
+        }
+
+        if (!post.discussion().canVote()) return;
+        var upData = post.data.relationships.upvotes.data;
+        var downData = post.data.relationships.downvotes.data;
+        isUpvoted = !isUpvoted;
+        isDownvoted = false;
+        post.save([isUpvoted, isDownvoted, 'vote']);
+        upData.some(function (upvote, i) {
+          if (upvote.id === flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()) {
+            upData.splice(i, 1);
+            return true;
+          }
+        });
+        downData.some(function (downvote, i) {
+          if (downvote.id === flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()) {
+            downData.splice(i, 1);
+            return true;
+          }
+        });
+
+        if (isUpvoted) {
+          upData.unshift({
+            type: 'users',
+            id: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()
+          });
+        }
+      }
+    }), 3);
+    items.add('points', m("label", {
+      className: "Post-points"
+    }, this.upvotedata().length - this.downvotedata().length), 2);
+    items.add('downvote', flarum_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a.component({
+      icon: 'fas fa-' + icon + '-down',
+      className: 'Post-vote Post-downvote',
+      style: isDownvoted !== false ? 'color:' + flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.data.attributes.themePrimaryColor : '',
+      disabled: !post.discussion().canVote(),
+      onclick: function onclick() {
+        if (!flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user) {
+          flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.modal.show(new flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_3___default.a());
+          return;
+        }
+
+        if (!post.discussion().canVote()) return;
+        var upData = post.data.relationships.upvotes.data;
+        var downData = post.data.relationships.downvotes.data;
+        isDownvoted = !isDownvoted;
+        isUpvoted = false;
+        post.save([isUpvoted, isDownvoted, 'vote']);
+        upData.some(function (upvote, i) {
+          if (upvote.id === flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()) {
+            upData.splice(i, 1);
+            return true;
+          }
+        });
+        downData.some(function (downvote, i) {
+          if (downvote.id === flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()) {
+            downData.splice(i, 1);
+            return true;
+          }
+        });
+
+        if (isDownvoted) {
+          downData.unshift({
+            type: 'users',
+            id: flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.session.user.id()
+          });
+        }
+      }
+    }), 1);
+  });
+});
+
+/***/ }),
+
+/***/ "./src/forum/components/RankingsPage.js":
+/*!**********************************************!*\
+  !*** ./src/forum/components/RankingsPage.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RankingsPage; });
+/* harmony import */ var _babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/es6/inheritsLoose */ "./node_modules/@babel/runtime/helpers/es6/inheritsLoose.js");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/helpers/avatar */ "flarum/helpers/avatar");
+/* harmony import */ var flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_components_Page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/components/Page */ "flarum/components/Page");
+/* harmony import */ var flarum_components_Page__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Page__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/components/IndexPage */ "flarum/components/IndexPage");
+/* harmony import */ var flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flarum/components/Button */ "flarum/components/Button");
+/* harmony import */ var flarum_components_Button__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Button__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/utils/ItemList */ "flarum/utils/ItemList");
+/* harmony import */ var flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! flarum/components/LogInModal */ "flarum/components/LogInModal");
+/* harmony import */ var flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var flarum_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/components/LoadingIndicator */ "flarum/components/LoadingIndicator");
+/* harmony import */ var flarum_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! flarum/helpers/listItems */ "flarum/helpers/listItems");
+/* harmony import */ var flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var flarum_helpers_username__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! flarum/helpers/username */ "flarum/helpers/username");
+/* harmony import */ var flarum_helpers_username__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_username__WEBPACK_IMPORTED_MODULE_10__);
+
+
+
+
+
+
+
+
+
+
+
+
+var RankingsPage =
+/*#__PURE__*/
+function (_Page) {
+  Object(_babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(RankingsPage, _Page);
+
+  function RankingsPage() {
+    return _Page.apply(this, arguments) || this;
+  }
+
+  var _proto = RankingsPage.prototype;
+
+  _proto.init = function init() {
+    _Page.prototype.init.call(this);
+
+    if (!app.session.user || app.session.user.data.attributes.canViewRankingPage !== true) {
+      m.route('/');
+    }
+
+    this.loading = true;
+    this.users = [];
+    this.refresh();
+  };
+
+  _proto.view = function view() {
+    var _this = this;
+
+    var loading;
+
+    if (this.loading) {
+      loading = flarum_components_LoadingIndicator__WEBPACK_IMPORTED_MODULE_8___default.a.component();
+    } else {
+      loading = flarum_components_Button__WEBPACK_IMPORTED_MODULE_5___default.a.component({
+        children: app.translator.trans('core.forum.discussion_list.load_more_button'),
+        className: 'Button',
+        onclick: this.loadMore.bind(this)
+      });
+    }
+
+    return m("div", {
+      className: "TagsPage"
+    }, flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.hero(), m("div", {
+      className: "container"
+    }, m("nav", {
+      className: "RankingPage-nav IndexPage-nav sideNav",
+      config: flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.affixSidebar
+    }, m("ul", null, flarum_helpers_listItems__WEBPACK_IMPORTED_MODULE_9___default()(flarum_components_IndexPage__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.sidebarItems().toArray()))), m("div", {
+      className: "RankingPage sideNavOffset"
+    }, m("table", {
+      class: "rankings"
+    }, m("tr", null, m("th", {
+      className: "rankings-mobile"
+    }, app.translator.trans('reflar-gamification.forum.ranking.rank')), m("th", null, app.translator.trans('reflar-gamification.forum.ranking.name')), m("th", null, app.translator.trans('reflar-gamification.forum.ranking.amount'))), this.users.map(function (user, i) {
+      ++i;
+      return [m("tr", {
+        className: 'ranking-' + i
+      }, i < 4 ? app.forum.attribute('CustomRankingImages') == '1' ? m("img", {
+        className: "rankings-mobile rankings-image",
+        src: app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i)
+      }) : m("td", {
+        className: 'rankings-mobile rankings-' + i
+      }, m("i", {
+        className: "icon fas fa-trophy"
+      })) : m("td", {
+        className: "rankings-4 rankings-mobile"
+      }, _this.addOrdinalSuffix(i)), m("td", null, m("div", {
+        className: "PostUser"
+      }, m("h3", {
+        className: "rankings-info"
+      }, m("a", {
+        href: app.route.user(user),
+        config: m.route
+      }, i < 4 ? flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2___default()(user, {
+        className: 'info-avatar rankings-' + i + '-avatar'
+      }) : '', " ", flarum_helpers_username__WEBPACK_IMPORTED_MODULE_10___default()(user))))), i < 4 ? m("td", {
+        className: 'rankings-' + i
+      }, user.data.attributes.Points) : m("td", {
+        className: "rankings-4"
+      }, user.data.attributes.Points))];
+    })), m("div", {
+      className: "rankings-loadmore"
+    }, " ", loading))));
+  };
+
+  _proto.refresh = function refresh(clear) {
+    var _this2 = this;
+
+    if (clear === void 0) {
+      clear = true;
+    }
+
+    if (clear) {
+      this.loading = true;
+      this.users = [];
+    }
+
+    return this.loadResults().then(function (results) {
+      _this2.users = [];
+
+      _this2.parseResults(results);
+    }, function () {
+      _this2.loading = false;
+      m.redraw();
+    });
+  };
+
+  _proto.addOrdinalSuffix = function addOrdinalSuffix(i) {
+    if (app.forum.attribute('DefaultLocale') == 'en') {
+      var j = i % 10,
+          k = i % 100;
+
+      if (j == 1 && k != 11) {
+        return i + 'st';
+      }
+
+      if (j == 2 && k != 12) {
+        return i + 'nd';
+      }
+
+      if (j == 3 && k != 13) {
+        return i + 'rd';
+      }
+
+      return i + 'th';
+    } else {
+      return i;
+    }
+  };
+
+  _proto.stickyParams = function stickyParams() {
+    return {
+      sort: m.route.param('sort'),
+      q: m.route.param('q')
+    };
+  };
+
+  _proto.actionItems = function actionItems() {
+    var items = new flarum_utils_ItemList__WEBPACK_IMPORTED_MODULE_6___default.a();
+    items.add('refresh', flarum_components_Button__WEBPACK_IMPORTED_MODULE_5___default.a.component({
+      title: app.translator.trans('core.forum.index.refresh_tooltip'),
+      icon: 'fas fa-refresh',
+      className: 'Button Button--icon',
+      onclick: function onclick() {
+        app.cache.discussionList.refresh();
+
+        if (app.session.user) {
+          app.store.find('users', app.session.user.id());
+          m.redraw();
+        }
+      }
+    }));
+    return items;
+  };
+
+  _proto.newDiscussion = function newDiscussion() {
+    var deferred = m.deferred();
+
+    if (app.session.user) {
+      this.composeNewDiscussion(deferred);
+    } else {
+      app.modal.show(new flarum_components_LogInModal__WEBPACK_IMPORTED_MODULE_7___default.a({
+        onlogin: this.composeNewDiscussion.bind(this, deferred)
+      }));
+    }
+
+    return deferred.promise;
+  };
+
+  _proto.composeNewDiscussion = function composeNewDiscussion(deferred) {
+    var component = new DiscussionComposer({
+      user: app.session.user
+    });
+    app.composer.load(component);
+    app.composer.show();
+    deferred.resolve(component);
+    return deferred.promise;
+  };
+
+  _proto.loadResults = function loadResults(offset) {
+    var params = {};
+    params.page = {
+      offset: offset,
+      limit: '10'
+    };
+    return app.store.find('rankings', params);
+  };
+
+  _proto.loadMore = function loadMore() {
+    this.loading = true;
+    this.loadResults(this.users.length).then(this.parseResults.bind(this));
+  };
+
+  _proto.parseResults = function parseResults(results) {
+    [].push.apply(this.users, results);
+    this.loading = false;
+    this.users.sort(function (a, b) {
+      return parseFloat(b.data.attributes.Points) - parseFloat(a.data.attributes.Points);
+    });
+    m.lazyRedraw();
+    return results;
+  };
+
+  return RankingsPage;
+}(flarum_components_Page__WEBPACK_IMPORTED_MODULE_3___default.a);
+
+
+
+/***/ }),
+
+/***/ "./src/forum/components/VoteNotification.js":
+/*!**************************************************!*\
+  !*** ./src/forum/components/VoteNotification.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UpvotedNotification; });
+/* harmony import */ var _babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/es6/inheritsLoose */ "./node_modules/@babel/runtime/helpers/es6/inheritsLoose.js");
+/* harmony import */ var flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/Notification */ "flarum/components/Notification");
+/* harmony import */ var flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var UpvotedNotification =
+/*#__PURE__*/
+function (_Notification) {
+  Object(_babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(UpvotedNotification, _Notification);
+
+  function UpvotedNotification() {
+    return _Notification.apply(this, arguments) || this;
+  }
+
+  var _proto = UpvotedNotification.prototype;
+
+  _proto.icon = function icon() {
+    if (this.props.notification.content() === 'Up') {
+      return 'fas fa-thumbs-up';
+    } else {
+      return 'fas fa-thumbs-down';
+    }
+  };
+
+  _proto.href = function href() {
+    return app.route.post(this.props.notification.subject());
+  };
+
+  _proto.content = function content() {
+    var username = this.props.notification.fromUser().username();
+
+    if (this.props.notification.content() === 'Up') {
+      return app.translator.trans('reflar-gamification.forum.notification.upvote', {
+        username: username
+      });
+    } else {
+      return app.translator.trans('reflar-gamification.forum.notification.downvote', {
+        username: username
+      });
+    }
+  };
+
+  _proto.excerpt = function excerpt() {
+    return this.props.notification.subject().contentPlain();
+  };
+
+  return UpvotedNotification;
+}(flarum_components_Notification__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+
+
+/***/ }),
+
+/***/ "./src/forum/components/VotesModal.js":
+/*!********************************************!*\
+  !*** ./src/forum/components/VotesModal.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return VotesModal; });
+/* harmony import */ var _babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/es6/inheritsLoose */ "./node_modules/@babel/runtime/helpers/es6/inheritsLoose.js");
+/* harmony import */ var flarum_components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/components/Modal */ "flarum/components/Modal");
+/* harmony import */ var flarum_components_Modal__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_components_Modal__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! flarum/helpers/avatar */ "flarum/helpers/avatar");
+/* harmony import */ var flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/helpers/username */ "flarum/helpers/username");
+/* harmony import */ var flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+
+var VotesModal =
+/*#__PURE__*/
+function (_Modal) {
+  Object(_babel_runtime_helpers_es6_inheritsLoose__WEBPACK_IMPORTED_MODULE_0__["default"])(VotesModal, _Modal);
+
+  function VotesModal() {
+    return _Modal.apply(this, arguments) || this;
+  }
+
+  var _proto = VotesModal.prototype;
+
+  _proto.className = function className() {
+    return 'VotesModal Modal--small';
+  };
+
+  _proto.title = function title() {
+    return app.translator.trans('reflar-gamification.forum.modal.title');
+  };
+
+  _proto.content = function content() {
+    return m("div", {
+      className: "Modal-body"
+    }, m("ul", {
+      className: "VotesModal-list"
+    }, m("legend", null, app.translator.trans('reflar-gamification.forum.modal.upvotes_label')), this.props.post.upvotes().map(function (user) {
+      return m("li", null, m("a", {
+        href: app.route.user(user),
+        config: m.route
+      }, flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2___default()(user), " ", ' ', flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default()(user)));
+    }), m("legend", null, app.translator.trans('reflar-gamification.forum.modal.downvotes_label')), this.props.post.downvotes().map(function (user) {
+      return m("li", null, m("a", {
+        href: app.route.user(user),
+        config: m.route
+      }, flarum_helpers_avatar__WEBPACK_IMPORTED_MODULE_2___default()(user), " ", ' ', flarum_helpers_username__WEBPACK_IMPORTED_MODULE_3___default()(user)));
+    })));
+  };
+
+  return VotesModal;
+}(flarum_components_Modal__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+
+
+/***/ }),
+
+/***/ "./src/forum/index.js":
+/*!****************************!*\
+  !*** ./src/forum/index.js ***!
+  \****************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flarum/extend */ "flarum/extend");
+/* harmony import */ var flarum_extend__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flarum_extend__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flarum/app */ "flarum/app");
+/* harmony import */ var flarum_app__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flarum_app__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_AddAttributes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/AddAttributes */ "./src/forum/components/AddAttributes.js");
+/* harmony import */ var _components_AddHotnessSort__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AddHotnessSort */ "./src/forum/components/AddHotnessSort.js");
+/* harmony import */ var _components_AddVoteButtons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/AddVoteButtons */ "./src/forum/components/AddVoteButtons.js");
+/* harmony import */ var _common_models_Rank__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../common/models/Rank */ "./src/common/models/Rank.js");
+/* harmony import */ var _components_RankingsPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/RankingsPage */ "./src/forum/components/RankingsPage.js");
+/* harmony import */ var _components_VoteNotification__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/VoteNotification */ "./src/forum/components/VoteNotification.js");
+
+
+
+
+
+
+
+
+flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.initializers.add('reflar-gamification', function (app) {
+  app.store.models.ranks = _common_models_Rank__WEBPACK_IMPORTED_MODULE_5__["default"];
+  app.notificationComponents.vote = _components_VoteNotification__WEBPACK_IMPORTED_MODULE_7__["default"];
+  app.routes.rankings = {
+    path: '/rankings',
+    component: _components_RankingsPage__WEBPACK_IMPORTED_MODULE_6__["default"].component()
+  };
+  Object(_components_AddVoteButtons__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  Object(_components_AddHotnessSort__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  Object(_components_AddAttributes__WEBPACK_IMPORTED_MODULE_2__["default"])();
+});
+
+/***/ }),
+
+/***/ "flarum/Model":
+/*!**********************************************!*\
+  !*** external "flarum.core.compat['Model']" ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['Model'];
+
+/***/ }),
+
+/***/ "flarum/app":
+/*!********************************************!*\
+  !*** external "flarum.core.compat['app']" ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['app'];
+
+/***/ }),
+
+/***/ "flarum/components/AvatarEditor":
+/*!****************************************************************!*\
+  !*** external "flarum.core.compat['components/AvatarEditor']" ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/AvatarEditor'];
+
+/***/ }),
+
+/***/ "flarum/components/Button":
+/*!**********************************************************!*\
+  !*** external "flarum.core.compat['components/Button']" ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Button'];
+
+/***/ }),
+
+/***/ "flarum/components/CommentPost":
+/*!***************************************************************!*\
+  !*** external "flarum.core.compat['components/CommentPost']" ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/CommentPost'];
+
+/***/ }),
+
+/***/ "flarum/components/DiscussionList":
+/*!******************************************************************!*\
+  !*** external "flarum.core.compat['components/DiscussionList']" ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/DiscussionList'];
+
+/***/ }),
+
+/***/ "flarum/components/Dropdown":
+/*!************************************************************!*\
+  !*** external "flarum.core.compat['components/Dropdown']" ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Dropdown'];
+
+/***/ }),
+
+/***/ "flarum/components/IndexPage":
+/*!*************************************************************!*\
+  !*** external "flarum.core.compat['components/IndexPage']" ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/IndexPage'];
+
+/***/ }),
+
+/***/ "flarum/components/LinkButton":
+/*!**************************************************************!*\
+  !*** external "flarum.core.compat['components/LinkButton']" ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/LinkButton'];
+
+/***/ }),
+
+/***/ "flarum/components/LoadingIndicator":
+/*!********************************************************************!*\
+  !*** external "flarum.core.compat['components/LoadingIndicator']" ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/LoadingIndicator'];
+
+/***/ }),
+
+/***/ "flarum/components/LogInModal":
+/*!**************************************************************!*\
+  !*** external "flarum.core.compat['components/LogInModal']" ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/LogInModal'];
+
+/***/ }),
+
+/***/ "flarum/components/Modal":
+/*!*********************************************************!*\
+  !*** external "flarum.core.compat['components/Modal']" ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Modal'];
+
+/***/ }),
+
+/***/ "flarum/components/Notification":
+/*!****************************************************************!*\
+  !*** external "flarum.core.compat['components/Notification']" ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Notification'];
+
+/***/ }),
+
+/***/ "flarum/components/Page":
+/*!********************************************************!*\
+  !*** external "flarum.core.compat['components/Page']" ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/Page'];
+
+/***/ }),
+
+/***/ "flarum/components/PostUser":
+/*!************************************************************!*\
+  !*** external "flarum.core.compat['components/PostUser']" ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/PostUser'];
+
+/***/ }),
+
+/***/ "flarum/components/UserCard":
+/*!************************************************************!*\
+  !*** external "flarum.core.compat['components/UserCard']" ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['components/UserCard'];
+
+/***/ }),
+
+/***/ "flarum/extend":
+/*!***********************************************!*\
+  !*** external "flarum.core.compat['extend']" ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['extend'];
+
+/***/ }),
+
+/***/ "flarum/helpers/avatar":
+/*!*******************************************************!*\
+  !*** external "flarum.core.compat['helpers/avatar']" ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['helpers/avatar'];
+
+/***/ }),
+
+/***/ "flarum/helpers/listItems":
+/*!**********************************************************!*\
+  !*** external "flarum.core.compat['helpers/listItems']" ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['helpers/listItems'];
+
+/***/ }),
+
+/***/ "flarum/helpers/userOnline":
+/*!***********************************************************!*\
+  !*** external "flarum.core.compat['helpers/userOnline']" ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['helpers/userOnline'];
+
+/***/ }),
+
+/***/ "flarum/helpers/username":
+/*!*********************************************************!*\
+  !*** external "flarum.core.compat['helpers/username']" ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['helpers/username'];
+
+/***/ }),
+
+/***/ "flarum/models/Discussion":
+/*!**********************************************************!*\
+  !*** external "flarum.core.compat['models/Discussion']" ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['models/Discussion'];
+
+/***/ }),
+
+/***/ "flarum/models/Post":
+/*!****************************************************!*\
+  !*** external "flarum.core.compat['models/Post']" ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['models/Post'];
+
+/***/ }),
+
+/***/ "flarum/models/User":
+/*!****************************************************!*\
+  !*** external "flarum.core.compat['models/User']" ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['models/User'];
+
+/***/ }),
+
+/***/ "flarum/utils/ItemList":
+/*!*******************************************************!*\
+  !*** external "flarum.core.compat['utils/ItemList']" ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['utils/ItemList'];
+
+/***/ }),
+
+/***/ "flarum/utils/PostControls":
+/*!***********************************************************!*\
+  !*** external "flarum.core.compat['utils/PostControls']" ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['utils/PostControls'];
+
+/***/ }),
+
+/***/ "flarum/utils/UserControls":
+/*!***********************************************************!*\
+  !*** external "flarum.core.compat['utils/UserControls']" ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['utils/UserControls'];
+
+/***/ }),
+
+/***/ "flarum/utils/mixin":
+/*!****************************************************!*\
+  !*** external "flarum.core.compat['utils/mixin']" ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['utils/mixin'];
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=forum.js.map

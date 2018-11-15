@@ -35,51 +35,50 @@ export default class RankingsPage extends Page {
             })
         }
         return (
-            <div className='RankingPage'>
+            <div className='TagsPage'>
                 {IndexPage.prototype.hero()}
                 <div className='container'>
-					<nav className="RankingPage-nav IndexPage-nav sideNav" config={IndexPage.prototype.affixSidebar}>
-						<ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
-					</nav>
-                        <div className='RankingPage'>
-                                <div className='sideNavOffset'>
-                                    <table class='rankings'>
-                                        <tr>
-                                            <th className='rankings-mobile'>{app.translator.trans('reflar-gamification.forum.ranking.rank')}</th>
-                                            <th>{app.translator.trans('reflar-gamification.forum.ranking.name')}</th>
-                                            <th>{app.translator.trans('reflar-gamification.forum.ranking.amount')}</th>
-                                        </tr>
-                                        {this.users.map((user, i) => {
-                                            ++i
-                                            return [
-                                                <tr className={'ranking-' + i}>
-                                                    {i < 4 ? (app.forum.attribute('CustomRankingImages') == '1' ? (
-                                                            <img className='rankings-mobile rankings-image'
-                                                                 src={app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i)}/>)
-                                                        : (
-                                                            <td className={'rankings-mobile rankings-' + i}> <i className="icon fas fa-trophy"></i></td>))
-                                                        : (
-                                                            <td className='rankings-4 rankings-mobile'>{this.addOrdinalSuffix(i)}</td>)}
-                                                    <td>
-                                                        <div className='PostUser'>
-                                                            <h3 className='rankings-info'>
-                                                                <a href={app.route.user(user)} config={m.route}>
-                                                                    {i < 4 ? (avatar(user, {className: 'info-avatar rankings-' + i + '-avatar'})) : ''} {username(user)}
-                                                                </a>
-                                                            </h3>
-                                                        </div>
-                                                    </td>
-                                                    {i < 4 ? (
-                                                            <td className={'rankings-' + i}>{user.data.attributes.Points}</td>)
-                                                        : (
-                                                            <td className='rankings-4'>{user.data.attributes.Points}</td>)}
-                                                </tr>
-                                            ]
-                                        })}
-                                    </table>
-                                    <div className='rankings-loadmore'> {loading}</div>
-                                </div>
-                        </div>
+                    <nav className="RankingPage-nav IndexPage-nav sideNav" config={IndexPage.prototype.affixSidebar}>
+                        <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
+                    </nav>
+                    <div className='RankingPage sideNavOffset'>
+                        <table class='rankings'>
+                            <tr>
+                                <th className='rankings-mobile'>{app.translator.trans('reflar-gamification.forum.ranking.rank')}</th>
+                                <th>{app.translator.trans('reflar-gamification.forum.ranking.name')}</th>
+                                <th>{app.translator.trans('reflar-gamification.forum.ranking.amount')}</th>
+                            </tr>
+                            {this.users.map((user, i) => {
+                                ++i
+                                return [
+                                    <tr className={'ranking-' + i}>
+                                        {i < 4 ? (app.forum.attribute('CustomRankingImages') == '1' ? (
+                                                <img className='rankings-mobile rankings-image'
+                                                     src={app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i)}/>)
+                                            : (
+                                                <td className={'rankings-mobile rankings-' + i}>
+                                                    <i className="icon fas fa-trophy"></i></td>))
+                                            : (
+                                                <td className='rankings-4 rankings-mobile'>{this.addOrdinalSuffix(i)}</td>)}
+                                        <td>
+                                            <div className='PostUser'>
+                                                <h3 className='rankings-info'>
+                                                    <a href={app.route.user(user)} config={m.route}>
+                                                        {i < 4 ? (avatar(user, {className: 'info-avatar rankings-' + i + '-avatar'})) : ''} {username(user)}
+                                                    </a>
+                                                </h3>
+                                            </div>
+                                        </td>
+                                        {i < 4 ? (
+                                                <td className={'rankings-' + i}>{user.data.attributes.Points}</td>)
+                                            : (
+                                                <td className='rankings-4'>{user.data.attributes.Points}</td>)}
+                                    </tr>
+                                ]
+                            })}
+                        </table>
+                        <div className='rankings-loadmore'> {loading}</div>
+                    </div>
                 </div>
             </div>
         )

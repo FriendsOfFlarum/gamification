@@ -149,14 +149,14 @@ export default function () {
                         upData.unshift({type: 'users', id: app.session.user.id()});
                     }
                 }
-            })
+            }), 3
         )
 
         items.add('points',
             <label className='Post-points'>
                 {this.upvotedata().length - this.downvotedata().length}
             </label>
-        )
+        , 2)
 
         items.add('downvote',
             Button.component({
@@ -197,7 +197,7 @@ export default function () {
                         downData.unshift({type: 'users', id: app.session.user.id()});
                     }
                 }
-            })
+            }), 1
         )
     })
 }

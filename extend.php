@@ -30,7 +30,8 @@ return [
         ->post('/reflar/gamification/convert', 'reflar.gamification.convert', Controllers\ConvertLikesController::class)
         ->get('/ranks', 'ranks.index', Controllers\ListRanksController::class)
         ->post('/ranks', 'ranks.create', Controllers\CreateRankController::class)
-        ->post('/reflar/topimage/{id}', 'reflar.topImage', Controllers\UploadTopImageController::class)
+        ->post('/topimage{id}', 'reflar.topImage.add', Controllers\UploadTopImageController::class)
+        ->delete('/topimage{id}', 'reflar.topImage.delete', Controllers\DeleteTopImageController::class)
         ->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class)
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),

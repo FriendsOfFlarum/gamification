@@ -50,7 +50,7 @@ class VoteBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getSubject()
     {
         return $this->post;
     }
@@ -58,7 +58,7 @@ class VoteBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public function getSender()
+    public function getFromUser()
     {
         return $this->actor;
     }
