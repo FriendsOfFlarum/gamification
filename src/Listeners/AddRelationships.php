@@ -13,19 +13,15 @@
 namespace Reflar\Gamification\Listeners;
 
 use Flarum\Api\Controller;
-use Flarum\Api\Serializer\DiscussionSerializer;
-use Flarum\Api\Serializer\ForumSerializer;
-use Flarum\Api\Serializer\PostSerializer;
-use Flarum\Api\Serializer\UserBasicSerializer;
-use Flarum\Api\Serializer\UserSerializer;
-use Flarum\Core\Post;
-use Flarum\Core\User;
-use Flarum\Event\ConfigureApiController;
+use Flarum\Api\Event\Serializing;
+use Flarum\Api\Event\WillGetData;
+use Flarum\Api\Event\WillSerializeData;
+use Flarum\Api\Serializer;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
-use Flarum\Event\PrepareApiAttributes;
-use Flarum\Event\PrepareApiData;
+use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\Gamification\Api\Controllers\OrderByPointsController;
 use Reflar\Gamification\Api\Serializers\RankSerializer;
@@ -49,10 +45,10 @@ class AddRelationships
     public function subscribe(Dispatcher $events)
     {
         $events->listen(GetModelRelationship::class, [$this, 'getModelRelationship']);
-        $events->listen(PrepareApiData::class, [$this, 'loadRanksRelationship']);
+        $events->listen(WillSerializeData::class, [$this, 'loadRanksRelationship']);
         $events->listen(GetApiRelationship::class, [$this, 'getApiAttributes']);
-        $events->listen(PrepareApiAttributes::class, [$this, 'prepareApiAttributes']);
-        $events->listen(ConfigureApiController::class, [$this, 'includeLikes']);
+        $events->listen(Serializing::class, [$this, 'prepareApiAttributes']);
+        $events->listen(WillGetData::class, [$this, 'includeLikes']);
     }
 
     /**
@@ -63,15 +59,15 @@ class AddRelationships
     public function getModelRelationship(GetModelRelationship $event)
     {
         if ($event->isRelationship(Post::class, 'upvotes')) {
-            return $event->model->belongsToMany(User::class, 'posts_votes', 'post_id', 'user_id', 'upvotes')->where('type', 'Up');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')->where('type', 'Up');
         }
 
         if ($event->isRelationship(Post::class, 'downvotes')) {
-            return $event->model->belongsToMany(User::class, 'posts_votes', 'post_id', 'user_id', 'downvotes')->where('type', 'Down');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'downvotes')->where('type', 'Down');
         }
 
         if ($event->isRelationship(User::class, 'ranks')) {
-            return $event->model->belongsToMany(Rank::class, 'users_ranks');
+            return $event->model->belongsToMany(Rank::class, 'rank_user', null, null, null, null, 'ranks');
         }
     }
 
@@ -82,23 +78,23 @@ class AddRelationships
      */
     public function getApiAttributes(GetApiRelationship $event)
     {
-        if ($event->isRelationship(PostSerializer::class, 'upvotes')) {
-            return $event->serializer->hasMany($event->model, UserBasicSerializer::class, 'upvotes');
+        if ($event->isRelationship(Serializer\PostSerializer::class, 'upvotes')) {
+            return $event->serializer->hasMany($event->model, Serializer\BasicUserSerializer::class, 'upvotes');
         }
 
-        if ($event->isRelationship(PostSerializer::class, 'downvotes')) {
-            return $event->serializer->hasMany($event->model, UserBasicSerializer::class, 'downvotes');
+        if ($event->isRelationship(Serializer\PostSerializer::class, 'downvotes')) {
+            return $event->serializer->hasMany($event->model, Serializer\BasicUserSerializer::class, 'downvotes');
         }
 
-        if ($event->isRelationship(ForumSerializer::class, 'ranks') || $event->isRelationship(UserSerializer::class, 'ranks')) {
+        if ($event->isRelationship(Serializer\ForumSerializer::class, 'ranks') || $event->isRelationship(Serializer\UserSerializer::class, 'ranks')) {
             return $event->serializer->hasMany($event->model, RankSerializer::class, 'ranks');
         }
     }
 
     /**
-     * @param PrepareApiData $event
+     * @param WillSerializeData $event
      */
-    public function loadRanksRelationship(PrepareApiData $event)
+    public function loadRanksRelationship(WillSerializeData $event)
     {
         if ($event->isController(Controller\ShowForumController::class)) {
             $event->data['ranks'] = Rank::get();
@@ -106,25 +102,25 @@ class AddRelationships
     }
 
     /**
-     * @param PrepareApiAttributes $event
+     * @param Serializing $event
      */
-    public function prepareApiAttributes(PrepareApiAttributes $event)
+    public function prepareApiAttributes(Serializing $event)
     {
-        if ($event->isSerializer(UserSerializer::class)) {
+        if ($event->isSerializer(Serializer\UserSerializer::class)) {
             $event->attributes['canViewRankingPage'] = (bool) $event->actor->can('reflar.gamification.viewRankingPage');
             $event->attributes['Points'] = $event->model->votes;
         }
-        if ($event->isSerializer(ForumSerializer::class)) {
+        if ($event->isSerializer(Serializer\ForumSerializer::class)) {
             $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
             $event->attributes['PointsPlaceholder'] = $this->settings->get('reflar.gamification.pointsPlaceholder');
             $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
             $event->attributes['CustomRankingImages'] = $this->settings->get('reflar.gamification.customRankingImages');
-            $event->attributes['TopImage1'] = $this->settings->get('reflar.gamification.topimage.1');
-            $event->attributes['TopImage2'] = $this->settings->get('reflar.gamification.topimage.2');
-            $event->attributes['TopImage3'] = $this->settings->get('reflar.gamification.topimage.3');
+            $event->attributes['topimage1Url'] = "/assets/{$this->settings->get('topimage1_path')}";
+            $event->attributes['topimage2Url'] = "/assets/{$this->settings->get('topimage2_path')}";
+            $event->attributes['topimage3Url'] = "/assets/{$this->settings->get('topimage3_path')}";
             $event->attributes['ranksAmt'] = $this->settings->get('reflar.gamification.rankAmt');
         }
-        if ($event->isSerializer(DiscussionSerializer::class)) {
+        if ($event->isSerializer(Serializer\DiscussionSerializer::class)) {
             $event->attributes['votes'] = (int) $event->model->votes;
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
             $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
@@ -132,9 +128,9 @@ class AddRelationships
     }
 
     /**
-     * @param ConfigureApiController $event
+     * @param WillGetData $event
      */
-    public function includeLikes(ConfigureApiController $event)
+    public function includeLikes(WillGetData $event)
     {
         if ($event->isController(Controller\ListUsersController::class)
             || $event->isController(Controller\ShowUserController::class)

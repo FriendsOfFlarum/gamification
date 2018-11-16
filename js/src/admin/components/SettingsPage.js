@@ -58,20 +58,20 @@ export default class SettingsPage extends Page {
                     m('form', {onsubmit: this.onsubmit.bind(this)}, [
                         m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.convert.help')),
                         (this.values.convertedLikes() === undefined ? (
-                                Button.component({
-                                    type: 'button',
-                                    className: 'Button Button--warning Ranks-button',
-                                    children: app.translator.trans('reflar-gamification.admin.page.convert.button'),
-                                    onclick: () => {
-                                        app.request({
-                                            url: app.forum.attribute('apiUrl') + '/reflar/gamification/convert',
-                                            method: 'POST'
-                                        }).then(this.values.convertedLikes('converting'));
-                                    }
-                                })
-                            ) : (this.values.convertedLikes() === 'converting' ? (
-                                    m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converting'))
-                                ) : (m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converted', {number: this.values.convertedLikes()}))))),
+                            Button.component({
+                                type: 'button',
+                                className: 'Button Button--warning Ranks-button',
+                                children: app.translator.trans('reflar-gamification.admin.page.convert.button'),
+                                onclick: () => {
+                                    app.request({
+                                        url: app.forum.attribute('apiUrl') + '/reflar/gamification/convert',
+                                        method: 'POST'
+                                    }).then(this.values.convertedLikes('converting'));
+                                }
+                            })
+                        ) : (this.values.convertedLikes() === 'converting' ? (
+                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converting'))
+                        ) : (m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converted', {number: this.values.convertedLikes()}))))),
 
                         m('fieldset', {className: 'SettingsPage-ranks'}, [
                             m('legend', {}, app.translator.trans('reflar-gamification.admin.page.ranks.title')),
@@ -79,7 +79,7 @@ export default class SettingsPage extends Page {
                             m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.help.help')),
                             m('div', {className: 'Ranks--Container'},
                                 this.ranks.map(rank => {
-                                    return m('div', {}, [
+                                    return m('div', {style: "float: left;"}, [
                                         m('input', {
                                             className: 'FormControl Ranks-number',
                                             type: 'number',
@@ -102,12 +102,12 @@ export default class SettingsPage extends Page {
                                         Button.component({
                                             type: 'button',
                                             className: 'Button Button--warning Ranks-button',
-                                            icon: 'times',
+                                            icon: 'fa fa-times',
                                             onclick: this.deleteRank.bind(this, rank)
                                         }),
                                     ])
                                 }),
-                                m('div', {}, [
+                                m('div', {style: "float: left; margin-bottom: 15px"}, [
                                     m('input', {
                                         className: 'FormControl Ranks-number',
                                         value: this.newRank.points(),
@@ -121,7 +121,7 @@ export default class SettingsPage extends Page {
                                         placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.name'),
                                         oninput: m.withAttr('value', this.newRank.name)
                                     }),
-                                        m('input', {
+                                    m('input', {
                                             className: 'FormControl Ranks-color',
                                             value: this.newRank.color(),
                                             placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.color'),
@@ -131,7 +131,7 @@ export default class SettingsPage extends Page {
                                     Button.component({
                                         type: 'button',
                                         className: 'Button Button--warning Ranks-button',
-                                        icon: 'plus',
+                                        icon: 'fa fa-plus',
                                         onclick: this.addRank.bind(this)
                                     }),
                                 ])
@@ -179,15 +179,15 @@ export default class SettingsPage extends Page {
                                 value: this.values.blockedUsers() || '',
                                 oninput: m.withAttr('value', this.values.blockedUsers)
                             }),
-                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.help')),
-                            m('label', {className: "Upload-label"}, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')),
-                            <UploadImageButton className="Upload-button" name="reflar/topimage/1"/>,
+                            m('div', { className: 'helpText' }, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.help')),
+                            m('label', { className: 'Upload-label' }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')),
+                            <UploadImageButton className="Upload-button" name="topimage1" />,
                             m('br'),
-                            m('label', {className: "Upload-label"}, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_2')),
-                            <UploadImageButton className="Upload-button" name="reflar/topimage/2"/>,
+                            m('label', { className: 'Upload-label' }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_2')),
+                            <UploadImageButton className="Upload-button" name="topimage2" />,
                             m('br'),
-                            m('label', {className: "Upload-label"}, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_3')),
-                            <UploadImageButton className="Upload-button" name="reflar/topimage/3"/>,
+                            m('label', { className: 'Upload-label' }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_3')),
+                            <UploadImageButton className="Upload-button" name="topimage3" />,
                             m('br'),
                             Button.component({
                                 type: 'submit',

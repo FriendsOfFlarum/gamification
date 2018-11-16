@@ -1,11 +1,10 @@
-import {extend} from 'flarum/extend'
-import app from 'flarum/app'
-import Button from 'flarum/components/Button'
-import LogInModal from 'flarum/components/LogInModal'
-import CommentPost from 'flarum/components/CommentPost'
+import {extend} from 'flarum/extend';
+import app from 'flarum/app';
+import Button from 'flarum/components/Button';
+import LogInModal from 'flarum/components/LogInModal';
+import CommentPost from 'flarum/components/CommentPost';
 import PostControls from 'flarum/utils/PostControls';
-
-import VotesModal from 'Reflar/Gamification/components/VotesModal'
+import VotesModal from './VotesModal';
 
 export default function () {
 
@@ -71,7 +70,7 @@ export default function () {
         if (post.discussion().canSeeVotes()) {
             items.add('viewVotes', [
                 m(Button, {
-                    icon: 'thumbs-up',
+                    icon: 'fas fa-thumbs-up',
                     onclick: () => {
                         app.modal.show(new VotesModal({post}))
                     }
@@ -114,7 +113,7 @@ export default function () {
 
         items.add('upvote',
             Button.component({
-                icon: icon + '-up',
+                icon: 'fas fa-' + icon + '-up',
                 className: 'Post-vote Post-upvote',
                 style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
                 disabled: !post.discussion().canVote(),
@@ -124,6 +123,7 @@ export default function () {
                         return
                     }
                     if (!post.discussion().canVote()) return
+
                     var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data;
 
@@ -139,30 +139,28 @@ export default function () {
                             return true;
                         }
                     });
-
                     downData.some((downvote, i) => {
                         if (downvote.id === app.session.user.id()) {
                             downData.splice(i, 1);
                             return true;
                         }
                     });
-
                     if (isUpvoted) {
                         upData.unshift({type: 'users', id: app.session.user.id()});
                     }
                 }
-            })
+            }), 3
         )
 
         items.add('points',
             <label className='Post-points'>
                 {this.upvotedata().length - this.downvotedata().length}
             </label>
-        )
+        , 2)
 
         items.add('downvote',
             Button.component({
-                icon: icon + '-down',
+                icon: 'fas fa-' + icon + '-down',
                 className: 'Post-vote Post-downvote',
                 style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
                 disabled: !post.discussion().canVote(),
@@ -172,6 +170,7 @@ export default function () {
                         return
                     }
                     if (!post.discussion().canVote()) return
+
                     var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data
 
@@ -187,7 +186,6 @@ export default function () {
                             return true;
                         }
                     });
-
                     downData.some((downvote, i) => {
                         if (downvote.id === app.session.user.id()) {
                             downData.splice(i, 1);
@@ -199,7 +197,7 @@ export default function () {
                         downData.unshift({type: 'users', id: app.session.user.id()});
                     }
                 }
-            })
+            }), 1
         )
     })
 }

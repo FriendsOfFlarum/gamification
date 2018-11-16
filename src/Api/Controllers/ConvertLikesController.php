@@ -12,16 +12,17 @@
 
 namespace Reflar\Gamification\Api\Controllers;
 
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Core\Discussion;
-use Flarum\Http\Controller\ControllerInterface;
+use Flarum\Discussion\Discussion;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\AssertPermissionTrait;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Reflar\Gamification\Gamification;
 use Reflar\Gamification\Likes;
 use Zend\Diactoros\Response\JsonResponse;
 
-class ConvertLikesController implements ControllerInterface
+class ConvertLikesController implements RequestHandlerInterface
 {
     use AssertPermissionTrait;
 
@@ -50,7 +51,7 @@ class ConvertLikesController implements ControllerInterface
      *
      * @return int
      */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $actor = $request->getAttribute('actor');
 

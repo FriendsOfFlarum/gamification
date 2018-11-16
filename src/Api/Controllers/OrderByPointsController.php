@@ -12,15 +12,16 @@
 
 namespace Reflar\Gamification\Api\Controllers;
 
-use Flarum\Api\Controller\AbstractCollectionController;
-use Flarum\Core\Exception\PermissionDeniedException;
+use Flarum\Api\Controller\AbstractListController;
+use Flarum\Api\Serializer\UserSerializer;
+use Flarum\User\Exception\PermissionDeniedException;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\Gamification\Gamification;
 use Tobscure\JsonApi\Document;
 
-class OrderByPointsController extends AbstractCollectionController
+class OrderByPointsController extends AbstractListController
 {
-    public $serializer = 'Flarum\Api\Serializer\UserSerializer';
+    public $serializer = UserSerializer::class;
 
     /**
      * @var array

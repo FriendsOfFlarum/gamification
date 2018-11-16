@@ -12,11 +12,10 @@
 
 namespace Reflar\Gamification\Listeners;
 
-use Flarum\Api\Serializer\PostBasicSerializer;
-use Flarum\Core\Notification\NotificationSyncer;
 use Flarum\Event\ConfigureNotificationTypes;
-use Flarum\Event\PostWasDeleted;
-use Flarum\Event\PostWasPosted;
+use Flarum\Notification\NotificationSyncer;
+use Flarum\Post\Event\Deleted;
+use Flarum\Post\Event\Posted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Reflar\Gamification\Gamification;
@@ -66,14 +65,14 @@ class EventHandlers
     public function subscribe(Dispatcher $events)
     {
         $events->listen(ConfigureNotificationTypes::class, [$this, 'registerNotificationType']);
-        $events->listen(PostWasPosted::class, [$this, 'addVote']);
-        $events->listen(PostWasDeleted::class, [$this, 'removeVote']);
+        $events->listen(Posted::class, [$this, 'addVote']);
+        $events->listen(Deleted::class, [$this, 'removeVote']);
     }
 
     /**
-     * @param PostWasPosted $event
+     * @param Posted $event
      */
-    public function addVote(PostWasPosted $event)
+    public function addVote(Posted $event)
     {
         if ('0' !== $this->settings->get('reflar.gamification.autoUpvotePosts')) {
             $actor = $event->actor;
@@ -106,9 +105,9 @@ class EventHandlers
     }
 
     /**
-     * @param PostWasDeleted $event
+     * @param Deleted $event
      */
-    public function removeVote(PostWasDeleted $event)
+    public function removeVote(Deleted $event)
     {
         $post = $event->post;
 

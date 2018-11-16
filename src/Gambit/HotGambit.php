@@ -12,8 +12,8 @@
 
 namespace Reflar\Gamification\Gambit;
 
-use Flarum\Core\Search\AbstractRegexGambit;
-use Flarum\Core\Search\AbstractSearch;
+use Flarum\Search\AbstractRegexGambit;
+use Flarum\Search\AbstractSearch;
 
 class HotGambit extends AbstractRegexGambit
 {

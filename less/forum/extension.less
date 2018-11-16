@@ -34,11 +34,6 @@
   width: 215px;
 }
 
-.RankingPage > .container {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-}
-
 .Post-vote {
     background-color: rgba(0,0,0,0);
     border: none;
@@ -137,3 +132,56 @@
       position: inherit;
     }
   }
+  @media (min-width: 992px) {
+    .RankingPage .sideNav {
+        padding:15px 0;
+        white-space: nowrap;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        float: none;
+        width: auto;
+        padding-top: 0
+    }
+
+    .RankingPage .sideNav:after {
+        content: " ";
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin-top: 15px;
+        border-bottom: 1px solid #e8ecf3
+    }
+
+    .RankingPage .sideNav>ul>li,.RankingPage .sideNav .Dropdown-menu>li {
+        display: inline-block;
+        margin: 0 20px 0 0;
+        vertical-align: top
+    }
+
+    .RankingPage .sideNav .Dropdown-separator {
+        display: none
+    }
+
+    .RankingPage .sideNav .Dropdown--select .Dropdown-menu>li>a {
+        padding-left: 25px
+    }
+
+    .RankingPage .sideNav .Dropdown--select .Dropdown-menu>li>a .icon {
+        margin-left: -25px
+    }
+
+    .RankingPage .sideNav .affix {
+        position: static
+    }
+
+    .RankingPage .sideNav:after {
+        display: none
+    }
+
+    .RankingPage .sideNav>ul>li:first-child {
+        width: 190px
+    }
+
+    .RankingPage .sideNavOffset {
+        margin: 15px 0 0
+    }

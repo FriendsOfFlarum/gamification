@@ -13,12 +13,12 @@
 namespace Reflar\Gamification\Listeners;
 
 use DateTime;
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Core\Exception\FloodingException;
-use Flarum\Core\Notification;
-use Flarum\Core\Notification\NotificationSyncer;
-use Flarum\Event\PostWillBeSaved;
+use Flarum\Notification\Notification;
+use Flarum\Notification\NotificationSyncer;
+use Flarum\Post\Event\Saving;
+use Flarum\Post\Exception\FloodingException;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\AssertPermissionTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Pusher;
 use Reflar\Gamification\Events\PostWasVoted;
@@ -70,14 +70,14 @@ class SaveVotesToDatabase
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(PostWillBeSaved::class, [$this, 'whenPostWillBeSaved']);
-        $events->listen(PostWasDeleted::class, [$this, 'whenPostWasDeleted']);
+        $events->listen(Saving::class, [$this, 'whenSaving']);
+        $events->listen(Deleted::class, [$this, 'whenDeleted']);
     }
 
     /**
-     * @param PostWillBeSaved $event
+     * @param Saving $event
      */
-    public function whenPostWillBeSaved(PostWillBeSaved $event)
+    public function whenSaving(Saving $event)
     {
         $post = $event->post;
         if ($post->id) {
@@ -88,7 +88,7 @@ class SaveVotesToDatabase
                 $user = $post->user;
 
                 $this->assertCan($actor, 'vote', $post->discussion);
-                // $this->assertNotFlooding($actor);
+                $this->assertNotFlooding($actor);
 
                 $isUpvoted = $data['attributes'][0];
 
@@ -179,9 +179,9 @@ class SaveVotesToDatabase
     public function sendData($post, $user, $actor, $type, $before)
     {
         $oldVote = Notification::where([
-            'sender_id'  => $actor->id,
-            'subject_id' => $post->id,
-            'data'       => '"'.$before.'"',
+            'from_user_id'  => $actor->id,
+            'subject_id'    => $post->id,
+            'data'          => '"'.$before.'"',
         ])->first();
 
         if ($oldVote) {

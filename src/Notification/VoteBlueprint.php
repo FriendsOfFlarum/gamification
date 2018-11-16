@@ -12,9 +12,9 @@
 
 namespace Reflar\Gamification\Notification;
 
-use Flarum\Core\Notification\BlueprintInterface;
-use Flarum\Core\Post;
-use Flarum\Core\User;
+use Flarum\Notification\Blueprint\BlueprintInterface;
+use Flarum\Post\Post;
+use Flarum\User\User;
 
 class VoteBlueprint implements BlueprintInterface
 {
@@ -58,7 +58,7 @@ class VoteBlueprint implements BlueprintInterface
     /**
      * {@inheritdoc}
      */
-    public function getSender()
+    public function getFromUser()
     {
         return $this->actor;
     }

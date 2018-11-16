@@ -12,7 +12,7 @@
 
 namespace Reflar\Gamification\Validator;
 
-use Flarum\Core\Validator\AbstractValidator;
+use Flarum\Foundation\AbstractValidator;
 
 class RankValidator extends AbstractValidator
 {

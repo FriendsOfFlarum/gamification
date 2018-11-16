@@ -76,6 +76,6 @@ class Rank extends AbstractModel
 
     public function users()
     {
-        return $this->belongsToMany('Flarum\Core\User', 'users_ranks');
+        return $this->belongsToMany('Flarum\User\User', 'users_ranks');
     }
 }

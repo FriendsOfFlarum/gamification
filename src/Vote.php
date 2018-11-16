@@ -12,13 +12,13 @@
 
 namespace Reflar\Gamification;
 
-use Flarum\Core\Post;
-use Flarum\Core\User;
 use Flarum\Database\AbstractModel;
+use Flarum\Post\Post;
+use Flarum\User\User;
 
 class Vote extends AbstractModel
 {
-    protected $table = 'posts_votes';
+    protected $table = 'post_votes';
 
     /**
      * @param Post $post

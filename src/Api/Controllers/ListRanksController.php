@@ -12,13 +12,13 @@
 
 namespace Reflar\Gamification\Api\Controllers;
 
-use Flarum\Api\Controller\AbstractCollectionController;
+use Flarum\Api\Controller\AbstractListController;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\Gamification\Api\Serializers\RankSerializer;
 use Reflar\Gamification\Rank;
 use Tobscure\JsonApi\Document;
 
-class ListRanksController extends AbstractCollectionController
+class ListRanksController extends AbstractListController
 {
     /**
      * @var RankSerializer

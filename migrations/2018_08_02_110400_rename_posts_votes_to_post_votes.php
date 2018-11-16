@@ -9,12 +9,6 @@
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
+use Flarum\Database\Migration;
 
-namespace Reflar\Gamification;
-
-use Flarum\Database\AbstractModel;
-
-class Likes extends AbstractModel
-{
-    protected $table = 'post_likes';
-}
+return Migration::renameTable('posts_votes', 'post_votes');

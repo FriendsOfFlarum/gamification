@@ -12,14 +12,14 @@
 
 namespace Reflar\Gamification\Api\Controllers;
 
-use Flarum\Api\Controller\AbstractResourceController;
+use Flarum\Api\Controller\AbstractShowController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Reflar\Gamification\Api\Serializers\RankSerializer;
 use Reflar\Gamification\Commands\EditRank;
 use Tobscure\JsonApi\Document;
 
-class UpdateRankController extends AbstractResourceController
+class UpdateRankController extends AbstractShowController
 {
     public $serializer = RankSerializer::class;
 
