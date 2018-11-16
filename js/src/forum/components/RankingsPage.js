@@ -54,7 +54,7 @@ export default class RankingsPage extends Page {
                                     <tr className={'ranking-' + i}>
                                         {i < 4 ? (app.forum.attribute('CustomRankingImages') == '1' ? (
                                                 <img className='rankings-mobile rankings-image'
-                                                     src={app.forum.attribute('baseUrl') + '/assets/' + app.forum.attribute('TopImage' + i)}/>)
+                                                     src={app.forum.attribute('baseUrl') + app.forum.attribute('topimage' + i + 'Url')}/>)
                                             : (
                                                 <td className={'rankings-mobile rankings-' + i}>
                                                     <i className="icon fas fa-trophy"></i></td>))

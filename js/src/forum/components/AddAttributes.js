@@ -5,7 +5,7 @@ import Post from "flarum/models/Post";
 import PostUser from "flarum/components/PostUser";
 import User from "flarum/models/User";
 import UserCard from "flarum/components/UserCard";
-import rankLabel from "Reflar/Gamification/helpers/rankLabel";
+import rankLabel from "../../common/helpers/rankLabel";
 
 export default function () {
     Discussion.prototype.canVote = Model.attribute('canVote');
