@@ -20,6 +20,11 @@ use Flarum\User\UserRepository;
 class Gamification
 {
     /**
+     * Sets the maximum number of user exposed through the ranking api.
+     */
+    const MAXIMUM_USER_EXPOSED = 25;
+
+    /**
      * @var PostRepository
      */
     protected $posts;
@@ -79,6 +84,18 @@ class Gamification
     public function orderByPoints($limit, $offset)
     {
         $blockedUsers = explode(', ', $this->settings->get('reflar.gamification.blockedUsers'));
+
+        if ($limit > self::MAXIMUM_USER_EXPOSED) {
+            $limit = self::MAXIMUM_USER_EXPOSED;
+        }
+
+        if ($offset >= self::MAXIMUM_USER_EXPOSED) {
+            return [];
+        }
+
+        if (($limit + $offset) > self::MAXIMUM_USER_EXPOSED) {
+            $limit = $limit + $offset - self::MAXIMUM_USER_EXPOSED;
+        }
 
         $query = User::query()
             ->whereNotIn('username', $blockedUsers)
