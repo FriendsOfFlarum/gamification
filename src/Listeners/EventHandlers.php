@@ -12,6 +12,7 @@
 
 namespace Reflar\Gamification\Listeners;
 
+use Flarum\Api\Serializer\BasicPostSerializer;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Deleted;
@@ -101,7 +102,7 @@ class EventHandlers
      */
     public function registerNotificationType(ConfigureNotificationTypes $event)
     {
-        $event->add(VoteBlueprint::class, PostBasicSerializer::class, ['alert']);
+        $event->add(VoteBlueprint::class, BasicPostSerializer::class, ['alert']);
     }
 
     /**
