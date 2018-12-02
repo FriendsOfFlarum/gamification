@@ -76,6 +76,7 @@ class SaveVotesToDatabase
 
     /**
      * @param Saving $event
+     *
      * @throws FloodingException
      * @throws \Flarum\User\Exception\PermissionDeniedException
      */
