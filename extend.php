@@ -18,14 +18,14 @@ use Reflar\Gamification\Api\Controllers;
 
 return [
     (new Extend\Frontend('admin'))
-        ->css(__DIR__.'/less/admin/extension.less')
+        ->css(__DIR__ . '/resources/less/admin/extension.less')
         ->js(__DIR__.'/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/less/forum/extension.less')
+        ->css(__DIR__ . '/resources/less/forum/extension.less')
         ->route('/rankings', 'rankings')
         ->route('/hot', 'hot'),
-    new Extend\Locales(__DIR__.'/locale'),
+    new Extend\Locales(__DIR__ . '/resources/locale'),
     (new Extend\Routes('api'))
         ->post('/reflar/gamification/convert', 'reflar.gamification.convert', Controllers\ConvertLikesController::class)
         ->get('/ranks', 'ranks.index', Controllers\ListRanksController::class)
