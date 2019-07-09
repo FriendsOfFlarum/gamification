@@ -32,6 +32,6 @@ composer update fof/gamification
 [<img src="https://opencollective.com/fof/donate/button@2x.png?color=blue" height="25" />](https://opencollective.com/fof/donate)
 
 - [Packagist](https://packagist.org/packages/fof/gamification)
-- [GitHub](https://github.com/packages/FriendsOfFlarum/gamification)
+- [GitHub](https://github.com/FriendsOfFlarum/gamification)
 
 An extension by [FriendsOfFlarum](https://github.com/FriendsOfFlarum).
