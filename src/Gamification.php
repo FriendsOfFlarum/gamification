@@ -1,16 +1,14 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification;
+namespace FoF\Gamification;
 
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -83,7 +81,7 @@ class Gamification
      */
     public function orderByPoints($limit, $offset)
     {
-        $blockedUsers = explode(', ', $this->settings->get('reflar.gamification.blockedUsers'));
+        $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers'));
 
         if ($limit > self::MAXIMUM_USER_EXPOSED) {
             $limit = self::MAXIMUM_USER_EXPOSED;
@@ -128,7 +126,7 @@ class Gamification
             $vote->type = 'Up';
             $vote->save();
 
-            $ranks = json_decode($this->settings->get('reflar.gamification.ranks'), true);
+            $ranks = json_decode($this->settings->get('fof-gamification.ranks'), true);
 
             if (isset($ranks[$post->user->votes])) {
                 $post->user->rank = $ranks[$post->user->votes];

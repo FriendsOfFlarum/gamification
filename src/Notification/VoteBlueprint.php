@@ -1,16 +1,14 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Notification;
+namespace FoF\Gamification\Notification;
 
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Post\Post;

@@ -1,4 +1,4 @@
-import {extend} from 'flarum/extend';
+import { extend } from 'flarum/extend';
 import app from 'flarum/app';
 import Button from 'flarum/components/Button';
 import LogInModal from 'flarum/components/LogInModal';
@@ -6,112 +6,109 @@ import CommentPost from 'flarum/components/CommentPost';
 import PostControls from 'flarum/utils/PostControls';
 import VotesModal from './VotesModal';
 
-export default function () {
-
-    extend(CommentPost.prototype, 'config', function (x, isInitialized, context) {
-        if (isInitialized) return
+export default function() {
+    extend(CommentPost.prototype, 'config', function(x, isInitialized, context) {
+        if (isInitialized) return;
 
         if (app.pusher) {
             app.pusher.then(channels => {
                 channels.main.bind('newVote', data => {
+                    var userId = parseInt(data.userId);
 
-                    var userId = parseInt(data.userId)
+                    if (userId == app.session.user.id()) return;
 
-                    if (userId == app.session.user.id()) return
-
-                    m.startComputation()
+                    m.startComputation();
 
                     if (this.postId() == data.postId) {
-
-                        var upData = this.upvotedata()
-                        var downData = this.downvotedata()
+                        var upData = this.upvotedata();
+                        var downData = this.downvotedata();
 
                         switch (data.before) {
                             case 'up':
-                                upData = this.removeVote(upData, userId)
+                                upData = this.removeVote(upData, userId);
                                 break;
                             case 'down':
-                                downData = this.removeVote(downData, userId)
+                                downData = this.removeVote(downData, userId);
                                 break;
-
                         }
 
                         switch (data.after) {
                             case 'up':
-                                upData.unshift({type: 'users', id: userId})
+                                upData.unshift({ type: 'users', id: userId });
                                 break;
                             case 'down':
-                                downData.unshift({type: 'users', id: userId})
+                                downData.unshift({ type: 'users', id: userId });
                                 break;
                             case 'none':
-                                downData = this.removeVote(downData, userId)
-                                upData = this.removeVote(upData, userId)
+                                downData = this.removeVote(downData, userId);
+                                upData = this.removeVote(upData, userId);
                                 break;
                         }
 
-                        this.downvotedata(downData)
-                        this.upvotedata(upData)
+                        this.downvotedata(downData);
+                        this.upvotedata(upData);
 
                         m.redraw.strategy('all');
-
                     }
 
-                    m.endComputation()
-
-                })
-
+                    m.endComputation();
+                });
 
                 extend(context, 'onunload', () => channels.main.unbind('newVote'));
             });
         }
-    })
+    });
 
-    extend(PostControls, 'moderationControls', function (items, post) {
+    extend(PostControls, 'moderationControls', function(items, post) {
         if (post.discussion().canSeeVotes()) {
             items.add('viewVotes', [
-                m(Button, {
-                    icon: 'fas fa-thumbs-up',
-                    onclick: () => {
-                        app.modal.show(new VotesModal({post}))
-                    }
-                }, app.translator.trans('reflar-gamification.forum.mod_item'))
+                m(
+                    Button,
+                    {
+                        icon: 'fas fa-thumbs-up',
+                        onclick: () => {
+                            app.modal.show(new VotesModal({ post }));
+                        },
+                    },
+                    app.translator.trans('fof-gamification.forum.mod_item')
+                ),
             ]);
         }
     });
 
+    extend(CommentPost.prototype, 'actionItems', function(items) {
+        const post = this.props.post;
 
-    extend(CommentPost.prototype, 'actionItems', function (items) {
-        const post = this.props.post
+        this.postId = m.prop(post.data.id);
 
-        this.postId = m.prop(post.data.id)
+        this.downvotedata = m.prop(post.data.relationships.downvotes.data);
+        this.upvotedata = m.prop(post.data.relationships.upvotes.data);
 
-        this.downvotedata = m.prop(post.data.relationships.downvotes.data)
-        this.upvotedata = m.prop(post.data.relationships.upvotes.data)
-
-        let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user)
-        let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user)
+        let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user);
+        let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user);
 
         if (!app.session.user) {
-            isDownvoted = false
-            isUpvoted = false
+            isDownvoted = false;
+            isUpvoted = false;
         }
 
-        let icon = app.forum.attribute('IconName')
+        let icon = app.forum.attribute('IconName');
 
         if (icon === null || icon === '') {
-            icon = 'thumbs'
+            icon = 'thumbs';
         }
 
-        this.removeVote = function (data, userId) {
+        this.removeVote = function(data, userId) {
             data.some((vote, i) => {
                 if (vote.id == userId) {
-                    data.splice(i, 1)
+                    data.splice(i, 1);
                 }
-            })
-            return data
-        }
+            });
+            return data;
+        };
 
-        items.add('upvote',
+        items.add(
+            'upvote',
             Button.component({
                 icon: 'fas fa-' + icon + '-up',
                 className: 'Post-vote Post-upvote',
@@ -119,10 +116,10 @@ export default function () {
                 disabled: !post.discussion().canVote(),
                 onclick: () => {
                     if (!app.session.user) {
-                        app.modal.show(new LogInModal())
-                        return
+                        app.modal.show(new LogInModal());
+                        return;
                     }
-                    if (!post.discussion().canVote()) return
+                    if (!post.discussion().canVote()) return;
 
                     var upData = post.data.relationships.upvotes.data;
                     var downData = post.data.relationships.downvotes.data;
@@ -146,19 +143,17 @@ export default function () {
                         }
                     });
                     if (isUpvoted) {
-                        upData.unshift({type: 'users', id: app.session.user.id()});
+                        upData.unshift({ type: 'users', id: app.session.user.id() });
                     }
-                }
-            }), 3
-        )
+                },
+            }),
+            3
+        );
 
-        items.add('points',
-            <label className='Post-points'>
-                {this.upvotedata().length - this.downvotedata().length}
-            </label>
-        , 2)
+        items.add('points', <label className="Post-points">{this.upvotedata().length - this.downvotedata().length}</label>, 2);
 
-        items.add('downvote',
+        items.add(
+            'downvote',
             Button.component({
                 icon: 'fas fa-' + icon + '-down',
                 className: 'Post-vote Post-downvote',
@@ -166,13 +161,13 @@ export default function () {
                 disabled: !post.discussion().canVote(),
                 onclick: () => {
                     if (!app.session.user) {
-                        app.modal.show(new LogInModal())
-                        return
+                        app.modal.show(new LogInModal());
+                        return;
                     }
-                    if (!post.discussion().canVote()) return
+                    if (!post.discussion().canVote()) return;
 
                     var upData = post.data.relationships.upvotes.data;
-                    var downData = post.data.relationships.downvotes.data
+                    var downData = post.data.relationships.downvotes.data;
 
                     isDownvoted = !isDownvoted;
 
@@ -194,10 +189,11 @@ export default function () {
                     });
 
                     if (isDownvoted) {
-                        downData.unshift({type: 'users', id: app.session.user.id()});
+                        downData.unshift({ type: 'users', id: app.session.user.id() });
                     }
-                }
-            }), 1
-        )
-    })
+                },
+            }),
+            1
+        );
+    });
 }

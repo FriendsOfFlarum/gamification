@@ -1,14 +1,12 @@
-import Alert from "flarum/components/Alert";
+import Alert from 'flarum/components/Alert';
 import Page from 'flarum/components/Page';
-import Button from "flarum/components/Button";
+import Button from 'flarum/components/Button';
 import UploadImageButton from 'flarum/components/UploadImageButton';
-import saveSettings from "flarum/utils/saveSettings";
-import Switch from "flarum/components/Switch";
+import saveSettings from 'flarum/utils/saveSettings';
+import Switch from 'flarum/components/Switch';
 
 export default class SettingsPage extends Page {
-
     init() {
-
         this.fields = [
             'convertedLikes',
             'amountPerPost',
@@ -17,34 +15,27 @@ export default class SettingsPage extends Page {
             'rankAmt',
             'iconName',
             'blockedUsers',
-            'pointsPlaceholder'
+            'pointsPlaceholder',
         ];
 
-        this.switches = [
-            'autoUpvotePosts',
-            'customRankingImages'
-        ];
+        this.switches = ['autoUpvotePosts', 'customRankingImages'];
 
         this.ranks = app.store.all('ranks');
 
         this.values = {};
 
-        this.settingsPrefix = 'reflar.gamification';
+        this.settingsPrefix = 'fof-gamification';
 
         const settings = app.data.settings;
 
-        this.fields.forEach(key =>
-            this.values[key] = m.prop(settings[this.addPrefix(key)])
-        );
+        this.fields.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
 
-        this.switches.forEach(key =>
-            this.values[key] = m.prop(settings[this.addPrefix(key)] === '1')
-        );
+        this.switches.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)] === '1')));
 
         this.newRank = {
-            'points': m.prop(''),
-            'name': m.prop(''),
-            'color': m.prop('')
+            points: m.prop(''),
+            name: m.prop(''),
+            color: m.prop(''),
         };
     }
 
@@ -53,167 +44,170 @@ export default class SettingsPage extends Page {
      */
     view() {
         return [
-            m('div', {className: 'SettingsPage'}, [
-                m('div', {className: 'container'}, [
-                    m('form', {onsubmit: this.onsubmit.bind(this)}, [
-                        m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.convert.help')),
-                        (this.values.convertedLikes() === undefined ? (
-                            Button.component({
-                                type: 'button',
-                                className: 'Button Button--warning Ranks-button',
-                                children: app.translator.trans('reflar-gamification.admin.page.convert.button'),
-                                onclick: () => {
-                                    app.request({
-                                        url: app.forum.attribute('apiUrl') + '/reflar/gamification/convert',
-                                        method: 'POST'
-                                    }).then(this.values.convertedLikes('converting'));
-                                }
-                            })
-                        ) : (this.values.convertedLikes() === 'converting' ? (
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converting'))
-                        ) : (m('label', {}, app.translator.trans('reflar-gamification.admin.page.convert.converted', {number: this.values.convertedLikes()}))))),
-
-                        m('fieldset', {className: 'SettingsPage-ranks'}, [
-                            m('legend', {}, app.translator.trans('reflar-gamification.admin.page.ranks.title')),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.ranks')),
-                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.ranks.help.help')),
-                            m('div', {className: 'Ranks--Container'},
+            m('div', { className: 'SettingsPage' }, [
+                m('div', { className: 'container' }, [
+                    m('form', { onsubmit: this.onsubmit.bind(this) }, [
+                        m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.convert.help')),
+                        this.values.convertedLikes() === undefined
+                            ? Button.component({
+                                  type: 'button',
+                                  className: 'Button Button--warning Ranks-button',
+                                  children: app.translator.trans('fof-gamification.admin.page.convert.button'),
+                                  onclick: () => {
+                                      app.request({
+                                          url: app.forum.attribute('apiUrl') + '/fof/gamification/convert',
+                                          method: 'POST',
+                                      }).then(this.values.convertedLikes('converting'));
+                                  },
+                              })
+                            : this.values.convertedLikes() === 'converting'
+                            ? m('label', {}, app.translator.trans('fof-gamification.admin.page.convert.converting'))
+                            : m(
+                                  'label',
+                                  {},
+                                  app.translator.trans('fof-gamification.admin.page.convert.converted', { number: this.values.convertedLikes() })
+                              ),
+                        m('fieldset', { className: 'SettingsPage-ranks' }, [
+                            m('legend', {}, app.translator.trans('fof-gamification.admin.page.ranks.title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.ranks')),
+                            m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.ranks.help.help')),
+                            m(
+                                'div',
+                                { className: 'Ranks--Container' },
                                 this.ranks.map(rank => {
-                                    return m('div', {style: "float: left;"}, [
+                                    return m('div', { style: 'float: left;' }, [
                                         m('input', {
                                             className: 'FormControl Ranks-number',
                                             type: 'number',
                                             value: rank.points(),
-                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.points'),
-                                            oninput: m.withAttr('value', this.updatePoints.bind(this, rank))
+                                            placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.points'),
+                                            oninput: m.withAttr('value', this.updatePoints.bind(this, rank)),
                                         }),
                                         m('input', {
                                             className: 'FormControl Ranks-name',
                                             value: rank.name(),
-                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.name'),
-                                            oninput: m.withAttr('value', this.updateName.bind(this, rank))
+                                            placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
+                                            oninput: m.withAttr('value', this.updateName.bind(this, rank)),
                                         }),
                                         m('input', {
                                             className: 'FormControl Ranks-color',
                                             value: rank.color(),
-                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.color'),
-                                            oninput: m.withAttr('value', this.updateColor.bind(this, rank))
+                                            placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
+                                            oninput: m.withAttr('value', this.updateColor.bind(this, rank)),
                                         }),
                                         Button.component({
                                             type: 'button',
                                             className: 'Button Button--warning Ranks-button',
                                             icon: 'fa fa-times',
-                                            onclick: this.deleteRank.bind(this, rank)
+                                            onclick: this.deleteRank.bind(this, rank),
                                         }),
-                                    ])
+                                    ]);
                                 }),
-                                m('div', {style: "float: left; margin-bottom: 15px"}, [
+                                m('div', { style: 'float: left; margin-bottom: 15px' }, [
                                     m('input', {
                                         className: 'FormControl Ranks-number',
                                         value: this.newRank.points(),
-                                        placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.points'),
+                                        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.points'),
                                         type: 'number',
-                                        oninput: m.withAttr('value', this.newRank.points)
+                                        oninput: m.withAttr('value', this.newRank.points),
                                     }),
                                     m('input', {
                                         className: 'FormControl Ranks-name',
                                         value: this.newRank.name(),
-                                        placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.name'),
-                                        oninput: m.withAttr('value', this.newRank.name)
+                                        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
+                                        oninput: m.withAttr('value', this.newRank.name),
                                     }),
                                     m('input', {
-                                            className: 'FormControl Ranks-color',
-                                            value: this.newRank.color(),
-                                            placeholder: app.translator.trans('reflar-gamification.admin.page.ranks.help.color'),
-                                            oninput: m.withAttr('value', this.newRank.color)
-                                        }
-                                    ),
+                                        className: 'FormControl Ranks-color',
+                                        value: this.newRank.color(),
+                                        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
+                                        oninput: m.withAttr('value', this.newRank.color),
+                                    }),
                                     Button.component({
                                         type: 'button',
                                         className: 'Button Button--warning Ranks-button',
                                         icon: 'fa fa-plus',
-                                        onclick: this.addRank.bind(this)
+                                        onclick: this.addRank.bind(this),
                                     }),
                                 ])
                             ),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.ranks.number_title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.number_title')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.rankAmt() || '',
                                 placeholder: 2,
-                                oninput: m.withAttr('value', this.values.rankAmt)
+                                oninput: m.withAttr('value', this.values.rankAmt),
                             }),
-                            m('legend', {}, app.translator.trans('reflar-gamification.admin.page.votes.title')),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.icon_name')),
-                            m('div', {className: 'helpText'}, app.translator.trans('reflar-gamification.admin.page.votes.icon_help')),
+                            m('legend', {}, app.translator.trans('fof-gamification.admin.page.votes.title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.icon_name')),
+                            m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.votes.icon_help')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.iconName() || '',
                                 placeholder: 'thumbs',
-                                oninput: m.withAttr('value', this.values.iconName)
+                                oninput: m.withAttr('value', this.values.iconName),
                             }),
                             Switch.component({
                                 state: this.values.autoUpvotePosts() || false,
-                                children: app.translator.trans('reflar-gamification.admin.page.votes.auto_upvote'),
+                                children: app.translator.trans('fof-gamification.admin.page.votes.auto_upvote'),
                                 onchange: this.values.autoUpvotePosts,
-                                className: 'votes-switch'
+                                className: 'votes-switch',
                             }),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.votes.points_title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.points_title')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.pointsPlaceholder() || '',
-                                placeholder: app.translator.trans('reflar-gamification.admin.page.votes.points_placeholder') + '{points}',
-                                oninput: m.withAttr('value', this.values.pointsPlaceholder)
+                                placeholder: app.translator.trans('fof-gamification.admin.page.votes.points_placeholder') + '{points}',
+                                oninput: m.withAttr('value', this.values.pointsPlaceholder),
                             }),
-                            m('legend', {}, app.translator.trans('reflar-gamification.admin.page.rankings.title')),
+                            m('legend', {}, app.translator.trans('fof-gamification.admin.page.rankings.title')),
                             Switch.component({
                                 state: this.values.customRankingImages() || false,
-                                children: app.translator.trans('reflar-gamification.admin.page.rankings.enable'),
+                                children: app.translator.trans('fof-gamification.admin.page.rankings.enable'),
                                 onchange: this.values.customRankingImages,
-                                className: 'votes-switch'
+                                className: 'votes-switch',
                             }),
-                            m('label', {}, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.rankings.blocked.title')),
                             m('input', {
                                 className: 'FormControl Ranks-blocked',
-                                placeholder: app.translator.trans('reflar-gamification.admin.page.rankings.blocked.placeholder'),
+                                placeholder: app.translator.trans('fof-gamification.admin.page.rankings.blocked.placeholder'),
                                 value: this.values.blockedUsers() || '',
-                                oninput: m.withAttr('value', this.values.blockedUsers)
+                                oninput: m.withAttr('value', this.values.blockedUsers),
                             }),
-                            m('div', { className: 'helpText' }, app.translator.trans('reflar-gamification.admin.page.rankings.blocked.help')),
-                            m('label', { className: 'Upload-label' }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_1')),
+                            m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.rankings.blocked.help')),
+                            m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_1')),
                             <UploadImageButton className="Upload-button" name="topimage1" />,
                             m('br'),
-                            m('label', { className: 'Upload-label' }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_2')),
+                            m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_2')),
                             <UploadImageButton className="Upload-button" name="topimage2" />,
                             m('br'),
-                            m('label', { className: 'Upload-label' }, app.translator.trans('reflar-gamification.admin.page.rankings.custom_image_3')),
+                            m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_3')),
                             <UploadImageButton className="Upload-button" name="topimage3" />,
                             m('br'),
                             Button.component({
                                 type: 'submit',
                                 className: 'Button Button--primary Ranks-save',
-                                children: app.translator.trans('reflar-gamification.admin.page.save_settings'),
+                                children: app.translator.trans('fof-gamification.admin.page.save_settings'),
                                 loading: this.loading,
-                                disabled: !this.changed()
-                            })
-                        ])
-                    ])
-                ])
-            ])
+                                disabled: !this.changed(),
+                            }),
+                        ]),
+                    ]),
+                ]),
+            ]),
         ];
     }
 
-
     updateName(rank, value) {
-        rank.save({name: value});
+        rank.save({ name: value });
     }
 
     updatePoints(rank, value) {
-        rank.save({points: value});
+        rank.save({ points: value });
     }
 
     updateColor(rank, value) {
-        rank.save({color: value});
+        rank.save({ color: value });
     }
 
     deleteRank(rankToDelete) {
@@ -223,25 +217,25 @@ export default class SettingsPage extends Page {
                 this.ranks.splice(i, 1);
                 return true;
             }
-        })
+        });
     }
 
     addRank(rank) {
-        app.store.createRecord('ranks').save({
-            points: this.newRank.points(),
-            name: this.newRank.name(),
-            color: this.newRank.color()
-        }).then(
-            rank => {
+        app.store
+            .createRecord('ranks')
+            .save({
+                points: this.newRank.points(),
+                name: this.newRank.name(),
+                color: this.newRank.color(),
+            })
+            .then(rank => {
                 this.newRank.color('');
                 this.newRank.name('');
                 this.newRank.points('');
                 this.ranks.push(rank);
                 m.redraw();
-            }
-        );
+            });
     }
-
 
     /**
      *
@@ -267,18 +261,19 @@ export default class SettingsPage extends Page {
 
         const settings = {};
 
-        this.switches.forEach(key => settings[this.addPrefix(key)] = this.values[key]());
-        this.fields.forEach(key => settings[this.addPrefix(key)] = this.values[key]());
+        this.switches.forEach(key => (settings[this.addPrefix(key)] = this.values[key]()));
+        this.fields.forEach(key => (settings[this.addPrefix(key)] = this.values[key]()));
 
         saveSettings(settings)
             .then(() => {
-                app.alerts.show(this.successAlert = new Alert({
-                    type: 'success',
-                    children: app.translator.trans('core.admin.basics.saved_message')
-                }));
+                app.alerts.show(
+                    (this.successAlert = new Alert({
+                        type: 'success',
+                        children: app.translator.trans('core.admin.basics.saved_message'),
+                    }))
+                );
             })
-            .catch(() => {
-            })
+            .catch(() => {})
             .then(() => {
                 this.loading = false;
                 window.location.reload();

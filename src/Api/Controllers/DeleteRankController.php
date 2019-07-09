@@ -1,21 +1,19 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Api\Controllers;
+namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractDeleteController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\Gamification\Commands\DeleteRank;
+use FoF\Gamification\Commands\DeleteRank;
 
 class DeleteRankController extends AbstractDeleteController
 {

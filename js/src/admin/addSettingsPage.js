@@ -1,19 +1,22 @@
-import {extend} from "flarum/extend";
-import AdminNav from "flarum/components/AdminNav";
-import AdminLinkButton from "flarum/components/AdminLinkButton";
-import SettingsPage from "./components/SettingsPage";
+import { extend } from 'flarum/extend';
+import AdminNav from 'flarum/components/AdminNav';
+import AdminLinkButton from 'flarum/components/AdminLinkButton';
+import SettingsPage from './components/SettingsPage';
 
-export default function () {
-    app.routes['reflar-gamification'] = {path: '/reflar/gamification', component: SettingsPage.component()};
+export default function() {
+    app.routes['fof-gamification'] = { path: '/fof/gamification', component: SettingsPage.component() };
 
-    app.extensionSettings['reflar-gamification'] = () => m.route(app.route('reflar-gamification'));
+    app.extensionSettings['fof-gamification'] = () => m.route(app.route('fof-gamification'));
 
     extend(AdminNav.prototype, 'items', items => {
-        items.add('reflar-gamification', AdminLinkButton.component({
-            href: app.route('reflar-gamification'),
-            icon: 'fas fa-thumbs-up',
-            children: 'Gamification',
-            description: app.translator.trans('reflar-gamification.admin.nav.desc')
-        }));
+        items.add(
+            'fof-gamification',
+            AdminLinkButton.component({
+                href: app.route('fof-gamification'),
+                icon: 'fas fa-thumbs-up',
+                children: 'Gamification',
+                description: app.translator.trans('fof-gamification.admin.nav.desc'),
+            })
+        );
     });
 }

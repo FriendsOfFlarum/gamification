@@ -1,16 +1,14 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Api\Controllers;
+namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Discussion\Discussion;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -18,8 +16,8 @@ use Flarum\User\AssertPermissionTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Reflar\Gamification\Gamification;
-use Reflar\Gamification\Likes;
+use FoF\Gamification\Gamification;
+use FoF\Gamification\Likes;
 use Zend\Diactoros\Response\JsonResponse;
 
 class ConvertLikesController implements RequestHandlerInterface
@@ -55,10 +53,10 @@ class ConvertLikesController implements RequestHandlerInterface
     {
         $actor = $request->getAttribute('actor');
 
-        if (null !== $actor && $actor->isAdmin() && 'POST' === $request->getMethod() && false == $this->settings->get('reflar.gamification.convertedLikes')) {
+        if (null !== $actor && $actor->isAdmin() && 'POST' === $request->getMethod() && false == $this->settings->get('fof-gamification.convertedLikes')) {
             $likes = Likes::all();
 
-            $this->settings->set('reflar.gamification.convertedLikes', 'converting');
+            $this->settings->set('fof-gamification.convertedLikes', 'converting');
 
             $counter = 0;
 
@@ -73,7 +71,7 @@ class ConvertLikesController implements RequestHandlerInterface
                 $this->gamification->calculateHotness($discussion);
             }
 
-            $this->settings->set('reflar.gamification.convertedLikes', $counter);
+            $this->settings->set('fof-gamification.convertedLikes', $counter);
 
             return new JsonResponse($counter, 200);
         }

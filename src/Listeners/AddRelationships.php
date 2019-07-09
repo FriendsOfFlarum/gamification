@@ -1,16 +1,14 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Listeners;
+namespace FoF\Gamification\Listeners;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Event\Serializing;
@@ -23,9 +21,9 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\Gamification\Api\Controllers\OrderByPointsController;
-use Reflar\Gamification\Api\Serializers\RankSerializer;
-use Reflar\Gamification\Rank;
+use FoF\Gamification\Api\Controllers\OrderByPointsController;
+use FoF\Gamification\Api\Serializers\RankSerializer;
+use FoF\Gamification\Rank;
 
 class AddRelationships
 {
@@ -67,7 +65,7 @@ class AddRelationships
         }
 
         if ($event->isRelationship(User::class, 'ranks')) {
-            return $event->model->belongsToMany(Rank::class, 'rank_user', null, null, null, null, 'ranks');
+            return $event->model->belongsToMany(Rank::class, 'rank_users', null, null, null, null, 'ranks');
         }
     }
 
@@ -107,19 +105,21 @@ class AddRelationships
     public function prepareApiAttributes(Serializing $event)
     {
         if ($event->isSerializer(Serializer\UserSerializer::class)) {
-            $event->attributes['canViewRankingPage'] = (bool) $event->actor->can('reflar.gamification.viewRankingPage');
+            $event->attributes['canViewRankingPage'] = (bool) $event->actor->can('fof.gamification.viewRankingPage');
             $event->attributes['Points'] = $event->model->votes;
         }
+
         if ($event->isSerializer(Serializer\ForumSerializer::class)) {
-            $event->attributes['IconName'] = $this->settings->get('reflar.gamification.iconName');
-            $event->attributes['PointsPlaceholder'] = $this->settings->get('reflar.gamification.pointsPlaceholder');
+            $event->attributes['IconName'] = $this->settings->get('fof-gamification.iconName');
+            $event->attributes['PointsPlaceholder'] = $this->settings->get('fof-gamification.pointsPlaceholder');
             $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
-            $event->attributes['CustomRankingImages'] = $this->settings->get('reflar.gamification.customRankingImages');
+            $event->attributes['CustomRankingImages'] = $this->settings->get('fof-gamification.customRankingImages');
             $event->attributes['topimage1Url'] = "/assets/{$this->settings->get('topimage1_path')}";
             $event->attributes['topimage2Url'] = "/assets/{$this->settings->get('topimage2_path')}";
             $event->attributes['topimage3Url'] = "/assets/{$this->settings->get('topimage3_path')}";
-            $event->attributes['ranksAmt'] = $this->settings->get('reflar.gamification.rankAmt');
+            $event->attributes['ranksAmt'] = $this->settings->get('fof-gamification.rankAmt');
         }
+
         if ($event->isSerializer(Serializer\DiscussionSerializer::class)) {
             $event->attributes['votes'] = (int) $event->model->votes;
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);

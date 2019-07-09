@@ -1,16 +1,14 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Listeners;
+namespace FoF\Gamification\Listeners;
 
 use Flarum\Api\Serializer\BasicPostSerializer;
 use Flarum\Event\ConfigureNotificationTypes;
@@ -19,10 +17,10 @@ use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\Gamification\Gamification;
-use Reflar\Gamification\Notification\VoteBlueprint;
-use Reflar\Gamification\Rank;
-use Reflar\Gamification\Vote;
+use FoF\Gamification\Gamification;
+use FoF\Gamification\Notification\VoteBlueprint;
+use FoF\Gamification\Rank;
+use FoF\Gamification\Vote;
 
 class EventHandlers
 {
@@ -75,7 +73,7 @@ class EventHandlers
      */
     public function addVote(Posted $event)
     {
-        if ('0' !== $this->settings->get('reflar.gamification.autoUpvotePosts')) {
+        if ('0' !== $this->settings->get('fof-gamification.autoUpvotePosts')) {
             $actor = $event->actor;
 
             $actor->increment('votes');

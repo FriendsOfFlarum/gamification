@@ -1,16 +1,14 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Listeners;
+namespace FoF\Gamification\Listeners;
 
 use DateTime;
 use Flarum\Notification\Notification;
@@ -21,11 +19,11 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\AssertPermissionTrait;
 use Illuminate\Contracts\Events\Dispatcher;
 use Pusher;
-use Reflar\Gamification\Events\PostWasVoted;
-use Reflar\Gamification\Gamification;
-use Reflar\Gamification\Notification\VoteBlueprint;
-use Reflar\Gamification\Rank;
-use Reflar\Gamification\Vote;
+use FoF\Gamification\Events\PostWasVoted;
+use FoF\Gamification\Gamification;
+use FoF\Gamification\Notification\VoteBlueprint;
+use FoF\Gamification\Rank;
+use FoF\Gamification\Vote;
 
 class SaveVotesToDatabase
 {

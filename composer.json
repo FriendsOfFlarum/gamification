@@ -1,11 +1,11 @@
 {
-    "name": "reflar/gamification",
+    "name": "fof/gamification",
     "description":  "Upvotes and downvotes for your Flarum community",
     "keywords": [
+        "flarum",
+        "friendsofflarum",
         "misc",
         "settings",
-        "flarum",
-        "reflar",
         "points",
         "gamification"
     ],
@@ -25,28 +25,31 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/ReDevelopers/ReFlar/gamification/issues",
-        "source": "https://github.com/ReDevelopers/ReFlar/gamification"
+        "issues": "https://github.com/FriendsOfFlarum/gamification/issues",
+        "source": "https://github.com/FriendsOfFlarum/gamification"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.8"
+        "flarum/core": "^0.1.0-beta.9"
     },
-      "autoload": {
+    "replace": {
+        "reflar/gamification": "*"
+    },
+    "autoload": {
         "psr-4": {
-            "Reflar\\Gamification\\": "src/"
+            "FoF\\Gamification\\": "src/"
         }
     },
     "extra": {
         "flarum-extension": {
-            "title": "ReFlar Gamification",
+            "title": "FoF Gamification",
             "icon": {
-                "name": "fa fa-thumbs-up",
-                "backgroundColor": "#263238",
+                "name": "fas fa-thumbs-up",
+                "backgroundColor": "#e74c3c",
                 "color": "#fff"
             }
         },
         "flagrow": {
-            "discuss": "https://discuss.flarum.org/d/5588-gamification-by-reflar"
+            "discuss": ""
         }
     }
 }

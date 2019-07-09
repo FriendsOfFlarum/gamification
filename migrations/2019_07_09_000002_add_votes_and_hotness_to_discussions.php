@@ -1,10 +1,8 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
@@ -13,7 +11,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 
 return [
-    'up'   => function (Builder $schema) {
+    'up' => function (Builder $schema) {
+        if ($schema->hasColumn('discussions', 'votes')) {
+            return;
+        }
+
         $schema->table('discussions', function (Blueprint $table) {
             $table->integer('votes');
             $table->float('hotness', 10, 4);

@@ -1,22 +1,20 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Api\Controllers;
+namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\User\Exception\PermissionDeniedException;
 use Psr\Http\Message\ServerRequestInterface;
-use Reflar\Gamification\Gamification;
+use FoF\Gamification\Gamification;
 use Tobscure\JsonApi\Document;
 
 class OrderByPointsController extends AbstractListController
@@ -48,7 +46,7 @@ class OrderByPointsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        if ($request->getAttribute('actor')->cannot('reflar.gamification.viewRankingPage')) {
+        if ($request->getAttribute('actor')->cannot('fof.gamification.viewRankingPage')) {
             throw new PermissionDeniedException();
         }
 

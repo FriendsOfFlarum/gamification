@@ -1,49 +1,37 @@
-# Gamification by ReFlar
+# Gamification by FriendsOfFlarum
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/reflar/gamification/blob/master/LICENSE.md) [![Latest Stable Version](https://img.shields.io/packagist/v/reflar/gamification.svg)](https://packagist.org/packages/reflar/gamification) [![Total Downloads](https://img.shields.io/packagist/dt/reflar/gamification.svg)](https://packagist.org/packages/reflar/gamification)  
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/gamification.svg)](https://packagist.org/packages/fof/gamification) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate)  
 
-A [Flarum](http://flarum.org) extension that adds upvotes, downvotes, and ranks to your Flarum Community!
+A [Flarum](http://flarum.org) extension. Add upvotes, downvotes, and ranks to your Flarum Community!
 
 Upvote and downvote posts anonymously, and reward active users with ranks, and sort posts by hotness/popularity.
 
-### Usage
+**Note:** This extension is meant as a replacement for the Flarum Likes extension. Therefore, they are not compatible and it's recommended to disable the Likes extension.
 
-- Just click upvote or downvote
-- Posts can be sorted by "Hotness"
+- Q: How is hotness sorted ? 
+- A: The total amount of hotness is got between the amount of votes on the discussion and the posts inside of it. Also, newer posts with the same amount of upvotes as another post will have more hotness, so time is also an influent factor.
 
 ### Installation
 
-Install it with composer:
+Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually with composer:
 
-```bash
-composer require reflar/gamification
+```sh
+composer require fof/gamification
 ```
 
-Then login and enable the extension.
+You can optionally convert your likes into upvotes, as well as calculate the hotness of all previously existing discussions.
 
-You can optionally convert your likes into upvotes, as well as calculate the hotness of all previous discussions.
+### Updating
 
-### How hotness is sorted? 
-
-The total amount of hotness is got between the amount of votes on the discussion and the posts inside of it. Also, newer posts with the same amount of upvotes as another post will have more hotness, so time is also an influent factor.
-
-### Developer Guide
-
-You have 1 event to listen for `PostWasVoted` it contains the post, post's user, the actor, and the vote type (up or down).
-
-### To Do
-
-- Requests?
-
-### Important
-
-This Extension is meant as a replacement for the Flarum Likes Extension. Therefore, they are not compatible and it's recommended to disable the Likes Extension.
-
-### Issues
-
-- [Open an issue on GitHub](https://github.com/ReFlar/gamification/issues) 
+```sh
+composer update fof/gamification
+```
 
 ### Links
 
-- [on github](https://github.com/ReFlar/gamification)
-- [on packagist](https://packagist.org/packages/ReFlar/gamification)
+[<img src="https://opencollective.com/fof/donate/button@2x.png?color=blue" height="25" />](https://opencollective.com/fof/donate)
+
+- [Packagist](https://packagist.org/packages/fof/gamification)
+- [GitHub](https://github.com/packages/FriendsOfFlarum/gamification)
+
+An extension by [FriendsOfFlarum](https://github.com/FriendsOfFlarum).

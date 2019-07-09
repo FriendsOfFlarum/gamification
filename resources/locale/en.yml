@@ -3,7 +3,7 @@ core:
     index_sort:
       hot_button: Trending
       
-reflar-gamification:
+fof-gamification:
   forum:
     vote_title: Show Who Voted
     nav:

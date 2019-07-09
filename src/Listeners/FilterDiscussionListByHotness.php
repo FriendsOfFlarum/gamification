@@ -1,20 +1,18 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification\Listeners;
+namespace FoF\Gamification\Listeners;
 
 use Flarum\Event\ConfigureDiscussionGambits;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\Gamification\Gambit\HotGambit;
+use FoF\Gamification\Gambit\HotGambit;
 
 class FilterDiscussionListByHotness
 {

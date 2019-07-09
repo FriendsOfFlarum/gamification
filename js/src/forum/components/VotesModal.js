@@ -8,32 +8,26 @@ export default class VotesModal extends Modal {
     }
 
     title() {
-        return app.translator.trans('reflar-gamification.forum.modal.title');
+        return app.translator.trans('fof-gamification.forum.modal.title');
     }
 
     content() {
         return (
             <div className="Modal-body">
                 <ul className="VotesModal-list">
-                    <legend>
-                        {app.translator.trans('reflar-gamification.forum.modal.upvotes_label')}
-                    </legend>
+                    <legend>{app.translator.trans('fof-gamification.forum.modal.upvotes_label')}</legend>
                     {this.props.post.upvotes().map(user => (
                         <li>
                             <a href={app.route.user(user)} config={m.route}>
-                                {avatar(user)} {' '}
-                                {username(user)}
+                                {avatar(user)} {username(user)}
                             </a>
                         </li>
                     ))}
-                    <legend>
-                        {app.translator.trans('reflar-gamification.forum.modal.downvotes_label')}
-                    </legend>
+                    <legend>{app.translator.trans('fof-gamification.forum.modal.downvotes_label')}</legend>
                     {this.props.post.downvotes().map(user => (
                         <li>
                             <a href={app.route.user(user)} config={m.route}>
-                                {avatar(user)} {' '}
-                                {username(user)}
+                                {avatar(user)} {username(user)}
                             </a>
                         </li>
                     ))}

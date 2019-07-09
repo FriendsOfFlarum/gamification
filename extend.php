@@ -1,20 +1,18 @@
 <?php
 /**
- *  This file is part of reflar/gamification.
+ *  This file is part of fof/gamification.
  *
- *  Copyright (c) ReFlar.
- *
- *  http://reflar.io
+ *  Copyright (c) FriendsOfFlarum.
  *
  *  For the full copyright and license information, please view the license.md
  *  file that was distributed with this source code.
  */
 
-namespace Reflar\Gamification;
+namespace FoF\Gamification;
 
 use Flarum\Extend;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\Gamification\Api\Controllers;
+use FoF\Gamification\Api\Controllers;
 
 return [
     (new Extend\Frontend('admin'))
@@ -27,11 +25,11 @@ return [
         ->route('/hot', 'hot'),
     new Extend\Locales(__DIR__ . '/resources/locale'),
     (new Extend\Routes('api'))
-        ->post('/reflar/gamification/convert', 'reflar.gamification.convert', Controllers\ConvertLikesController::class)
+        ->post('/fof/gamification/convert', 'fof.gamification.convert', Controllers\ConvertLikesController::class)
         ->get('/ranks', 'ranks.index', Controllers\ListRanksController::class)
         ->post('/ranks', 'ranks.create', Controllers\CreateRankController::class)
-        ->post('/topimage{id}', 'reflar.topImage.add', Controllers\UploadTopImageController::class)
-        ->delete('/topimage{id}', 'reflar.topImage.delete', Controllers\DeleteTopImageController::class)
+        ->post('/topimage{id}', 'fof.topImage.add', Controllers\UploadTopImageController::class)
+        ->delete('/topimage{id}', 'fof.topImage.delete', Controllers\DeleteTopImageController::class)
         ->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class)
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
