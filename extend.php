@@ -11,6 +11,7 @@
 namespace FoF\Gamification;
 
 use Flarum\Extend;
+use Flarum\Post\Event\Saving;
 use Illuminate\Contracts\Events\Dispatcher;
 use FoF\Gamification\Api\Controllers;
 
@@ -36,9 +37,10 @@ return [
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddRelationships::class);
         $events->subscribe(Listeners\EventHandlers::class);
-        $events->subscribe(Listeners\SaveVotesToDatabase::class);
         $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
 
         $events->subscribe(Access\DiscussionPolicy::class);
+
+        $events->listen(Saving::class, Listeners\SaveVotesToDatabase::class);
     },
 ];

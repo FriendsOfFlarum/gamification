@@ -64,21 +64,12 @@ class SaveVotesToDatabase
     }
 
     /**
-     * @param Dispatcher $events
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        $events->listen(Saving::class, [$this, 'whenSaving']);
-        $events->listen(Deleted::class, [$this, 'whenDeleted']);
-    }
-
-    /**
      * @param Saving $event
      *
      * @throws FloodingException
      * @throws \Flarum\User\Exception\PermissionDeniedException
      */
-    public function whenSaving(Saving $event)
+    public function handle(Saving $event)
     {
         $post = $event->post;
         if ($post->id) {

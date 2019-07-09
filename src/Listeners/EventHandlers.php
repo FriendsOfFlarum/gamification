@@ -12,7 +12,6 @@ namespace FoF\Gamification\Listeners;
 
 use Flarum\Api\Serializer\BasicPostSerializer;
 use Flarum\Event\ConfigureNotificationTypes;
-use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -30,11 +29,6 @@ class EventHandlers
     protected $settings;
 
     /**
-     * @var NotificationSyncer
-     */
-    protected $notifications;
-
-    /**
      * @var Gamification
      */
     protected $gamification;
@@ -48,13 +42,11 @@ class EventHandlers
      * EventHandlers constructor.
      *
      * @param SettingsRepositoryInterface $settings
-     * @param NotificationSyncer          $notifications
-     * @param Gamification                $gamification
+     * @param Gamification $gamification
      */
-    public function __construct(SettingsRepositoryInterface $settings, NotificationSyncer $notifications, Gamification $gamification)
+    public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
     {
         $this->settings = $settings;
-        $this->notifications = $notifications;
         $this->gamification = $gamification;
     }
 
