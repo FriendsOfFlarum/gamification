@@ -1,11 +1,12 @@
 <?php
-/**
- *  This file is part of fof/gamification.
+
+/*
+ * This file is part of fof/gamification.
  *
- *  Copyright (c) FriendsOfFlarum.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
- *  For the full copyright and license information, please view the license.md
- *  file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace FoF\Gamification\Listeners;
@@ -20,10 +21,10 @@ use Flarum\Event\GetModelRelationship;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
-use Illuminate\Contracts\Events\Dispatcher;
 use FoF\Gamification\Api\Controllers\OrderByPointsController;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Rank;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AddRelationships
 {

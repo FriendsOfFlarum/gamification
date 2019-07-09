@@ -1,30 +1,31 @@
 <?php
-/**
- *  This file is part of fof/gamification.
+
+/*
+ * This file is part of fof/gamification.
  *
- *  Copyright (c) FriendsOfFlarum.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
- *  For the full copyright and license information, please view the license.md
- *  file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace FoF\Gamification;
 
 use Flarum\Extend;
 use Flarum\Post\Event\Saving;
-use Illuminate\Contracts\Events\Dispatcher;
 use FoF\Gamification\Api\Controllers;
+use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('admin'))
-        ->css(__DIR__ . '/resources/less/admin/extension.less')
+        ->css(__DIR__.'/resources/less/admin/extension.less')
         ->js(__DIR__.'/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__ . '/resources/less/forum/extension.less')
+        ->css(__DIR__.'/resources/less/forum/extension.less')
         ->route('/rankings', 'rankings')
         ->route('/hot', 'hot'),
-    new Extend\Locales(__DIR__ . '/resources/locale'),
+    new Extend\Locales(__DIR__.'/resources/locale'),
     (new Extend\Routes('api'))
         ->post('/fof/gamification/convert', 'fof.gamification.convert', Controllers\ConvertLikesController::class)
         ->get('/ranks', 'ranks.index', Controllers\ListRanksController::class)

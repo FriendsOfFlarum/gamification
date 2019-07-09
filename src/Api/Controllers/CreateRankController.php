@@ -1,20 +1,21 @@
 <?php
-/**
- *  This file is part of fof/gamification.
+
+/*
+ * This file is part of fof/gamification.
  *
- *  Copyright (c) FriendsOfFlarum.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
- *  For the full copyright and license information, please view the license.md
- *  file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractCreateController;
-use Illuminate\Contracts\Bus\Dispatcher;
-use Psr\Http\Message\ServerRequestInterface;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Commands\CreateRank;
+use Illuminate\Contracts\Bus\Dispatcher;
+use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
 class CreateRankController extends AbstractCreateController

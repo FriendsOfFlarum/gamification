@@ -29,7 +29,7 @@ return [
             'blockedUsers',
             'pointsPlaceholder',
             'autoUpvotePosts',
-            'customRankingImages'
+            'customRankingImages',
         ];
 
         foreach ($keys as $key) {

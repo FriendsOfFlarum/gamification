@@ -1,11 +1,12 @@
 <?php
-/**
- *  This file is part of fof/gamification.
+
+/*
+ * This file is part of fof/gamification.
  *
- *  Copyright (c) FriendsOfFlarum.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
- *  For the full copyright and license information, please view the license.md
- *  file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace FoF\Gamification\Listeners;
@@ -17,13 +18,13 @@ use Flarum\Post\Event\Saving;
 use Flarum\Post\Exception\FloodingException;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\AssertPermissionTrait;
-use Illuminate\Contracts\Events\Dispatcher;
-use Pusher;
 use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Gamification;
 use FoF\Gamification\Notification\VoteBlueprint;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
+use Illuminate\Contracts\Events\Dispatcher;
+use Pusher;
 
 class SaveVotesToDatabase
 {

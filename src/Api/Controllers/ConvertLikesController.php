@@ -1,11 +1,12 @@
 <?php
-/**
- *  This file is part of fof/gamification.
+
+/*
+ * This file is part of fof/gamification.
  *
- *  Copyright (c) FriendsOfFlarum.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
- *  For the full copyright and license information, please view the license.md
- *  file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace FoF\Gamification\Api\Controllers;
@@ -13,11 +14,11 @@ namespace FoF\Gamification\Api\Controllers;
 use Flarum\Discussion\Discussion;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\AssertPermissionTrait;
+use FoF\Gamification\Gamification;
+use FoF\Gamification\Likes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use FoF\Gamification\Gamification;
-use FoF\Gamification\Likes;
 use Zend\Diactoros\Response\JsonResponse;
 
 class ConvertLikesController implements RequestHandlerInterface
