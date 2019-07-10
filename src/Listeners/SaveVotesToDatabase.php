@@ -11,7 +11,7 @@
 
 namespace FoF\Gamification\Listeners;
 
-use DateTime;
+use Carbon\Carbon;
 use Flarum\Notification\Notification;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Saving;
@@ -140,7 +140,7 @@ class SaveVotesToDatabase
             $this->sendData($post, $user, $actor, $vote->type, ' ');
             $vote->save();
         }
-        $actor->last_vote_time = new DateTime();
+        $actor->last_vote_time = Carbon::now();
         $actor->save();
     }
 
@@ -235,7 +235,7 @@ class SaveVotesToDatabase
      */
     public function assertNotFlooding($actor)
     {
-        if (new DateTime($actor->last_vote_time) >= new DateTime('-10 seconds')) {
+        if ($actor->last_vote_time !== null && Carbon::parse($actor->last_vote_time)->greaterThanOrEqualTo(Carbon::now()->subSeconds(10))) {
             throw new FloodingException();
         }
     }
