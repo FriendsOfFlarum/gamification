@@ -123,7 +123,7 @@ class Gamification
                 $post->discussion->increment('votes');
             }
 
-            $vote = vote::build($post, $user);
+            $vote = Vote::build($post, $user);
             $vote->type = 'Up';
             $vote->save();
 
