@@ -5,6 +5,7 @@ core:
       
 fof-gamification:
   forum:
+    votes: Votes
     vote_title: Show Who Voted
     nav:
       name: Rankings
@@ -46,6 +47,8 @@ fof-gamification:
         points_placeholder: "Points: "
         color_holder: '#ffffff'
         auto_upvote: Auto upvote posts when posted
+        rate_limit: Enforce a vote rate limit (10 seconds)
+        discussion_page: Show total votes of original post on discussions list
         title: Votes
         vote_color: Voted color
         icon_name: Upvote/downvote icon

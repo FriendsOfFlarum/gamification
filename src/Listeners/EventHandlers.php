@@ -13,7 +13,7 @@ namespace FoF\Gamification\Listeners;
 
 use Flarum\Api\Serializer\BasicPostSerializer;
 use Flarum\Event\ConfigureNotificationTypes;
-use Flarum\Post\Event\Deleted;
+use Flarum\Post\Event\Deleting;
 use Flarum\Post\Event\Posted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Gamification\Gamification;
@@ -43,7 +43,7 @@ class EventHandlers
      * EventHandlers constructor.
      *
      * @param SettingsRepositoryInterface $settings
-     * @param Gamification                $gamification
+     * @param Gamification $gamification
      */
     public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
     {
@@ -58,7 +58,7 @@ class EventHandlers
     {
         $events->listen(ConfigureNotificationTypes::class, [$this, 'registerNotificationType']);
         $events->listen(Posted::class, [$this, 'addVote']);
-        $events->listen(Deleted::class, [$this, 'removeVote']);
+        $events->listen(Deleting::class, [$this, 'removeVote']);
     }
 
     /**
@@ -81,9 +81,7 @@ class EventHandlers
 
             if (null !== $ranks) {
                 $actor->ranks()->detach();
-                foreach ($ranks as $rank) {
-                    $actor->ranks()->attach($rank->id);
-                }
+                $actor->ranks()->attach($ranks);
             }
         }
     }
@@ -97,29 +95,22 @@ class EventHandlers
     }
 
     /**
-     * @param Deleted $event
+     * @param Deleting $event
      */
-    public function removeVote(Deleted $event)
+    public function removeVote(Deleting $event)
     {
         $post = $event->post;
-
-        foreach ($post->upvotes() as $upvote) {
-            $upvote->delete();
-        }
-        foreach ($post->downvotes() as $downvote) {
-            $downvote->delete();
-        }
 
         $voteNumber = $post->upvotes()->count() - $post->downvotes()->count();
         $user = $event->post->user;
         $user->votes = $user->votes - $voteNumber;
 
+        $user->save();
+
         $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
         if (null !== $ranks) {
-            foreach ($ranks as $rank) {
-                $user->ranks()->detach($rank->id);
-            }
+            $user->ranks()->detach($ranks);
         }
     }
 }

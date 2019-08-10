@@ -114,6 +114,7 @@ class AddRelationships
             $event->attributes['IconName'] = $this->settings->get('fof-gamification.iconName');
             $event->attributes['PointsPlaceholder'] = $this->settings->get('fof-gamification.pointsPlaceholder');
             $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
+            $event->attributes['showVotesOnDiscussionPage'] = (bool) $this->settings->get('fof-gamification.showVotesOnDiscussionPage');
             $event->attributes['CustomRankingImages'] = $this->settings->get('fof-gamification.customRankingImages');
             $event->attributes['topimage1Url'] = "/assets/{$this->settings->get('topimage1_path')}";
             $event->attributes['topimage2Url'] = "/assets/{$this->settings->get('topimage2_path')}";

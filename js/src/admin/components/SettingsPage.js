@@ -18,7 +18,12 @@ export default class SettingsPage extends Page {
             'pointsPlaceholder',
         ];
 
-        this.switches = ['autoUpvotePosts', 'customRankingImages'];
+        this.switches = [
+            'autoUpvotePosts',
+            'customRankingImages',
+            'rateLimit',
+            'showVotesOnDiscussionPage'
+        ];
 
         this.ranks = app.store.all('ranks');
 
@@ -151,6 +156,18 @@ export default class SettingsPage extends Page {
                                 state: this.values.autoUpvotePosts() || false,
                                 children: app.translator.trans('fof-gamification.admin.page.votes.auto_upvote'),
                                 onchange: this.values.autoUpvotePosts,
+                                className: 'votes-switch',
+                            }),
+                            Switch.component({
+                                state: this.values.rateLimit() || false,
+                                children: app.translator.trans('fof-gamification.admin.page.votes.rate_limit'),
+                                onchange: this.values.rateLimit,
+                                className: 'votes-switch',
+                            }),
+                            Switch.component({
+                                state: this.values.showVotesOnDiscussionPage() || false,
+                                children: app.translator.trans('fof-gamification.admin.page.votes.discussion_page'),
+                                onchange: this.values.showVotesOnDiscussionPage,
                                 className: 'votes-switch',
                             }),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.points_title')),

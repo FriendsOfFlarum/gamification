@@ -1,5 +1,30 @@
 @import "../lib/rankLabel.less";
 
+@media (min-width: 768px) {
+  .DiscussionListItem-info>.item-tags.gamification {
+    right: 122px !important;
+  }
+}
+
+.item-discussion-votes {
+  margin-left: 5px;
+  position: absolute;
+  right: 80px;
+  top: 15px;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: max-width .2s ease-in-out,-webkit-mask-image .2s;
+  -webkit-mask-image: linear-gradient(to right, #000 140px, rgba(0,0,0,0) 150px);
+  font-size: 14px;
+  line-height: 1;
+  color: @muted-color;
+
+  .icon {
+    margin-right: 8px;
+  }
+}
+
 .VotesModal-list {
     list-style: none;
     padding: 0;

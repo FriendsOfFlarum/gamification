@@ -6,6 +6,7 @@ import AddVoteButtons from './components/AddVoteButtons';
 import Rank from '../common/models/Rank';
 import RankingsPage from './components/RankingsPage';
 import VoteNotification from './components/VoteNotification';
+import addUpvotesToDiscussion from './components/addUpvotesToDiscussion';
 
 app.initializers.add('fof-gamification', app => {
     app.store.models.ranks = Rank;
@@ -17,4 +18,5 @@ app.initializers.add('fof-gamification', app => {
     AddVoteButtons();
     AddHotnessFilter();
     AddAttributes();
+    addUpvotesToDiscussion();
 });

@@ -81,7 +81,10 @@ class SaveVotesToDatabase
                 $user = $post->user;
 
                 $this->assertCan($actor, 'vote', $post->discussion);
-                $this->assertNotFlooding($actor);
+
+                if ($this->settings->get('fof-gamification.rateLimit')) {
+                    $this->assertNotFlooding($actor);
+                }
 
                 $isUpvoted = $data['attributes'][0];
 
@@ -198,18 +201,13 @@ class SaveVotesToDatabase
             $ranks = Rank::where('points', '<=', $user->votes)->get();
 
             if (null !== $ranks) {
-                $user->ranks()->detach();
-                foreach ($ranks as $rank) {
-                    $user->ranks()->attach($rank->id);
-                }
+                $user->ranks()->sync($ranks);
             }
-        } elseif ('Down' === $type) {
+        } else {
             $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
             if (null !== $ranks) {
-                foreach ($ranks as $rank) {
-                    $user->ranks()->detach($rank->id);
-                }
+                $user->ranks()->detach($ranks);
             }
         }
     }
