@@ -22,5 +22,5 @@ return [
         $schema->table('post_votes', function (Blueprint $table) {
             $table->dropForeign(['post_id']);
         });
-    }
+    },
 ];

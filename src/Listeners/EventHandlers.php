@@ -43,7 +43,7 @@ class EventHandlers
      * EventHandlers constructor.
      *
      * @param SettingsRepositoryInterface $settings
-     * @param Gamification $gamification
+     * @param Gamification                $gamification
      */
     public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
     {
