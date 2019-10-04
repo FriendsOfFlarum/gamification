@@ -14,6 +14,15 @@ use Illuminate\Database\Schema\Builder;
 
 return [
     'up' => function (Builder $schema) {
+        // Delete rows with non-existent entities so that we will be able to create
+        // foreign keys without any issues.
+        $schema->getConnection()
+            ->table('post_votes')
+            ->whereNotExists(function ($query) {
+                $query->selectRaw(1)->from('posts')->whereColumn('id', 'post_id');
+            })
+            ->delete();
+
         $schema->table('post_votes', function (Blueprint $table) {
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
