@@ -27,17 +27,20 @@ export default function() {
     };
 
     const findMatchClass = function(node, className) {
-        var newArray = [];
-        if (node.children) {
-            var nodeInChildren = node.children.find(matchClass(className));
+        const arr = [];
+
+        if (node && node.children) {
+            const nodeInChildren = node.children.find(matchClass(className));
+
             if (nodeInChildren !== undefined) {
-                newArray = newArray.concat(nodeInChildren);
+                arr.push(...nodeInChildren);
             }
+
             node.children.forEach(function(currentValue) {
-                newArray = newArray.concat(findMatchClass(currentValue, className));
+                arr.push(...findMatchClass(currentValue, className));
             });
         }
-        return newArray;
+        return arr;
     };
 
     extend(UserCard.prototype, 'infoItems', function(items, user) {
@@ -58,7 +61,10 @@ export default function() {
 
     extend(UserCard.prototype, 'view', function(vnode) {
         const user = this.props.user;
-        let profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
+        const profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
+
+        if (!profile_node) return;
+
         let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
         if (user.ranks()) {
             if (badges_node === undefined || badges_node === '') {

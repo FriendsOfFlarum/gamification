@@ -14,12 +14,12 @@ export default class UpvotedNotification extends Notification {
     }
 
     content() {
-        let username = this.props.notification.fromUser().username();
+        const user = this.props.notification.fromUser();
 
         if (this.props.notification.content() === 'Up') {
-            return app.translator.trans('fof-gamification.forum.notification.upvote', { username });
+            return app.translator.trans('fof-gamification.forum.notification.upvote', { user });
         } else {
-            return app.translator.trans('fof-gamification.forum.notification.downvote', { username });
+            return app.translator.trans('fof-gamification.forum.notification.downvote', { user });
         }
     }
 
