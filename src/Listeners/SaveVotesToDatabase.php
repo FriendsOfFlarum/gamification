@@ -243,16 +243,22 @@ class SaveVotesToDatabase
      */
     protected function getPusher()
     {
-        $options = [];
-        if ($cluster = $this->settings->get('flarum-pusher.app_cluster')) {
-            $options['cluster'] = $cluster;
-        }
+        if (app()->bound(Pusher::class)) {
+            return app(Pusher::class);
+        } else {
+            $settings = app('flarum.settings');
 
-        return new Pusher(
-            $this->settings->get('flarum-pusher.app_key'),
-            $this->settings->get('flarum-pusher.app_secret'),
-            $this->settings->get('flarum-pusher.app_id'),
-            $options
-        );
-    }
+            $options = [];
+
+            if ($cluster = $settings->get('flarum-pusher.app_cluster')) {
+                $options['cluster'] = $cluster;
+            }
+
+            return new Pusher(
+                $settings->get('flarum-pusher.app_key'),
+                $settings->get('flarum-pusher.app_secret'),
+                $settings->get('flarum-pusher.app_id'),
+                $options
+            );
+        }
 }
