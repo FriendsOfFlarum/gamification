@@ -261,4 +261,5 @@ class SaveVotesToDatabase
                 $options
             );
         }
+    }
 }
