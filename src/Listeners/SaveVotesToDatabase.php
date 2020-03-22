@@ -190,7 +190,8 @@ class SaveVotesToDatabase
         } elseif ($user->id !== $actor->id) {
             $this->notifications->sync(
                 new VoteBlueprint($post, $actor, $type),
-                [$user]);
+                [$user]
+            );
         }
 
         $this->events->fire(
