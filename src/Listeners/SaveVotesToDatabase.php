@@ -218,6 +218,7 @@ class SaveVotesToDatabase
      * @param $post
      * @param $clicked
      * @param $actor
+     *
      * @throws \Pusher\PusherException
      */
     public function pushNewVote($type, $post, $clicked, $actor)
@@ -226,11 +227,11 @@ class SaveVotesToDatabase
 
         if ($pusher = $this->getPusher()) {
             $pusher->trigger('public', 'newVote', [
-                'postId' => $post->id,
-                'before' => $type[0],
-                'after' => $type[1],
+                'postId'  => $post->id,
+                'before'  => $type[0],
+                'after'   => $type[1],
                 'clicked' => $clicked,
-                'userId' => $actor->id,
+                'userId'  => $actor->id,
             ]);
         }
     }
@@ -248,8 +249,9 @@ class SaveVotesToDatabase
     }
 
     /**
-     * @return bool|\Illuminate\Foundation\Application|mixed|Pusher
      * @throws \Pusher\PusherException
+     *
+     * @return bool|\Illuminate\Foundation\Application|mixed|Pusher
      */
     private function getPusher()
     {
