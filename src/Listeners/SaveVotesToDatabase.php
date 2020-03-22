@@ -24,7 +24,7 @@ use FoF\Gamification\Notification\VoteBlueprint;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
 use Illuminate\Contracts\Events\Dispatcher;
-use Pusher;
+use Pusher\Pusher;
 
 class SaveVotesToDatabase
 {
@@ -212,18 +212,26 @@ class SaveVotesToDatabase
         }
     }
 
+    /**
+     * @param $type
+     * @param $post
+     * @param $clicked
+     * @param $actor
+     * @throws \Pusher\PusherException
+     */
     public function pushNewVote($type, $post, $clicked, $actor)
     {
         $type = explode('2', $type);
 
-        $pusher = $this->getPusher();
-        $pusher->trigger('public', 'newVote', [
-            'postId'  => $post->id,
-            'before'  => $type[0],
-            'after'   => $type[1],
-            'clicked' => $clicked,
-            'userId'  => $actor->id,
-        ]);
+        if ($pusher = $this->getPusher()) {
+            $pusher->trigger('public', 'newVote', [
+                'postId' => $post->id,
+                'before' => $type[0],
+                'after' => $type[1],
+                'clicked' => $clicked,
+                'userId' => $actor->id,
+            ]);
+        }
     }
 
     /**
@@ -239,10 +247,15 @@ class SaveVotesToDatabase
     }
 
     /**
-     * @return Pusher
+     * @return bool|\Illuminate\Foundation\Application|mixed|Pusher
+     * @throws \Pusher\PusherException
      */
-    protected function getPusher()
+    private function getPusher()
     {
+        if (!class_exists(Pusher::class)) {
+            return false;
+        }
+
         if (app()->bound(Pusher::class)) {
             return app(Pusher::class);
         } else {
