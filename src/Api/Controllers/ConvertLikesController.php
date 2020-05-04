@@ -16,10 +16,10 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\AssertPermissionTrait;
 use FoF\Gamification\Gamification;
 use FoF\Gamification\Likes;
+use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Response\JsonResponse;
 
 class ConvertLikesController implements RequestHandlerInterface
 {
