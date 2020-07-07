@@ -42,13 +42,15 @@ class Vote extends AbstractModel
     }
 
     /**
-     * @param Collection $votes
+     * @param array $params
      * @return int
      */
-    public static function calculate($votes): int
+    public static function calculate(array $params): int
     {
-        return $votes->pluck('type')->map(function ($item) {
-            return $item === 'Down' ? -1 : 1;
-        })->sum();
+        return self::query()
+            ->where($params)
+            ->selectRaw('SUM(CASE WHEN `type` = "Up" THEN 1 ELSE -1 END) as vote')
+            ->pluck('vote')
+            ->sum();
     }
 }
