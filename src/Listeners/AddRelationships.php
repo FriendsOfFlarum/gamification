@@ -16,6 +16,7 @@ use Flarum\Api\Event\Serializing;
 use Flarum\Api\Event\WillGetData;
 use Flarum\Api\Event\WillSerializeData;
 use Flarum\Api\Serializer;
+use Flarum\Discussion\Discussion;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
 use Flarum\Post\Post;
@@ -24,6 +25,7 @@ use Flarum\User\User;
 use FoF\Gamification\Api\Controllers\OrderByPointsController;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Rank;
+use FoF\Gamification\Vote;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddRelationships
@@ -57,6 +59,14 @@ class AddRelationships
      */
     public function getModelRelationship(GetModelRelationship $event)
     {
+        if ($event->isRelationship(User::class,  'allVotes')) {
+            return $event->model->belongsToMany(User::class, 'post_votes', 'user_id');
+        }
+
+        if ($event->isRelationship(Post::class, 'votes')) {
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id');
+        }
+
         if ($event->isRelationship(Post::class, 'upvotes')) {
             return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')->where('type', 'Up');
         }

@@ -16,8 +16,10 @@ use Flarum\Notification\Notification;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Saving;
 use Flarum\Post\Exception\FloodingException;
+use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\AssertPermissionTrait;
+use Flarum\User\User;
 use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Gamification;
 use FoF\Gamification\Notification\VoteBlueprint;
@@ -105,10 +107,8 @@ class SaveVotesToDatabase
         if ($vote) {
             if (!$isUpvoted && !$isDownvoted) {
                 if ('Up' == $vote->type) {
-                    $this->changePoints($user, $post, -1);
                     $this->pushNewVote('up2none', $post, 'up', $actor);
                 } else {
-                    $this->changePoints($user, $post, 1);
                     $this->pushNewVote('down2none', $post, 'down', $actor);
                 }
                 $this->sendData($post, $user, $actor, 'None', $vote->type);
@@ -116,13 +116,11 @@ class SaveVotesToDatabase
             } else {
                 if ('Up' == $vote->type) {
                     $vote->type = 'Down';
-                    $this->changePoints($user, $post, -2);
                     $this->pushNewVote('up2down', $post, 'down', $actor);
 
                     $this->sendData($post, $user, $actor, 'Down', 'Up');
                 } else {
                     $vote->type = 'Up';
-                    $this->changePoints($user, $post, 2);
                     $this->pushNewVote('down2up', $post, 'up', $actor);
 
                     $this->sendData($post, $user, $actor, 'Up', 'Down');
@@ -133,16 +131,17 @@ class SaveVotesToDatabase
             $vote = Vote::build($post, $actor);
             if ($isDownvoted) {
                 $vote->type = 'Down';
-                $this->changePoints($user, $post, -1);
                 $this->pushNewVote('none2down', $post, 'down', $actor);
             } elseif ($isUpvoted) {
                 $vote->type = 'Up';
-                $this->changePoints($user, $post, 1);
                 $this->pushNewVote('none2up', $post, 'up', $actor);
             }
             $this->sendData($post, $user, $actor, $vote->type, ' ');
             $vote->save();
         }
+
+        $this->updatePoints($user, $post);
+
         $actor->last_vote_time = Carbon::now();
         $actor->save();
     }
@@ -150,19 +149,19 @@ class SaveVotesToDatabase
     /**
      * @param $user
      * @param $post
-     * @param $number
      */
-    public function changePoints($user, $post, $number)
+    public function updatePoints(User $user, Post $post)
     {
-        $user->votes = $user->votes + $number;
+        $user->votes = Vote::calculate($user->allVotes());
+
         $discussion = $post->discussion;
 
-        if (1 == $post->number) {
-            $discussion->votes = $discussion->votes + $number;
-            $discussion->save();
+        if ($post->id === $discussion->first_post_id) {
+            $discussion->votes = Vote::calculate($post->votes());
+
             $this->gamification->calculateHotness($discussion);
         }
-        $post->save();
+
         $user->save();
     }
 
