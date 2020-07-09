@@ -150,7 +150,7 @@ class SaveVotesToDatabase
      * @param $user
      * @param $post
      */
-    public function updatePoints(User $user, Post $post)
+    public function updatePoints(?User $user, Post $post)
     {
         if ($user) {
             $user->votes = Vote::calculate(
@@ -192,7 +192,7 @@ class SaveVotesToDatabase
                 $oldVote->data = $type;
                 $oldVote->save();
             }
-        } elseif ($user->id !== $actor->id) {
+        } elseif ($user && $user->id !== $actor->id) {
             $this->notifications->sync(
                 new VoteBlueprint($post, $actor, $type),
                 [$user]
@@ -203,17 +203,19 @@ class SaveVotesToDatabase
             new PostWasVoted($post, $user, $actor, $type)
         );
 
-        if ('Up' === $type) {
-            $ranks = Rank::where('points', '<=', $user->votes)->get();
+        if ($user) {
+            if ('Up' === $type) {
+                $ranks = Rank::where('points', '<=', $user->votes)->get();
 
-            if (null !== $ranks) {
-                $user->ranks()->sync($ranks);
-            }
-        } else {
-            $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
+                if ($ranks) {
+                    $user->ranks()->sync($ranks);
+                }
+            } else {
+                $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
 
-            if (null !== $ranks) {
-                $user->ranks()->detach($ranks);
+                if ($ranks) {
+                    $user->ranks()->detach($ranks);
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ class PostWasVoted
     public $post;
 
     /**
-     * @var User
+     * @var User|null
      */
     public $user;
 
@@ -40,11 +40,11 @@ class PostWasVoted
      * PostWasVoted constructor.
      *
      * @param Post   $post
-     * @param User   $user
+     * @param User|null   $user
      * @param User   $actor
      * @param string $type
      */
-    public function __construct(Post $post, User $user, User $actor, $type)
+    public function __construct(Post $post, ?User $user, User $actor, $type)
     {
         $this->post = $post;
         $this->user = $user;
