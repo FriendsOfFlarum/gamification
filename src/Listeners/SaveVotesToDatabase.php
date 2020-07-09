@@ -152,7 +152,15 @@ class SaveVotesToDatabase
      */
     public function updatePoints(User $user, Post $post)
     {
-        $user->votes = Vote::calculate(['user_id' => $user->id]);
+        if ($user) {
+            $user->votes = Vote::calculate(
+                Vote::query()
+                    ->join('posts', 'posts.id', '=', 'post_votes.post_id')
+                    ->where('posts.user_id', $user->id),
+                true
+            );
+            $user->save();
+        }
 
         $discussion = $post->discussion;
 
@@ -161,8 +169,6 @@ class SaveVotesToDatabase
 
             $this->gamification->calculateHotness($discussion);
         }
-
-        $user->save();
     }
 
     /**

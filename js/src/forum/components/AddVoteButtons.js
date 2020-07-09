@@ -5,8 +5,10 @@ import LogInModal from 'flarum/components/LogInModal';
 import CommentPost from 'flarum/components/CommentPost';
 import PostControls from 'flarum/utils/PostControls';
 import VotesModal from './VotesModal';
+import setting from '../helpers/setting';
 
 export default function() {
+    // TODO change to discussion page
     extend(CommentPost.prototype, 'config', function(x, isInitialized, context) {
         if (isInitialized) return;
 
@@ -19,7 +21,7 @@ export default function() {
 
                     m.startComputation();
 
-                    if (this.postId() == data.postId) {
+                    if (this.props.post.id() == data.postId) {
                         var upData = this.upvotedata();
                         var downData = this.downvotedata();
 
@@ -45,7 +47,7 @@ export default function() {
                                 break;
                         }
 
-                        this.downvotedata(downData);
+                        this.downvotedata(downData); // TODO
                         this.upvotedata(upData);
 
                         m.redraw.strategy('all');
@@ -76,119 +78,75 @@ export default function() {
         }
     });
 
-    extend(CommentPost.prototype, 'actionItems', function(items) {
-        const post = this.props.post;
-
-        this.postId = m.prop(post.data.id);
-
-        this.downvotedata = m.prop(post.data.relationships.downvotes.data);
-        this.upvotedata = m.prop(post.data.relationships.upvotes.data);
-
-        let isUpvoted = app.session.user && post.upvotes().some(user => user === app.session.user);
-        let isDownvoted = app.session.user && post.downvotes().some(user => user === app.session.user);
-
+    const update = (post, upvoted, downvoted, load) => {
         if (!app.session.user) {
-            isDownvoted = false;
-            isUpvoted = false;
+            app.modal.show(new LogInModal());
+            return;
+        } else if (!post.discussion().canVote()) {
+            return;
         }
 
+        if (upvoted && downvoted) {
+            upvoted = false;
+            downvoted = false;
+        }
+
+        load(true);
+
+        return post
+            .save([upvoted, downvoted, 'vote'])
+            .then(
+                () => null,
+                () => null
+            )
+            .then(() => {
+                load(false);
+
+                post.discussion().pushAttributes({
+                    votes: post.votes(),
+                });
+
+                m.redraw();
+            });
+    };
+
+    extend(CommentPost.prototype, 'actionItems', function(items) {
+        const post = this.props.post;
+        const hasDownvoted = post.hasDownvoted();
+        const hasUpvoted = post.hasUpvoted();
 
         const icon = setting('iconName') || 'thumbs';
 
-        this.removeVote = function(data, userId) {
-            data.some((vote, i) => {
-                if (vote.id == userId) {
-                    data.splice(i, 1);
-                }
-            });
-            return data;
-        };
+        const canVote = post.discussion().canVote();
 
         items.add(
             'upvote',
             Button.component({
-                icon: 'fas fa-' + icon + '-up',
+                icon: this.voteLoading || `fas fa-${icon}-up`,
                 className: 'Post-vote Post-upvote',
-                style: isUpvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : 'color:',
-                disabled: !post.discussion().canVote(),
-                onclick: () => {
-                    if (!app.session.user) {
-                        app.modal.show(new LogInModal());
-                        return;
-                    }
-                    if (!post.discussion().canVote()) return;
-
-                    var upData = post.data.relationships.upvotes.data;
-                    var downData = post.data.relationships.downvotes.data;
-
-                    isUpvoted = !isUpvoted;
-
-                    isDownvoted = false;
-
-                    post.save([isUpvoted, isDownvoted, 'vote']);
-
-                    upData.some((upvote, i) => {
-                        if (upvote.id === app.session.user.id()) {
-                            upData.splice(i, 1);
-                            return true;
-                        }
-                    });
-                    downData.some((downvote, i) => {
-                        if (downvote.id === app.session.user.id()) {
-                            downData.splice(i, 1);
-                            return true;
-                        }
-                    });
-                    if (isUpvoted) {
-                        upData.unshift({ type: 'users', id: app.session.user.id() });
-                    }
+                style: hasUpvoted && {
+                    color: app.forum.attribute('themePrimaryColor'),
                 },
+                loading: this.voteLoading,
+                disabled: this.voteLoading || !canVote,
+                onclick: () => update(post, !hasUpvoted, false, val => (this.voteLoading = val)),
             }),
             3
         );
 
-        items.add('points', <label className="Post-points">{this.upvotedata().length - this.downvotedata().length}</label>, 2);
+        items.add('points', <label className="Post-points">{post.votes()}</label>, 2);
 
         items.add(
             'downvote',
             Button.component({
-                icon: 'fas fa-' + icon + '-down',
+                icon: this.voteLoading || `fas fa-${icon}-down`,
                 className: 'Post-vote Post-downvote',
-                style: isDownvoted !== false ? 'color:' + app.forum.data.attributes.themePrimaryColor : '',
-                disabled: !post.discussion().canVote(),
-                onclick: () => {
-                    if (!app.session.user) {
-                        app.modal.show(new LogInModal());
-                        return;
-                    }
-                    if (!post.discussion().canVote()) return;
-
-                    var upData = post.data.relationships.upvotes.data;
-                    var downData = post.data.relationships.downvotes.data;
-
-                    isDownvoted = !isDownvoted;
-
-                    isUpvoted = false;
-
-                    post.save([isUpvoted, isDownvoted, 'vote']);
-
-                    upData.some((upvote, i) => {
-                        if (upvote.id === app.session.user.id()) {
-                            upData.splice(i, 1);
-                            return true;
-                        }
-                    });
-                    downData.some((downvote, i) => {
-                        if (downvote.id === app.session.user.id()) {
-                            downData.splice(i, 1);
-                            return true;
-                        }
-                    });
-
-                    if (isDownvoted) {
-                        downData.unshift({ type: 'users', id: app.session.user.id() });
-                    }
+                style: hasDownvoted && {
+                    color: app.forum.attribute('themePrimaryColor'),
                 },
+                loading: this.voteLoading,
+                disabled: !post.discussion().canVote(),
+                onclick: () => update(post, false, !hasDownvoted, val => (this.voteLoading = val)),
             }),
             1
         );

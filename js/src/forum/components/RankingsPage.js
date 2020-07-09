@@ -1,4 +1,3 @@
-import { extend } from 'flarum/extend';
 import avatar from 'flarum/helpers/avatar';
 import Page from 'flarum/components/Page';
 import IndexPage from 'flarum/components/IndexPage';
@@ -36,6 +35,7 @@ export default class RankingsPage extends Page {
                 onclick: this.loadMore.bind(this),
             });
         }
+
         return (
             <div className="TagsPage">
                 {IndexPage.prototype.hero()}
@@ -77,9 +77,9 @@ export default class RankingsPage extends Page {
                                             </div>
                                         </td>
                                         {i < 4 ? (
-                                            <td className={'rankings-' + i}>{user.data.attributes.Points}</td>
+                                            <td className={'rankings-' + i}>{user.points()}</td>
                                         ) : (
-                                            <td className="rankings-4">{user.data.attributes.Points}</td>
+                                            <td className="rankings-4">{user.points()}</td>
                                         )}
                                     </tr>,
                                 ];
@@ -206,7 +206,7 @@ export default class RankingsPage extends Page {
         this.loading = false;
 
         this.users.sort(function(a, b) {
-            return parseFloat(b.data.attributes.Points) - parseFloat(a.data.attributes.Points);
+            return parseFloat(b.points()) - parseFloat(a.points());
         });
 
         m.lazyRedraw();

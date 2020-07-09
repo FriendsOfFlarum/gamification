@@ -133,6 +133,15 @@ class AddRelationships
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
             $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
         }
+
+        if ($event->isSerializer(Serializer\PostSerializer::class)) {
+            $vote = $event->model->votes()->where('user_id', $event->actor->id)->first(['type']);
+
+            $event->attributes['votes'] = Vote::calculate(['post_id' => $event->model->id]);
+
+            $event->attributes['hasUpvoted'] = $vote && $vote->type === 'Up';
+            $event->attributes['hasDownvoted'] = $vote && $vote->type === 'Down';
+        }
     }
 
     /**
@@ -148,13 +157,15 @@ class AddRelationships
             $event->addInclude('ranks');
         }
         if ($event->isController(Controller\ShowDiscussionController::class)) {
-            $event->addInclude(['posts.upvotes', 'posts.downvotes', 'posts.user.ranks']);
+            $event->addInclude('posts.user.ranks');
         }
         if ($event->isController(Controller\ListPostsController::class)
             || $event->isController(Controller\ShowPostController::class)
             || $event->isController(Controller\CreatePostController::class)
             || $event->isController(Controller\UpdatePostController::class)) {
-            $event->addInclude(['upvotes', 'downvotes', 'user.ranks']);
+            $event->addInclude(['user.ranks']);
+            $event->addOptionalInclude('upvotes');
+            $event->addOptionalInclude('downvotes');
         }
         if ($event->isController(Controller\ShowForumController::class)) {
             $event->addInclude('ranks');

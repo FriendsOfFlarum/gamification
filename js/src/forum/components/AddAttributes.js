@@ -19,6 +19,9 @@ export default function() {
     Post.prototype.upvotes = Model.hasMany('upvotes');
     Post.prototype.downvotes = Model.hasMany('downvotes');
 
+    Post.prototype.votes = Model.attribute('votes');
+    Post.prototype.hasUpvoted = Model.attribute('hasUpvoted');
+    Post.prototype.hasDownvoted = Model.attribute('hasDownvoted');
     const matchClass = className => {
         return node => node && node.attrs && node.attrs.className && node.attrs.className === className;
     };

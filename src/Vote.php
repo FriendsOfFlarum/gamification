@@ -14,7 +14,6 @@ namespace FoF\Gamification;
 use Flarum\Database\AbstractModel;
 use Flarum\Post\Post;
 use Flarum\User\User;
-use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @property int user_id
@@ -41,15 +40,23 @@ class Vote extends AbstractModel
         return $vote;
     }
 
-    /**
-     * @param array $params
-     * @return int
-     */
-    public static function calculate(array $params): int
+    public static function calculate($paramsOrQuery, $advanced = false): int
     {
-        return self::query()
-            ->where($params)
-            ->selectRaw('SUM(CASE WHEN `type` = "Up" THEN 1 ELSE -1 END) as vote')
+        $query = $paramsOrQuery;
+
+        if (is_array($paramsOrQuery)) {
+            $query = self::query()
+                ->where($paramsOrQuery);
+        }
+
+        $prefix = "";
+
+        if ($advanced) {
+            $prefix = self::query()->getConnection()->getTablePrefix() . (new self())->getTable() . '.';
+        }
+
+        return $query
+            ->selectRaw("SUM(CASE WHEN {$prefix}type = \"Up\" THEN 1 WHEN {$prefix}type = \"Down\" THEN -1 ELSE 0 END) as vote")
             ->pluck('vote')
             ->sum();
     }
