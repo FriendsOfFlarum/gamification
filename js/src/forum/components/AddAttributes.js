@@ -24,7 +24,13 @@ export default function() {
     Post.prototype.hasDownvoted = Model.attribute('hasDownvoted');
 
     const matchClass = className => {
-        return node => node && node.attrs && node.attrs.className && String(node.attrs.className).split(' ').includes(className);
+        return node =>
+            node &&
+            node.attrs &&
+            node.attrs.className &&
+            String(node.attrs.className)
+                .split(' ')
+                .includes(className);
     };
 
     const matchTag = tagName => {
