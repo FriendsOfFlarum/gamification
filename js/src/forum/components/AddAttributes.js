@@ -22,8 +22,9 @@ export default function() {
     Post.prototype.votes = Model.attribute('votes');
     Post.prototype.hasUpvoted = Model.attribute('hasUpvoted');
     Post.prototype.hasDownvoted = Model.attribute('hasDownvoted');
+
     const matchClass = className => {
-        return node => node && node.attrs && node.attrs.className && node.attrs.className === className;
+        return node => node && node.attrs && node.attrs.className && String(node.attrs.className).split(' ').includes(className);
     };
 
     const matchTag = tagName => {
@@ -36,14 +37,15 @@ export default function() {
         if (node && node.children) {
             const nodeInChildren = node.children.find(matchClass(className));
 
-            if (nodeInChildren !== undefined) {
-                arr.push(...nodeInChildren);
+            if (nodeInChildren) {
+                arr.push(nodeInChildren);
             }
 
             node.children.forEach(function(currentValue) {
                 arr.push(...findMatchClass(currentValue, className));
             });
         }
+
         return arr;
     };
 
