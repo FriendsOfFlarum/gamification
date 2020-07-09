@@ -16,7 +16,6 @@ use Flarum\Api\Event\Serializing;
 use Flarum\Api\Event\WillGetData;
 use Flarum\Api\Event\WillSerializeData;
 use Flarum\Api\Serializer;
-use Flarum\Discussion\Discussion;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
 use Flarum\Post\Post;
@@ -59,7 +58,7 @@ class AddRelationships
      */
     public function getModelRelationship(GetModelRelationship $event)
     {
-        if ($event->isRelationship(User::class,  'allVotes')) {
+        if ($event->isRelationship(User::class, 'allVotes')) {
             return $event->model->belongsToMany(User::class, 'post_votes', 'user_id');
         }
 

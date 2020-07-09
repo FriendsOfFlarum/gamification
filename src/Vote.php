@@ -49,10 +49,10 @@ class Vote extends AbstractModel
                 ->where($paramsOrQuery);
         }
 
-        $prefix = "";
+        $prefix = '';
 
         if ($advanced) {
-            $prefix = self::query()->getConnection()->getTablePrefix() . (new self())->getTable() . '.';
+            $prefix = self::query()->getConnection()->getTablePrefix().(new self())->getTable().'.';
         }
 
         return $query

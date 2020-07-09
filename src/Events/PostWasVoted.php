@@ -39,10 +39,10 @@ class PostWasVoted
     /**
      * PostWasVoted constructor.
      *
-     * @param Post   $post
-     * @param User|null   $user
-     * @param User   $actor
-     * @param string $type
+     * @param Post      $post
+     * @param User|null $user
+     * @param User      $actor
+     * @param string    $type
      */
     public function __construct(Post $post, ?User $user, User $actor, $type)
     {
