@@ -18,12 +18,7 @@ export default class SettingsPage extends Page {
             'pointsPlaceholder',
         ];
 
-        this.switches = [
-            'autoUpvotePosts',
-            'customRankingImages',
-            'rateLimit',
-            'showVotesOnDiscussionPage'
-        ];
+        this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage'];
 
         this.ranks = app.store.all('ranks');
 
@@ -35,7 +30,7 @@ export default class SettingsPage extends Page {
 
         this.fields.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
 
-        this.switches.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)] === '1')));
+        this.switches.forEach(key => (this.values[key] = m.prop(!!Number(settings[this.addPrefix(key)]))));
 
         this.newRank = {
             points: m.prop(''),

@@ -92,11 +92,8 @@ export default function() {
             isUpvoted = false;
         }
 
-        let icon = app.forum.attribute('IconName');
 
-        if (icon === null || icon === '') {
-            icon = 'thumbs';
-        }
+        const icon = setting('iconName') || 'thumbs';
 
         this.removeVote = function(data, userId) {
             data.some((vote, i) => {

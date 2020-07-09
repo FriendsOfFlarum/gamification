@@ -115,21 +115,17 @@ class AddRelationships
      */
     public function prepareApiAttributes(Serializing $event)
     {
-        if ($event->isSerializer(Serializer\UserSerializer::class)) {
-            $event->attributes['canViewRankingPage'] = (bool) $event->actor->can('fof.gamification.viewRankingPage');
-            $event->attributes['Points'] = $event->model->votes;
+        if ($event->isSerializer(Serializer\ForumSerializer::class)) {
+            $prefix = 'fof-gamification';
+
+            $event->attributes['topimage1Url'] = "/assets/{$this->settings->get("$prefix.topimage1_path")}";
+            $event->attributes['topimage2Url'] = "/assets/{$this->settings->get("$prefix.topimage2_path")}";
+            $event->attributes['topimage3Url'] = "/assets/{$this->settings->get("$prefix.topimage3_path")}";
         }
 
-        if ($event->isSerializer(Serializer\ForumSerializer::class)) {
-            $event->attributes['IconName'] = $this->settings->get('fof-gamification.iconName');
-            $event->attributes['PointsPlaceholder'] = $this->settings->get('fof-gamification.pointsPlaceholder');
-            $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
-            $event->attributes['showVotesOnDiscussionPage'] = (bool) $this->settings->get('fof-gamification.showVotesOnDiscussionPage');
-            $event->attributes['CustomRankingImages'] = $this->settings->get('fof-gamification.customRankingImages');
-            $event->attributes['topimage1Url'] = "/assets/{$this->settings->get('topimage1_path')}";
-            $event->attributes['topimage2Url'] = "/assets/{$this->settings->get('topimage2_path')}";
-            $event->attributes['topimage3Url'] = "/assets/{$this->settings->get('topimage3_path')}";
-            $event->attributes['ranksAmt'] = $this->settings->get('fof-gamification.rankAmt');
+        if ($event->isSerializer(Serializer\UserSerializer::class)) {
+            $event->attributes['canViewRankingPage'] = (bool) $event->actor->can('fof.gamification.viewRankingPage');
+            $event->attributes['points'] = $event->model->votes;
         }
 
         if ($event->isSerializer(Serializer\DiscussionSerializer::class)) {

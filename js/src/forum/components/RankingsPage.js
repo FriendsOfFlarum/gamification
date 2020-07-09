@@ -8,6 +8,8 @@ import LogInModal from 'flarum/components/LogInModal';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
 import listItems from 'flarum/helpers/listItems';
 import username from 'flarum/helpers/username';
+import icon from 'flarum/helpers/icon';
+import setting from '../helpers/setting';
 
 export default class RankingsPage extends Page {
     init() {
@@ -53,15 +55,13 @@ export default class RankingsPage extends Page {
                                 return [
                                     <tr className={'ranking-' + i}>
                                         {i < 4 ? (
-                                            app.forum.attribute('CustomRankingImages') == '1' ? (
+                                            setting('customRankingImages', true) ? (
                                                 <img
                                                     className="rankings-mobile rankings-image"
-                                                    src={app.forum.attribute('baseUrl') + app.forum.attribute('topimage' + i + 'Url')}
+                                                    src={app.forum.attribute('baseUrl') + app.forum.attribute(`topimage${i}Url`)}
                                                 />
                                             ) : (
-                                                <td className={'rankings-mobile rankings-' + i}>
-                                                    <i className="icon fas fa-trophy"></i>
-                                                </td>
+                                                <td className={'rankings-mobile rankings-' + i}>{icon('fas fa-trophy')}</td>
                                             )
                                         ) : (
                                             <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>
@@ -111,16 +111,15 @@ export default class RankingsPage extends Page {
     }
 
     addOrdinalSuffix(i) {
-        if (app.forum.attribute('DefaultLocale') == 'en') {
-            var j = i % 10,
-                k = i % 100;
-            if (j == 1 && k != 11) {
+        if (app.data.attributes['locale'] === 'en') {
+            const j = i % 10;
+            const k = i % 100;
+
+            if (j === 1 && k !== 11) {
                 return i + 'st';
-            }
-            if (j == 2 && k != 12) {
+            } else if (j === 2 && k !== 12) {
                 return i + 'nd';
-            }
-            if (j == 3 && k != 13) {
+            } else if (j === 3 && k !== 13) {
                 return i + 'rd';
             }
             return i + 'th';
