@@ -12,6 +12,7 @@ import addHotnessFilter from './addHotnessSort';
 import addVoteButtons from './addVoteButtons';
 import addUpvotesToDiscussion from './addUpvotesToDiscussion';
 import addUserInfo from './addUserInfo';
+import addPusher from './addPusher';
 
 app.initializers.add('fof-gamification', app => {
     Discussion.prototype.votes = Model.attribute('votes');
@@ -38,4 +39,5 @@ app.initializers.add('fof-gamification', app => {
     addHotnessFilter();
     addUserInfo();
     addUpvotesToDiscussion();
+    addPusher();
 });
