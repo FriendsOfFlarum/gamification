@@ -21,7 +21,6 @@ use Flarum\User\User;
  * @property int user_id
  * @property int post_id
  * @property int value
- * @property string type
  * @property Post $post
  * @property User $user
  */
@@ -80,17 +79,6 @@ class Vote extends AbstractModel
         $discussion->votes = self::calculate(['post_id' => $discussion->first_post_id]);
 
         return $discussion;
-    }
-
-    public function getTypeAttribute()
-    {
-        return $this->isUpvote()
-            ? 'Up'
-            : (
-                $this->isDownvote()
-                    ? 'Down'
-                    : 'None'
-            );
     }
 
     public function isUpvote()
