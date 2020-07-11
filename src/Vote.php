@@ -12,13 +12,19 @@
 namespace FoF\Gamification;
 
 use Flarum\Database\AbstractModel;
+use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
 use Flarum\User\User;
 
 /**
+ * @property int id
  * @property int user_id
  * @property int post_id
+ * @property int value
  * @property string type
+ *
+ * @property Post $post
+ * @property User $user
  */
 class Vote extends AbstractModel
 {
@@ -55,9 +61,51 @@ class Vote extends AbstractModel
             $prefix = self::query()->getConnection()->getTablePrefix().(new self())->getTable().'.';
         }
 
-        return $query
-            ->selectRaw("SUM(CASE WHEN {$prefix}type = \"Up\" THEN 1 WHEN {$prefix}type = \"Down\" THEN -1 ELSE 0 END) as vote")
-            ->pluck('vote')
-            ->sum();
+        return $query->sum($prefix . 'value');
+    }
+
+    public static function updateUserVotes(User $user): User
+    {
+        $user->votes = self::calculate(
+            Vote::query()
+                ->join('posts', 'posts.id', '=', 'post_votes.post_id')
+                ->where('posts.user_id', $user->id),
+            true
+        );
+
+        return $user;
+    }
+
+    public static function updateDiscussionVotes(Discussion $discussion): Discussion
+    {
+        $discussion->votes = Vote::calculate(['post_id' => $discussion->first_post_id]);
+
+        return $discussion;
+    }
+
+    public function getTypeAttribute() {
+        return $this->isUpvote()
+            ? 'Up'
+            : (
+                $this->isDownvote()
+                    ? 'Down'
+                    : 'None'
+            );
+    }
+
+    public function isUpvote() {
+        return $this->value > 0;
+    }
+
+    public function isDownvote() {
+        return $this->value < 0;
+    }
+
+    public function post() {
+        return $this->belongsTo(Post::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

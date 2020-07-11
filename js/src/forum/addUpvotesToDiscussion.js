@@ -2,7 +2,7 @@ import { extend } from 'flarum/extend';
 import DiscussionListItem from 'flarum/components/DiscussionListItem';
 import abbreviateNumber from 'flarum/utils/abbreviateNumber';
 import icon from 'flarum/helpers/icon';
-import setting from '../helpers/setting';
+import setting from './helpers/setting';
 
 export default function() {
     extend(DiscussionListItem.prototype, 'infoItems', function(items) {

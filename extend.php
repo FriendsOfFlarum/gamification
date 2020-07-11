@@ -51,8 +51,6 @@ return [
         $events->subscribe(Listeners\EventHandlers::class);
         $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
 
-        $events->subscribe(Access\DiscussionPolicy::class);
-
         $events->listen(Saving::class, Listeners\SaveVotesToDatabase::class);
     },
 ];

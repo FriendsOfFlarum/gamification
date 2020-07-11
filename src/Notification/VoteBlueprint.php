@@ -14,36 +14,23 @@ namespace FoF\Gamification\Notification;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Post\Post;
 use Flarum\User\User;
+use FoF\Gamification\Vote;
 
 class VoteBlueprint implements BlueprintInterface
 {
     /**
-     * @var Post
+     * @var Vote
      */
-    public $post;
-
-    /**
-     * @var User
-     */
-    public $actor;
-
-    /**
-     * @var string
-     */
-    public $type;
+    protected $vote;
 
     /**
      * VoteBlueprint constructor.
      *
-     * @param Post $post
-     * @param User $actor
-     * @param $type
+     * @param Vote $vote
      */
-    public function __construct(Post $post, User $actor, $type)
+    public function __construct(Vote $vote)
     {
-        $this->post = $post;
-        $this->actor = $actor;
-        $this->type = $type;
+        $this->vote = $vote;
     }
 
     /**
@@ -51,7 +38,7 @@ class VoteBlueprint implements BlueprintInterface
      */
     public function getSubject()
     {
-        return $this->post;
+        return $this->vote->post;
     }
 
     /**
@@ -59,7 +46,7 @@ class VoteBlueprint implements BlueprintInterface
      */
     public function getFromUser()
     {
-        return $this->actor;
+        return $this->vote->user;
     }
 
     /**
@@ -67,7 +54,7 @@ class VoteBlueprint implements BlueprintInterface
      */
     public function getData()
     {
-        return $this->type;
+        return $this->vote->value;
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace FoF\Gamification;
 
+use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
@@ -24,29 +25,15 @@ class Gamification
     const MAXIMUM_USER_EXPOSED = 25;
 
     /**
-     * @var PostRepository
-     */
-    protected $posts;
-
-    /**
-     * @var UserRepository
-     */
-    protected $users;
-
-    /**
      * @var SettingsRepositoryInterface
      */
     protected $settings;
 
     /**
-     * @param PostRepository              $posts
-     * @param UserRepository              $users
      * @param SettingsRepositoryInterface $settings
      */
-    public function __construct(PostRepository $posts, UserRepository $users, SettingsRepositoryInterface $settings)
+    public function __construct(SettingsRepositoryInterface $settings)
     {
-        $this->posts = $posts;
-        $this->users = $users;
         $this->settings = $settings;
     }
 
@@ -107,24 +94,23 @@ class Gamification
     }
 
     /**
-     * @param $post_id
-     * @param $user_id
-     * @param User $actor
+     * @param $postId
+     * @param $userId
      */
-    public function convertLike($post_id, $user_id)
+    public function convertLike($postId, $userId)
     {
-        $user = $this->users->query()->where('id', $user_id)->first();
-        $post = $this->posts->query()->where('id', $post_id)->first();
+        $user = User::find($userId);
+        $post = Post::find($postId);
 
-        if (null !== $post && null !== $post->user && null !== $user) {
-            $post->user->increment('votes');
+        if ($post && $post->user && $user) {
+            Vote::updateUserVotes($post->user)->save();
 
             if ($post->number = 1) {
-                $post->discussion->increment('votes');
+                Vote::updateDiscussionVotes($post->discussion);
             }
 
             $vote = Vote::build($post, $user);
-            $vote->type = 'Up';
+            $vote->value = 1;
             $vote->save();
 
             $ranks = json_decode($this->settings->get('fof-gamification.ranks'), true);

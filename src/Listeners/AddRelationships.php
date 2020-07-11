@@ -67,11 +67,13 @@ class AddRelationships
         }
 
         if ($event->isRelationship(Post::class, 'upvotes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')->where('type', 'Up');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')
+                ->where('value', '>', 0);
         }
 
         if ($event->isRelationship(Post::class, 'downvotes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'downvotes')->where('type', 'Down');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'downvotes')
+                ->where('value', '<', 0);
         }
 
         if ($event->isRelationship(User::class, 'ranks')) {
@@ -129,17 +131,18 @@ class AddRelationships
 
         if ($event->isSerializer(Serializer\DiscussionSerializer::class)) {
             $event->attributes['votes'] = (int) $event->model->votes;
-            $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
-            $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
         }
 
         if ($event->isSerializer(Serializer\PostSerializer::class)) {
-            $vote = $event->model->votes()->where('user_id', $event->actor->id)->first(['type']);
+            $vote = Vote::query()->where('post_id', $event->model->id)->where('user_id', $event->actor->id)->first(['value']);
 
             $event->attributes['votes'] = Vote::calculate(['post_id' => $event->model->id]);
 
-            $event->attributes['hasUpvoted'] = $vote && $vote->type === 'Up';
-            $event->attributes['hasDownvoted'] = $vote && $vote->type === 'Down';
+            $event->attributes['hasUpvoted'] = $vote && $vote->isUpvote();
+            $event->attributes['hasDownvoted'] = $vote && $vote->isDownvote();
+
+            $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
+            $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
         }
     }
 

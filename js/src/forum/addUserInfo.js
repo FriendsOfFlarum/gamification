@@ -1,28 +1,10 @@
-import Discussion from 'flarum/models/Discussion';
 import { extend } from 'flarum/extend';
-import Model from 'flarum/Model';
-import Post from 'flarum/models/Post';
 import PostUser from 'flarum/components/PostUser';
-import User from 'flarum/models/User';
 import UserCard from 'flarum/components/UserCard';
-import rankLabel from '../../common/helpers/rankLabel';
-import setting from '../helpers/setting';
+import rankLabel from '../common/helpers/rankLabel';
+import setting from './helpers/setting';
 
 export default function() {
-    Discussion.prototype.canVote = Model.attribute('canVote');
-    Discussion.prototype.canSeeVotes = Model.attribute('canSeeVotes');
-    Discussion.prototype.votes = Model.attribute('votes');
-
-    User.prototype.points = Model.attribute('points');
-    User.prototype.ranks = Model.hasMany('ranks');
-
-    Post.prototype.upvotes = Model.hasMany('upvotes');
-    Post.prototype.downvotes = Model.hasMany('downvotes');
-
-    Post.prototype.votes = Model.attribute('votes');
-    Post.prototype.hasUpvoted = Model.attribute('hasUpvoted');
-    Post.prototype.hasDownvoted = Model.attribute('hasDownvoted');
-
     const matchClass = className => {
         return node =>
             node &&
@@ -57,12 +39,13 @@ export default function() {
 
     extend(UserCard.prototype, 'infoItems', function(items) {
         const placeholder = setting('pointsPlaceholder');
+        const pts = String(this.props.user.points());
         let points;
 
         if (placeholder) {
-            points = placeholder.replace('{points}', this.props.user.points());
+            points = placeholder.replace('{points}', pts);
         } else {
-            points = app.translator.trans('fof-gamification.forum.user.points', { points: this.props.user.points() });
+            points = app.translator.trans('fof-gamification.forum.user.points', { points: pts });
         }
 
         items.add('points', points);

@@ -26,7 +26,7 @@ use FoF\Gamification\Notification\VoteBlueprint;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
 use Illuminate\Contracts\Events\Dispatcher;
-use Pusher\Pusher;
+use Pusher;
 
 class SaveVotesToDatabase
 {
@@ -82,7 +82,7 @@ class SaveVotesToDatabase
                 $actor = $event->actor;
                 $user = $post->user;
 
-                $this->assertCan($actor, 'vote', $post->discussion);
+                $this->assertCan($actor, 'vote', $post);
 
                 if ($this->settings->get('fof-gamification.rateLimit')) {
                     $this->assertNotFlooding($actor);
@@ -106,41 +106,35 @@ class SaveVotesToDatabase
 
         if ($vote) {
             if (!$isUpvoted && !$isDownvoted) {
-                if ('Up' == $vote->type) {
-                    $this->pushNewVote('up2none', $post, 'up', $actor);
-                } else {
-                    $this->pushNewVote('down2none', $post, 'down', $actor);
-                }
-                $this->sendData($post, $user, $actor, 'None', $vote->type);
+                $vote->value = 0;
+
                 $vote->delete();
             } else {
-                if ('Up' == $vote->type) {
-                    $vote->type = 'Down';
-                    $this->pushNewVote('up2down', $post, 'down', $actor);
-
-                    $this->sendData($post, $user, $actor, 'Down', 'Up');
+                if ($vote->isUpvote()) {
+                    $vote->value = -1;
                 } else {
-                    $vote->type = 'Up';
-                    $this->pushNewVote('down2up', $post, 'up', $actor);
-
-                    $this->sendData($post, $user, $actor, 'Up', 'Down');
+                    $vote->value = 1;
                 }
+
                 $vote->save();
             }
         } else {
             $vote = Vote::build($post, $actor);
+
             if ($isDownvoted) {
-                $vote->type = 'Down';
-                $this->pushNewVote('none2down', $post, 'down', $actor);
+                $vote->value = -1;
             } elseif ($isUpvoted) {
-                $vote->type = 'Up';
-                $this->pushNewVote('none2up', $post, 'up', $actor);
+                $vote->value = 1;
             }
-            $this->sendData($post, $user, $actor, $vote->type, ' ');
+
             $vote->save();
         }
 
+        $this->pushNewVote($vote);
+
         $this->updatePoints($user, $post);
+
+        $this->sendData($vote);
 
         $actor->last_vote_time = Carbon::now();
         $actor->save();
@@ -153,92 +147,61 @@ class SaveVotesToDatabase
     public function updatePoints(?User $user, Post $post)
     {
         if ($user) {
-            $user->votes = Vote::calculate(
-                Vote::query()
-                    ->join('posts', 'posts.id', '=', 'post_votes.post_id')
-                    ->where('posts.user_id', $user->id),
-                true
-            );
-            $user->save();
+            Vote::updateUserVotes($user)->save();
         }
 
         $discussion = $post->discussion;
 
         if ($post->id === $discussion->first_post_id) {
-            $discussion->votes = Vote::calculate(['post_id' => $post->id]);
-
-            $this->gamification->calculateHotness($discussion);
+            $this->gamification->calculateHotness(
+                Vote::updateDiscussionVotes($discussion)
+            );
         }
     }
 
-    /**
-     * @param $post
-     * @param $user
-     * @param $actor
-     * @param $type
-     */
-    public function sendData($post, $user, $actor, $type, $before)
+    public function sendData(Vote $vote)
     {
-        $oldVote = Notification::where([
-            'from_user_id'  => $actor->id,
+        $post = $vote->post;
+        $user = $post->user;
+
+        $notif = Notification::query()->where([
+            'from_user_id'  => $vote->user->id,
+            'type'          => 'vote',
             'subject_id'    => $post->id,
-            'data'          => '"'.$before.'"',
         ])->first();
 
-        if ($oldVote) {
-            if ('None' === $type) {
-                $oldVote->delete();
+        if ($notif) {
+            if ($vote->value === 0) {
+                $notif->delete();
             } else {
-                $oldVote->data = $type;
-                $oldVote->save();
+                $notif->data = $vote->value;
+                $notif->save();
             }
-        } elseif ($user && $user->id !== $actor->id) {
+        } elseif ($user && $user->id !== $vote->user->id && $vote->value !== 0) {
             $this->notifications->sync(
-                new VoteBlueprint($post, $actor, $type),
+                new VoteBlueprint($vote),
                 [$user]
             );
         }
 
         $this->events->fire(
-            new PostWasVoted($post, $user, $actor, $type)
+            new PostWasVoted($vote)
         );
 
         if ($user) {
-            if ('Up' === $type) {
-                $ranks = Rank::where('points', '<=', $user->votes)->get();
+            $ranks = Rank::where('points', '<=', $user->votes)->pluck('id');
 
-                if ($ranks) {
-                    $user->ranks()->sync($ranks);
-                }
-            } else {
-                $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
-
-                if ($ranks) {
-                    $user->ranks()->detach($ranks);
-                }
-            }
+            $user->ranks()->sync($ranks);
         }
     }
 
-    /**
-     * @param $type
-     * @param $post
-     * @param $clicked
-     * @param $actor
-     *
-     * @throws \Pusher\PusherException
-     */
-    public function pushNewVote($type, $post, $clicked, $actor)
+    public function pushNewVote(Vote $vote)
     {
-        $type = explode('2', $type);
-
-        if ($pusher = $this->getPusher()) {
-            $pusher->trigger('public', 'newVote', [
-                'postId'  => $post->id,
-                'before'  => $type[0],
-                'after'   => $type[1],
-                'clicked' => $clicked,
-                'userId'  => $actor->id,
+        if (app()->bound(Pusher::class)) {
+            app()->make(Pusher::class)->trigger('public', 'newVote', [
+                'post_id'  => $vote->post->id,
+                'user_id' => $vote->user->id,
+                'votes' => $vote->post->votes()->sum('value'),
             ]);
         }
     }
@@ -252,37 +215,6 @@ class SaveVotesToDatabase
     {
         if ($actor->last_vote_time !== null && Carbon::parse($actor->last_vote_time)->greaterThanOrEqualTo(Carbon::now()->subSeconds(10))) {
             throw new FloodingException();
-        }
-    }
-
-    /**
-     * @throws \Pusher\PusherException
-     *
-     * @return bool|\Illuminate\Foundation\Application|mixed|Pusher
-     */
-    private function getPusher()
-    {
-        if (!class_exists(Pusher::class)) {
-            return false;
-        }
-
-        if (app()->bound(Pusher::class)) {
-            return app(Pusher::class);
-        } else {
-            $settings = app('flarum.settings');
-
-            $options = [];
-
-            if ($cluster = $settings->get('flarum-pusher.app_cluster')) {
-                $options['cluster'] = $cluster;
-            }
-
-            return new Pusher(
-                $settings->get('flarum-pusher.app_key'),
-                $settings->get('flarum-pusher.app_secret'),
-                $settings->get('flarum-pusher.app_id'),
-                $options
-            );
         }
     }
 }
