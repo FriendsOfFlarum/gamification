@@ -12,10 +12,8 @@
 namespace FoF\Gamification;
 
 use Flarum\Post\Post;
-use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
-use Flarum\User\UserRepository;
 
 class Gamification
 {

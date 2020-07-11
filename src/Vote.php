@@ -22,7 +22,6 @@ use Flarum\User\User;
  * @property int post_id
  * @property int value
  * @property string type
- *
  * @property Post $post
  * @property User $user
  */
@@ -61,13 +60,13 @@ class Vote extends AbstractModel
             $prefix = self::query()->getConnection()->getTablePrefix().(new self())->getTable().'.';
         }
 
-        return $query->sum($prefix . 'value');
+        return $query->sum($prefix.'value');
     }
 
     public static function updateUserVotes(User $user): User
     {
         $user->votes = self::calculate(
-            Vote::query()
+            self::query()
                 ->join('posts', 'posts.id', '=', 'post_votes.post_id')
                 ->where('posts.user_id', $user->id),
             true
@@ -78,12 +77,13 @@ class Vote extends AbstractModel
 
     public static function updateDiscussionVotes(Discussion $discussion): Discussion
     {
-        $discussion->votes = Vote::calculate(['post_id' => $discussion->first_post_id]);
+        $discussion->votes = self::calculate(['post_id' => $discussion->first_post_id]);
 
         return $discussion;
     }
 
-    public function getTypeAttribute() {
+    public function getTypeAttribute()
+    {
         return $this->isUpvote()
             ? 'Up'
             : (
@@ -93,19 +93,23 @@ class Vote extends AbstractModel
             );
     }
 
-    public function isUpvote() {
+    public function isUpvote()
+    {
         return $this->value > 0;
     }
 
-    public function isDownvote() {
+    public function isDownvote()
+    {
         return $this->value < 0;
     }
 
-    public function post() {
+    public function post()
+    {
         return $this->belongsTo(Post::class);
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

@@ -26,7 +26,8 @@ return [
             foreach ($votes as $vote) {
                 $val = $vote->type === 'Up'
                     ? 1
-                    : ($vote->type === 'Down'
+                    : (
+                        $vote->type === 'Down'
                         ? -1
                         : 0
                     );

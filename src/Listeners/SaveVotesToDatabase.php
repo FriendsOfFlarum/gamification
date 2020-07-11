@@ -200,8 +200,8 @@ class SaveVotesToDatabase
         if (app()->bound(Pusher::class)) {
             app()->make(Pusher::class)->trigger('public', 'newVote', [
                 'post_id'  => $vote->post->id,
-                'user_id' => $vote->user->id,
-                'votes' => $vote->post->votes()->sum('value'),
+                'user_id'  => $vote->user->id,
+                'votes'    => $vote->post->votes()->sum('value'),
             ]);
         }
     }

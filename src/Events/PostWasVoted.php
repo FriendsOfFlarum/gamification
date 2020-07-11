@@ -11,8 +11,6 @@
 
 namespace FoF\Gamification\Events;
 
-use Flarum\Post\Post;
-use Flarum\User\User;
 use FoF\Gamification\Vote;
 
 class PostWasVoted

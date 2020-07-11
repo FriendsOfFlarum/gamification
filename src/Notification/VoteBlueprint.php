@@ -13,7 +13,6 @@ namespace FoF\Gamification\Notification;
 
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Post\Post;
-use Flarum\User\User;
 use FoF\Gamification\Vote;
 
 class VoteBlueprint implements BlueprintInterface

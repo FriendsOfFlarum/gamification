@@ -10,8 +10,6 @@
  */
 
 use Flarum\Group\Permission;
-use FoF\Gamification\Vote;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 
 return [
@@ -19,14 +17,14 @@ return [
         Permission::query()
             ->where('permission', 'discussion.vote')
             ->update([
-                'permission' => 'discussion.votePosts'
+                'permission' => 'discussion.votePosts',
             ]);
     },
     'down' => function (Builder $schema) {
         Permission::query()
             ->where('permission', 'discussion.votePosts')
             ->update([
-                'permission' => 'discussion.vote'
+                'permission' => 'discussion.vote',
             ]);
     },
 ];
