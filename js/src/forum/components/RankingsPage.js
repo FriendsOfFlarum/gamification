@@ -111,7 +111,7 @@ export default class RankingsPage extends Page {
     }
 
     addOrdinalSuffix(i) {
-        if (app.data.attributes['locale'] === 'en') {
+        if (app.data.locale === 'en') {
             const j = i % 10;
             const k = i % 100;
 
