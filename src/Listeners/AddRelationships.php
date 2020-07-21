@@ -119,9 +119,9 @@ class AddRelationships
         if ($event->isSerializer(Serializer\ForumSerializer::class)) {
             $prefix = 'fof-gamification';
 
-            $event->attributes['topimage1Url'] = "/assets/{$this->settings->get("$prefix.topimage1_path")}";
-            $event->attributes['topimage2Url'] = "/assets/{$this->settings->get("$prefix.topimage2_path")}";
-            $event->attributes['topimage3Url'] = "/assets/{$this->settings->get("$prefix.topimage3_path")}";
+            $event->attributes["$prefix.topimage1Url"] = "/assets/{$this->settings->get("$prefix.topimage1_path")}";
+            $event->attributes["$prefix.topimage2Url"] = "/assets/{$this->settings->get("$prefix.topimage2_path")}";
+            $event->attributes["$prefix.topimage3Url"] = "/assets/{$this->settings->get("$prefix.topimage3_path")}";
         }
 
         if ($event->isSerializer(Serializer\UserSerializer::class)) {

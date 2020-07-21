@@ -58,7 +58,7 @@ export default class RankingsPage extends Page {
                                             setting('customRankingImages', true) ? (
                                                 <img
                                                     className="rankings-mobile rankings-image"
-                                                    src={app.forum.attribute('baseUrl') + app.forum.attribute(`topimage${i}Url`)}
+                                                    src={app.forum.attribute('baseUrl') + app.forum.attribute(`fof-gamification.topimage${i}Url`)}
                                                 />
                                             ) : (
                                                 <td className={'rankings-mobile rankings-' + i}>{icon('fas fa-trophy')}</td>
