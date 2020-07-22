@@ -19,14 +19,14 @@ const get = (discussion, key) => {
 };
 
 export default () => {
-    extend(DiscussionListItem.prototype, 'init', function() {
+    extend(DiscussionListItem.prototype, 'init', function () {
         this.voteLoading = m.prop(false);
     });
 
-    extend(DiscussionListItem.prototype, 'view', function(vdom) {
+    extend(DiscussionListItem.prototype, 'view', function (vdom) {
         if (!vdom || !vdom.children) return;
 
-        const content = vdom.children.find(v => v && v.attrs && v.attrs.className && v.attrs.className.includes('DiscussionListItem-content'));
+        const content = vdom.children.find((v) => v && v.attrs && v.attrs.className && v.attrs.className.includes('DiscussionListItem-content'));
         const discussion = this.props.discussion;
         const post = discussion.firstPost();
 

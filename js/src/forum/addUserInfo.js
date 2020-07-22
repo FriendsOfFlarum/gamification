@@ -4,22 +4,16 @@ import UserCard from 'flarum/components/UserCard';
 import rankLabel from '../common/helpers/rankLabel';
 import setting from './helpers/setting';
 
-export default function() {
-    const matchClass = className => {
-        return node =>
-            node &&
-            node.attrs &&
-            node.attrs.className &&
-            String(node.attrs.className)
-                .split(' ')
-                .includes(className);
+export default function () {
+    const matchClass = (className) => {
+        return (node) => node && node.attrs && node.attrs.className && String(node.attrs.className).split(' ').includes(className);
     };
 
-    const matchTag = tagName => {
-        return node => node && node.tag && node.tag === tagName;
+    const matchTag = (tagName) => {
+        return (node) => node && node.tag && node.tag === tagName;
     };
 
-    const findMatchClass = function(node, className) {
+    const findMatchClass = function (node, className) {
         const arr = [];
 
         if (node && node.children) {
@@ -29,7 +23,7 @@ export default function() {
                 arr.push(nodeInChildren);
             }
 
-            node.children.forEach(function(currentValue) {
+            node.children.forEach(function (currentValue) {
                 arr.push(...findMatchClass(currentValue, className));
             });
         }
@@ -37,7 +31,7 @@ export default function() {
         return arr;
     };
 
-    extend(UserCard.prototype, 'infoItems', function(items) {
+    extend(UserCard.prototype, 'infoItems', function (items) {
         const placeholder = setting('pointsPlaceholder');
         const pts = String(this.props.user.points());
         let points;
@@ -51,7 +45,7 @@ export default function() {
         items.add('points', points);
     });
 
-    extend(UserCard.prototype, 'view', function(vnode) {
+    extend(UserCard.prototype, 'view', function (vnode) {
         const user = this.props.user;
         const profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
         const amt = Number(setting('rankAmt'));
@@ -92,7 +86,7 @@ export default function() {
         return vnode;
     });
 
-    extend(PostUser.prototype, 'view', function(vnode) {
+    extend(PostUser.prototype, 'view', function (vnode) {
         const post = this.props.post;
         const user = post.user();
 

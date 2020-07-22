@@ -3,9 +3,9 @@ import DiscussionPage from 'flarum/components/DiscussionPage';
 
 import debounce from 'lodash.debounce';
 
-const fetch = postId => app.store.find('posts', postId).then(() => m.redraw());
+const fetch = (postId) => app.store.find('posts', postId).then(() => m.redraw());
 const debounced = [];
-const update = postId => {
+const update = (postId) => {
     let func = debounced[postId];
 
     if (func) return func(postId);
@@ -16,12 +16,12 @@ const update = postId => {
 };
 
 export default () => {
-    extend(DiscussionPage.prototype, 'config', function(x, isInitialized, context) {
+    extend(DiscussionPage.prototype, 'config', function (x, isInitialized, context) {
         if (isInitialized) return;
 
         if (app.pusher) {
-            app.pusher.then(channels => {
-                channels.main.bind('newVote', data => {
+            app.pusher.then((channels) => {
+                channels.main.bind('newVote', (data) => {
                     const post = app.store.getById('posts', data.post_id);
                     const userId = data.user_id;
 

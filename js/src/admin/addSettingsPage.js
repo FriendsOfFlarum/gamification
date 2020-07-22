@@ -3,12 +3,12 @@ import AdminNav from 'flarum/components/AdminNav';
 import AdminLinkButton from 'flarum/components/AdminLinkButton';
 import SettingsPage from './components/SettingsPage';
 
-export default function() {
+export default function () {
     app.routes['fof-gamification'] = { path: '/fof/gamification', component: SettingsPage.component() };
 
     app.extensionSettings['fof-gamification'] = () => m.route(app.route('fof-gamification'));
 
-    extend(AdminNav.prototype, 'items', items => {
+    extend(AdminNav.prototype, 'items', (items) => {
         items.add(
             'fof-gamification',
             AdminLinkButton.component({

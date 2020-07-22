@@ -7,8 +7,8 @@ import VotesModal from './components/VotesModal';
 import setting from './helpers/setting';
 import saveVote from './helpers/saveVote';
 
-export default function() {
-    extend(PostControls, 'moderationControls', function(items, post) {
+export default function () {
+    extend(PostControls, 'moderationControls', function (items, post) {
         if (post.canSeeVotes()) {
             items.add('viewVotes', [
                 m(
@@ -25,7 +25,7 @@ export default function() {
         }
     });
 
-    extend(CommentPost.prototype, 'actionItems', function(items) {
+    extend(CommentPost.prototype, 'actionItems', function (items) {
         const post = this.props.post;
         const hasDownvoted = post.hasDownvoted();
         const hasUpvoted = post.hasUpvoted();
@@ -45,7 +45,7 @@ export default function() {
                     },
                     loading: this.voteLoading,
                     disabled: this.voteLoading || !canVote,
-                    onclick: () => saveVote(post, !hasUpvoted, false, val => (this.voteLoading = val)),
+                    onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
                 })}
 
                 <label className="Post-points">{post.votes()}</label>
@@ -58,7 +58,7 @@ export default function() {
                     },
                     loading: this.voteLoading,
                     disabled: !canVote,
-                    onclick: () => saveVote(post, false, !hasDownvoted, val => (this.voteLoading = val)),
+                    onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
                 })}
             </div>,
             10

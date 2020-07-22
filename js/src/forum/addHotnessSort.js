@@ -6,8 +6,8 @@ import Dropdown from 'flarum/components/Dropdown';
 import Button from 'flarum/components/Button';
 import LinkButton from 'flarum/components/LinkButton';
 
-export default function() {
-    IndexPage.prototype.viewItems = function() {
+export default function () {
+    IndexPage.prototype.viewItems = function () {
         const items = new ItemList();
         const sortMap = app.cache.discussionList.sortMap();
 
@@ -16,7 +16,7 @@ export default function() {
             sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
         }
 
-        let dropDownLabel = sortOptions[this.params().sort] || Object.keys(sortMap).map(key => sortOptions[key])[0];
+        let dropDownLabel = sortOptions[this.params().sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0];
 
         if (/^.*?\/hot/.test(m.route())) {
             dropDownLabel = app.translator.trans('core.forum.index_sort.hot_button');
@@ -27,7 +27,7 @@ export default function() {
             Dropdown.component({
                 buttonClassName: 'Button',
                 label: dropDownLabel,
-                children: Object.keys(sortOptions).map(value => {
+                children: Object.keys(sortOptions).map((value) => {
                     const label = sortOptions[value];
                     let active = (this.params().sort || Object.keys(sortMap)[0]) === value;
 
@@ -53,7 +53,7 @@ export default function() {
         return items;
     };
 
-    extend(IndexPage.prototype, 'navItems', function(items) {
+    extend(IndexPage.prototype, 'navItems', function (items) {
         items.add(
             'rankings',
             LinkButton.component({
@@ -65,7 +65,7 @@ export default function() {
         );
     });
 
-    IndexPage.prototype.changeSort = function(sort) {
+    IndexPage.prototype.changeSort = function (sort) {
         const params = this.params();
 
         if (sort === 'hot') {
@@ -84,11 +84,11 @@ export default function() {
         }
     };
 
-    extend(DiscussionList.prototype, 'sortMap', function(map) {
+    extend(DiscussionList.prototype, 'sortMap', function (map) {
         map.hot = 'hot';
     });
 
-    extend(DiscussionList.prototype, 'requestParams', function(params) {
+    extend(DiscussionList.prototype, 'requestParams', function (params) {
         if (this.props.params.filter === 'hot') {
             params.filter.q = ' is:hot';
         }

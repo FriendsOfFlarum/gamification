@@ -99,7 +99,7 @@ export default class RankingsPage extends Page {
         }
 
         return this.loadResults().then(
-            results => {
+            (results) => {
                 this.users = [];
                 this.parseResults(results);
             },
@@ -205,7 +205,7 @@ export default class RankingsPage extends Page {
 
         this.loading = false;
 
-        this.users.sort(function(a, b) {
+        this.users.sort(function (a, b) {
             return parseFloat(b.points()) - parseFloat(a.points());
         });
 

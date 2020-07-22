@@ -28,9 +28,9 @@ export default class SettingsPage extends Page {
 
         const settings = app.data.settings;
 
-        this.fields.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
+        this.fields.forEach((key) => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
 
-        this.switches.forEach(key => (this.values[key] = m.prop(!!Number(settings[this.addPrefix(key)]))));
+        this.switches.forEach((key) => (this.values[key] = m.prop(!!Number(settings[this.addPrefix(key)]))));
 
         this.newRank = {
             points: m.prop(''),
@@ -74,7 +74,7 @@ export default class SettingsPage extends Page {
                             m(
                                 'div',
                                 { className: 'Ranks--Container' },
-                                this.ranks.map(rank => {
+                                this.ranks.map((rank) => {
                                     return m('div', { style: 'float: left;' }, [
                                         m('input', {
                                             className: 'FormControl Ranks-number',
@@ -248,7 +248,7 @@ export default class SettingsPage extends Page {
                 name: this.newRank.name(),
                 color: this.newRank.color(),
             })
-            .then(rank => {
+            .then((rank) => {
                 this.newRank.color('');
                 this.newRank.name('');
                 this.newRank.points('');
@@ -262,8 +262,8 @@ export default class SettingsPage extends Page {
      * @returns boolean
      */
     changed() {
-        var switchesCheck = this.switches.some(key => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
-        var fieldsCheck = this.fields.some(key => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
+        var switchesCheck = this.switches.some((key) => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
+        var fieldsCheck = this.fields.some((key) => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
         return fieldsCheck || switchesCheck;
     }
 
@@ -281,8 +281,8 @@ export default class SettingsPage extends Page {
 
         const settings = {};
 
-        this.switches.forEach(key => (settings[this.addPrefix(key)] = this.values[key]()));
-        this.fields.forEach(key => (settings[this.addPrefix(key)] = this.values[key]()));
+        this.switches.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
+        this.fields.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
 
         saveSettings(settings)
             .then(() => {

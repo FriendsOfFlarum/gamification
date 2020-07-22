@@ -17,7 +17,7 @@ import addAlternateLayout from './addAlternateLayout';
 
 import setting from './helpers/setting';
 
-app.initializers.add('fof-gamification', app => {
+app.initializers.add('fof-gamification', (app) => {
     Discussion.prototype.votes = Model.attribute('votes');
     Discussion.prototype.hasUpvoted = Model.attribute('hasUpvoted');
     Discussion.prototype.hasDownvoted = Model.attribute('hasDownvoted');

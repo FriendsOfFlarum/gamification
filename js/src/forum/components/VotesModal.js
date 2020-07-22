@@ -32,7 +32,7 @@ export default class VotesModal extends Modal {
         return (
             <div className="Modal-body">
                 <ul className="VotesModal-list">
-                    {['upvotes', 'downvotes'].map(type => {
+                    {['upvotes', 'downvotes'].map((type) => {
                         const voters = this.props.post[type]();
 
                         if (!voters || !voters.length) return;
@@ -40,7 +40,7 @@ export default class VotesModal extends Modal {
                         return (
                             <div>
                                 <legend>{app.translator.trans(`fof-gamification.forum.modal.${type}_label`)}</legend>
-                                {voters.map(user => (
+                                {voters.map((user) => (
                                     <li>
                                         <a href={app.route.user(user)} config={m.route}>
                                             {avatar(user)} {username(user)}
