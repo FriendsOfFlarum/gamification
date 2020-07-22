@@ -1,0 +1,67 @@
+.DiscussionListItem-votes {
+    position: absolute;
+    left: -8px;
+    top: 12px;
+    text-align: center;
+
+    height: 36px;
+    width: 32px;
+    line-height: 24px;
+    padding-top: 2px;
+
+    .icon, span {
+        display: block;
+        margin-top: -2px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .icon {
+        font-size: .75em;
+    }
+
+    + .DiscussionListItem-author {
+        margin-left: -22px;
+        margin-right: 10px;
+    }
+}
+
+.hasPane {
+    &.panePinned, &.paneShowing {
+        .DiscussionListItem-votes.alternateLayout {
+            left: 6px;
+        }
+    }
+}
+
+.Post-actions {
+    width: 100%;
+    text-align: right;
+
+    .CommentPost-votes.alternateLayout {
+        position: absolute;
+        left: 0;
+
+        button {
+            padding: 0;
+
+            &.loading {
+                margin-left: -7px;
+            }
+        }
+
+        .Post-points {
+            padding: 0 5px;
+        }
+
+        .Post-upvote {
+            .icon:before {
+                content: "";
+            }
+        }
+
+        .Post-downvote .icon:before {
+            content: "";
+        }
+    }
+}

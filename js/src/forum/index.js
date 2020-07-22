@@ -13,9 +13,15 @@ import addVoteButtons from './addVoteButtons';
 import addUpvotesToDiscussion from './addUpvotesToDiscussion';
 import addUserInfo from './addUserInfo';
 import addPusher from './addPusher';
+import addAlternateLayout from './addAlternateLayout';
+
+import setting from './helpers/setting';
 
 app.initializers.add('fof-gamification', app => {
     Discussion.prototype.votes = Model.attribute('votes');
+    Discussion.prototype.hasUpvoted = Model.attribute('hasUpvoted');
+    Discussion.prototype.hasDownvoted = Model.attribute('hasDownvoted');
+    Discussion.prototype.canVote = Model.attribute('canVote');
 
     User.prototype.points = Model.attribute('points');
     User.prototype.ranks = Model.hasMany('ranks');
@@ -40,4 +46,8 @@ app.initializers.add('fof-gamification', app => {
     addUserInfo();
     addUpvotesToDiscussion();
     addPusher();
+
+    if (setting('useAlternateLayout', true)) {
+        addAlternateLayout();
+    }
 });

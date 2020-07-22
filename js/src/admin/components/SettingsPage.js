@@ -18,7 +18,7 @@ export default class SettingsPage extends Page {
             'pointsPlaceholder',
         ];
 
-        this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage'];
+        this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout'];
 
         this.ranks = app.store.all('ranks');
 
@@ -138,6 +138,7 @@ export default class SettingsPage extends Page {
                                 placeholder: 2,
                                 oninput: m.withAttr('value', this.values.rankAmt),
                             }),
+
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.votes.title')),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.icon_name')),
                             m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.votes.icon_help')),
@@ -165,6 +166,12 @@ export default class SettingsPage extends Page {
                                 onchange: this.values.showVotesOnDiscussionPage,
                                 className: 'votes-switch',
                             }),
+                            Switch.component({
+                                state: this.values.useAlternateLayout() || false,
+                                children: app.translator.trans('fof-gamification.admin.page.votes.alternate_layout'),
+                                onchange: this.values.useAlternateLayout,
+                                className: 'votes-switch',
+                            }),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.points_title')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
@@ -172,6 +179,7 @@ export default class SettingsPage extends Page {
                                 placeholder: app.translator.trans('fof-gamification.admin.page.votes.points_placeholder') + '{points}',
                                 oninput: m.withAttr('value', this.values.pointsPlaceholder),
                             }),
+
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.rankings.title')),
                             Switch.component({
                                 state: this.values.customRankingImages() || false,

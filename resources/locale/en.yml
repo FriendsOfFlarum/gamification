@@ -2,7 +2,7 @@ core:
   forum:
     index_sort:
       hot_button: Trending
-      
+
 fof-gamification:
   forum:
     votes: Votes
@@ -49,6 +49,7 @@ fof-gamification:
         auto_upvote: Auto upvote posts when posted
         rate_limit: Enforce a vote rate limit (10 seconds)
         discussion_page: Show total votes of original post on discussions list
+        alternate_layout: Use alternate layout to show and/or do upvotes/downvotes
         title: Votes
         vote_color: Voted color
         icon_name: Upvote/downvote icon
