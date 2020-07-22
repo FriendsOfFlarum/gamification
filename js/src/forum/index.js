@@ -8,7 +8,7 @@ import Rank from '../common/models/Rank';
 import RankingsPage from './components/RankingsPage';
 import VoteNotification from './components/VoteNotification';
 
-import addHotnessFilter from './addHotnessSort';
+import addHotnessSort from './addHotnessSort';
 import addVoteButtons from './addVoteButtons';
 import addUpvotesToDiscussion from './addUpvotesToDiscussion';
 import addUserInfo from './addUserInfo';
@@ -42,7 +42,7 @@ app.initializers.add('fof-gamification', app => {
     app.routes.rankings = { path: '/rankings', component: RankingsPage.component() };
 
     addVoteButtons();
-    addHotnessFilter();
+    addHotnessSort();
     addUserInfo();
     addUpvotesToDiscussion();
     addPusher();
@@ -51,3 +51,6 @@ app.initializers.add('fof-gamification', app => {
         addAlternateLayout();
     }
 });
+
+export * from './components';
+export * from './helpers';

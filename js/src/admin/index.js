@@ -31,3 +31,6 @@ app.initializers.add('fof-gamification', app => {
 
     addSettingsPage();
 });
+
+export * from '../common/helpers';
+export * from './components';
