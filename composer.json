@@ -22,6 +22,11 @@
           "name": "Charlie K",
           "email": "Charlie.K@redevs.org",
           "homepage": "https://redevs.org"
+        },
+        {
+            "name": "David Sevilla Martin",
+            "email": "me+fof@datitisev.me",
+            "homepage": "https://datitisev.me"
         }
     ],
     "support": {
