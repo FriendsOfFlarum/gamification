@@ -52,9 +52,9 @@ class DeleteTopImageController extends AbstractDeleteController
 
         $this->assertAdmin($request->getAttribute('actor'));
 
-        $path = $this->settings->get('topimage'.$id.'_path');
+        $path = $this->settings->get($key = "fof-gamification.topimage{$id}_path");
 
-        $this->settings->set('topimage'.$id.'_path', null);
+        $this->settings->set($key, null);
 
         $uploadDir = new Filesystem(new Local($this->app->publicPath().'/assets'));
 

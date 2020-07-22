@@ -2,7 +2,7 @@ import Notification from 'flarum/components/Notification';
 
 export default class UpvotedNotification extends Notification {
     icon() {
-        if (this.props.notification.content() === 'Up') {
+        if (this.props.notification.content() > 0) {
             return 'fas fa-thumbs-up';
         } else {
             return 'fas fa-thumbs-down';
@@ -15,8 +15,9 @@ export default class UpvotedNotification extends Notification {
 
     content() {
         const user = this.props.notification.fromUser();
+        const content = this.props.notification.content();
 
-        if (this.props.notification.content() === 'Up') {
+        if (content > 0) {
             return app.translator.trans('fof-gamification.forum.notification.upvote', { user });
         } else {
             return app.translator.trans('fof-gamification.forum.notification.downvote', { user });

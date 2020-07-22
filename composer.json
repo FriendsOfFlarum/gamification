@@ -29,7 +29,8 @@
         "source": "https://github.com/FriendsOfFlarum/gamification"
     },
     "require": {
-        "flarum/core": ">=0.1.0-beta.12 <0.1.0-beta.14"
+        "flarum/core": ">=0.1.0-beta.12 <0.1.0-beta.14",
+        "fof/extend": ">=0.3.0"
     },
     "replace": {
         "reflar/gamification": "*"

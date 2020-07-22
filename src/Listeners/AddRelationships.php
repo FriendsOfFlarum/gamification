@@ -24,6 +24,7 @@ use Flarum\User\User;
 use FoF\Gamification\Api\Controllers\OrderByPointsController;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Rank;
+use FoF\Gamification\Vote;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddRelationships
@@ -57,12 +58,22 @@ class AddRelationships
      */
     public function getModelRelationship(GetModelRelationship $event)
     {
+        if ($event->isRelationship(User::class, 'allVotes')) {
+            return $event->model->belongsToMany(User::class, 'post_votes', 'user_id');
+        }
+
+        if ($event->isRelationship(Post::class, 'votes')) {
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id');
+        }
+
         if ($event->isRelationship(Post::class, 'upvotes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')->where('type', 'Up');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')
+                ->where('value', '>', 0);
         }
 
         if ($event->isRelationship(Post::class, 'downvotes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'downvotes')->where('type', 'Down');
+            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'downvotes')
+                ->where('value', '<', 0);
         }
 
         if ($event->isRelationship(User::class, 'ranks')) {
@@ -105,25 +116,31 @@ class AddRelationships
      */
     public function prepareApiAttributes(Serializing $event)
     {
-        if ($event->isSerializer(Serializer\UserSerializer::class)) {
-            $event->attributes['canViewRankingPage'] = (bool) $event->actor->can('fof.gamification.viewRankingPage');
-            $event->attributes['Points'] = $event->model->votes;
+        if ($event->isSerializer(Serializer\ForumSerializer::class)) {
+            $prefix = 'fof-gamification';
+
+            $event->attributes["$prefix.topimage1Url"] = "/assets/{$this->settings->get("$prefix.topimage1_path")}";
+            $event->attributes["$prefix.topimage2Url"] = "/assets/{$this->settings->get("$prefix.topimage2_path")}";
+            $event->attributes["$prefix.topimage3Url"] = "/assets/{$this->settings->get("$prefix.topimage3_path")}";
         }
 
-        if ($event->isSerializer(Serializer\ForumSerializer::class)) {
-            $event->attributes['IconName'] = $this->settings->get('fof-gamification.iconName');
-            $event->attributes['PointsPlaceholder'] = $this->settings->get('fof-gamification.pointsPlaceholder');
-            $event->attributes['DefaultLocale'] = $this->settings->get('default_locale');
-            $event->attributes['showVotesOnDiscussionPage'] = (bool) $this->settings->get('fof-gamification.showVotesOnDiscussionPage');
-            $event->attributes['CustomRankingImages'] = $this->settings->get('fof-gamification.customRankingImages');
-            $event->attributes['topimage1Url'] = "/assets/{$this->settings->get('topimage1_path')}";
-            $event->attributes['topimage2Url'] = "/assets/{$this->settings->get('topimage2_path')}";
-            $event->attributes['topimage3Url'] = "/assets/{$this->settings->get('topimage3_path')}";
-            $event->attributes['ranksAmt'] = $this->settings->get('fof-gamification.rankAmt');
+        if ($event->isSerializer(Serializer\UserSerializer::class)) {
+            $event->attributes['canViewRankingPage'] = (bool) $event->actor->can('fof.gamification.viewRankingPage');
+            $event->attributes['points'] = $event->model->votes;
         }
 
         if ($event->isSerializer(Serializer\DiscussionSerializer::class)) {
             $event->attributes['votes'] = (int) $event->model->votes;
+        }
+
+        if ($event->isSerializer(Serializer\PostSerializer::class)) {
+            $vote = Vote::query()->where('post_id', $event->model->id)->where('user_id', $event->actor->id)->first(['value']);
+
+            $event->attributes['votes'] = Vote::calculate(['post_id' => $event->model->id]);
+
+            $event->attributes['hasUpvoted'] = $vote && $vote->isUpvote();
+            $event->attributes['hasDownvoted'] = $vote && $vote->isDownvote();
+
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
             $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);
         }
@@ -142,13 +159,15 @@ class AddRelationships
             $event->addInclude('ranks');
         }
         if ($event->isController(Controller\ShowDiscussionController::class)) {
-            $event->addInclude(['posts.upvotes', 'posts.downvotes', 'posts.user.ranks']);
+            $event->addInclude('posts.user.ranks');
         }
         if ($event->isController(Controller\ListPostsController::class)
             || $event->isController(Controller\ShowPostController::class)
             || $event->isController(Controller\CreatePostController::class)
             || $event->isController(Controller\UpdatePostController::class)) {
-            $event->addInclude(['upvotes', 'downvotes', 'user.ranks']);
+            $event->addInclude(['user.ranks']);
+            $event->addOptionalInclude('upvotes');
+            $event->addOptionalInclude('downvotes');
         }
         if ($event->isController(Controller\ShowForumController::class)) {
             $event->addInclude('ranks');

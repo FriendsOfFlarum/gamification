@@ -18,12 +18,7 @@ export default class SettingsPage extends Page {
             'pointsPlaceholder',
         ];
 
-        this.switches = [
-            'autoUpvotePosts',
-            'customRankingImages',
-            'rateLimit',
-            'showVotesOnDiscussionPage'
-        ];
+        this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage'];
 
         this.ranks = app.store.all('ranks');
 
@@ -35,7 +30,7 @@ export default class SettingsPage extends Page {
 
         this.fields.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
 
-        this.switches.forEach(key => (this.values[key] = m.prop(settings[this.addPrefix(key)] === '1')));
+        this.switches.forEach(key => (this.values[key] = m.prop(!!Number(settings[this.addPrefix(key)]))));
 
         this.newRank = {
             points: m.prop(''),
@@ -193,13 +188,13 @@ export default class SettingsPage extends Page {
                             }),
                             m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.rankings.blocked.help')),
                             m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_1')),
-                            <UploadImageButton className="Upload-button" name="topimage1" />,
+                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage1" />,
                             m('br'),
                             m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_2')),
-                            <UploadImageButton className="Upload-button" name="topimage2" />,
+                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage2" />,
                             m('br'),
                             m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_3')),
-                            <UploadImageButton className="Upload-button" name="topimage3" />,
+                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage3" />,
                             m('br'),
                             Button.component({
                                 type: 'submit',

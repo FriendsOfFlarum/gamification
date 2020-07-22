@@ -79,7 +79,7 @@ class UploadTopImageController extends ShowForumController
             'target' => new Filesystem(new Local($this->app->publicPath().'/assets')),
         ]);
 
-        if (($path = $this->settings->get('topimage'.$id.'_path')) && $mount->has($file = "target://$path")) {
+        if (($path = $this->settings->get($key = "fof-gamification.topimage{$id}_path")) && $mount->has($file = "target://$path")) {
             $mount->delete($file);
         }
 
@@ -87,7 +87,7 @@ class UploadTopImageController extends ShowForumController
 
         $mount->move('source://'.pathinfo($tmpFile, PATHINFO_BASENAME), "target://$uploadName");
 
-        $this->settings->set('topimage'.$id.'_path', $uploadName);
+        $this->settings->set($key, $uploadName);
 
         return parent::data($request, $document);
     }
