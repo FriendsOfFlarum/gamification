@@ -1,4 +1,5 @@
 @import "../lib/rankLabel.less";
+@import "./alternateLayout.less";
 
 @media (min-width: 768px) {
   .DiscussionListItem-info>.item-tags.gamification {
@@ -60,10 +61,22 @@
     width: 215px;
 }
 
-.Post-vote {
-    background-color: rgba(0, 0, 0, 0);
-    border: none;
-    margin: 7px 1em 0 1em;
+.CommentPost-votes {
+    .Post-points {
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        margin-right: 0.5em;
+    }
+
+    .Post-vote {
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        margin: 8px 0 0;
+    }
+
+    .Post-vote:focus {
+        outline: 0;
+    }
 }
 
 .Post-Rank {
@@ -72,16 +85,12 @@
     margin-left: 10px;
 }
 
-.Post-vote:focus {
-    outline: 0;
-}
-
-.item-points {
-    margin-top: 7px;
-    background-color: rgba(0, 0, 0, 0);
-    border: none;
-    margin-right: 0.5em !important;
-}
+//.item-points {
+//    margin-top: 7px;
+//    background-color: rgba(0, 0, 0, 0);
+//    border: none;
+//    margin-right: 0.5em !important;
+//}
 
 .User-Rank {
     color: gray;

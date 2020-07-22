@@ -130,16 +130,27 @@ class AddRelationships
         }
 
         if ($event->isSerializer(Serializer\DiscussionSerializer::class)) {
+            if ($event->actor->exists) {
+                $vote = Vote::query()->where(['post_id' => $event->model->firstPost->id, 'user_id' => $event->actor->id])->first(['value']);
+
+                $event->attributes['hasUpvoted'] = $vote && $vote->isUpvote();
+                $event->attributes['hasDownvoted'] = $vote && $vote->isDownvote();
+            }
+
             $event->attributes['votes'] = (int) $event->model->votes;
+
+            $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model->firstPost);
         }
 
         if ($event->isSerializer(Serializer\PostSerializer::class)) {
-            $vote = Vote::query()->where('post_id', $event->model->id)->where('user_id', $event->actor->id)->first(['value']);
+            if ($event->actor->exists) {
+                $vote = Vote::query()->where(['post_id' => $event->model->id, 'user_id' => $event->actor->id])->first(['value']);
+
+                $event->attributes['hasUpvoted'] = $vote && $vote->isUpvote();
+                $event->attributes['hasDownvoted'] = $vote && $vote->isDownvote();
+            }
 
             $event->attributes['votes'] = Vote::calculate(['post_id' => $event->model->id]);
-
-            $event->attributes['hasUpvoted'] = $vote && $vote->isUpvote();
-            $event->attributes['hasDownvoted'] = $vote && $vote->isDownvote();
 
             $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model);
             $event->attributes['canSeeVotes'] = (bool) $event->actor->can('canSeeVotes', $event->model);

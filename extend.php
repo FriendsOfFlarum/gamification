@@ -34,6 +34,7 @@ return [
         ->addKeys([
             'iconName', 'pointsPlaceholder', 'showVotesOnDiscussionPage', 'rankAmt',
             'customRankingImages',
+            'useAlternateLayout',
         ]),
 
     (new Extend\Routes('api'))

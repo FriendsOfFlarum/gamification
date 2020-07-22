@@ -7,9 +7,12 @@ import setting from './helpers/setting';
 export default function() {
     extend(DiscussionListItem.prototype, 'infoItems', function(items) {
         if (setting('showVotesOnDiscussionPage', true)) {
+            if (setting('useAlternateLayout', true)) return;
+
             $('.DiscussionListItem-info')
                 .find('.item-tags')
                 .addClass('gamification');
+
             items.add(
                 'discussion-votes',
                 <span className="DiscussionListItem-votes" title={app.translator.trans('fof-gamification.forum.votes')}>
