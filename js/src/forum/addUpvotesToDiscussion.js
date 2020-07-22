@@ -5,20 +5,18 @@ import icon from 'flarum/helpers/icon';
 import setting from './helpers/setting';
 
 export default function () {
+    if (!setting('showVotesOnDiscussionPage', true) || setting('useAlternateLayout', true)) {
+        return;
+    }
+
     extend(DiscussionListItem.prototype, 'infoItems', function (items) {
-        if (setting('showVotesOnDiscussionPage', true)) {
-            if (setting('useAlternateLayout', true)) return;
-
-            $('.DiscussionListItem-info').find('.item-tags').addClass('gamification');
-
-            items.add(
-                'discussion-votes',
-                <span className="DiscussionListItem-votes" title={app.translator.trans('fof-gamification.forum.votes')}>
-                    {icon('far fa-thumbs-up')}
-                    {abbreviateNumber(this.props.discussion.votes())}
-                </span>,
-                10
-            );
-        }
+        items.add(
+            'discussion-votes',
+            <span className="DiscussionListItem-votes" title={app.translator.trans('fof-gamification.forum.votes')}>
+                {icon('far fa-thumbs-up')}
+                {abbreviateNumber(this.props.discussion.votes())}
+            </span>,
+            20
+        );
     });
 }
