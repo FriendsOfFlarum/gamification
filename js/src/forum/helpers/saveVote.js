@@ -13,8 +13,6 @@ export default (post, upvoted, downvoted, load, discussion = post.discussion()) 
         downvoted = false;
     }
 
-    console.log(load);
-
     if (load) load(true);
 
     m.redraw();

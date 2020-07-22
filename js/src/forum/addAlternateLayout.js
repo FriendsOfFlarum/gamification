@@ -11,7 +11,6 @@ const get = (discussion, key) => {
     const post = discussion.firstPost();
 
     if (post && post[key]() !== undefined) {
-        console.log(key, 'post', post[key]());
         return post[key]();
     }
 
