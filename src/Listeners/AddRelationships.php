@@ -135,7 +135,7 @@ class AddRelationships
             if ($event->actor->exists && $post) {
                 $vote = Vote::query()->where([
                     'post_id' => $post->id,
-                    'user_id' => $event->actor->id
+                    'user_id' => $event->actor->id,
                 ])->first(['value']);
 
                 $event->attributes['hasUpvoted'] = $vote && $vote->isUpvote();
