@@ -130,8 +130,13 @@ class AddRelationships
         }
 
         if ($event->isSerializer(Serializer\DiscussionSerializer::class)) {
-            if ($event->actor->exists) {
-                $vote = Vote::query()->where(['post_id' => $event->model->firstPost->id, 'user_id' => $event->actor->id])->first(['value']);
+            $post = $event->model->firstPost ?: $event->model->posts()->where('number', 1)->first();
+
+            if ($event->actor->exists && $post) {
+                $vote = Vote::query()->where([
+                    'post_id' => $post->id,
+                    'user_id' => $event->actor->id
+                ])->first(['value']);
 
                 $event->attributes['hasUpvoted'] = $vote && $vote->isUpvote();
                 $event->attributes['hasDownvoted'] = $vote && $vote->isDownvote();
@@ -139,7 +144,7 @@ class AddRelationships
 
             $event->attributes['votes'] = (int) $event->model->votes;
 
-            $event->attributes['canVote'] = (bool) $event->actor->can('vote', $event->model->firstPost);
+            $event->attributes['canVote'] = $post && $event->actor->can('vote', $post);
         }
 
         if ($event->isSerializer(Serializer\PostSerializer::class)) {
