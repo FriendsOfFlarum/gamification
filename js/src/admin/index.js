@@ -11,7 +11,7 @@ app.initializers.add('fof-gamification', (app) => {
         items.add('Vote', {
             icon: 'fas fa-thumbs-up',
             label: app.translator.trans('fof-gamification.admin.permissions.vote_label'),
-            permission: 'discussion.vote',
+            permission: 'discussion.votePosts',
         });
     });
 

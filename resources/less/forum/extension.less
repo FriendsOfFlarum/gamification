@@ -72,10 +72,14 @@
         background-color: rgba(0, 0, 0, 0);
         border: none;
         margin: 8px 0 0;
-    }
 
-    .Post-vote:focus {
-        outline: 0;
+        &:focus {
+            outline: 0;
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+        }
     }
 }
 
