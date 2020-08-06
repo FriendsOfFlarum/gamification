@@ -22,7 +22,6 @@ fof-gamification:
     modal:
       title: Voters
       upvotes_label: 'Upvoters:'
-      downvotes_label: 'Downvoters:'
     mod_item: View Voters
   admin:
     permissions:

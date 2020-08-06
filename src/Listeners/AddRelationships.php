@@ -71,11 +71,6 @@ class AddRelationships
                 ->where('value', '>', 0);
         }
 
-        if ($event->isRelationship(Post::class, 'downvotes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'downvotes')
-                ->where('value', '<', 0);
-        }
-
         if ($event->isRelationship(User::class, 'ranks')) {
             return $event->model->belongsToMany(Rank::class, 'rank_users', null, null, null, null, 'ranks');
         }
@@ -90,10 +85,6 @@ class AddRelationships
     {
         if ($event->isRelationship(Serializer\PostSerializer::class, 'upvotes')) {
             return $event->serializer->hasMany($event->model, Serializer\BasicUserSerializer::class, 'upvotes');
-        }
-
-        if ($event->isRelationship(Serializer\PostSerializer::class, 'downvotes')) {
-            return $event->serializer->hasMany($event->model, Serializer\BasicUserSerializer::class, 'downvotes');
         }
 
         if ($event->isRelationship(Serializer\ForumSerializer::class, 'ranks') || $event->isRelationship(Serializer\UserSerializer::class, 'ranks')) {
@@ -183,7 +174,6 @@ class AddRelationships
             || $event->isController(Controller\UpdatePostController::class)) {
             $event->addInclude(['user.ranks']);
             $event->addOptionalInclude('upvotes');
-            $event->addOptionalInclude('downvotes');
         }
         if ($event->isController(Controller\ShowForumController::class)) {
             $event->addInclude('ranks');

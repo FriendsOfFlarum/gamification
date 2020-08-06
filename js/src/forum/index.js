@@ -27,7 +27,6 @@ app.initializers.add('fof-gamification', (app) => {
     User.prototype.ranks = Model.hasMany('ranks');
 
     Post.prototype.upvotes = Model.hasMany('upvotes');
-    Post.prototype.downvotes = Model.hasMany('downvotes');
 
     Post.prototype.votes = Model.attribute('votes');
     Post.prototype.canVote = Model.attribute('canVote');
