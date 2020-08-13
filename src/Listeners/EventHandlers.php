@@ -102,7 +102,7 @@ class EventHandlers
     {
         $post = $event->post;
 
-        $voteNumber = $post->upvotes()->count() - $post->downvotes()->count();
+        $voteNumber = Vote::calculate(['post_id' => $post->id]);
         $user = $event->post->user;
         $user->votes = $user->votes - $voteNumber;
 

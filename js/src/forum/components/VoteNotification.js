@@ -15,7 +15,7 @@ export default class UpvotedNotification extends Notification {
 
     content() {
         const user = this.props.notification.fromUser();
-        const content = this.props.notification.content();
+        const content = parseInt(this.props.notification.content());
 
         if (content > 0) {
             return app.translator.trans('fof-gamification.forum.notification.upvote', { user });
