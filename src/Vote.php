@@ -44,7 +44,7 @@ class Vote extends AbstractModel
         return $vote;
     }
 
-    public static function calculate($paramsOrQuery, $advanced = false): int
+    public static function calculate($paramsOrQuery): int
     {
         $query = $paramsOrQuery;
 
@@ -53,13 +53,7 @@ class Vote extends AbstractModel
                 ->where($paramsOrQuery);
         }
 
-        $prefix = '';
-
-        if ($advanced) {
-            $prefix = self::query()->getConnection()->getTablePrefix().(new self())->getTable().'.';
-        }
-
-        return $query->sum($prefix.'value');
+        return $query->sum('value');
     }
 
     public static function updateUserVotes(User $user): User
@@ -67,8 +61,7 @@ class Vote extends AbstractModel
         $user->votes = self::calculate(
             self::query()
                 ->join('posts', 'posts.id', '=', 'post_votes.post_id')
-                ->where('posts.user_id', $user->id),
-            true
+                ->where('posts.user_id', $user->id)
         );
 
         return $user;
