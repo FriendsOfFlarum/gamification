@@ -1,9 +1,9 @@
 import Alert from 'flarum/components/Alert';
 import Page from 'flarum/components/Page';
 import Button from 'flarum/components/Button';
-import UploadImageButton from 'flarum/components/UploadImageButton';
 import saveSettings from 'flarum/utils/saveSettings';
 import Switch from 'flarum/components/Switch';
+import UploadImageButton from './UploadImageButton';
 
 export default class SettingsPage extends Page {
     init() {
@@ -195,15 +195,17 @@ export default class SettingsPage extends Page {
                                 oninput: m.withAttr('value', this.values.blockedUsers),
                             }),
                             m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.rankings.blocked.help')),
-                            m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_1')),
-                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage1" />,
-                            m('br'),
-                            m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_2')),
-                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage2" />,
-                            m('br'),
-                            m('label', { className: 'Upload-label' }, app.translator.trans('fof-gamification.admin.page.rankings.custom_image_3')),
-                            <UploadImageButton className="Upload-button" name="fof-gamification.topimage3" />,
-                            m('br'),
+                            ...[1, 2, 3].map((num) => [
+                                <label className="Upload-label">
+                                    {app.translator.trans(`fof-gamification.admin.page.rankings.custom_image_${num}`)}
+                                </label>,
+                                <UploadImageButton
+                                    className="Upload-button"
+                                    name={`fof-gamification.topimage${num}`}
+                                    path={`fof/gamification/topimage${num}`}
+                                />,
+                                <br />,
+                            ]),
                             Button.component({
                                 type: 'submit',
                                 className: 'Button Button--primary Ranks-save',

@@ -15,6 +15,7 @@ use Flarum\Api\Controller\ShowForumController;
 use Flarum\Foundation\Application;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use League\Flysystem\Adapter\Local;
@@ -52,12 +53,10 @@ class UploadTopImageController extends ShowForumController
 
         $id = array_get($request->getQueryParams(), 'id');
 
-        $file = array_get($request->getUploadedFiles(), 'topimage'.$id);
+        $file = Arr::first($request->getUploadedFiles());
 
         $tmpFile = tempnam($this->app->storagePath().'/tmp', 'topimage.'.$id);
         $file->moveTo($tmpFile);
-
-        $extension = pathinfo($file->getClientFilename(), PATHINFO_EXTENSION);
 
         if ('1' == $id) {
             $size = 125;

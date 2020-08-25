@@ -39,10 +39,10 @@ return [
 
     (new Extend\Routes('api'))
         ->post('/fof/gamification/convert', 'fof.gamification.convert', Controllers\ConvertLikesController::class)
+        ->post('/fof/gamification/topimage{id}', 'fof.topImage.add', Controllers\UploadTopImageController::class)
+        ->delete('/fof/gamification/topimage{id}', 'fof.topImage.delete', Controllers\DeleteTopImageController::class)
         ->get('/ranks', 'ranks.index', Controllers\ListRanksController::class)
         ->post('/ranks', 'ranks.create', Controllers\CreateRankController::class)
-        ->post('/topimage{id}', 'fof.topImage.add', Controllers\UploadTopImageController::class)
-        ->delete('/topimage{id}', 'fof.topImage.delete', Controllers\DeleteTopImageController::class)
         ->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class)
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
