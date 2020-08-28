@@ -22,7 +22,7 @@ return [
                 $schema->getConnection()->transaction(function () use ($item) {
                     $item->delete();
 
-                    $item->permission = $item->permission . 'Posts';
+                    $item->permission = $item->permission.'Posts';
 
                     if (!Permission::query()->where($item->getAttributes())->exists()) {
                         $item->save();
