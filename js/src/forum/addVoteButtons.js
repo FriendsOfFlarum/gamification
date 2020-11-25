@@ -32,6 +32,9 @@ export default function () {
 
         const icon = setting('iconName') || 'thumbs';
 
+        // We set canVote to true for guest users so that they can access the login by clicking the button
+        const canVote = !app.session.user || post.canVote();
+
         items.add(
             'votes',
             <div className={`CommentPost-votes ${setting('useAlternateLayout', true) && 'alternateLayout'}`}>
@@ -42,7 +45,7 @@ export default function () {
                         color: app.forum.attribute('themePrimaryColor'),
                     },
                     loading: this.voteLoading,
-                    disabled: this.voteLoading,
+                    disabled: this.voteLoading || !canVote,
                     onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
                 })}
 
@@ -55,6 +58,7 @@ export default function () {
                         color: app.forum.attribute('themePrimaryColor'),
                     },
                     loading: this.voteLoading,
+                    disabled: !canVote,
                     onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
                 })}
             </div>,
