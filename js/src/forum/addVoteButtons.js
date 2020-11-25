@@ -32,8 +32,6 @@ export default function () {
 
         const icon = setting('iconName') || 'thumbs';
 
-        const canVote = post.canVote();
-
         items.add(
             'votes',
             <div className={`CommentPost-votes ${setting('useAlternateLayout', true) && 'alternateLayout'}`}>
@@ -44,7 +42,7 @@ export default function () {
                         color: app.forum.attribute('themePrimaryColor'),
                     },
                     loading: this.voteLoading,
-                    disabled: this.voteLoading || !canVote,
+                    disabled: this.voteLoading,
                     onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
                 })}
 
@@ -57,7 +55,6 @@ export default function () {
                         color: app.forum.attribute('themePrimaryColor'),
                     },
                     loading: this.voteLoading,
-                    disabled: !canVote,
                     onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
                 })}
             </div>,

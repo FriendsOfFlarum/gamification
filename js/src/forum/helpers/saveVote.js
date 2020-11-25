@@ -1,8 +1,9 @@
-import LogInModal from 'flarum/components/LogInModal';
+import DiscussionControls from 'flarum/utils/DiscussionControls';
 
 export default (post, upvoted, downvoted, load, discussion = post.discussion()) => {
     if (!app.session.user) {
-        app.modal.show(new LogInModal());
+        // We use this instead of showing LogInModal so that extensions can override it
+        DiscussionControls.replyAction.call(discussion, true);
         return;
     } else if (discussion && !discussion.canVote() && !post.canVote()) {
         return;
