@@ -2,8 +2,6 @@ import avatar from 'flarum/helpers/avatar';
 import Page from 'flarum/components/Page';
 import IndexPage from 'flarum/components/IndexPage';
 import Button from 'flarum/components/Button';
-import ItemList from 'flarum/utils/ItemList';
-import LogInModal from 'flarum/components/LogInModal';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
 import listItems from 'flarum/helpers/listItems';
 import username from 'flarum/helpers/username';
@@ -126,62 +124,6 @@ export default class RankingsPage extends Page {
         } else {
             return i;
         }
-    }
-
-    stickyParams() {
-        return {
-            sort: m.route.param('sort'),
-            q: m.route.param('q'),
-        };
-    }
-
-    actionItems() {
-        const items = new ItemList();
-
-        items.add(
-            'refresh',
-            Button.component({
-                title: app.translator.trans('core.forum.index.refresh_tooltip'),
-                icon: 'fas fa-refresh',
-                className: 'Button Button--icon',
-                onclick: () => {
-                    app.cache.discussionList.refresh();
-                    if (app.session.user) {
-                        app.store.find('users', app.session.user.id());
-                        m.redraw();
-                    }
-                },
-            })
-        );
-
-        return items;
-    }
-
-    newDiscussion() {
-        const deferred = m.deferred();
-
-        if (app.session.user) {
-            this.composeNewDiscussion(deferred);
-        } else {
-            app.modal.show(
-                new LogInModal({
-                    onlogin: this.composeNewDiscussion.bind(this, deferred),
-                })
-            );
-        }
-
-        return deferred.promise;
-    }
-
-    composeNewDiscussion(deferred) {
-        const component = new DiscussionComposer({ user: app.session.user });
-
-        app.composer.load(component);
-        app.composer.show();
-
-        deferred.resolve(component);
-
-        return deferred.promise;
     }
 
     loadResults(offset) {
