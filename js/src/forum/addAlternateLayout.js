@@ -31,7 +31,8 @@ export default () => {
 
         const hasUpvoted = get(discussion, 'hasUpvoted');
         const hasDownvoted = get(discussion, 'hasDownvoted');
-        const canVote = get(discussion, 'canVote');
+        // We set canVote to true for guest users so that they can access the login by clicking the button
+        const canVote = !app.session.user || get(discussion, 'canVote');
 
         const style = {
             color: app.forum.attribute('themePrimaryColor'),
