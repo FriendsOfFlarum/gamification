@@ -26,7 +26,7 @@ export default function () {
     });
 
     extend(CommentPost.prototype, 'actionItems', function (items) {
-        const post = this.props.post;
+        const post = this.attrs.post;
         const hasDownvoted = post.hasDownvoted();
         const hasUpvoted = post.hasUpvoted();
 

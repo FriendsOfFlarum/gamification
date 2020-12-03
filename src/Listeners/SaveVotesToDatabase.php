@@ -18,7 +18,6 @@ use Flarum\Post\Event\Saving;
 use Flarum\Post\Exception\FloodingException;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\AssertPermissionTrait;
 use Flarum\User\User;
 use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Gamification;
@@ -30,8 +29,6 @@ use Pusher;
 
 class SaveVotesToDatabase
 {
-    use AssertPermissionTrait;
-
     /**
      * @var Dispatcher
      */
@@ -82,7 +79,7 @@ class SaveVotesToDatabase
                 $actor = $event->actor;
                 $user = $post->user;
 
-                $this->assertCan($actor, 'vote', $post);
+                $actor->assertCan('vote', $post);
 
                 if ($this->settings->get('fof-gamification.rateLimit')) {
                     $this->assertNotFlooding($actor);
@@ -184,7 +181,7 @@ class SaveVotesToDatabase
             );
         }
 
-        $this->events->fire(
+        $this->events->dispatch(
             new PostWasVoted($vote)
         );
 

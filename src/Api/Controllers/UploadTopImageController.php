@@ -14,7 +14,6 @@ namespace FoF\Gamification\Api\Controllers;
 use Flarum\Api\Controller\ShowForumController;
 use Flarum\Foundation\Application;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\AssertPermissionTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -26,8 +25,6 @@ use Tobscure\JsonApi\Document;
 
 class UploadTopImageController extends ShowForumController
 {
-    use AssertPermissionTrait;
-
     /**
      * @var SettingsRepositoryInterface
      */
@@ -49,9 +46,9 @@ class UploadTopImageController extends ShowForumController
 
     public function data(ServerRequestInterface $request, Document $document)
     {
-        $this->assertAdmin($request->getAttribute('actor'));
+        $request->getAttribute('actor')->assertAdmin();
 
-        $id = array_get($request->getQueryParams(), 'id');
+        $id = Arr::get($request->getQueryParams(), 'id');
 
         $file = Arr::first($request->getUploadedFiles());
 

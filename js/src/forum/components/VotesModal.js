@@ -13,7 +13,7 @@ export default class VotesModal extends Modal {
     }
 
     init() {
-        this.loading = !this.props.post.upvotes();
+        this.loading = !this.attrs.post.upvotes();
 
         if (this.loading) {
             this.load();
@@ -33,7 +33,7 @@ export default class VotesModal extends Modal {
             <div className="Modal-body">
                 <ul className="VotesModal-list">
                     {['upvotes'].map((type) => {
-                        const voters = this.props.post[type]();
+                        const voters = this.attrs.post[type]();
 
                         if (!voters || !voters.length) return;
 
@@ -57,7 +57,7 @@ export default class VotesModal extends Modal {
 
     load() {
         return app.store
-            .find('posts', this.props.post.id(), {
+            .find('posts', this.attrs.post.id(), {
                 include: 'upvotes',
             })
             .then(this.loaded.bind(this));

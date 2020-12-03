@@ -14,7 +14,7 @@ namespace FoF\Gamification\Api\Controllers;
 use Flarum\Api\Controller\AbstractDeleteController;
 use Flarum\Foundation\Application;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\EmptyResponse;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -22,8 +22,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteTopImageController extends AbstractDeleteController
 {
-    use AssertPermissionTrait;
-
     /**
      * @var SettingsRepositoryInterface
      */
@@ -48,9 +46,9 @@ class DeleteTopImageController extends AbstractDeleteController
      */
     protected function delete(ServerRequestInterface $request)
     {
-        $id = array_get($request->getQueryParams(), 'id');
+        $id = Arr::get($request->getQueryParams(), 'id');
 
-        $this->assertAdmin($request->getAttribute('actor'));
+        $request->getAttribute('actor')->assertAdmin();
 
         $path = $this->settings->get($key = "fof-gamification.topimage{$id}_path");
 

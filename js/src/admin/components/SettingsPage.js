@@ -1,12 +1,13 @@
-import Alert from 'flarum/components/Alert';
 import Page from 'flarum/components/Page';
 import Button from 'flarum/components/Button';
 import saveSettings from 'flarum/utils/saveSettings';
 import Switch from 'flarum/components/Switch';
 import UploadImageButton from './UploadImageButton';
+import Stream from 'flarum/utils/Stream';
+import withAttr from 'flarum/utils/withAttr';
 
 export default class SettingsPage extends Page {
-    init() {
+    oninit() {
         this.fields = [
             'convertedLikes',
             'amountPerPost',
@@ -28,14 +29,14 @@ export default class SettingsPage extends Page {
 
         const settings = app.data.settings;
 
-        this.fields.forEach((key) => (this.values[key] = m.prop(settings[this.addPrefix(key)])));
+        this.fields.forEach((key) => (this.values[key] = Stream(settings[this.addPrefix(key)])));
 
-        this.switches.forEach((key) => (this.values[key] = m.prop(!!Number(settings[this.addPrefix(key)]))));
+        this.switches.forEach((key) => (this.values[key] = Stream(!!Number(settings[this.addPrefix(key)]))));
 
         this.newRank = {
-            points: m.prop(''),
-            name: m.prop(''),
-            color: m.prop(''),
+            points: Stream(''),
+            name: Stream(''),
+            color: Stream(''),
         };
     }
 
@@ -49,24 +50,25 @@ export default class SettingsPage extends Page {
                     m('form', { onsubmit: this.onsubmit.bind(this) }, [
                         m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.convert.help')),
                         this.values.convertedLikes() === undefined
-                            ? Button.component({
-                                  type: 'button',
-                                  className: 'Button Button--warning Ranks-button',
-                                  children: app.translator.trans('fof-gamification.admin.page.convert.button'),
-                                  onclick: () => {
-                                      app.request({
-                                          url: app.forum.attribute('apiUrl') + '/fof/gamification/convert',
-                                          method: 'POST',
-                                      }).then(this.values.convertedLikes('converting'));
-                                  },
-                              })
+                            ? Button.component(
+                                {
+                                    type: 'button',
+                                    className: 'Button Button--warning Ranks-button',
+                                    onclick: () => {
+                                        app.request({
+                                            url: app.forum.attribute('apiUrl') + '/fof/gamification/convert',
+                                            method: 'POST',
+                                        }).then(this.values.convertedLikes('converting'));
+                                    },
+                                },
+                                app.translator.trans('fof-gamification.admin.page.convert.button'))
                             : this.values.convertedLikes() === 'converting'
-                            ? m('label', {}, app.translator.trans('fof-gamification.admin.page.convert.converting'))
-                            : m(
-                                  'label',
-                                  {},
-                                  app.translator.trans('fof-gamification.admin.page.convert.converted', { number: this.values.convertedLikes() })
-                              ),
+                                ? m('label', {}, app.translator.trans('fof-gamification.admin.page.convert.converting'))
+                                : m(
+                                    'label',
+                                    {},
+                                    app.translator.trans('fof-gamification.admin.page.convert.converted', { number: this.values.convertedLikes() })
+                                ),
                         m('fieldset', { className: 'SettingsPage-ranks' }, [
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.ranks.title')),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.ranks')),
@@ -81,19 +83,19 @@ export default class SettingsPage extends Page {
                                             type: 'number',
                                             value: rank.points(),
                                             placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.points'),
-                                            oninput: m.withAttr('value', this.updatePoints.bind(this, rank)),
+                                            oninput: withAttr('value', this.updatePoints.bind(this, rank)),
                                         }),
                                         m('input', {
                                             className: 'FormControl Ranks-name',
                                             value: rank.name(),
                                             placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
-                                            oninput: m.withAttr('value', this.updateName.bind(this, rank)),
+                                            oninput: withAttr('value', this.updateName.bind(this, rank)),
                                         }),
                                         m('input', {
                                             className: 'FormControl Ranks-color',
                                             value: rank.color(),
                                             placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
-                                            oninput: m.withAttr('value', this.updateColor.bind(this, rank)),
+                                            oninput: withAttr('value', this.updateColor.bind(this, rank)),
                                         }),
                                         Button.component({
                                             type: 'button',
@@ -109,19 +111,19 @@ export default class SettingsPage extends Page {
                                         value: this.newRank.points(),
                                         placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.points'),
                                         type: 'number',
-                                        oninput: m.withAttr('value', this.newRank.points),
+                                        oninput: withAttr('value', this.newRank.points),
                                     }),
                                     m('input', {
                                         className: 'FormControl Ranks-name',
                                         value: this.newRank.name(),
                                         placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
-                                        oninput: m.withAttr('value', this.newRank.name),
+                                        oninput: withAttr('value', this.newRank.name),
                                     }),
                                     m('input', {
                                         className: 'FormControl Ranks-color',
                                         value: this.newRank.color(),
                                         placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
-                                        oninput: m.withAttr('value', this.newRank.color),
+                                        oninput: withAttr('value', this.newRank.color),
                                     }),
                                     Button.component({
                                         type: 'button',
@@ -136,7 +138,7 @@ export default class SettingsPage extends Page {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.rankAmt() || '',
                                 placeholder: 2,
-                                oninput: m.withAttr('value', this.values.rankAmt),
+                                oninput: withAttr('value', this.values.rankAmt),
                             }),
 
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.votes.title')),
@@ -146,53 +148,63 @@ export default class SettingsPage extends Page {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.iconName() || '',
                                 placeholder: 'thumbs',
-                                oninput: m.withAttr('value', this.values.iconName),
+                                oninput: withAttr('value', this.values.iconName),
                             }),
-                            Switch.component({
-                                state: this.values.autoUpvotePosts() || false,
-                                children: app.translator.trans('fof-gamification.admin.page.votes.auto_upvote'),
-                                onchange: this.values.autoUpvotePosts,
-                                className: 'votes-switch',
-                            }),
-                            Switch.component({
-                                state: this.values.rateLimit() || false,
-                                children: app.translator.trans('fof-gamification.admin.page.votes.rate_limit'),
-                                onchange: this.values.rateLimit,
-                                className: 'votes-switch',
-                            }),
-                            Switch.component({
-                                state: this.values.showVotesOnDiscussionPage() || false,
-                                children: app.translator.trans('fof-gamification.admin.page.votes.discussion_page'),
-                                onchange: this.values.showVotesOnDiscussionPage,
-                                className: 'votes-switch',
-                            }),
-                            Switch.component({
-                                state: this.values.useAlternateLayout() || false,
-                                children: app.translator.trans('fof-gamification.admin.page.votes.alternate_layout'),
-                                onchange: this.values.useAlternateLayout,
-                                className: 'votes-switch',
-                            }),
+                            Switch.component(
+                                {
+                                    state: this.values.autoUpvotePosts() || false,
+                                    onchange: this.values.autoUpvotePosts,
+                                    className: 'votes-switch',
+                                },
+                                app.translator.trans('fof-gamification.admin.page.votes.auto_upvote'),
+                            ),
+                            Switch.component(
+                                {
+                                    state: this.values.rateLimit() || false,
+                                    onchange: this.values.rateLimit,
+                                    className: 'votes-switch',
+                                },
+                                app.translator.trans('fof-gamification.admin.page.votes.rate_limit'),
+                            ),
+                            Switch.component(
+                                {
+                                    state: this.values.showVotesOnDiscussionPage() || false,
+                                    onchange: this.values.showVotesOnDiscussionPage,
+                                    className: 'votes-switch',
+                                },
+                                app.translator.trans('fof-gamification.admin.page.votes.discussion_page'),
+                            ),
+                            Switch.component(
+                                {
+                                    state: this.values.useAlternateLayout() || false,
+                                    onchange: this.values.useAlternateLayout,
+                                    className: 'votes-switch',
+                                },
+                                app.translator.trans('fof-gamification.admin.page.votes.alternate_layout'),
+                            ),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.points_title')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
                                 value: this.values.pointsPlaceholder() || '',
                                 placeholder: app.translator.trans('fof-gamification.admin.page.votes.points_placeholder') + '{points}',
-                                oninput: m.withAttr('value', this.values.pointsPlaceholder),
+                                oninput: withAttr('value', this.values.pointsPlaceholder),
                             }),
 
                             m('legend', {}, app.translator.trans('fof-gamification.admin.page.rankings.title')),
-                            Switch.component({
-                                state: this.values.customRankingImages() || false,
-                                children: app.translator.trans('fof-gamification.admin.page.rankings.enable'),
-                                onchange: this.values.customRankingImages,
-                                className: 'votes-switch',
-                            }),
+                            Switch.component(
+                                {
+                                    state: this.values.customRankingImages() || false,
+                                    onchange: this.values.customRankingImages,
+                                    className: 'votes-switch',
+                                },
+                                app.translator.trans('fof-gamification.admin.page.rankings.enable'),
+                            ),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.rankings.blocked.title')),
                             m('input', {
                                 className: 'FormControl Ranks-blocked',
                                 placeholder: app.translator.trans('fof-gamification.admin.page.rankings.blocked.placeholder'),
                                 value: this.values.blockedUsers() || '',
-                                oninput: m.withAttr('value', this.values.blockedUsers),
+                                oninput: withAttr('value', this.values.blockedUsers),
                             }),
                             m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.rankings.blocked.help')),
                             ...[1, 2, 3].map((num) => [
@@ -206,13 +218,15 @@ export default class SettingsPage extends Page {
                                 />,
                                 <br />,
                             ]),
-                            Button.component({
-                                type: 'submit',
-                                className: 'Button Button--primary Ranks-save',
-                                children: app.translator.trans('fof-gamification.admin.page.save_settings'),
-                                loading: this.loading,
-                                disabled: !this.changed(),
-                            }),
+                            Button.component(
+                                {
+                                    type: 'submit',
+                                    className: 'Button Button--primary Ranks-save',
+                                    loading: this.loading,
+                                    disabled: !this.changed(),
+                                },
+                                app.translator.trans('fof-gamification.admin.page.save_settings'),
+                            ),
                         ]),
                     ]),
                 ]),
@@ -279,8 +293,6 @@ export default class SettingsPage extends Page {
 
         this.loading = true;
 
-        app.alerts.dismiss(this.successAlert);
-
         const settings = {};
 
         this.switches.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
@@ -289,10 +301,7 @@ export default class SettingsPage extends Page {
         saveSettings(settings)
             .then(() => {
                 app.alerts.show(
-                    (this.successAlert = new Alert({
-                        type: 'success',
-                        children: app.translator.trans('core.admin.basics.saved_message'),
-                    }))
+                    { type: 'success' }, app.translator.trans('core.admin.basics.saved_message'),
                 );
             })
             .catch(() => {})

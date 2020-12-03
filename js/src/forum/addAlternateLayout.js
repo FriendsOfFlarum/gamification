@@ -6,6 +6,7 @@ import abbreviateNumber from 'flarum/utils/abbreviateNumber';
 
 import saveVote from './helpers/saveVote';
 import setting from './helpers/setting';
+import Stream from 'flarum/utils/Stream';
 
 const get = (discussion, key) => {
     const post = discussion.firstPost();
@@ -18,15 +19,15 @@ const get = (discussion, key) => {
 };
 
 export default () => {
-    extend(DiscussionListItem.prototype, 'init', function () {
-        this.voteLoading = m.prop(false);
+    extend(DiscussionListItem.prototype, 'oninit', function () {
+        this.voteLoading = Stream(false);
     });
 
     extend(DiscussionListItem.prototype, 'view', function (vdom) {
         if (!vdom || !vdom.children) return;
 
         const content = vdom.children.find((v) => v && v.attrs && v.attrs.className && v.attrs.className.includes('DiscussionListItem-content'));
-        const discussion = this.props.discussion;
+        const discussion = this.attrs.discussion;
         const post = discussion.firstPost();
 
         const hasUpvoted = get(discussion, 'hasUpvoted');

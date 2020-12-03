@@ -15,39 +15,42 @@ export default function () {
         for (const i in sortMap) {
             sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
         }
+        let dropDownLabel = sortOptions[app.search.params().sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0];
 
-        let dropDownLabel = sortOptions[this.params().sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0];
-
-        if (/^.*?\/hot/.test(m.route())) {
+        if (/^.*?\/hot/.test(m.route.get())) {
             dropDownLabel = app.translator.trans('core.forum.index_sort.hot_button');
         }
 
         items.add(
             'sort',
-            Dropdown.component({
-                buttonClassName: 'Button',
-                label: dropDownLabel,
-                children: Object.keys(sortOptions).map((value) => {
+            Dropdown.component(
+                {
+                    buttonClassName: 'Button',
+                    label: dropDownLabel,
+                },
+                Object.keys(sortOptions).map((value) => {
                     const label = sortOptions[value];
-                    let active = (this.params().sort || Object.keys(sortMap)[0]) === value;
+                    let active = (app.search.params().sort || Object.keys(sortMap)[0]) === value;
 
-                    if (/^.*?\/hot/.test(m.route()) && value === 'hot') {
+                    if (/^.*?\/hot/.test(m.route.get()) && value === 'hot') {
                         active = true;
                     }
 
-                    if (/^.*?\/hot/.test(m.route()) && value === 'latest') {
+                    if (/^.*?\/hot/.test(m.route.get()) && value === 'latest') {
                         active = false;
                         m.redraw();
                     }
 
-                    return Button.component({
-                        children: label,
-                        icon: active ? 'fas fa-check' : true,
-                        onclick: this.changeSort.bind(this, value),
-                        active: active,
-                    });
-                }),
-            })
+                    return Button.component(
+                        {
+                            icon: active ? 'fas fa-check' : true,
+                            onclick: this.changeSort.bind(this, value),
+                            active: active,
+                        },
+                        label
+                    );
+                })
+            )
         );
 
         return items;
@@ -56,21 +59,23 @@ export default function () {
     extend(IndexPage.prototype, 'navItems', function (items) {
         items.add(
             'rankings',
-            LinkButton.component({
-                href: app.route('rankings'),
-                children: app.translator.trans('fof-gamification.forum.nav.name'),
-                icon: 'fas fa-trophy',
-            }),
+            LinkButton.component(
+                {
+                    href: app.route('rankings'),
+                    icon: 'fas fa-trophy',
+                },
+                app.translator.trans('fof-gamification.forum.nav.name'),
+            ),
             80
         );
     });
 
     IndexPage.prototype.changeSort = function (sort) {
-        const params = this.params();
+        const params = app.search.params();
 
         if (sort === 'hot') {
-            m.route('/');
-            m.route(m.route() + 'hot');
+            m.route.set('/');
+            m.route.set(m.route.get() + 'hot');
         } else {
             if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
                 delete params.sort;
@@ -80,7 +85,7 @@ export default function () {
             if (params.filter === 'hot') {
                 delete params.filter;
             }
-            m.route(app.route('index', params));
+            m.route.set(app.route('index', params));
         }
     };
 
@@ -89,7 +94,7 @@ export default function () {
     });
 
     extend(DiscussionList.prototype, 'requestParams', function (params) {
-        if (this.props.params.filter === 'hot') {
+        if (this.attrs.params.filter === 'hot') {
             params.filter.q = ' is:hot';
         }
     });

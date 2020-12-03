@@ -9,11 +9,11 @@ import icon from 'flarum/helpers/icon';
 import setting from '../helpers/setting';
 
 export default class RankingsPage extends Page {
-    init() {
-        super.init();
+    oninit(vnode) {
+        super.oninit(vnode);
 
         if (!app.session.user || app.session.user.data.attributes.canViewRankingPage !== true) {
-            m.route('/');
+            m.route.set('/');
         }
 
         this.loading = true;
@@ -27,11 +27,13 @@ export default class RankingsPage extends Page {
         if (this.loading) {
             loading = LoadingIndicator.component();
         } else {
-            loading = Button.component({
-                children: app.translator.trans('core.forum.discussion_list.load_more_button'),
-                className: 'Button',
-                onclick: this.loadMore.bind(this),
-            });
+            loading = Button.component(
+                {
+                    className: 'Button',
+                    onclick: this.loadMore.bind(this),
+                },
+                app.translator.trans('core.forum.discussion_list.load_more_button'),
+            );
         }
 
         return (
@@ -151,7 +153,7 @@ export default class RankingsPage extends Page {
             return parseFloat(b.points()) - parseFloat(a.points());
         });
 
-        m.lazyRedraw();
+        m.redraw();
 
         return results;
     }

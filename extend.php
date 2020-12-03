@@ -11,8 +11,11 @@
 
 namespace FoF\Gamification;
 
+use Flarum\Database\AbstractModel;
 use Flarum\Extend;
 use Flarum\Post\Event\Saving;
+use Flarum\Post\Post;
+use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -46,6 +49,18 @@ return [
         ->patch('/ranks/{id}', 'ranks.update', Controllers\UpdateRankController::class)
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
+
+    (new Extend\Model(User::class))
+        ->belongsToMany('ranks', Rank::class, 'rank_users', null, null, null, null, 'ranks'),
+    (new Extend\Model(User::class))
+        ->belongsToMany('allVotes', User::class, 'post_votes', 'user_id'),
+    (new Extend\Model(Post::class))
+        ->belongsToMany('votes', User::class, 'post_votes', 'post_id', 'user_id'),
+    (new Extend\Model(Post::class))
+        ->relationship('upvotes', function (AbstractModel $model) {
+            return $model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')
+                ->where('value', '>', 0);
+        }),
 
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddRelationships::class);
