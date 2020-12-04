@@ -21,14 +21,14 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('admin'))
-        ->css(__DIR__ . '/resources/less/admin/extension.less')
-        ->js(__DIR__ . '/js/dist/admin.js'),
+        ->css(__DIR__.'/resources/less/admin/extension.less')
+        ->js(__DIR__.'/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js')
-        ->css(__DIR__ . '/resources/less/forum/extension.less')
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->css(__DIR__.'/resources/less/forum/extension.less')
         ->route('/rankings', 'rankings'),
 
-    new Extend\Locales(__DIR__ . '/resources/locale'),
+    new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(User::class))
         ->belongsToMany('allVotes', User::class, 'user_id'),
@@ -44,7 +44,6 @@ return [
 
     (new Extend\Model(Post::class))
         ->belongsToMany('post_votes', User::class, 'post_id', 'user_id'),
-
 
     (new ExtensionSettings())
         ->setPrefix('fof-gamification.')
