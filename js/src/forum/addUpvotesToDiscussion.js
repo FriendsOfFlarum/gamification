@@ -14,7 +14,7 @@ export default function () {
             'discussion-votes',
             <span className="DiscussionListItem-votes" title={app.translator.trans('fof-gamification.forum.votes')}>
                 {icon('far fa-thumbs-up')}
-                {abbreviateNumber(this.props.discussion.votes())}
+                {abbreviateNumber(this.attrs.discussion.votes())}
             </span>,
             20
         );
