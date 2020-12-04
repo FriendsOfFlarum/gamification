@@ -13,26 +13,46 @@ namespace FoF\Gamification;
 
 use Flarum\Extend;
 use Flarum\Post\Event\Saving;
+use Flarum\Post\Post;
+use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('admin'))
-        ->css(__DIR__.'/resources/less/admin/extension.less')
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->css(__DIR__ . '/resources/less/admin/extension.less')
+        ->js(__DIR__ . '/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/resources/less/forum/extension.less')
-        ->route('/rankings', 'rankings')
-        ->route('/hot', 'hot'),
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/resources/less/forum/extension.less')
+        ->route('/rankings', 'rankings'),
 
-    new Extend\Locales(__DIR__.'/resources/locale'),
+    new Extend\Locales(__DIR__ . '/resources/locale'),
+
+    (new Extend\Model(User::class))
+        ->belongsToMany('allVotes', User::class, 'user_id'),
+
+    (new Extend\Model(User::class))
+        ->belongsToMany('ranks', Rank::class, 'rank_users'),
+
+    (new Extend\Model(Post::class))
+        ->relationship('post_votes', function ($post) {
+            return $post->belongsToMany(User::class, 'post_id', 'user_id', null, null, 'upvotes')
+                ->where('value', '>', 0);
+        }),
+
+    (new Extend\Model(Post::class))
+        ->belongsToMany('post_votes', User::class, 'post_id', 'user_id'),
+
 
     (new ExtensionSettings())
         ->setPrefix('fof-gamification.')
         ->addKeys([
-            'iconName', 'pointsPlaceholder', 'showVotesOnDiscussionPage', 'rankAmt',
+            'iconName',
+            'pointsPlaceholder',
+            'showVotesOnDiscussionPage',
+            'rankAmt',
             'customRankingImages',
             'useAlternateLayout',
         ]),
@@ -48,7 +68,7 @@ return [
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
 
     function (Dispatcher $events) {
-        $events->subscribe(Listeners\AddRelationships::class);
+        $events->subscribe(Listeners\AddData::class);
         $events->subscribe(Listeners\EventHandlers::class);
         $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
 

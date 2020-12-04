@@ -16,7 +16,7 @@ export default function () {
                     {
                         icon: 'fas fa-thumbs-up',
                         onclick: () => {
-                            app.modal.show(new VotesModal({ post }));
+                            app.modal.show(VotesModal, { post });
                         },
                     },
                     app.translator.trans('fof-gamification.forum.mod_item')
@@ -26,7 +26,7 @@ export default function () {
     });
 
     extend(CommentPost.prototype, 'actionItems', function (items) {
-        const post = this.props.post;
+        const post = this.attrs.post;
         const hasDownvoted = post.hasDownvoted();
         const hasUpvoted = post.hasUpvoted();
 

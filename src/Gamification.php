@@ -45,6 +45,7 @@ class Gamification
         $date = strtotime($discussion->start_time);
 
         $s = $discussion->votes;
+
         $order = log10(max(abs($s), 1));
 
         if ($s > 0) {
@@ -57,7 +58,7 @@ class Gamification
 
         $seconds = $date - 1134028003;
 
-        $discussion->hotness = round($sign * $order + $seconds / 45000, 10);
+        $discussion->hotness = round($order + (($sign * $seconds)/45000), 10);
 
         $discussion->save();
     }

@@ -12,6 +12,7 @@
 namespace FoF\Gamification\Listeners;
 
 use Carbon\Carbon;
+use Flarum\Foundation\DispatchEventsTrait;
 use Flarum\Notification\Notification;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Saving;
@@ -30,6 +31,7 @@ use Pusher;
 
 class SaveVotesToDatabase
 {
+    use DispatchEventsTrait;
     use AssertPermissionTrait;
 
     /**
@@ -184,7 +186,7 @@ class SaveVotesToDatabase
             );
         }
 
-        $this->events->fire(
+        $this->events->dispatch(
             new PostWasVoted($vote)
         );
 

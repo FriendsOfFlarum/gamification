@@ -16,8 +16,7 @@ const update = (postId) => {
 };
 
 export default () => {
-    extend(DiscussionPage.prototype, 'config', function (x, isInitialized, context) {
-        if (isInitialized) return;
+    extend(DiscussionPage.prototype, 'oncreate', function () {
 
         if (app.pusher) {
             app.pusher.then((channels) => {
@@ -29,9 +28,15 @@ export default () => {
 
                     update(post.id());
                 });
-
-                extend(context, 'onunload', () => channels.main.unbind('newVote'));
             });
         }
+    });
+
+    extend(DiscussionPage.prototype, 'onremove', function () {
+      if (app.pusher) {
+        app.pusher.then((channels) => {
+          channels.main.unbind('newVote');
+        })
+      }
     });
 };

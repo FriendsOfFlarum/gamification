@@ -38,7 +38,7 @@ app.initializers.add('fof-gamification', (app) => {
 
     app.notificationComponents.vote = VoteNotification;
 
-    app.routes.rankings = { path: '/rankings', component: RankingsPage.component() };
+    app.routes.rankings = { path: '/rankings', component: RankingsPage };
 
     addVoteButtons();
     addHotnessSort();

@@ -4,7 +4,7 @@ import AdminLinkButton from 'flarum/components/AdminLinkButton';
 import SettingsPage from './components/SettingsPage';
 
 export default function () {
-    app.routes['fof-gamification'] = { path: '/fof/gamification', component: SettingsPage.component() };
+    app.routes['fof-gamification'] = { path: '/fof/gamification', component: SettingsPage };
 
     app.extensionSettings['fof-gamification'] = () => m.route(app.route('fof-gamification'));
 
@@ -14,9 +14,8 @@ export default function () {
             AdminLinkButton.component({
                 href: app.route('fof-gamification'),
                 icon: 'fas fa-thumbs-up',
-                children: 'Gamification',
                 description: app.translator.trans('fof-gamification.admin.nav.desc'),
-            })
+            }, 'Gamification')
         );
     });
 }

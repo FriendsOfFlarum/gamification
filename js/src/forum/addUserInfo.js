@@ -33,7 +33,7 @@ export default function () {
 
     extend(UserCard.prototype, 'infoItems', function (items) {
         const placeholder = setting('pointsPlaceholder');
-        const pts = String(this.props.user.points());
+        const pts = String(this.attrs.user.points());
         let points;
 
         if (placeholder) {
@@ -46,7 +46,7 @@ export default function () {
     });
 
     extend(UserCard.prototype, 'view', function (vnode) {
-        const user = this.props.user;
+        const user = this.attrs.user;
         const profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
         const amt = Number(setting('rankAmt'));
 
@@ -87,7 +87,7 @@ export default function () {
     });
 
     extend(PostUser.prototype, 'view', function (vnode) {
-        const post = this.props.post;
+        const post = this.attrs.post;
         const user = post.user();
 
         if (!user) {
@@ -107,5 +107,9 @@ export default function () {
                     }
                 })
         );
+
+      header_node.children = header_node.children.filter(function (el) {
+        return el.tag !== undefined;
+      });
     });
 }

@@ -1,7 +1,7 @@
 import { extend } from 'flarum/extend';
 import IndexPage from 'flarum/components/IndexPage';
 import ItemList from 'flarum/utils/ItemList';
-import DiscussionList from 'flarum/components/DiscussionList';
+import DiscussionListState from 'flarum/states/DiscussionListState';
 import Dropdown from 'flarum/components/Dropdown';
 import Button from 'flarum/components/Button';
 import LinkButton from 'flarum/components/LinkButton';
@@ -9,16 +9,16 @@ import LinkButton from 'flarum/components/LinkButton';
 export default function () {
     IndexPage.prototype.viewItems = function () {
         const items = new ItemList();
-        const sortMap = app.cache.discussionList.sortMap();
+        const sortMap = app.discussions.sortMap();
 
         const sortOptions = {};
         for (const i in sortMap) {
             sortOptions[i] = app.translator.trans('core.forum.index_sort.' + i + '_button');
         }
 
-        let dropDownLabel = sortOptions[this.params().sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0];
+        let dropDownLabel = sortOptions[app.search.params().sort] || Object.keys(sortMap).map((key) => sortOptions[key])[0];
 
-        if (/^.*?\/hot/.test(m.route())) {
+        if (/^.*?\/hot/.test(m.route.get())) {
             dropDownLabel = app.translator.trans('core.forum.index_sort.hot_button');
         }
 
@@ -27,27 +27,25 @@ export default function () {
             Dropdown.component({
                 buttonClassName: 'Button',
                 label: dropDownLabel,
-                children: Object.keys(sortOptions).map((value) => {
-                    const label = sortOptions[value];
-                    let active = (this.params().sort || Object.keys(sortMap)[0]) === value;
+            }, Object.keys(sortOptions).map((value) => {
+              const label = sortOptions[value];
+              let active = (app.search.params().sort || Object.keys(sortMap)[0]) === value;
 
-                    if (/^.*?\/hot/.test(m.route()) && value === 'hot') {
-                        active = true;
-                    }
+              if (/^.*?\/hot/.test(m.route.get()) && value === 'hot') {
+                active = true;
+              }
 
-                    if (/^.*?\/hot/.test(m.route()) && value === 'latest') {
-                        active = false;
-                        m.redraw();
-                    }
+              if (/^.*?\/hot/.test(m.route.get()) && value === 'latest') {
+                active = false;
+                m.redraw();
+              }
 
-                    return Button.component({
-                        children: label,
-                        icon: active ? 'fas fa-check' : true,
-                        onclick: this.changeSort.bind(this, value),
-                        active: active,
-                    });
-                }),
-            })
+              return Button.component({
+                icon: active ? 'fas fa-check' : true,
+                onclick: app.search.changeSort.bind(app.search, value),
+                active: active,
+              }, label);
+            }))
         );
 
         return items;
@@ -58,39 +56,13 @@ export default function () {
             'rankings',
             LinkButton.component({
                 href: app.route('rankings'),
-                children: app.translator.trans('fof-gamification.forum.nav.name'),
                 icon: 'fas fa-trophy',
-            }),
+            }, app.translator.trans('fof-gamification.forum.nav.name')),
             80
         );
     });
 
-    IndexPage.prototype.changeSort = function (sort) {
-        const params = this.params();
-
-        if (sort === 'hot') {
-            m.route('/');
-            m.route(m.route() + 'hot');
-        } else {
-            if (sort === Object.keys(app.cache.discussionList.sortMap())[0]) {
-                delete params.sort;
-            } else {
-                params.sort = sort;
-            }
-            if (params.filter === 'hot') {
-                delete params.filter;
-            }
-            m.route(app.route('index', params));
-        }
-    };
-
-    extend(DiscussionList.prototype, 'sortMap', function (map) {
-        map.hot = 'hot';
-    });
-
-    extend(DiscussionList.prototype, 'requestParams', function (params) {
-        if (this.props.params.filter === 'hot') {
-            params.filter.q = ' is:hot';
-        }
+    extend(DiscussionListState.prototype, 'sortMap', function (map) {
+        map.hot = '-hotness';
     });
 }

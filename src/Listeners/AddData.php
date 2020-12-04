@@ -17,17 +17,14 @@ use Flarum\Api\Event\WillGetData;
 use Flarum\Api\Event\WillSerializeData;
 use Flarum\Api\Serializer;
 use Flarum\Event\GetApiRelationship;
-use Flarum\Event\GetModelRelationship;
-use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\User;
 use FoF\Gamification\Api\Controllers\OrderByPointsController;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class AddRelationships
+class AddData
 {
     /**
      * @var SettingsRepositoryInterface
@@ -44,36 +41,10 @@ class AddRelationships
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(GetModelRelationship::class, [$this, 'getModelRelationship']);
         $events->listen(WillSerializeData::class, [$this, 'loadRanksRelationship']);
         $events->listen(GetApiRelationship::class, [$this, 'getApiAttributes']);
         $events->listen(Serializing::class, [$this, 'prepareApiAttributes']);
         $events->listen(WillGetData::class, [$this, 'includeLikes']);
-    }
-
-    /**
-     * @param GetModelRelationship $event
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany|null
-     */
-    public function getModelRelationship(GetModelRelationship $event)
-    {
-        if ($event->isRelationship(User::class, 'allVotes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'user_id');
-        }
-
-        if ($event->isRelationship(Post::class, 'votes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id');
-        }
-
-        if ($event->isRelationship(Post::class, 'upvotes')) {
-            return $event->model->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')
-                ->where('value', '>', 0);
-        }
-
-        if ($event->isRelationship(User::class, 'ranks')) {
-            return $event->model->belongsToMany(Rank::class, 'rank_users', null, null, null, null, 'ranks');
-        }
     }
 
     /**
@@ -167,6 +138,9 @@ class AddRelationships
         }
         if ($event->isController(Controller\ShowDiscussionController::class)) {
             $event->addInclude('posts.user.ranks');
+        }
+        if ($event->isController(Controller\ListDiscussionsController::class)) {
+            $event->addSortField('hotness');
         }
         if ($event->isController(Controller\ListPostsController::class)
             || $event->isController(Controller\ShowPostController::class)
