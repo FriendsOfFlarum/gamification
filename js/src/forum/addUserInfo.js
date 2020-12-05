@@ -17,7 +17,6 @@ export default function () {
         const arr = [];
 
         if (node && node.children) {
-            console.log(node.children);
             const nodeInChildren = node.children.find(matchClass(className));
 
             if (nodeInChildren) {
