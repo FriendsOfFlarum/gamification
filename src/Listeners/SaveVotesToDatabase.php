@@ -31,7 +31,7 @@ use Pusher;
 class SaveVotesToDatabase
 {
     use DispatchEventsTrait;
-    
+
     /**
      * @var Dispatcher
      */
