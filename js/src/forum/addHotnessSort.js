@@ -24,28 +24,34 @@ export default function () {
 
         items.add(
             'sort',
-            Dropdown.component({
-                buttonClassName: 'Button',
-                label: dropDownLabel,
-            }, Object.keys(sortOptions).map((value) => {
-              const label = sortOptions[value];
-              let active = (app.search.params().sort || Object.keys(sortMap)[0]) === value;
+            Dropdown.component(
+                {
+                    buttonClassName: 'Button',
+                    label: dropDownLabel,
+                },
+                Object.keys(sortOptions).map((value) => {
+                    const label = sortOptions[value];
+                    let active = (app.search.params().sort || Object.keys(sortMap)[0]) === value;
 
-              if (/^.*?\/hot/.test(m.route.get()) && value === 'hot') {
-                active = true;
-              }
+                    if (/^.*?\/hot/.test(m.route.get()) && value === 'hot') {
+                        active = true;
+                    }
 
-              if (/^.*?\/hot/.test(m.route.get()) && value === 'latest') {
-                active = false;
-                m.redraw();
-              }
+                    if (/^.*?\/hot/.test(m.route.get()) && value === 'latest') {
+                        active = false;
+                        m.redraw();
+                    }
 
-              return Button.component({
-                icon: active ? 'fas fa-check' : true,
-                onclick: app.search.changeSort.bind(app.search, value),
-                active: active,
-              }, label);
-            }))
+                    return Button.component(
+                        {
+                            icon: active ? 'fas fa-check' : true,
+                            onclick: app.search.changeSort.bind(app.search, value),
+                            active: active,
+                        },
+                        label
+                    );
+                })
+            )
         );
 
         return items;
@@ -54,10 +60,13 @@ export default function () {
     extend(IndexPage.prototype, 'navItems', function (items) {
         items.add(
             'rankings',
-            LinkButton.component({
-                href: app.route('rankings'),
-                icon: 'fas fa-trophy',
-            }, app.translator.trans('fof-gamification.forum.nav.name')),
+            LinkButton.component(
+                {
+                    href: app.route('rankings'),
+                    icon: 'fas fa-trophy',
+                },
+                app.translator.trans('fof-gamification.forum.nav.name')
+            ),
             80
         );
     });

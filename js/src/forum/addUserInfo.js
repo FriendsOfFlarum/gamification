@@ -16,7 +16,7 @@ export default function () {
     const findMatchClass = function (node, className) {
         const arr = [];
 
-        if (node && node.children) {
+        if (node && node.children && Array.isArray(node.children)) {
             const nodeInChildren = node.children.find(matchClass(className));
 
             if (nodeInChildren) {
@@ -37,7 +37,7 @@ export default function () {
         let points;
 
         if (placeholder) {
-            points = placeholder.replace('{points}', pts);
+            points = <div>{placeholder.replace('{points}', pts)}</div>;
         } else {
             points = app.translator.trans('fof-gamification.forum.user.points', { points: pts });
         }
@@ -70,16 +70,16 @@ export default function () {
                     </ul>
                 );
             } else {
-                badges_node.children.push(
-                    user
-                        .ranks()
-                        .reverse()
-                        .map((rank, i) => {
-                            if (!amt || i < amt) {
-                                return <li className="User-Rank">{rankLabel(rank)}</li>;
-                            }
-                        })
-                );
+                user.ranks()
+                    .reverse()
+                    .map((rank, i) => {
+                        if (!amt || i < amt) {
+                            return <li className="User-Rank">{rankLabel(rank)}</li>;
+                        }
+                    })
+                    .forEach((rank) => {
+                        badges_node.children.push(rank);
+                    });
             }
         }
 
@@ -108,8 +108,8 @@ export default function () {
                 })
         );
 
-      header_node.children = header_node.children.filter(function (el) {
-        return el.tag !== undefined;
-      });
+        header_node.children = header_node.children.filter(function (el) {
+            return el.tag !== undefined;
+        });
     });
 }

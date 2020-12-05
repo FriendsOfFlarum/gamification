@@ -11,11 +11,14 @@ export default function () {
     extend(AdminNav.prototype, 'items', (items) => {
         items.add(
             'fof-gamification',
-            AdminLinkButton.component({
-                href: app.route('fof-gamification'),
-                icon: 'fas fa-thumbs-up',
-                description: app.translator.trans('fof-gamification.admin.nav.desc'),
-            }, 'Gamification')
+            AdminLinkButton.component(
+                {
+                    href: app.route('fof-gamification'),
+                    icon: 'fas fa-thumbs-up',
+                    description: app.translator.trans('fof-gamification.admin.nav.desc'),
+                },
+                'Gamification'
+            )
         );
     });
 }

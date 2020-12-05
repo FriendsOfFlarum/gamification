@@ -17,7 +17,6 @@ const update = (postId) => {
 
 export default () => {
     extend(DiscussionPage.prototype, 'oncreate', function () {
-
         if (app.pusher) {
             app.pusher.then((channels) => {
                 channels.main.bind('newVote', (data) => {
@@ -33,10 +32,10 @@ export default () => {
     });
 
     extend(DiscussionPage.prototype, 'onremove', function () {
-      if (app.pusher) {
-        app.pusher.then((channels) => {
-          channels.main.unbind('newVote');
-        })
-      }
+        if (app.pusher) {
+            app.pusher.then((channels) => {
+                channels.main.unbind('newVote');
+            });
+        }
     });
 };
