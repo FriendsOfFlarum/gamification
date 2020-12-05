@@ -11,14 +11,11 @@
 
 namespace FoF\Gamification\Commands;
 
-use Flarum\User\AssertPermissionTrait;
 use Flarum\User\Exception\PermissionDeniedException;
 use FoF\Gamification\Rank;
 
 class DeleteRankHandler
 {
-    use AssertPermissionTrait;
-
     /**
      * @param DeleteRank $command
      *
@@ -28,9 +25,7 @@ class DeleteRankHandler
      */
     public function handle(DeleteRank $command)
     {
-        $actor = $command->actor;
-
-        $this->assertAdmin($actor);
+        $command->actor->assertAdmin();
 
         $rank = Rank::where('id', $command->rankId)->firstOrFail();
 

@@ -66,11 +66,12 @@ return [
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
 
+    (new Extend\Event())
+        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class),
+
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddData::class);
         $events->subscribe(Listeners\EventHandlers::class);
         $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
-
-        $events->listen(Saving::class, Listeners\SaveVotesToDatabase::class);
     },
 ];

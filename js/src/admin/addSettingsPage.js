@@ -6,7 +6,7 @@ import SettingsPage from './components/SettingsPage';
 export default function () {
     app.routes['fof-gamification'] = { path: '/fof/gamification', component: SettingsPage };
 
-    app.extensionSettings['fof-gamification'] = () => m.route(app.route('fof-gamification'));
+    app.extensionSettings['fof-gamification'] = () => m.route.set(app.route('fof-gamification'));
 
     extend(AdminNav.prototype, 'items', (items) => {
         items.add(

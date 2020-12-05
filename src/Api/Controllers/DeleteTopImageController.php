@@ -13,8 +13,9 @@ namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractDeleteController;
 use Flarum\Foundation\Application;
+use Flarum\Foundation\Paths;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\EmptyResponse;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -22,25 +23,23 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteTopImageController extends AbstractDeleteController
 {
-    use AssertPermissionTrait;
-
     /**
      * @var SettingsRepositoryInterface
      */
     protected $settings;
 
     /**
-     * @var Application
+     * @var Paths
      */
-    protected $app;
+    protected $paths;
 
     /**
      * @param SettingsRepositoryInterface $settings
      */
-    public function __construct(SettingsRepositoryInterface $settings, Application $app)
+    public function __construct(SettingsRepositoryInterface $settings, Paths $paths)
     {
         $this->settings = $settings;
-        $this->app = $app;
+        $this->paths = $paths;
     }
 
     /**
@@ -48,15 +47,15 @@ class DeleteTopImageController extends AbstractDeleteController
      */
     protected function delete(ServerRequestInterface $request)
     {
-        $id = array_get($request->getQueryParams(), 'id');
+        $id = Arr::get($request->getQueryParams(), 'id');
 
-        $this->assertAdmin($request->getAttribute('actor'));
+        $request->getAttribute('actor')->assertAdmin();
 
         $path = $this->settings->get($key = "fof-gamification.topimage{$id}_path");
 
         $this->settings->set($key, null);
 
-        $uploadDir = new Filesystem(new Local($this->app->publicPath().'/assets'));
+        $uploadDir = new Filesystem(new Local($this->paths->public.'/assets'));
 
         if ($uploadDir->has($path)) {
             $uploadDir->delete($path);

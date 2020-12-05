@@ -13,7 +13,6 @@ namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Discussion\Discussion;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\AssertPermissionTrait;
 use FoF\Gamification\Gamification;
 use FoF\Gamification\Likes;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -23,8 +22,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ConvertLikesController implements RequestHandlerInterface
 {
-    use AssertPermissionTrait;
-
     /**
      * @var SettingsRepositoryInterface
      */

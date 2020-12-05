@@ -15,6 +15,7 @@ use Flarum\Api\Controller\AbstractCreateController;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Commands\CreateRank;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -44,7 +45,7 @@ class CreateRankController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         return $this->bus->dispatch(
-            new CreateRank($request->getAttribute('actor'), array_get($request->getParsedBody(), 'data', []))
+            new CreateRank($request->getAttribute('actor'), Arr::get($request->getParsedBody(), 'data', []))
         );
     }
 }
