@@ -12,7 +12,6 @@
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractDeleteController;
-use Flarum\Foundation\Application;
 use Flarum\Foundation\Paths;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Support\Arr;
