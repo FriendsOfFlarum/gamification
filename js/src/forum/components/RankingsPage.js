@@ -15,7 +15,7 @@ export default class RankingsPage extends Page {
         super.oninit(vnode);
 
         if (!app.session.user || app.session.user.data.attributes.canViewRankingPage !== true) {
-            m.route('/');
+            m.route.set('/');
         }
 
         this.loading = true;
