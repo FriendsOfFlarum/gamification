@@ -37,13 +37,13 @@ return [
         ->belongsToMany('ranks', Rank::class, 'rank_users'),
 
     (new Extend\Model(Post::class))
-        ->relationship('post_votes', function ($post) {
-            return $post->belongsToMany(User::class, 'post_id', 'user_id', null, null, 'upvotes')
+        ->relationship('upvotes', function (Post $post) {
+            return $post->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')
                 ->where('value', '>', 0);
         }),
 
     (new Extend\Model(Post::class))
-        ->belongsToMany('post_votes', User::class, 'post_id', 'user_id'),
+        ->belongsToMany('votes', User::class, 'post_votes', 'post_id', 'user_id'),
 
     (new ExtensionSettings())
         ->setPrefix('fof-gamification.')

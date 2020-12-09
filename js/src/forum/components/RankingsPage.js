@@ -8,6 +8,7 @@ import listItems from 'flarum/helpers/listItems';
 import username from 'flarum/helpers/username';
 import icon from 'flarum/helpers/icon';
 import setting from '../helpers/setting';
+import Link from 'flarum/components/Link';
 
 export default class RankingsPage extends Page {
     oninit(vnode) {
@@ -72,10 +73,10 @@ export default class RankingsPage extends Page {
                                         <td>
                                             <div className="PostUser">
                                                 <h3 className="rankings-info">
-                                                    <a href={app.route.user(user)} config={m.route}>
+                                                    <Link href={app.route.user(user)}>
                                                         {i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : ''}{' '}
                                                         {username(user)}
-                                                    </a>
+                                                    </Link>
                                                 </h3>
                                             </div>
                                         </td>

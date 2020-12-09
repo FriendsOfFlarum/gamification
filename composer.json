@@ -31,10 +31,18 @@
     ],
     "support": {
         "issues": "https://github.com/FriendsOfFlarum/gamification/issues",
-        "source": "https://github.com/FriendsOfFlarum/gamification"
+        "source": "https://github.com/FriendsOfFlarum/gamification",
+        "forum": "https://discuss.flarum.org/d/20671"
     },
+    "homepage": "https://friendsofflarum.org",
+    "funding": [
+        {
+            "type": "website",
+            "url": "https://opencollective.com/fof/donate"
+        }
+    ],
     "require": {
-        "flarum/core": "~0.1.0-beta.14",
+        "flarum/core": ">=0.1.0-beta.14 <0.1.0-beta.15",
         "fof/extend": ">=0.3.0"
     },
     "replace": {
@@ -48,6 +56,7 @@
     "extra": {
         "flarum-extension": {
             "title": "FoF Gamification",
+            "category": "discussion",
             "icon": {
                 "name": "fas fa-thumbs-up",
                 "backgroundColor": "#e74c3c",

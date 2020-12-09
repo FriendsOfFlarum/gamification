@@ -2,6 +2,7 @@ import Modal from 'flarum/components/Modal';
 import LoadingIndicator from 'flarum/components/LoadingIndicator';
 import avatar from 'flarum/helpers/avatar';
 import username from 'flarum/helpers/username';
+import Link from 'flarum/components/Link';
 
 export default class VotesModal extends Modal {
     className() {
@@ -44,9 +45,9 @@ export default class VotesModal extends Modal {
                                 <legend>{app.translator.trans(`fof-gamification.forum.modal.${type}_label`)}</legend>
                                 {voters.map((user) => (
                                     <li>
-                                        <a href={app.route.user(user)} config={m.route}>
+                                        <Link href={app.route.user(user)}>
                                             {avatar(user)} {username(user)}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </div>
