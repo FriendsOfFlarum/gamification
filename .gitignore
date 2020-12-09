@@ -6,5 +6,4 @@ node_modules
 bower_components
 .idea
 .floo*
-package-lock.json
 js/dist
