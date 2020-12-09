@@ -25,7 +25,6 @@ app.initializers.add('fof-gamification', (app) => {
             icon: 'fas fa-trophy',
             label: app.translator.trans('fof-gamification.admin.permissions.see_ranking_page'),
             permission: 'fof.gamification.viewRankingPage',
-            allowGuest: true,
         });
     });
 

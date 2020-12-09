@@ -58,6 +58,9 @@ export default function () {
     };
 
     extend(IndexPage.prototype, 'navItems', function (items) {
+        if (!app.session.user || app.session.user.data.attributes.canViewRankingPage !== true) {
+            return;
+        }
         items.add(
             'rankings',
             LinkButton.component(
