@@ -42,8 +42,8 @@
         }
     ],
     "require": {
-        "flarum/core": ">=0.1.0-beta.14 <0.1.0-beta.15",
-        "fof/extend": ">=0.3.0"
+        "flarum/core": ">=0.1.0-beta.15 <0.1.0-beta.16",
+        "fof/extend": ">=0.3.1"
     },
     "replace": {
         "reflar/gamification": "*"

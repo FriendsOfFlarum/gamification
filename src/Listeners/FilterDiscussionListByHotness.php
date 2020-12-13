@@ -13,22 +13,13 @@ namespace FoF\Gamification\Listeners;
 
 use Flarum\Event\ConfigureDiscussionGambits;
 use FoF\Gamification\Gambit\HotGambit;
-use Illuminate\Contracts\Events\Dispatcher;
 
 class FilterDiscussionListByHotness
 {
     /**
-     * @param Dispatcher $events
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        $events->listen(ConfigureDiscussionGambits::class, [$this, 'ConfigureDiscussionGambits']);
-    }
-
-    /**
      * @param ConfigureDiscussionGambits $event
      */
-    public function ConfigureDiscussionGambits(ConfigureDiscussionGambits $event)
+    public function handle(ConfigureDiscussionGambits $event)
     {
         $event->gambits->add(HotGambit::class);
     }
