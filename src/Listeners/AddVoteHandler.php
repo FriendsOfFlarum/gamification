@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) 2020 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification\Listeners;
 
 use Flarum\Post\Event\Posted;
@@ -19,7 +28,7 @@ class AddVoteHandler
      * @var Gamification
      */
     protected $gamification;
-    
+
     /**
      * EventHandlers constructor.
      *
@@ -31,7 +40,7 @@ class AddVoteHandler
         $this->settings = $settings;
         $this->gamification = $gamification;
     }
-    
+
     public function handle(Posted $event)
     {
         if ('0' !== $this->settings->get('fof-gamification.autoUpvotePosts') && $event->post->exists()) {

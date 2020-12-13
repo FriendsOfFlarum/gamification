@@ -27,14 +27,14 @@ use FoF\Gamification\Notification\VoteBlueprint;
 
 return [
     (new Extend\Frontend('admin'))
-        ->css(__DIR__ . '/resources/less/admin/extension.less')
-        ->js(__DIR__ . '/js/dist/admin.js'),
+        ->css(__DIR__.'/resources/less/admin/extension.less')
+        ->js(__DIR__.'/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js')
-        ->css(__DIR__ . '/resources/less/forum/extension.less')
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->css(__DIR__.'/resources/less/forum/extension.less')
         ->route('/rankings', 'rankings'),
 
-    new Extend\Locales(__DIR__ . '/resources/locale'),
+    new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(User::class))
         ->belongsToMany('allVotes', User::class, 'user_id'),
@@ -104,6 +104,7 @@ return [
         ->mutate(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {
             $attributes['canViewRankingPage'] = (bool) $serializer->getActor()->can('fof.gamification.viewRankingPage');
             $attributes['points'] = $user->votes;
+
             return $attributes;
         }),
 
