@@ -1,34 +1,27 @@
 import app from 'flarum/app';
-import { extend } from 'flarum/extend';
-import PermissionGrid from 'flarum/components/PermissionGrid';
-import addSettingsPage from './addSettingsPage';
+import SettingsPage from './components/SettingsPage';
 import Rank from '../common/models/Rank';
 
 app.initializers.add('fof-gamification', (app) => {
     app.store.models.ranks = Rank;
 
-    extend(PermissionGrid.prototype, 'replyItems', (items) => {
-        items.add('Vote', {
+    app.extensionData.for('fof-gamification')
+        .registerPermission({
             icon: 'fas fa-thumbs-up',
             label: app.translator.trans('fof-gamification.admin.permissions.vote_label'),
             permission: 'discussion.votePosts',
-        });
-    });
-
-    extend(PermissionGrid.prototype, 'viewItems', (items) => {
-        items.add('canSeeVotes', {
+        }, 'reply')
+        .registerPermission({
             icon: 'fas fa-info-circle',
             label: app.translator.trans('fof-gamification.admin.permissions.see_votes_label'),
             permission: 'discussion.canSeeVotes',
-        });
-        items.add('canViewRankingPage', {
+        }, 'view')
+        .registerPermission({
             icon: 'fas fa-trophy',
             label: app.translator.trans('fof-gamification.admin.permissions.see_ranking_page'),
             permission: 'fof.gamification.viewRankingPage',
-        });
-    });
-
-    addSettingsPage();
+        }, 'view')
+        .registerPage(SettingsPage);
 });
 
 export * from '../common/helpers';

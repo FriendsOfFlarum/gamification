@@ -11,18 +11,13 @@
 
 namespace FoF\Gamification\Listeners;
 
-use Flarum\Api\Serializer\BasicPostSerializer;
-use Flarum\Event\ConfigureNotificationTypes;
-use Flarum\Post\Event\Deleting;
 use Flarum\Post\Event\Posted;
 use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Gamification\Gamification;
-use FoF\Gamification\Notification\VoteBlueprint;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
-use Illuminate\Contracts\Events\Dispatcher;
 
-class EventHandlers
+class AddVoteHandler
 {
     /**
      * @var SettingsRepositoryInterface
@@ -33,11 +28,6 @@ class EventHandlers
      * @var Gamification
      */
     protected $gamification;
-
-    /**
-     * @var Vote
-     */
-    protected $vote;
 
     /**
      * EventHandlers constructor.
@@ -51,20 +41,7 @@ class EventHandlers
         $this->gamification = $gamification;
     }
 
-    /**
-     * @param Dispatcher $events
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        $events->listen(ConfigureNotificationTypes::class, [$this, 'registerNotificationType']);
-        $events->listen(Posted::class, [$this, 'addVote']);
-        $events->listen(Deleting::class, [$this, 'removeVote']);
-    }
-
-    /**
-     * @param Posted $event
-     */
-    public function addVote(Posted $event)
+    public function handle(Posted $event)
     {
         if ('0' !== $this->settings->get('fof-gamification.autoUpvotePosts') && $event->post->exists()) {
             $actor = $event->actor;
@@ -84,34 +61,6 @@ class EventHandlers
                 $actor->ranks()->detach();
                 $actor->ranks()->attach($ranks);
             }
-        }
-    }
-
-    /**
-     * @param ConfigureNotificationTypes $event
-     */
-    public function registerNotificationType(ConfigureNotificationTypes $event)
-    {
-        $event->add(VoteBlueprint::class, BasicPostSerializer::class, ['alert']);
-    }
-
-    /**
-     * @param Deleting $event
-     */
-    public function removeVote(Deleting $event)
-    {
-        $post = $event->post;
-
-        $voteNumber = Vote::calculate(['post_id' => $post->id]);
-        $user = $event->post->user;
-        $user->votes = $user->votes - $voteNumber;
-
-        $user->save();
-
-        $ranks = Rank::whereBetween('points', [$user->votes + 1, $user->votes + 2])->get();
-
-        if (null !== $ranks) {
-            $user->ranks()->detach($ranks);
         }
     }
 }

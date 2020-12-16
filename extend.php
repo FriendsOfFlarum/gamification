@@ -11,13 +11,19 @@
 
 namespace FoF\Gamification;
 
+use Flarum\Api\Controller;
+use Flarum\Api\Serializer;
+use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Extend;
+use Flarum\Post\Event\Deleted;
+use Flarum\Post\Event\Posted;
 use Flarum\Post\Event\Saving;
 use Flarum\Post\Post;
 use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
-use Illuminate\Contracts\Events\Dispatcher;
+use FoF\Gamification\Api\Serializers;
+use FoF\Gamification\Notification\VoteBlueprint;
 
 return [
     (new Extend\Frontend('admin'))
@@ -69,9 +75,90 @@ return [
     (new Extend\Event())
         ->listen(Saving::class, Listeners\SaveVotesToDatabase::class),
 
-    function (Dispatcher $events) {
-        $events->subscribe(Listeners\AddData::class);
-        $events->subscribe(Listeners\EventHandlers::class);
-        $events->subscribe(Listeners\FilterDiscussionListByHotness::class);
-    },
+    (new Extend\ApiSerializer(Serializer\PostSerializer::class))
+        ->hasMany('upvotes', Serializer\BasicUserSerializer::class),
+
+    (new Extend\ApiSerializer(Serializer\UserSerializer::class))
+        ->hasMany('ranks', Serializers\RankSerializer::class),
+
+    (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
+        ->hasMany('ranks', Serializers\RankSerializer::class),
+
+    (new Extend\ApiController(Controller\ShowForumController::class))
+        ->prepareDataForSerialization(function (Controller\ShowForumController $controller, &$data) {
+            $data['ranks'] = Rank::get();
+        }),
+
+    (new Extend\Settings())
+        ->serializeToForum('fof-gamification.topimage1Url', 'fof-gamification.topimage1_path', function ($value) {
+            return $value ? "/assets/$value" : null;
+        })
+        ->serializeToForum('fof-gamification.topimage2Url', 'fof-gamification.topimage2_path', function ($value) {
+            return $value ? "/assets/$value" : null;
+        })
+        ->serializeToForum('fof-gamification.topimage3Url', 'fof-gamification.topimage3_path', function ($value) {
+            return $value ? "/assets/$value" : null;
+        }),
+
+    (new Extend\ApiSerializer(Serializer\UserSerializer::class))
+        ->mutate(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {
+            $attributes['canViewRankingPage'] = (bool) $serializer->getActor()->can('fof.gamification.viewRankingPage');
+            $attributes['points'] = $user->votes;
+
+            return $attributes;
+        }),
+
+    (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
+        ->mutate(AddDiscussionData::class),
+
+    (new Extend\ApiSerializer(Serializer\PostSerializer::class))
+        ->mutate(AddPostData::class),
+
+    (new Extend\ApiController(Controller\ListUsersController::class))
+        ->addInclude('ranks'),
+
+    (new Extend\ApiController(Controller\ShowUserController::class))
+        ->addInclude('ranks'),
+
+    (new Extend\ApiController(Controller\CreateUserController::class))
+        ->addInclude('ranks'),
+
+    (new Extend\ApiController(Controllers\OrderByPointsController::class))
+        ->addInclude('ranks'),
+
+    (new Extend\ApiController(Controller\UpdateUserController::class))
+        ->addInclude('ranks'),
+
+    (new Extend\ApiController(Controller\ShowDiscussionController::class))
+        ->addInclude('posts.user.ranks'),
+
+    (new Extend\ApiController(Controller\ListDiscussionsController::class))
+        ->addSortField('hotness'),
+
+    (new Extend\ApiController(Controller\ListPostsController::class))
+        ->addInclude('user.ranks')
+        ->addOptionalInclude('upvotes'),
+
+    (new Extend\ApiController(Controller\ShowPostController::class))
+        ->addInclude('user.ranks')
+        ->addOptionalInclude('upvotes'),
+
+    (new Extend\ApiController(Controller\CreatePostController::class))
+        ->addInclude('user.ranks')
+        ->addOptionalInclude('upvotes'),
+
+    (new Extend\ApiController(Controller\UpdatePostController::class))
+        ->addInclude('user.ranks')
+        ->addOptionalInclude('upvotes'),
+
+    (new Extend\ApiController(Controller\ShowForumController::class))
+        ->addInclude('ranks'),
+
+    (new Extend\Notification())
+        ->type(VoteBlueprint::class, Serializer\BasicPostSerializer::class, ['alert']),
+
+    (new Extend\Event())
+        ->listen(Posted::class, Listeners\AddVoteHandler::class)
+        ->listen(Deleted::class, Listeners\RemoveVoteHandler::class)
+        ->listen(ConfigureDiscussionGambits::class, Listeners\FilterDiscussionListByHotness::class),
 ];

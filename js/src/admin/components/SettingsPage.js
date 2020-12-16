@@ -1,4 +1,4 @@
-import Page from 'flarum/components/Page';
+import ExtensionPage from 'flarum/components/ExtensionPage';
 import Button from 'flarum/components/Button';
 import saveSettings from 'flarum/utils/saveSettings';
 import Switch from 'flarum/components/Switch';
@@ -6,7 +6,7 @@ import withAttr from 'flarum/utils/withAttr';
 import Stream from 'flarum/utils/Stream';
 import UploadImageButton from './UploadImageButton';
 
-export default class SettingsPage extends Page {
+export default class SettingsPage extends ExtensionPage {
     oninit(vnode) {
         super.oninit(vnode);
 
@@ -45,7 +45,7 @@ export default class SettingsPage extends Page {
     /**
      * @returns {*}
      */
-    view() {
+    content() {
         return [
             m('div', { className: 'SettingsPage' }, [
                 m('div', { className: 'container' }, [

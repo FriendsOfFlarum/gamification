@@ -28,8 +28,6 @@ fof-gamification:
       vote_label: Upvote/Downvote posts
       see_votes_label: See post upvotes/downvotes
       see_ranking_page: See ranking page
-    nav:
-      desc: Gamification for your Flarum community
     page:
       rankings:
         blocked:
