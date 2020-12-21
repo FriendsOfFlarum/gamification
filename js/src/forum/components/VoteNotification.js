@@ -14,7 +14,7 @@ export default class UpvotedNotification extends Notification {
     }
 
     content() {
-        const user = this.props.notification.fromUser();
+        const user = this.attrs.notification.fromUser();
         const content = parseInt(this.attrs.notification.content());
 
         if (content > 0) {
