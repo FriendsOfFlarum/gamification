@@ -30,7 +30,7 @@ class AddPostData
         $attributes['votes'] = Vote::calculate(['post_id' => $post->id]);
 
         $attributes['canVote'] = (bool) $actor->can('vote', $post);
-        $attributes['canSeeVotes'] = (bool) $actor->can('canSeeVotes', $post);
+        $attributes['canSeeVotes'] = (bool) $actor->can('canSeeVotes', $post->discussion);
 
         return $attributes;
     }
