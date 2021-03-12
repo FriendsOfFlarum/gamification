@@ -42,7 +42,7 @@ class Gamification
      */
     public function calculateHotness($discussion)
     {
-        $date = strtotime($discussion->start_time);
+        $date = strtotime($discussion->created_at);
 
         $s = $discussion->votes;
 
