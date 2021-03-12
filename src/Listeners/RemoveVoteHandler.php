@@ -11,13 +11,13 @@
 
 namespace FoF\Gamification\Listeners;
 
-use Flarum\Post\Event\Deleting;
+use Flarum\Post\Event\Deleted;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
 
 class RemoveVoteHandler
 {
-    public function handle(Deleting $event)
+    public function handle(Deleted $event)
     {
         $post = $event->post;
 
