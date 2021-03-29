@@ -1,6 +1,6 @@
-import { extend } from 'flarum/extend';
-import PostUser from 'flarum/components/PostUser';
-import UserCard from 'flarum/components/UserCard';
+import { extend } from 'flarum/common/extend';
+import PostUser from 'flarum/forum/components/PostUser';
+import UserCard from 'flarum/forum/components/UserCard';
 import rankLabel from '../common/helpers/rankLabel';
 import setting from './helpers/setting';
 

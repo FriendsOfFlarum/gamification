@@ -1,5 +1,5 @@
-import { extend } from 'flarum/extend';
-import DiscussionPage from 'flarum/components/DiscussionPage';
+import { extend } from 'flarum/common/extend';
+import DiscussionPage from 'flarum/forum/components/DiscussionPage';
 
 import debounce from 'lodash.debounce';
 

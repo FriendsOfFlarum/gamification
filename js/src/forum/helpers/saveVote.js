@@ -1,4 +1,4 @@
-import DiscussionControls from 'flarum/utils/DiscussionControls';
+import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 
 export default (post, upvoted, downvoted, load, discussion = post.discussion()) => {
     if (!app.session.user) {

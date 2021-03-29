@@ -1,14 +1,14 @@
-import avatar from 'flarum/helpers/avatar';
-import Page from 'flarum/components/Page';
-import IndexPage from 'flarum/components/IndexPage';
-import AffixedSidebar from 'flarum/components/AffixedSidebar';
-import Button from 'flarum/components/Button';
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import listItems from 'flarum/helpers/listItems';
-import username from 'flarum/helpers/username';
-import icon from 'flarum/helpers/icon';
+import avatar from 'flarum/common/helpers/avatar';
+import Page from 'flarum/common/components/Page';
+import IndexPage from 'flarum/forum/components/IndexPage';
+import AffixedSidebar from 'flarum/forum/components/AffixedSidebar';
+import Button from 'flarum/common/components/Button';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
+import listItems from 'flarum/common/helpers/listItems';
+import username from 'flarum/common/helpers/username';
+import icon from 'flarum/common/helpers/icon';
 import setting from '../helpers/setting';
-import Link from 'flarum/components/Link';
+import Link from 'flarum/common/components/Link';
 
 export default class RankingsPage extends Page {
     oninit(vnode) {

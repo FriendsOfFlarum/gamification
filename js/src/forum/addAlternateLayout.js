@@ -1,9 +1,9 @@
-import { extend } from 'flarum/extend';
-import DiscussionListItem from 'flarum/components/DiscussionListItem';
+import { extend } from 'flarum/common/extend';
+import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 
-import icon from 'flarum/helpers/icon';
-import abbreviateNumber from 'flarum/utils/abbreviateNumber';
-import Stream from 'flarum/utils/Stream';
+import icon from 'flarum/common/helpers/icon';
+import abbreviateNumber from 'flarum/common/utils/abbreviateNumber';
+import Stream from 'flarum/common/utils/Stream';
 
 import saveVote from './helpers/saveVote';
 import setting from './helpers/setting';

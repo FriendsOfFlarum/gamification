@@ -17,7 +17,7 @@ return [
         /**
          * @var SettingsRepositoryInterface
          */
-        $settings = app('flarum.settings');
+        $settings = resolve('flarum.settings');
 
         $keys = [
             'convertedLikes',

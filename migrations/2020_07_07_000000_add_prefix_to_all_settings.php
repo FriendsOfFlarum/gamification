@@ -17,7 +17,7 @@ return [
         /**
          * @var SettingsRepositoryInterface
          */
-        $settings = app('flarum.settings');
+        $settings = resolve('flarum.settings');
 
         foreach ([1, 2, 3] as $num) {
             if ($value = $settings->get($key = "topimage{$num}_path")) {
