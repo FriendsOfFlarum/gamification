@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/gamification.
  *
- * Copyright (c) 2020 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -163,5 +163,5 @@ return [
         ->listen(Deleted::class, Listeners\RemoveVoteHandler::class),
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
-        ->addGambit(HotGambit::class)
+        ->addGambit(HotGambit::class),
 ];
