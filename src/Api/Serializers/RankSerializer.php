@@ -13,6 +13,7 @@ namespace FoF\Gamification\Api\Serializers;
 
 use Flarum\Api\Serializer\AbstractSerializer;
 use FoF\Gamification\Rank;
+use InvalidArgumentException;
 
 class RankSerializer extends AbstractSerializer
 {
