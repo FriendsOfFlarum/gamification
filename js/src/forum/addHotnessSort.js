@@ -1,10 +1,10 @@
-import { extend } from 'flarum/extend';
-import IndexPage from 'flarum/components/IndexPage';
-import ItemList from 'flarum/utils/ItemList';
-import DiscussionListState from 'flarum/states/DiscussionListState';
-import Dropdown from 'flarum/components/Dropdown';
-import Button from 'flarum/components/Button';
-import LinkButton from 'flarum/components/LinkButton';
+import { extend } from 'flarum/common/extend';
+import IndexPage from 'flarum/forum/components/IndexPage';
+import ItemList from 'flarum/common/utils/ItemList';
+import DiscussionListState from 'flarum/forum/states/DiscussionListState';
+import Dropdown from 'flarum/common/components/Dropdown';
+import Button from 'flarum/common/components/Button';
+import LinkButton from 'flarum/common/components/LinkButton';
 
 export default function () {
     IndexPage.prototype.viewItems = function () {

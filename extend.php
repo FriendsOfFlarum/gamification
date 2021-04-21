@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/gamification.
  *
- * Copyright (c) 2020 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ namespace FoF\Gamification;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
-use Flarum\Event\ConfigureDiscussionGambits;
+use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
@@ -23,6 +23,7 @@ use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Api\Serializers;
+use FoF\Gamification\Gambit\HotGambit;
 use FoF\Gamification\Notification\VoteBlueprint;
 
 return [
@@ -101,7 +102,7 @@ return [
         }),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
-        ->mutate(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {
+        ->attributes(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {
             $attributes['canViewRankingPage'] = (bool) $serializer->getActor()->can('fof.gamification.viewRankingPage');
             $attributes['points'] = $user->votes;
 
@@ -109,10 +110,10 @@ return [
         }),
 
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-        ->mutate(AddDiscussionData::class),
+        ->attributes(AddDiscussionData::class),
 
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
-        ->mutate(AddPostData::class),
+        ->attributes(AddPostData::class),
 
     (new Extend\ApiController(Controller\ListUsersController::class))
         ->addInclude('ranks'),
@@ -159,6 +160,8 @@ return [
 
     (new Extend\Event())
         ->listen(Posted::class, Listeners\AddVoteHandler::class)
-        ->listen(Deleted::class, Listeners\RemoveVoteHandler::class)
-        ->listen(ConfigureDiscussionGambits::class, Listeners\FilterDiscussionListByHotness::class),
+        ->listen(Deleted::class, Listeners\RemoveVoteHandler::class),
+
+    (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
+        ->addGambit(HotGambit::class),
 ];

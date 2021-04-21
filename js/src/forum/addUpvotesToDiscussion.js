@@ -1,7 +1,7 @@
-import { extend } from 'flarum/extend';
-import DiscussionListItem from 'flarum/components/DiscussionListItem';
-import abbreviateNumber from 'flarum/utils/abbreviateNumber';
-import icon from 'flarum/helpers/icon';
+import { extend } from 'flarum/common/extend';
+import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
+import abbreviateNumber from 'flarum/common/utils/abbreviateNumber';
+import icon from 'flarum/common/helpers/icon';
 import setting from './helpers/setting';
 
 export default function () {

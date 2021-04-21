@@ -1,9 +1,9 @@
-import ExtensionPage from 'flarum/components/ExtensionPage';
-import Button from 'flarum/components/Button';
-import saveSettings from 'flarum/utils/saveSettings';
-import Switch from 'flarum/components/Switch';
-import withAttr from 'flarum/utils/withAttr';
-import Stream from 'flarum/utils/Stream';
+import ExtensionPage from 'flarum/admin/components/ExtensionPage';
+import Button from 'flarum/common/components/Button';
+import saveSettings from 'flarum/admin/utils/saveSettings';
+import Switch from 'flarum/common/components/Switch';
+import withAttr from 'flarum/common/utils/withAttr';
+import Stream from 'flarum/common/utils/Stream';
 import UploadImageButton from './UploadImageButton';
 
 export default class SettingsPage extends ExtensionPage {

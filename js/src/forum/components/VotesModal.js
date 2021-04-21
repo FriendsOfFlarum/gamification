@@ -1,8 +1,8 @@
-import Modal from 'flarum/components/Modal';
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import avatar from 'flarum/helpers/avatar';
-import username from 'flarum/helpers/username';
-import Link from 'flarum/components/Link';
+import Modal from 'flarum/common/components/Modal';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
+import avatar from 'flarum/common/helpers/avatar';
+import username from 'flarum/common/helpers/username';
+import Link from 'flarum/common/components/Link';
 
 export default class VotesModal extends Modal {
     className() {

@@ -1,7 +1,7 @@
-import { extend } from 'flarum/extend';
-import Button from 'flarum/components/Button';
-import CommentPost from 'flarum/components/CommentPost';
-import PostControls from 'flarum/utils/PostControls';
+import { extend } from 'flarum/common/extend';
+import Button from 'flarum/common/components/Button';
+import CommentPost from 'flarum/forum/components/CommentPost';
+import PostControls from 'flarum/forum/utils/PostControls';
 
 import VotesModal from './components/VotesModal';
 import setting from './helpers/setting';

@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/gamification.
  *
- * Copyright (c) 2020 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,6 +25,7 @@ use FoF\Gamification\Gamification;
 use FoF\Gamification\Notification\VoteBlueprint;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 use Pusher;
 
@@ -53,17 +54,23 @@ class SaveVotesToDatabase
     protected $settings;
 
     /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * @param Dispatcher                  $events
      * @param NotificationSyncer          $notifications
      * @param Gamification                $gamification
      * @param SettingsRepositoryInterface $settings
      */
-    public function __construct(Dispatcher $events, NotificationSyncer $notifications, Gamification $gamification, SettingsRepositoryInterface $settings)
+    public function __construct(Dispatcher $events, NotificationSyncer $notifications, Gamification $gamification, SettingsRepositoryInterface $settings, Container $container)
     {
         $this->events = $events;
         $this->notifications = $notifications;
         $this->gamification = $gamification;
         $this->settings = $settings;
+        $this->container = $container;
     }
 
     /**
@@ -197,11 +204,11 @@ class SaveVotesToDatabase
 
     public function pushNewVote(Vote $vote)
     {
-        if (app()->bound(Pusher::class)) {
-            app()->make(Pusher::class)->trigger('public', 'newVote', [
-                'post_id'  => $vote->post->id,
-                'user_id'  => $vote->user->id,
-                'votes'    => $vote->post->votes()->sum('value'),
+        if ($this->container->bound(Pusher::class)) {
+            $this->container->make(Pusher::class)->trigger('public', 'newVote', [
+                'post_id' => $vote->post->id,
+                'user_id' => $vote->user->id,
+                'votes'   => $vote->post->votes()->sum('value'),
             ]);
         }
     }

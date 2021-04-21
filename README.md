@@ -13,7 +13,7 @@ Upvote and downvote posts anonymously, and reward active users with ranks, and s
 
 ### Installation
 
-Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually with composer:
+Install manually with composer:
 
 ```sh
 composer require fof/gamification

@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/gamification.
  *
- * Copyright (c) 2020 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@ return [
         /**
          * @var SettingsRepositoryInterface
          */
-        $settings = app('flarum.settings');
+        $settings = resolve('flarum.settings');
 
         foreach ([1, 2, 3] as $num) {
             if ($value = $settings->get($key = "topimage{$num}_path")) {
