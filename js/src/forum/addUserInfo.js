@@ -78,6 +78,9 @@ export default function () {
                         }
                     })
                     .forEach((rank) => {
+                        if (!rank) {
+                            return;
+                        }
                         badges_node.children.push(rank);
                     });
             }
