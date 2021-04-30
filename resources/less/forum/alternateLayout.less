@@ -34,6 +34,16 @@
     }
 }
 
+.Post--hidden {
+    &:not(.revealContent) .Post-actions {
+        width: initial;
+
+        .item-votes {
+            display: none;
+        }
+    }
+}
+
 .Post-actions {
     width: 100%;
     text-align: right;
