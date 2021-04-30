@@ -1089,6 +1089,8 @@ __webpack_require__.r(__webpack_exports__);
     return vnode;
   });
   Object(flarum_common_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_forum_components_PostUser__WEBPACK_IMPORTED_MODULE_1___default.a.prototype, 'view', function (vnode) {
+    var _Number;
+
     var post = this.attrs.post;
     var user = post.user();
 
@@ -1097,15 +1099,12 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     var header_node = vnode.children.find(matchTag('h3'));
-    var amt = Number(Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_4__["default"])('rankAmt'));
-    header_node.children.push(user.ranks().reverse().map(function (rank, i) {
-      if (!amt || i < amt) {
-        return m("span", {
-          className: "Post-Rank"
-        }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(rank));
-      }
-    }));
-    header_node.children = header_node.children.filter(function (el) {
+    var amt = (_Number = Number(Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_4__["default"])('rankAmt'))) != null ? _Number : user.ranks().length;
+    header_node.children = header_node.children.concat(user.ranks().reverse().splice(0, amt).map(function (rank) {
+      return m("span", {
+        className: "Post-Rank"
+      }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(rank));
+    })).filter(function (el) {
       return el.tag !== undefined;
     });
   });
