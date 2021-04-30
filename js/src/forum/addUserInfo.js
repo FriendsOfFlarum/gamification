@@ -98,20 +98,17 @@ export default function () {
         }
 
         const header_node = vnode.children.find(matchTag('h3'));
-        const amt = Number(setting('rankAmt'));
+        const amt = Number(setting('rankAmt')) ?? user.ranks().length;
 
-        header_node.children.push(
+        header_node.children = header_node.children.concat(
             user
                 .ranks()
                 .reverse()
-                .map((rank, i) => {
-                    if (!amt || i < amt) {
-                        return <span className="Post-Rank">{rankLabel(rank)}</span>;
-                    }
+                .splice(0, amt)
+                .map((rank) => {
+                    return <span className="Post-Rank">{rankLabel(rank)}</span>;
                 })
-        );
-
-        header_node.children = header_node.children.filter(function (el) {
+        ).filter(function (el) {
             return el.tag !== undefined;
         });
     });
