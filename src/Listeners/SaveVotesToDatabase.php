@@ -19,6 +19,7 @@ use Flarum\Post\Event\Saving;
 use Flarum\Post\Exception\FloodingException;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Exception\PermissionDeniedException;
 use Flarum\User\User;
 use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Gamification;
@@ -93,6 +94,10 @@ class SaveVotesToDatabase
 
                 if ($this->settings->get('fof-gamification.rateLimit')) {
                     $this->assertNotFlooding($actor);
+                }
+
+                if ($post->user_id === $actor->id && !$this->settings->get('fof-gamification.allowSelfVote')) {
+                    throw new PermissionDeniedException();
                 }
 
                 $isUpvoted = $data['attributes'][0];
