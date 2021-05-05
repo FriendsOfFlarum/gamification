@@ -1156,11 +1156,17 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     var post = this.attrs.post;
+    var user = app.session.user;
     var hasDownvoted = post.hasDownvoted();
     var hasUpvoted = post.hasUpvoted();
     var icon = Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_5__["default"])('iconName') || 'thumbs'; // We set canVote to true for guest users so that they can access the login by clicking the button
 
-    var canVote = !app.session.user || post.canVote();
+    var canVote = !user || post.canVote();
+
+    if (user && user.id() === post.user().id() && !Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_5__["default"])('allowSelfVote')) {
+      canVote = false;
+    }
+
     items.add('votes', m("div", {
       className: "CommentPost-votes " + (Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_5__["default"])('useAlternateLayout', true) && 'alternateLayout')
     }, flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_1___default.a.component({
@@ -1171,6 +1177,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       loading: this.voteLoading,
       disabled: this.voteLoading || !canVote,
+      title: !canVote ? app.translator.trans('fof-gamification.forum.no_autovote_message') : '',
       onclick: function onclick() {
         return Object(_helpers_saveVote__WEBPACK_IMPORTED_MODULE_6__["default"])(post, !hasUpvoted, false, function (val) {
           return _this.voteLoading = val;
@@ -1186,6 +1193,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       loading: this.voteLoading,
       disabled: !canVote,
+      title: !canVote ? app.translator.trans('fof-gamification.forum.no_autovote_message') : '',
       onclick: function onclick() {
         return Object(_helpers_saveVote__WEBPACK_IMPORTED_MODULE_6__["default"])(post, false, !hasDownvoted, function (val) {
           return _this.voteLoading = val;

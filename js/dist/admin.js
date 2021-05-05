@@ -198,7 +198,7 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
     _ExtensionPage.prototype.oninit.call(this, vnode);
 
     this.fields = ['convertedLikes', 'amountPerPost', 'amountPerDiscussion', 'postStartAmount', 'rankAmt', 'iconName', 'blockedUsers', 'pointsPlaceholder'];
-    this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout'];
+    this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout', 'allowSelfVote'];
     this.ranks = app.store.all('ranks');
     this.values = {};
     this.settingsPrefix = 'fof-gamification';
@@ -309,6 +309,10 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
       placeholder: 'thumbs',
       oninput: flarum_common_utils_withAttr__WEBPACK_IMPORTED_MODULE_5___default()('value', this.values.iconName)
     }), flarum_common_components_Switch__WEBPACK_IMPORTED_MODULE_4___default.a.component({
+      state: this.values.allowSelfVote(),
+      onchange: this.values.allowSelfVote,
+      className: 'votes-switch'
+    }, app.translator.trans('fof-gamification.admin.page.votes.allow_selfvote')), flarum_common_components_Switch__WEBPACK_IMPORTED_MODULE_4___default.a.component({
       state: this.values.autoUpvotePosts() || false,
       onchange: this.values.autoUpvotePosts,
       className: 'votes-switch'
