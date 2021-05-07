@@ -16,6 +16,7 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Gamification\Gamification;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
+use Illuminate\Support\Collection;
 
 class AddVoteHandler
 {
@@ -58,8 +59,22 @@ class AddVoteHandler
             $ranks = Rank::where('points', '<=', $actor->votes)->get();
 
             if ($ranks) {
+                assert($ranks instanceof Collection);
                 $actor->ranks()->detach();
+
+                foreach ($ranks as $rank) {
+                    foreach ($rank->groups as $group) {
+                        $actor->groups()->detach($group);
+                    }
+                }
+
                 $actor->ranks()->attach($ranks);
+
+                foreach ($ranks as $rank) {
+                    foreach ($rank->groups as $group) {
+                        $actor->groups()->attach($group);
+                    }
+                }
             }
         }
     }
