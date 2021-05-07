@@ -5,6 +5,7 @@ import Switch from 'flarum/common/components/Switch';
 import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import UploadImageButton from './UploadImageButton';
+import Select from "flarum/common/components/Select";
 
 export default class SettingsPage extends ExtensionPage {
     oninit(vnode) {
@@ -46,6 +47,7 @@ export default class SettingsPage extends ExtensionPage {
             points: Stream(''),
             name: Stream(''),
             color: Stream(''),
+            groups: Stream('')
         };
     }
 
@@ -53,6 +55,9 @@ export default class SettingsPage extends ExtensionPage {
      * @returns {*}
      */
     content() {
+        const groups = {};
+        app.store.all('groups').forEach(group => groups[parseInt(group.id())] = group.nameSingular());
+
         return [
             m('div', { className: 'SettingsPage' }, [
                 m('div', { className: 'container' }, [
@@ -107,6 +112,13 @@ export default class SettingsPage extends ExtensionPage {
                                             placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
                                             oninput: withAttr('value', this.updateColor.bind(this, rank)),
                                         }),
+                                        Select.component({
+                                            className: 'FormControl Ranks-group',
+                                            options: groups,
+                                            value: Array.isArray(rank.groups()) ? rank.groups()[0] : rank.groups(),
+                                            placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+                                            onchange: this.updateGroups.bind(this, rank),
+                                        }),
                                         Button.component({
                                             type: 'button',
                                             className: 'Button Button--warning Ranks-button',
@@ -134,6 +146,13 @@ export default class SettingsPage extends ExtensionPage {
                                         value: this.newRank.color(),
                                         placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
                                         oninput: withAttr('value', this.newRank.color),
+                                    }),
+                                    Select.component({
+                                        className: 'FormControl Ranks-group',
+                                        options: groups,
+                                        value: this.newRank.groups(),
+                                        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+                                        onChange: withAttr('value', this.newRank.groups),
                                     }),
                                     Button.component({
                                         type: 'button',
@@ -264,6 +283,10 @@ export default class SettingsPage extends ExtensionPage {
         rank.save({ color: value });
     }
 
+    updateGroups(rank, value) {
+        rank.save({ groups: value });
+    }
+
     deleteRank(rankToDelete) {
         rankToDelete.delete();
         this.ranks.some((rank, i) => {
@@ -281,11 +304,13 @@ export default class SettingsPage extends ExtensionPage {
                 points: this.newRank.points(),
                 name: this.newRank.name(),
                 color: this.newRank.color(),
+                groups: this.newRank.groups()
             })
             .then((rank) => {
                 this.newRank.color('');
                 this.newRank.name('');
                 this.newRank.points('');
+                this.newRank.groups('');
                 this.ranks.push(rank);
                 m.redraw();
             });

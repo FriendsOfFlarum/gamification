@@ -691,7 +691,8 @@ var Rank = /*#__PURE__*/function (_mixin) {
 }(flarum_common_utils_mixin__WEBPACK_IMPORTED_MODULE_2___default()(flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a, {
   points: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('points'),
   name: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('name'),
-  color: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('color')
+  color: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('color'),
+  groups: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('groups')
 }));
 
 
@@ -1312,7 +1313,7 @@ var RankingsPage = /*#__PURE__*/function (_Page) {
         className: "PostUser"
       }, m("h3", {
         className: "rankings-info"
-      }, m(flarum_common_components_Link__WEBPACK_IMPORTED_MODULE_11___default.a, {
+      }, m("a", {
         href: app.route.user(user)
       }, i < 4 ? flarum_common_helpers_avatar__WEBPACK_IMPORTED_MODULE_1___default()(user, {
         className: 'info-avatar rankings-' + i + '-avatar'

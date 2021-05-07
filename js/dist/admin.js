@@ -174,6 +174,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! flarum/common/utils/Stream */ "flarum/common/utils/Stream");
 /* harmony import */ var flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _UploadImageButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UploadImageButton */ "./src/admin/components/UploadImageButton.js");
+/* harmony import */ var flarum_common_components_Select__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! flarum/common/components/Select */ "flarum/common/components/Select");
+/* harmony import */ var flarum_common_components_Select__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(flarum_common_components_Select__WEBPACK_IMPORTED_MODULE_8__);
+
 
 
 
@@ -212,7 +215,8 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
     this.newRank = {
       points: flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6___default()(''),
       name: flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6___default()(''),
-      color: flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6___default()('')
+      color: flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6___default()(''),
+      groups: flarum_common_utils_Stream__WEBPACK_IMPORTED_MODULE_6___default()('')
     };
   }
   /**
@@ -223,6 +227,10 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
   _proto.content = function content() {
     var _this2 = this;
 
+    var groups = {};
+    app.store.all('groups').forEach(function (group) {
+      return groups[parseInt(group.id())] = group.nameSingular();
+    });
     return [m('div', {
       className: 'SettingsPage'
     }, [m('div', {
@@ -267,6 +275,12 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
         value: rank.color(),
         placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
         oninput: flarum_common_utils_withAttr__WEBPACK_IMPORTED_MODULE_5___default()('value', _this2.updateColor.bind(_this2, rank))
+      }), flarum_common_components_Select__WEBPACK_IMPORTED_MODULE_8___default.a.component({
+        className: 'FormControl Ranks-group',
+        options: groups,
+        value: Array.isArray(rank.groups()) ? rank.groups()[0] : rank.groups(),
+        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+        onchange: _this2.updateGroups.bind(_this2, rank)
       }), flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a.component({
         type: 'button',
         className: 'Button Button--warning Ranks-button',
@@ -291,6 +305,12 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
       value: this.newRank.color(),
       placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
       oninput: flarum_common_utils_withAttr__WEBPACK_IMPORTED_MODULE_5___default()('value', this.newRank.color)
+    }), flarum_common_components_Select__WEBPACK_IMPORTED_MODULE_8___default.a.component({
+      className: 'FormControl Ranks-group',
+      options: groups,
+      value: this.newRank.groups(),
+      placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+      onChange: flarum_common_utils_withAttr__WEBPACK_IMPORTED_MODULE_5___default()('value', this.newRank.groups)
     }), flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a.component({
       type: 'button',
       className: 'Button Button--warning Ranks-button',
@@ -378,6 +398,12 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
     });
   };
 
+  _proto.updateGroups = function updateGroups(rank, value) {
+    rank.save({
+      groups: value
+    });
+  };
+
   _proto.deleteRank = function deleteRank(rankToDelete) {
     var _this3 = this;
 
@@ -397,13 +423,16 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
     app.store.createRecord('ranks').save({
       points: this.newRank.points(),
       name: this.newRank.name(),
-      color: this.newRank.color()
+      color: this.newRank.color(),
+      groups: this.newRank.groups()
     }).then(function (rank) {
       _this4.newRank.color('');
 
       _this4.newRank.name('');
 
       _this4.newRank.points('');
+
+      _this4.newRank.groups('');
 
       _this4.ranks.push(rank);
 
@@ -659,7 +688,8 @@ var Rank = /*#__PURE__*/function (_mixin) {
 }(flarum_common_utils_mixin__WEBPACK_IMPORTED_MODULE_2___default()(flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a, {
   points: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('points'),
   name: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('name'),
-  color: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('color')
+  color: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('color'),
+  groups: flarum_common_Model__WEBPACK_IMPORTED_MODULE_1___default.a.attribute('groups')
 }));
 
 
@@ -747,6 +777,17 @@ module.exports = flarum.core.compat['common/Model'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['common/components/Button'];
+
+/***/ }),
+
+/***/ "flarum/common/components/Select":
+/*!*****************************************************************!*\
+  !*** external "flarum.core.compat['common/components/Select']" ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['common/components/Select'];
 
 /***/ }),
 
