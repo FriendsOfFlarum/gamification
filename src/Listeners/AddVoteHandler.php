@@ -59,22 +59,11 @@ class AddVoteHandler
             $ranks = Rank::where('points', '<=', $actor->votes)->get();
 
             if ($ranks) {
-                assert($ranks instanceof Collection);
+                $actor->groups()->detach($actor->ranks()->pluck('groups'));
                 $actor->ranks()->detach();
 
-                foreach ($ranks as $rank) {
-                    foreach ($rank->groups as $group) {
-                        $actor->groups()->detach($group);
-                    }
-                }
-
                 $actor->ranks()->attach($ranks);
-
-                foreach ($ranks as $rank) {
-                    foreach ($rank->groups as $group) {
-                        $actor->groups()->attach($group);
-                    }
-                }
+                $actor->groups()->attach($ranks->pluck('groups'));
             }
         }
     }

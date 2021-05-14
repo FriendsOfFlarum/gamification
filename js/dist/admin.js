@@ -310,13 +310,69 @@ var SettingsPage = /*#__PURE__*/function (_ExtensionPage) {
       options: groups,
       value: this.newRank.groups(),
       placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
-      onChange: flarum_common_utils_withAttr__WEBPACK_IMPORTED_MODULE_5___default()('value', this.newRank.groups)
+      onChange: this.newRank.groups
     }), flarum_common_components_Button__WEBPACK_IMPORTED_MODULE_2___default.a.component({
       type: 'button',
       className: 'Button Button--warning Ranks-button',
       icon: 'fa fa-plus',
       onclick: this.addRank.bind(this)
-    })])), m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.number_title')), m('input', {
+    })])),
+    /*m('legend', {}, app.translator.trans('fof-gamification.admin.page.ranks-group.title')),
+    m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks-group.label')),
+    m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.ranks-group.help')),
+    m(
+        'div',
+        { className: 'Ranks--Container' },
+        this.ranks.map((rank) => {
+            return m('div', { style: 'float: left;' }, [
+                m('input', {
+                    className: 'FormControl Ranks-name',
+                    value: rank.name(),
+                    placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
+                    oninput: withAttr('value', this.updateName.bind(this, rank)),
+                }),
+                Select.component({
+                    className: 'FormControl Ranks-group',
+                    options: groups,
+                    value: Array.isArray(rank.groups()) ? rank.groups()[0] : rank.groups(),
+                    placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+                    onchange: this.updateGroups.bind(this, rank),
+                }),
+                Button.component({
+                    type: 'button',
+                    className: 'Button Button--warning Ranks-button',
+                    icon: 'fa fa-times',
+                    onclick: this.deleteRank.bind(this, rank),
+                }),
+            ]);
+        }),
+        m('legend', {}, app.translator.trans('fof-gamification.admin.page.group-sticky-rank.title')),
+        m('label', {}, app.translator.trans('fof-gamification.admin.page.group-sticky-rank.label')),
+        m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.group-sticky-rank.help.help')),
+        m('div', { style: 'float: left; margin-bottom: 15px' }, [
+            Select.component({
+                className: 'FormControl Ranks-name',
+                options: groups,
+                //value: this.newRank.groups(),
+                placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+                onChange: withAttr('value', this.newRank.groups),
+            }),
+            Select.component({
+                className: 'FormControl Ranks-group',
+                //options: this.ranks,
+                //value: this.newRank.groups(),
+                placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+                onChange: withAttr('value', this.newRank.groups),
+            }),
+            Button.component({
+                type: 'button',
+                className: 'Button Button--warning Ranks-button',
+                icon: 'fa fa-plus',
+                //onclick: this.addRank.bind(this),
+            }),
+        ])
+    ),*/
+    m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.number_title')), m('input', {
       className: 'FormControl Ranks-default',
       value: this.values.rankAmt() || '',
       placeholder: 2,
