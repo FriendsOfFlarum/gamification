@@ -145,7 +145,7 @@ export default class SettingsPage extends ExtensionPage {
                                         options: groups,
                                         value: this.newRank.groups(),
                                         placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
-                                        onChange: withAttr('value', this.newRank.groups),
+                                        onChange: this.newRank.groups,
                                     }),
                                     Button.component({
                                         type: 'button',
