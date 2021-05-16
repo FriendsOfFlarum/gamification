@@ -55,7 +55,9 @@ export default class SettingsPage extends ExtensionPage {
      * @returns {*}
      */
     content() {
-        const groups = {};
+        const groups = {
+            0: null
+        };
         app.store.all('groups').forEach(group => groups[parseInt(group.id())] = group.nameSingular());
 
         return [
