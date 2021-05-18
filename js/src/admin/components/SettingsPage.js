@@ -29,7 +29,8 @@ export default class SettingsPage extends ExtensionPage {
             'rateLimit',
             'showVotesOnDiscussionPage',
             'useAlternateLayout',
-            'allowSelfVote'
+            'allowSelfVote',
+            'onlyOneStickyRank'
         ];
 
         this.ranks = app.store.all('ranks');
@@ -177,7 +178,6 @@ export default class SettingsPage extends ExtensionPage {
                                 'table',
                                 { className: 'Ranks--Container' },
                                 app.store.all('groups').map((group) => {
-                                    console.log(group.sticky_rank() ? group.sticky_rank().name() : '')
                                     return [
                                         m('tr', [
                                             m('td', GroupBadge.component({ group: group })),
@@ -197,6 +197,13 @@ export default class SettingsPage extends ExtensionPage {
                                         m('tr', {style: 'height: 8px;'})
                                     ];
                                 })
+                            ),
+                            Switch.component({
+                                    state: this.values.onlyOneStickyRank(),
+                                    onchange: this.values.onlyOneStickyRank,
+                                    className: 'votes-switch',
+                                },
+                                app.translator.trans('fof-gamification.admin.page.sticky-ranks.only_one_sticky_rank')
                             ),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.number_title')),
                             m('input', {
