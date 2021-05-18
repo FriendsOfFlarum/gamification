@@ -66,3 +66,10 @@ fof-gamification:
           help: "Input the required number of upvotes, the name of the rank, and the hex color of the rank"
           points: Points
           name: Name
+          group: Group
+          sticky_group: Sticky group
+      sticky-ranks:
+        title: Sticky Ranks
+        label: Prefixed ranks for a group
+        help: Add a sticky rank to a group. This will be displayed over the real rank (replaces the real rank label)
+

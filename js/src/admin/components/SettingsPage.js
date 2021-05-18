@@ -5,6 +5,8 @@ import Switch from 'flarum/common/components/Switch';
 import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import UploadImageButton from './UploadImageButton';
+import Select from "flarum/common/components/Select";
+import GroupBadge from "flarum/common/components/GroupBadge";
 
 export default class SettingsPage extends ExtensionPage {
     oninit(vnode) {
@@ -21,7 +23,14 @@ export default class SettingsPage extends ExtensionPage {
             'pointsPlaceholder',
         ];
 
-        this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout'];
+        this.switches = [
+            'autoUpvotePosts',
+            'customRankingImages',
+            'rateLimit',
+            'showVotesOnDiscussionPage',
+            'useAlternateLayout',
+            'allowSelfVote'
+        ];
 
         this.ranks = app.store.all('ranks');
 
@@ -39,6 +48,8 @@ export default class SettingsPage extends ExtensionPage {
             points: Stream(''),
             name: Stream(''),
             color: Stream(''),
+            groups: Stream(''),
+            sticky_group: Stream('')
         };
     }
 
@@ -46,6 +57,15 @@ export default class SettingsPage extends ExtensionPage {
      * @returns {*}
      */
     content() {
+        const groups = {
+            null: null
+        };
+        app.store.all('groups').forEach(group => groups[parseInt(group.id())] = group.nameSingular());
+        const ranks = {
+            null: null
+        };
+        this.ranks.forEach(rank => ranks[parseInt(rank.id())] = rank.name());
+
         return [
             m('div', { className: 'SettingsPage' }, [
                 m('div', { className: 'container' }, [
@@ -100,6 +120,13 @@ export default class SettingsPage extends ExtensionPage {
                                             placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
                                             oninput: withAttr('value', this.updateColor.bind(this, rank)),
                                         }),
+                                        Select.component({
+                                            className: 'FormControl Ranks-group',
+                                            options: groups,
+                                            value: Array.isArray(rank.groups()) ? rank.groups()[0] : rank.groups(),
+                                            placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+                                            onchange: this.updateGroups.bind(this, rank),
+                                        }),
                                         Button.component({
                                             type: 'button',
                                             className: 'Button Button--warning Ranks-button',
@@ -128,6 +155,13 @@ export default class SettingsPage extends ExtensionPage {
                                         placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.color'),
                                         oninput: withAttr('value', this.newRank.color),
                                     }),
+                                    Select.component({
+                                        className: 'FormControl Ranks-group',
+                                        options: groups,
+                                        value: this.newRank.groups(),
+                                        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
+                                        onChange: this.newRank.groups,
+                                    }),
                                     Button.component({
                                         type: 'button',
                                         className: 'Button Button--warning Ranks-button',
@@ -135,6 +169,34 @@ export default class SettingsPage extends ExtensionPage {
                                         onclick: this.addRank.bind(this),
                                     }),
                                 ])
+                            ),
+                            m('legend', {}, app.translator.trans('fof-gamification.admin.page.sticky-ranks.title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.sticky-ranks.label')),
+                            m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.sticky-ranks.help')),
+                            m(
+                                'table',
+                                { className: 'Ranks--Container' },
+                                app.store.all('groups').map((group) => {
+                                    console.log(group.sticky_rank() ? group.sticky_rank().name() : '')
+                                    return [
+                                        m('tr', [
+                                            m('td', GroupBadge.component({ group: group })),
+                                            m('td', m('b', {
+                                                    className: 'Ranks-group',
+                                                    style: 'margin-right: 8px; margin-left: 5px;'
+                                                }, `${group.nameSingular()}`)
+                                            ),
+                                            m('td', Select.component({
+                                                className: 'FormControl Ranks-name',
+                                                options: ranks,
+                                                value: group.sticky_rank() ? group.sticky_rank().id() : '',
+                                                placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
+                                                onchange: this.updateStickyRank.bind(this, group),
+                                            })),
+                                        ]),
+                                        m('tr', {style: 'height: 8px;'})
+                                    ];
+                                })
                             ),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.number_title')),
                             m('input', {
@@ -155,9 +217,17 @@ export default class SettingsPage extends ExtensionPage {
                             }),
                             Switch.component(
                                 {
+                                    state: this.values.allowSelfVote(),
+                                    onchange: this.values.allowSelfVote,
+                                    className: 'votes-switch',
+                                },
+                                app.translator.trans('fof-gamification.admin.page.votes.allow_selfvote')
+                            ),
+                            Switch.component(
+                                {
                                     state: this.values.autoUpvotePosts() || false,
                                     onchange: this.values.autoUpvotePosts,
-                                    className: 'votes-switch',
+                                    className: 'votes-switch'
                                 },
                                 app.translator.trans('fof-gamification.admin.page.votes.auto_upvote')
                             ),
@@ -249,6 +319,17 @@ export default class SettingsPage extends ExtensionPage {
         rank.save({ color: value });
     }
 
+    updateGroups(rank, value) {
+        rank.save({ groups: value });
+    }
+
+    updateStickyRank(group, value) {
+        const emptyValue = {
+            data: []
+        }
+        group.save({ relationships: { sticky_rank: value ? (app.store.getById('ranks', value) ?? emptyValue) : emptyValue } })
+    }
+
     deleteRank(rankToDelete) {
         rankToDelete.delete();
         this.ranks.some((rank, i) => {
@@ -266,11 +347,13 @@ export default class SettingsPage extends ExtensionPage {
                 points: this.newRank.points(),
                 name: this.newRank.name(),
                 color: this.newRank.color(),
+                groups: this.newRank.groups()
             })
             .then((rank) => {
                 this.newRank.color('');
                 this.newRank.name('');
                 this.newRank.points('');
+                this.newRank.groups('');
                 this.ranks.push(rank);
                 m.redraw();
             });
@@ -304,7 +387,9 @@ export default class SettingsPage extends ExtensionPage {
         this.fields.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
 
         saveSettings(settings)
-            .then(this.onsaved.bind(this))
+            .then(() => {
+                app.alerts.show({ type: 'success' }, app.translator.trans('core.admin.basics.saved_message'));
+            })
             .catch(() => {})
             .then(() => {
                 this.loading = false;
