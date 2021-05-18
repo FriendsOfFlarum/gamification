@@ -1058,13 +1058,17 @@ __webpack_require__.r(__webpack_exports__);
     var amt = Number(Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_4__["default"])('rankAmt'));
     if (!profile_node) return vnode;
     var badges_node = profile_node.children.find(matchClass('UserCard-badges'));
-    var sticky_ranks = user.groups().filter(function (group) {
-      return group.sticky_rank();
-    }).map(function (group) {
-      return m("li", {
-        className: "User-Rank"
-      }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(group.sticky_rank()));
-    });
+    var sticky_ranks = [];
+
+    if (user.groups()) {
+      sticky_ranks = user.groups().filter(function (group) {
+        return group.sticky_rank();
+      }).map(function (group) {
+        return m("li", {
+          className: "User-Rank"
+        }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(group.sticky_rank()));
+      });
+    }
 
     if (user.ranks()) {
       if (!badges_node) {
@@ -1109,13 +1113,18 @@ __webpack_require__.r(__webpack_exports__);
 
     var header_node = vnode.children.find(matchTag('h3'));
     var amt = (_Number = Number(Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_4__["default"])('rankAmt'))) != null ? _Number : user.ranks().length;
-    var sticky_ranks = user.groups().filter(function (group) {
-      return group.sticky_rank();
-    }).map(function (group) {
-      return m("span", {
-        className: "User-Rank"
-      }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(group.sticky_rank()));
-    });
+    var sticky_ranks = [];
+
+    if (user.groups()) {
+      sticky_ranks = user.groups().filter(function (group) {
+        return group.sticky_rank();
+      }).map(function (group) {
+        return m("span", {
+          className: "User-Rank"
+        }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(group.sticky_rank()));
+      });
+    }
+
     header_node.children = header_node.children.concat(sticky_ranks.length ? sticky_ranks : user.ranks().reverse().splice(0, amt).map(function (rank) {
       return m("span", {
         className: "Post-Rank"
