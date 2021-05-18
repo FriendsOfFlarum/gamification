@@ -68,7 +68,8 @@ return [
             'rankAmt',
             'customRankingImages',
             'useAlternateLayout',
-            'allowSelfVote'
+            'allowSelfVote',
+            'onlyOneStickyRank'
         ]),
 
     (new Extend\Routes('api'))
@@ -100,16 +101,6 @@ return [
     (new Extend\ApiController(Controller\ShowForumController::class))
         ->prepareDataForSerialization(function (Controller\ShowForumController $controller, &$data) {
             $data['ranks'] = Rank::get();
-            /*$data['groups'] = Group::get();
-            foreach ($data['groups'] as $id => $group) {
-                if (!empty($group->sticky_rank)) {
-                    $group->sticky_rank()->associate(Rank::find($group->sticky_rank)->first());
-                    Arr::set($data, "groups.$id", $group);
-                }
-            }*/
-            /*echo "<pre>";
-            var_dump($data['groups'][0]);
-            echo "</pre>";*/
         }),
 
     (new Extend\Settings())

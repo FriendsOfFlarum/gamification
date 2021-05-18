@@ -56,9 +56,21 @@ export default function () {
 
         let sticky_ranks = [];
         if (user.groups()) {
-            sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
-                (group) => <li className="User-Rank">{rankLabel(group.sticky_rank())}</li>
-            );
+            sticky_ranks = user.groups().filter((group) => {
+                return group.sticky_rank();
+            });
+
+            if (setting('onlyOneStickyRank')) {
+                let higher;
+                sticky_ranks.forEach((rank) => {
+                    if (!higher || rank.points > higher.points) {
+                        higher = rank;
+                    }
+                })
+                sticky_ranks = [higher];
+            }
+
+            sticky_ranks.map((group) => <li className="User-Rank">{rankLabel(group.sticky_rank())}</li>);
         }
         if (user.ranks()) {
             if (!badges_node) {
@@ -109,7 +121,19 @@ export default function () {
 
         let sticky_ranks = [];
         if (user.groups()) {
-            sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
+            sticky_ranks = user.groups().filter((group) => group.sticky_rank());
+
+            if (setting('onlyOneStickyRank')) {
+                let higher;
+                sticky_ranks.forEach((rank) => {
+                    if (!higher || rank.points > higher.points) {
+                        higher = rank;
+                    }
+                })
+                sticky_ranks = [higher];
+            }
+
+            sticky_ranks.map(
                 (group) => <span className="User-Rank">{rankLabel(group.sticky_rank())}</span>
             );
         }
