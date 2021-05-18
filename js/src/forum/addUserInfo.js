@@ -53,9 +53,13 @@ export default function () {
         if (!profile_node) return vnode;
 
         let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
-        const sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
-            (group) => <li className="User-Rank">{rankLabel(group.sticky_rank())}</li>
-        );
+
+        let sticky_ranks = [];
+        if (user.groups()) {
+            sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
+                (group) => <li className="User-Rank">{rankLabel(group.sticky_rank())}</li>
+            );
+        }
         if (user.ranks()) {
             if (!badges_node) {
                 profile_node.children.splice(
@@ -103,9 +107,12 @@ export default function () {
         const header_node = vnode.children.find(matchTag('h3'));
         const amt = Number(setting('rankAmt')) ?? user.ranks().length;
 
-        const sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
-            (group) => <span className="User-Rank">{rankLabel(group.sticky_rank())}</span>
-        );
+        let sticky_ranks = [];
+        if (user.groups()) {
+            sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
+                (group) => <span className="User-Rank">{rankLabel(group.sticky_rank())}</span>
+            );
+        }
         header_node.children = header_node.children.concat(
             sticky_ranks.length ? sticky_ranks :
             user
