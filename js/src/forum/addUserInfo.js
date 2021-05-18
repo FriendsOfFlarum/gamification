@@ -50,16 +50,19 @@ export default function () {
         const profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
         const amt = Number(setting('rankAmt'));
 
-        if (!profile_node) return;
+        if (!profile_node) return vnode;
 
         let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
+        const sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
+            (group) => <li className="User-Rank">{rankLabel(group.sticky_rank())}</li>
+        );
         if (user.ranks()) {
             if (!badges_node) {
                 profile_node.children.splice(
                     1,
                     0,
                     <ul className="UserCard-badges badges">
-                        {user
+                        {sticky_ranks.length ? sticky_ranks : user
                             .ranks()
                             .reverse()
                             .map((rank, i) => {
@@ -70,19 +73,19 @@ export default function () {
                     </ul>
                 );
             } else {
-                user.ranks()
+                const ranks = sticky_ranks.length ? sticky_ranks : user.ranks()
                     .reverse()
                     .map((rank, i) => {
                         if (!amt || i < amt) {
                             return <li className="User-Rank">{rankLabel(rank)}</li>;
                         }
-                    })
-                    .forEach((rank) => {
-                        if (!rank) {
-                            return;
-                        }
-                        badges_node.children.push(rank);
                     });
+                ranks.forEach((rank) => {
+                    if (!rank) {
+                        return;
+                    }
+                    badges_node.children.push(rank);
+                });
             }
         }
 
@@ -100,7 +103,11 @@ export default function () {
         const header_node = vnode.children.find(matchTag('h3'));
         const amt = Number(setting('rankAmt')) ?? user.ranks().length;
 
+        const sticky_ranks = user.groups().filter((group) => group.sticky_rank()).map(
+            (group) => <span className="User-Rank">{rankLabel(group.sticky_rank())}</span>
+        );
         header_node.children = header_node.children.concat(
+            sticky_ranks.length ? sticky_ranks :
             user
                 .ranks()
                 .reverse()

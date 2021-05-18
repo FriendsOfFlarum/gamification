@@ -1056,14 +1056,21 @@ __webpack_require__.r(__webpack_exports__);
     var user = this.attrs.user;
     var profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
     var amt = Number(Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_4__["default"])('rankAmt'));
-    if (!profile_node) return;
+    if (!profile_node) return vnode;
     var badges_node = profile_node.children.find(matchClass('UserCard-badges'));
+    var sticky_ranks = user.groups().filter(function (group) {
+      return group.sticky_rank();
+    }).map(function (group) {
+      return m("li", {
+        className: "User-Rank"
+      }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(group.sticky_rank()));
+    });
 
     if (user.ranks()) {
       if (!badges_node) {
         profile_node.children.splice(1, 0, m("ul", {
           className: "UserCard-badges badges"
-        }, user.ranks().reverse().map(function (rank, i) {
+        }, sticky_ranks.length ? sticky_ranks : user.ranks().reverse().map(function (rank, i) {
           if (!amt || i < amt) {
             return m("li", {
               className: "User-Rank"
@@ -1071,13 +1078,14 @@ __webpack_require__.r(__webpack_exports__);
           }
         })));
       } else {
-        user.ranks().reverse().map(function (rank, i) {
+        var ranks = sticky_ranks.length ? sticky_ranks : user.ranks().reverse().map(function (rank, i) {
           if (!amt || i < amt) {
             return m("li", {
               className: "User-Rank"
             }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(rank));
           }
-        }).forEach(function (rank) {
+        });
+        ranks.forEach(function (rank) {
           if (!rank) {
             return;
           }
@@ -1101,7 +1109,14 @@ __webpack_require__.r(__webpack_exports__);
 
     var header_node = vnode.children.find(matchTag('h3'));
     var amt = (_Number = Number(Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_4__["default"])('rankAmt'))) != null ? _Number : user.ranks().length;
-    header_node.children = header_node.children.concat(user.ranks().reverse().splice(0, amt).map(function (rank) {
+    var sticky_ranks = user.groups().filter(function (group) {
+      return group.sticky_rank();
+    }).map(function (group) {
+      return m("span", {
+        className: "User-Rank"
+      }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(group.sticky_rank()));
+    });
+    header_node.children = header_node.children.concat(sticky_ranks.length ? sticky_ranks : user.ranks().reverse().splice(0, amt).map(function (rank) {
       return m("span", {
         className: "Post-Rank"
       }, Object(_common_helpers_rankLabel__WEBPACK_IMPORTED_MODULE_3__["default"])(rank));
@@ -1697,21 +1712,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var flarum_common_models_User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flarum/common/models/User */ "flarum/common/models/User");
 /* harmony import */ var flarum_common_models_User__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(flarum_common_models_User__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _common_models_Rank__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../common/models/Rank */ "./src/common/models/Rank.js");
-/* harmony import */ var _components_RankingsPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/RankingsPage */ "./src/forum/components/RankingsPage.js");
-/* harmony import */ var _components_VoteNotification__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/VoteNotification */ "./src/forum/components/VoteNotification.js");
-/* harmony import */ var _addHotnessSort__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./addHotnessSort */ "./src/forum/addHotnessSort.js");
-/* harmony import */ var _addVoteButtons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./addVoteButtons */ "./src/forum/addVoteButtons.js");
-/* harmony import */ var _addUpvotesToDiscussion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./addUpvotesToDiscussion */ "./src/forum/addUpvotesToDiscussion.js");
-/* harmony import */ var _addUserInfo__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./addUserInfo */ "./src/forum/addUserInfo.js");
-/* harmony import */ var _addPusher__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./addPusher */ "./src/forum/addPusher.js");
-/* harmony import */ var _addAlternateLayout__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./addAlternateLayout */ "./src/forum/addAlternateLayout.js");
-/* harmony import */ var _helpers_setting__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./helpers/setting */ "./src/forum/helpers/setting.js");
-/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components */ "./src/forum/components/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "components", function() { return _components__WEBPACK_IMPORTED_MODULE_14__["components"]; });
+/* harmony import */ var flarum_common_models_Group__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! flarum/common/models/Group */ "flarum/common/models/Group");
+/* harmony import */ var flarum_common_models_Group__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(flarum_common_models_Group__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _common_models_Rank__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../common/models/Rank */ "./src/common/models/Rank.js");
+/* harmony import */ var _components_RankingsPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/RankingsPage */ "./src/forum/components/RankingsPage.js");
+/* harmony import */ var _components_VoteNotification__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/VoteNotification */ "./src/forum/components/VoteNotification.js");
+/* harmony import */ var _addHotnessSort__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./addHotnessSort */ "./src/forum/addHotnessSort.js");
+/* harmony import */ var _addVoteButtons__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./addVoteButtons */ "./src/forum/addVoteButtons.js");
+/* harmony import */ var _addUpvotesToDiscussion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./addUpvotesToDiscussion */ "./src/forum/addUpvotesToDiscussion.js");
+/* harmony import */ var _addUserInfo__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./addUserInfo */ "./src/forum/addUserInfo.js");
+/* harmony import */ var _addPusher__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./addPusher */ "./src/forum/addPusher.js");
+/* harmony import */ var _addAlternateLayout__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./addAlternateLayout */ "./src/forum/addAlternateLayout.js");
+/* harmony import */ var _helpers_setting__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./helpers/setting */ "./src/forum/helpers/setting.js");
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components */ "./src/forum/components/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "components", function() { return _components__WEBPACK_IMPORTED_MODULE_15__["components"]; });
 
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./helpers */ "./src/forum/helpers/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "helpers", function() { return _helpers__WEBPACK_IMPORTED_MODULE_15__["helpers"]; });
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./helpers */ "./src/forum/helpers/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "helpers", function() { return _helpers__WEBPACK_IMPORTED_MODULE_16__["helpers"]; });
+
 
 
 
@@ -1734,26 +1752,27 @@ app.initializers.add('fof-gamification', function (app) {
   flarum_common_models_Discussion__WEBPACK_IMPORTED_MODULE_1___default.a.prototype.canVote = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canVote');
   flarum_common_models_User__WEBPACK_IMPORTED_MODULE_3___default.a.prototype.points = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('points');
   flarum_common_models_User__WEBPACK_IMPORTED_MODULE_3___default.a.prototype.ranks = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('ranks');
+  flarum_common_models_Group__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.sticky_rank = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasOne('sticky_rank');
   flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.upvotes = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.hasMany('upvotes');
   flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.votes = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('votes');
   flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.canVote = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canVote');
   flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.canSeeVotes = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('canSeeVotes');
   flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.hasUpvoted = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('hasUpvoted');
   flarum_common_models_Post__WEBPACK_IMPORTED_MODULE_2___default.a.prototype.hasDownvoted = flarum_common_Model__WEBPACK_IMPORTED_MODULE_0___default.a.attribute('hasDownvoted');
-  app.store.models.ranks = _common_models_Rank__WEBPACK_IMPORTED_MODULE_4__["default"];
-  app.notificationComponents.vote = _components_VoteNotification__WEBPACK_IMPORTED_MODULE_6__["default"];
+  app.store.models.ranks = _common_models_Rank__WEBPACK_IMPORTED_MODULE_5__["default"];
+  app.notificationComponents.vote = _components_VoteNotification__WEBPACK_IMPORTED_MODULE_7__["default"];
   app.routes.rankings = {
     path: '/rankings',
-    component: _components_RankingsPage__WEBPACK_IMPORTED_MODULE_5__["default"]
+    component: _components_RankingsPage__WEBPACK_IMPORTED_MODULE_6__["default"]
   };
-  Object(_addVoteButtons__WEBPACK_IMPORTED_MODULE_8__["default"])();
-  Object(_addHotnessSort__WEBPACK_IMPORTED_MODULE_7__["default"])();
-  Object(_addUserInfo__WEBPACK_IMPORTED_MODULE_10__["default"])();
-  Object(_addUpvotesToDiscussion__WEBPACK_IMPORTED_MODULE_9__["default"])();
-  Object(_addPusher__WEBPACK_IMPORTED_MODULE_11__["default"])();
+  Object(_addVoteButtons__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  Object(_addHotnessSort__WEBPACK_IMPORTED_MODULE_8__["default"])();
+  Object(_addUserInfo__WEBPACK_IMPORTED_MODULE_11__["default"])();
+  Object(_addUpvotesToDiscussion__WEBPACK_IMPORTED_MODULE_10__["default"])();
+  Object(_addPusher__WEBPACK_IMPORTED_MODULE_12__["default"])();
 
-  if (Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_13__["default"])('useAlternateLayout', true)) {
-    Object(_addAlternateLayout__WEBPACK_IMPORTED_MODULE_12__["default"])();
+  if (Object(_helpers_setting__WEBPACK_IMPORTED_MODULE_14__["default"])('useAlternateLayout', true)) {
+    Object(_addAlternateLayout__WEBPACK_IMPORTED_MODULE_13__["default"])();
   }
 });
 
@@ -1912,6 +1931,17 @@ module.exports = flarum.core.compat['common/helpers/username'];
 /***/ (function(module, exports) {
 
 module.exports = flarum.core.compat['common/models/Discussion'];
+
+/***/ }),
+
+/***/ "flarum/common/models/Group":
+/*!************************************************************!*\
+  !*** external "flarum.core.compat['common/models/Group']" ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = flarum.core.compat['common/models/Group'];
 
 /***/ }),
 

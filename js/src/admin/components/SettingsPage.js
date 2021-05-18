@@ -6,6 +6,7 @@ import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import UploadImageButton from './UploadImageButton';
 import Select from "flarum/common/components/Select";
+import GroupBadge from "flarum/common/components/GroupBadge";
 
 export default class SettingsPage extends ExtensionPage {
     oninit(vnode) {
@@ -47,7 +48,8 @@ export default class SettingsPage extends ExtensionPage {
             points: Stream(''),
             name: Stream(''),
             color: Stream(''),
-            groups: Stream('')
+            groups: Stream(''),
+            sticky_group: Stream('')
         };
     }
 
@@ -56,9 +58,13 @@ export default class SettingsPage extends ExtensionPage {
      */
     content() {
         const groups = {
-            0: null
+            null: null
         };
         app.store.all('groups').forEach(group => groups[parseInt(group.id())] = group.nameSingular());
+        const ranks = {
+            null: null
+        };
+        this.ranks.forEach(rank => ranks[parseInt(rank.id())] = rank.name());
 
         return [
             m('div', { className: 'SettingsPage' }, [
@@ -164,61 +170,34 @@ export default class SettingsPage extends ExtensionPage {
                                     }),
                                 ])
                             ),
-                            /*m('legend', {}, app.translator.trans('fof-gamification.admin.page.ranks-group.title')),
-                            m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks-group.label')),
-                            m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.ranks-group.help')),
+                            m('legend', {}, app.translator.trans('fof-gamification.admin.page.sticky-ranks.title')),
+                            m('label', {}, app.translator.trans('fof-gamification.admin.page.sticky-ranks.label')),
+                            m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.sticky-ranks.help')),
                             m(
-                                'div',
+                                'table',
                                 { className: 'Ranks--Container' },
-                                this.ranks.map((rank) => {
-                                    return m('div', { style: 'float: left;' }, [
-                                        m('input', {
-                                            className: 'FormControl Ranks-name',
-                                            value: rank.name(),
-                                            placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
-                                            oninput: withAttr('value', this.updateName.bind(this, rank)),
-                                        }),
-                                        Select.component({
-                                            className: 'FormControl Ranks-group',
-                                            options: groups,
-                                            value: Array.isArray(rank.groups()) ? rank.groups()[0] : rank.groups(),
-                                            placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
-                                            onchange: this.updateGroups.bind(this, rank),
-                                        }),
-                                        Button.component({
-                                            type: 'button',
-                                            className: 'Button Button--warning Ranks-button',
-                                            icon: 'fa fa-times',
-                                            onclick: this.deleteRank.bind(this, rank),
-                                        }),
-                                    ]);
-                                }),
-                                m('legend', {}, app.translator.trans('fof-gamification.admin.page.group-sticky-rank.title')),
-                                m('label', {}, app.translator.trans('fof-gamification.admin.page.group-sticky-rank.label')),
-                                m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.group-sticky-rank.help.help')),
-                                m('div', { style: 'float: left; margin-bottom: 15px' }, [
-                                    Select.component({
-                                        className: 'FormControl Ranks-name',
-                                        options: groups,
-                                        //value: this.newRank.groups(),
-                                        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
-                                        onChange: withAttr('value', this.newRank.groups),
-                                    }),
-                                    Select.component({
-                                        className: 'FormControl Ranks-group',
-                                        //options: this.ranks,
-                                        //value: this.newRank.groups(),
-                                        placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.group'),
-                                        onChange: withAttr('value', this.newRank.groups),
-                                    }),
-                                    Button.component({
-                                        type: 'button',
-                                        className: 'Button Button--warning Ranks-button',
-                                        icon: 'fa fa-plus',
-                                        //onclick: this.addRank.bind(this),
-                                    }),
-                                ])
-                            ),*/
+                                app.store.all('groups').map((group) => {
+                                    console.log(group.sticky_rank() ? group.sticky_rank().name() : '')
+                                    return [
+                                        m('tr', [
+                                            m('td', GroupBadge.component({ group: group })),
+                                            m('td', m('b', {
+                                                    className: 'Ranks-group',
+                                                    style: 'margin-right: 8px; margin-left: 5px;'
+                                                }, `${group.nameSingular()}`)
+                                            ),
+                                            m('td', Select.component({
+                                                className: 'FormControl Ranks-name',
+                                                options: ranks,
+                                                value: group.sticky_rank() ? group.sticky_rank().id() : '',
+                                                placeholder: app.translator.trans('fof-gamification.admin.page.ranks.help.name'),
+                                                onchange: this.updateStickyRank.bind(this, group),
+                                            })),
+                                        ]),
+                                        m('tr', {style: 'height: 8px;'})
+                                    ];
+                                })
+                            ),
                             m('label', {}, app.translator.trans('fof-gamification.admin.page.ranks.number_title')),
                             m('input', {
                                 className: 'FormControl Ranks-default',
@@ -342,6 +321,13 @@ export default class SettingsPage extends ExtensionPage {
 
     updateGroups(rank, value) {
         rank.save({ groups: value });
+    }
+
+    updateStickyRank(group, value) {
+        const emptyValue = {
+            data: []
+        }
+        group.save({ relationships: { sticky_rank: value ? (app.store.getById('ranks', value) ?? emptyValue) : emptyValue } })
     }
 
     deleteRank(rankToDelete) {

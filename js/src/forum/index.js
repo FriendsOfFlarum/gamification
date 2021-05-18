@@ -2,6 +2,7 @@ import Model from 'flarum/common/Model';
 import Discussion from 'flarum/common/models/Discussion';
 import Post from 'flarum/common/models/Post';
 import User from 'flarum/common/models/User';
+import Group from 'flarum/common/models/Group';
 
 import Rank from '../common/models/Rank';
 
@@ -25,6 +26,8 @@ app.initializers.add('fof-gamification', (app) => {
 
     User.prototype.points = Model.attribute('points');
     User.prototype.ranks = Model.hasMany('ranks');
+
+    Group.prototype.sticky_rank = Model.hasOne('sticky_rank');
 
     Post.prototype.upvotes = Model.hasMany('upvotes');
 
