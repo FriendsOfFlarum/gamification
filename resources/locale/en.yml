@@ -23,6 +23,7 @@ fof-gamification:
       title: Voters
       upvotes_label: 'Upvoters:'
     mod_item: View Voters
+    no_autovote_message: You are not allowed to vote your own post
   admin:
     permissions:
       vote_label: Upvote/Downvote posts
@@ -43,7 +44,8 @@ fof-gamification:
         points_title: Points Placeholder
         points_placeholder: "Points: "
         color_holder: '#ffffff'
-        auto_upvote: Auto upvote posts when posted
+        allow_selfvote: Allow users to vote their own posts (Self vote)
+        auto_upvote: Auto upvote posts when posted (works only when the self vote option is enabled)
         rate_limit: Enforce a vote rate limit (10 seconds)
         discussion_page: Show total votes of original post on discussions list
         alternate_layout: Use alternate layout to show and/or do upvotes/downvotes
@@ -63,7 +65,7 @@ fof-gamification:
         number_title: How many rank badges should be shown?
         help:
           color: '#ffffff'
-          help: "Input the required number of upvotes, the name of the rank, and the hex color of the rank"
+          help: Input the required upvotes, rank name, rank color (hex) and (optionally) the group to add the user to after achieving the rank
           points: Points
           name: Name
           group: Group
