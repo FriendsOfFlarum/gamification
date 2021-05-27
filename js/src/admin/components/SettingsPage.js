@@ -304,9 +304,7 @@ export default class SettingsPage extends ExtensionPage {
         this.fields.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
 
         saveSettings(settings)
-            .then(() => {
-                app.alerts.show({ type: 'success' }, app.translator.trans('core.admin.basics.saved_message'));
-            })
+            .then(this.onsaved.bind(this))
             .catch(() => {})
             .then(() => {
                 this.loading = false;
