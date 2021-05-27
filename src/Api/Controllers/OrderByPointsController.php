@@ -13,6 +13,7 @@ namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\Api\Serializer\UserSerializer;
+use Flarum\Http\RequestUtil;
 use Flarum\User\Exception\PermissionDeniedException;
 use FoF\Gamification\Gamification;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,7 +48,7 @@ class OrderByPointsController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        if ($request->getAttribute('actor')->cannot('fof.gamification.viewRankingPage')) {
+        if (RequestUtil::getActor($request)->cannot('fof.gamification.viewRankingPage')) {
             throw new PermissionDeniedException();
         }
 

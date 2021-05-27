@@ -13,6 +13,7 @@ namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractDeleteController;
 use Flarum\Foundation\Paths;
+use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\EmptyResponse;
@@ -48,7 +49,7 @@ class DeleteTopImageController extends AbstractDeleteController
     {
         $id = Arr::get($request->getQueryParams(), 'id');
 
-        $request->getAttribute('actor')->assertAdmin();
+        RequestUtil::getActor($request)->assertAdmin();
 
         $path = $this->settings->get($key = "fof-gamification.topimage{$id}_path");
 
