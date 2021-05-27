@@ -16,10 +16,10 @@ use Flarum\Search\AbstractRegexGambit;
 
 class HotGambit extends AbstractRegexGambit
 {
-    /**
-     * @var string
-     */
-    protected $pattern = 'is:hot';
+    function getGambitPattern()
+    {
+        return 'is:hot';
+    }
 
     /**
      * @param AbstractQueryState $search
