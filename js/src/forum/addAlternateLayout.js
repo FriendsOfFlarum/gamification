@@ -3,6 +3,7 @@ import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 
 import icon from 'flarum/common/helpers/icon';
 import abbreviateNumber from 'flarum/common/utils/abbreviateNumber';
+import classList from 'flarum/common/utils/classList';
 import Stream from 'flarum/common/utils/Stream';
 
 import saveVote from './helpers/saveVote';
@@ -46,7 +47,7 @@ export default () => {
         const useAlternateLayout = setting('useAlternateLayout', true);
 
         content.children.unshift(
-            <div className={`DiscussionListItem-votes ${useAlternateLayout && 'alternateLayout'}`}>
+            <div className={classList('DiscussionListItem-votes', useAlternateLayout && 'alternateLayout')}>
                 {icon('fas fa-arrow-up', {
                     style: hasUpvoted ? style : {},
                     onclick: canVote && (() => saveVote(post, !hasUpvoted, false, null, discussion)),
