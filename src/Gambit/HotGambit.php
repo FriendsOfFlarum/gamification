@@ -16,7 +16,7 @@ use Flarum\Search\AbstractRegexGambit;
 
 class HotGambit extends AbstractRegexGambit
 {
-    function getGambitPattern()
+    public function getGambitPattern()
     {
         return 'is:hot';
     }
