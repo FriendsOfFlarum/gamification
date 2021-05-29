@@ -12,6 +12,7 @@
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Gamification\Gamification;
 use FoF\Gamification\Likes;
@@ -49,7 +50,7 @@ class ConvertLikesController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $actor = $request->getAttribute('actor');
+        $actor = RequestUtil::getActor($request);
 
         if (null !== $actor && $actor->isAdmin() && 'POST' === $request->getMethod() && false == $this->settings->get('fof-gamification.convertedLikes')) {
             $likes = Likes::all();

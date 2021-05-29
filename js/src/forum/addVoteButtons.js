@@ -1,6 +1,7 @@
 import { extend } from 'flarum/common/extend';
 import Button from 'flarum/common/components/Button';
 import CommentPost from 'flarum/forum/components/CommentPost';
+import classList from 'flarum/common/utils/classList';
 import PostControls from 'flarum/forum/utils/PostControls';
 
 import VotesModal from './components/VotesModal';
@@ -37,7 +38,7 @@ export default function () {
 
         items.add(
             'votes',
-            <div className={`CommentPost-votes ${setting('useAlternateLayout', true) && 'alternateLayout'}`}>
+            <div className={classList('CommentPost-votes', setting('useAlternateLayout', true) && 'alternateLayout')}>
                 {Button.component({
                     icon: this.voteLoading || `fas fa-${icon}-up`,
                     className: 'Post-vote Post-upvote',

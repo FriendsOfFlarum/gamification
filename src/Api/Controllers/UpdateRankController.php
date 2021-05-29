@@ -12,6 +12,7 @@
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractShowController;
+use Flarum\Http\RequestUtil;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Commands\EditRank;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -45,7 +46,7 @@ class UpdateRankController extends AbstractShowController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         return $this->bus->dispatch(
-            new EditRank(Arr::get($request->getQueryParams(), 'id'), $request->getAttribute('actor'), Arr::get($request->getParsedBody(), 'data', []))
+            new EditRank(Arr::get($request->getQueryParams(), 'id'), RequestUtil::getActor($request), Arr::get($request->getParsedBody(), 'data', []))
         );
     }
 }

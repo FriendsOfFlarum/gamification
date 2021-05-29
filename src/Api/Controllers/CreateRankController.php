@@ -12,6 +12,7 @@
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractCreateController;
+use Flarum\Http\RequestUtil;
 use FoF\Gamification\Api\Serializers\RankSerializer;
 use FoF\Gamification\Commands\CreateRank;
 use Illuminate\Contracts\Bus\Dispatcher;
@@ -45,7 +46,7 @@ class CreateRankController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         return $this->bus->dispatch(
-            new CreateRank($request->getAttribute('actor'), Arr::get($request->getParsedBody(), 'data', []))
+            new CreateRank(RequestUtil::getActor($request), Arr::get($request->getParsedBody(), 'data', []))
         );
     }
 }
