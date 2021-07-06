@@ -28,13 +28,18 @@ export default function () {
 
     extend(CommentPost.prototype, 'actionItems', function (items) {
         const post = this.attrs.post;
+        const user = app.session.user;
         const hasDownvoted = post.hasDownvoted();
         const hasUpvoted = post.hasUpvoted();
 
         const icon = setting('iconName') || 'thumbs';
 
         // We set canVote to true for guest users so that they can access the login by clicking the button
-        const canVote = !app.session.user || post.canVote();
+        let canVote = !user || post.canVote();
+
+        if (user && user.id() === post.user().id() && !setting('allowSelfVote')) {
+            canVote = false;
+        }
 
         items.add(
             'votes',
@@ -47,6 +52,7 @@ export default function () {
                     },
                     loading: this.voteLoading,
                     disabled: this.voteLoading || !canVote,
+                    title: !canVote ? app.translator.trans('fof-gamification.forum.no_autovote_message') : '',
                     onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
                 })}
 
@@ -60,6 +66,7 @@ export default function () {
                     },
                     loading: this.voteLoading,
                     disabled: !canVote,
+                    title: !canVote ? app.translator.trans('fof-gamification.forum.no_autovote_message') : '',
                     onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
                 })}
             </div>,

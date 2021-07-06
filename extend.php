@@ -61,6 +61,7 @@ return [
             'rankAmt',
             'customRankingImages',
             'useAlternateLayout',
+            'allowSelfVote'
         ]),
 
     (new Extend\Routes('api'))
