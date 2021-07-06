@@ -46,7 +46,8 @@ class CreateRankHandler
         $rank = Rank::build(
             Arr::get($data, 'attributes.name'),
             Arr::get($data, 'attributes.color'),
-            Arr::get($data, 'attributes.points')
+            Arr::get($data, 'attributes.points'),
+            Arr::get($data, 'attributes.groups')
         );
 
         $this->validator->assertValid($rank->getAttributes());

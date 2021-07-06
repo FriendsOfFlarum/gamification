@@ -25,15 +25,21 @@ class Rank extends AbstractModel
      * @param string $name
      * @param string $color
      * @param int    $points
+     * @param int|array $groups
      *
      * @return static
      */
-    public static function build($name, $color, $points)
+    public static function build($name, $color, $points, $groups)
     {
         $rank = new static();
         $rank->name = $name;
         $rank->color = $color;
         $rank->points = $points;
+
+        if (is_int($groups)) {
+            $groups = [$groups];
+        }
+        $rank->groups = $groups;
 
         return $rank;
     }
@@ -70,6 +76,21 @@ class Rank extends AbstractModel
     public function updateColor($color)
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * @param int|array $color
+     *
+     * @return $this
+     */
+    public function updateGroups($groups)
+    {
+        if (is_int($groups)) {
+            $groups = [$groups];
+        }
+        $this->groups = $groups;
 
         return $this;
     }

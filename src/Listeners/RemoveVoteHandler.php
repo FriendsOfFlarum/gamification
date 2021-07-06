@@ -31,6 +31,7 @@ class RemoveVoteHandler
 
         if (null !== $ranks) {
             $user->ranks()->detach($ranks);
+            $user->groups()->detach($ranks->pluck('groups'));
         }
     }
 }

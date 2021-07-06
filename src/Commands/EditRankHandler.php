@@ -63,6 +63,11 @@ class EditRankHandler
             $rank->updateColor($attributes['color']);
         }
 
+        if (isset($attributes['groups']) && '' !== $attributes['groups']) {
+            $validate['groups'] = $attributes['groups'];
+            $rank->updateGroups($attributes['groups']);
+        }
+
         $this->validator->assertValid(array_merge($rank->getDirty(), $validate));
 
         $rank->save();

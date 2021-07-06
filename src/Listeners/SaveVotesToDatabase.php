@@ -196,9 +196,18 @@ class SaveVotesToDatabase
         );
 
         if ($user) {
-            $ranks = Rank::where('points', '<=', $user->votes)->pluck('id');
+            $old_groups = $user->ranks()->pluck('groups')->unique();
 
-            $user->ranks()->sync($ranks);
+            $ranks = Rank::where('points', '<=', $user->votes);
+            $new_groups = $ranks->pluck('groups')->unique();
+
+            $user->ranks()->sync($ranks->pluck('id'));
+
+            $user->groups()->detach($old_groups);
+
+            if (!($new_groups->containsOneItem() && $new_groups->first() === "null")) {
+                $user->groups()->attach($new_groups);
+            }
         }
     }
 
