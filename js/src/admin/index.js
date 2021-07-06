@@ -1,9 +1,13 @@
 import app from 'flarum/admin/app';
 import SettingsPage from './components/SettingsPage';
+
+import Model from "flarum/common/Model";
 import Rank from '../common/models/Rank';
+import Group from "flarum/common/models/Group";
 
 app.initializers.add('fof-gamification', (app) => {
     app.store.models.ranks = Rank;
+    Group.prototype.sticky_rank = Model.hasOne('sticky_rank')
 
     app.extensionData
         .for('fof-gamification')

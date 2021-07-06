@@ -13,8 +13,10 @@ namespace FoF\Gamification;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
+use Flarum\Api\Serializer\AbstractSerializer;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
+use Flarum\Group\Group;
 use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
 use Flarum\Post\Event\Saving;
@@ -24,7 +26,9 @@ use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Api\Serializers;
 use FoF\Gamification\Gambit\HotGambit;
+use FoF\Gamification\Listeners\SyncGroupsStickyRanks;
 use FoF\Gamification\Notification\VoteBlueprint;
+use Illuminate\Support\Arr;
 
 return [
     (new Extend\Frontend('admin'))
@@ -42,6 +46,9 @@ return [
 
     (new Extend\Model(User::class))
         ->belongsToMany('ranks', Rank::class, 'rank_users'),
+
+    (new Extend\Model(Group::class))
+        ->belongsTo('sticky_rank', Rank::class,'sticky_rank'),
 
     (new Extend\Model(Post::class))
         ->relationship('upvotes', function (Post $post) {
@@ -61,6 +68,8 @@ return [
             'rankAmt',
             'customRankingImages',
             'useAlternateLayout',
+            'allowSelfVote',
+            'onlyOneStickyRank'
         ]),
 
     (new Extend\Routes('api'))
@@ -74,13 +83,17 @@ return [
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
 
     (new Extend\Event())
-        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class),
+        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class)
+        ->listen(\Flarum\Group\Event\Saving::class, SyncGroupsStickyRanks::class),
 
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
         ->hasMany('upvotes', Serializer\BasicUserSerializer::class),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->hasMany('ranks', Serializers\RankSerializer::class),
+
+    (new Extend\ApiSerializer(Serializer\GroupSerializer::class))
+        ->hasOne('sticky_rank', Serializers\RankSerializer::class),
 
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
         ->hasMany('ranks', Serializers\RankSerializer::class),
@@ -130,6 +143,15 @@ return [
     (new Extend\ApiController(Controller\UpdateUserController::class))
         ->addInclude('ranks'),
 
+    (new Extend\ApiController(Controller\ListGroupsController::class))
+        ->addInclude('sticky_rank'),
+
+    (new Extend\ApiController(Controller\CreateGroupController::class))
+        ->addInclude('sticky_rank'),
+
+    (new Extend\ApiController(Controller\UpdateGroupController::class))
+        ->addInclude('sticky_rank'),
+
     (new Extend\ApiController(Controller\ShowDiscussionController::class))
         ->addInclude('posts.user.ranks'),
 
@@ -153,6 +175,7 @@ return [
         ->addOptionalInclude('upvotes'),
 
     (new Extend\ApiController(Controller\ShowForumController::class))
+        ->addInclude('groups.sticky_rank')
         ->addInclude('ranks'),
 
     (new Extend\Notification())
