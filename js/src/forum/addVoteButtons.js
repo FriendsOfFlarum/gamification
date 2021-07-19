@@ -37,7 +37,7 @@ export default function () {
         // We set canVote to true for guest users so that they can access the login by clicking the button
         let canVote = !user || post.canVote();
 
-        if (user && user.id() === post.user().id() && !setting('allowSelfVote')) {
+        if (user && user.id() === post.user()?.id() && !setting('allowSelfVote')) {
             canVote = false;
         }
 
