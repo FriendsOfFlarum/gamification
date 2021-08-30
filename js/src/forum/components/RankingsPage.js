@@ -73,7 +73,7 @@ export default class RankingsPage extends Page {
                                         <td>
                                             <div className="PostUser">
                                                 <h3 className="rankings-info">
-                                                    <a href={app.route.user(user)}>
+                                                    <Link href={app.route.user(user)} force={true}>
                                                         {i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : ''}{' '}
                                                         {username(user)}
                                                     </a>
