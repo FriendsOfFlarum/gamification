@@ -76,7 +76,7 @@ export default class RankingsPage extends Page {
                                                     <Link href={app.route.user(user)} force={true}>
                                                         {i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : ''}{' '}
                                                         {username(user)}
-                                                    </a>
+                                                    </Link>
                                                 </h3>
                                             </div>
                                         </td>
