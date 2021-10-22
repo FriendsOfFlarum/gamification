@@ -16,6 +16,7 @@ import addPusher from './addPusher';
 import addAlternateLayout from './addAlternateLayout';
 
 import setting from './helpers/setting';
+import addVotesSort from './addVotesSort';
 
 app.initializers.add('fof-gamification', (app) => {
   Discussion.prototype.votes = Model.attribute('votes');
@@ -42,6 +43,7 @@ app.initializers.add('fof-gamification', (app) => {
 
   addVoteButtons();
   addHotnessSort();
+  addVotesSort();
   addUserInfo();
   addUpvotesToDiscussion();
   addPusher();

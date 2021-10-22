@@ -2,6 +2,7 @@ core:
   forum:
     index_sort:
       hot_button: Trending
+      votes_button: Upvotes
 
 fof-gamification:
   forum:

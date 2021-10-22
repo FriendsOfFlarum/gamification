@@ -134,7 +134,8 @@ return [
         ->addInclude('posts.user.ranks'),
 
     (new Extend\ApiController(Controller\ListDiscussionsController::class))
-        ->addSortField('hotness'),
+        ->addSortField('hotness')
+        ->addSortField('votes'),
 
     (new Extend\ApiController(Controller\ListPostsController::class))
         ->addInclude('user.ranks')
