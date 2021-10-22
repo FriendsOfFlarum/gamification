@@ -23,6 +23,7 @@ use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Api\Serializers;
+use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Gambit\HotGambit;
 use FoF\Gamification\Notification\VoteBlueprint;
 
@@ -74,7 +75,8 @@ return [
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
 
     (new Extend\Event())
-        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class),
+        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class)
+        ->listen(PostWasVoted::class, Listeners\AddDiscussionVotes::class),
 
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
         ->hasMany('upvotes', Serializer\BasicUserSerializer::class),
@@ -165,4 +167,7 @@ return [
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
         ->addGambit(HotGambit::class),
+
+    (new Extend\Console())
+        ->command(Console\ResyncDiscussionVotes::class),
 ];
