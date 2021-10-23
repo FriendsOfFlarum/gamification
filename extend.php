@@ -24,7 +24,6 @@ use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Api\Serializers;
-use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Gambit\HotGambit;
 use FoF\Gamification\Notification\VoteBlueprint;
 
@@ -163,7 +162,6 @@ return [
 
     (new Extend\Notification())
         ->type(VoteBlueprint::class, Serializer\BasicPostSerializer::class, ['alert']),
-
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
         ->addGambit(HotGambit::class),
