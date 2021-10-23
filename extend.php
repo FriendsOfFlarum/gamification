@@ -13,6 +13,7 @@ namespace FoF\Gamification;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
+use Flarum\Discussion\Event\Started;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event\Deleted;
@@ -76,7 +77,9 @@ return [
 
     (new Extend\Event())
         ->listen(Saving::class, Listeners\SaveVotesToDatabase::class)
-        ->listen(PostWasVoted::class, Listeners\AddDiscussionVotes::class),
+        ->listen(Posted::class, Listeners\AddVoteHandler::class)
+        ->listen(Deleted::class, Listeners\RemoveVoteHandler::class)
+        ->listen(Started::class, Listeners\AddDiscussionVotes::class),
 
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
         ->hasMany('upvotes', Serializer\BasicUserSerializer::class),
@@ -161,9 +164,6 @@ return [
     (new Extend\Notification())
         ->type(VoteBlueprint::class, Serializer\BasicPostSerializer::class, ['alert']),
 
-    (new Extend\Event())
-        ->listen(Posted::class, Listeners\AddVoteHandler::class)
-        ->listen(Deleted::class, Listeners\RemoveVoteHandler::class),
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
         ->addGambit(HotGambit::class),

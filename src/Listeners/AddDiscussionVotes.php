@@ -12,19 +12,15 @@
 namespace FoF\Gamification\Listeners;
 
 use Flarum\Discussion\Discussion;
-use Flarum\Post\Post;
-use FoF\Gamification\Events\PostWasVoted;
+use Flarum\Discussion\Event\Started;
 use FoF\Gamification\Vote;
 
 class AddDiscussionVotes
 {
-    public function handle(PostWasVoted $event)
+    public function handle(Started $event)
     {
-        /** @var Post $post */
-        $post = $event->vote->post;
-
         /** @var Discussion $discussion */
-        $discussion = Vote::updateDiscussionVotes($post->discussion);
+        $discussion = Vote::updateDiscussionVotes($event->discussion);
         $discussion->save();
     }
 }
