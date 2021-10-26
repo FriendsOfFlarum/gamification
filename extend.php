@@ -62,6 +62,7 @@ return [
             'rankAmt',
             'customRankingImages',
             'useAlternateLayout',
+            'upVotesOnly',
         ]),
 
     (new Extend\Routes('api'))

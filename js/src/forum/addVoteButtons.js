@@ -32,6 +32,7 @@ export default function () {
     const hasUpvoted = post.hasUpvoted();
 
     const icon = setting('iconName') || 'thumbs';
+    const upVotesOnly = setting('upVotesOnly', true);
 
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || post.canVote();
@@ -52,16 +53,18 @@ export default function () {
 
         <label className="Post-points">{post.votes()}</label>
 
-        {Button.component({
-          icon: this.voteLoading || `fas fa-${icon}-down`,
-          className: 'Post-vote Post-downvote',
-          style: hasDownvoted && {
-            color: app.forum.attribute('themePrimaryColor'),
-          },
-          loading: this.voteLoading,
-          disabled: !canVote,
-          onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
-        })}
+        {upVotesOnly
+          ? ''
+          : Button.component({
+              icon: this.voteLoading || `fas fa-${icon}-down`,
+              className: 'Post-vote Post-downvote',
+              style: hasDownvoted && {
+                color: app.forum.attribute('themePrimaryColor'),
+              },
+              loading: this.voteLoading,
+              disabled: !canVote,
+              onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
+            })}
       </div>,
       10
     );

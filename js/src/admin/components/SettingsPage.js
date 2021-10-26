@@ -21,7 +21,7 @@ export default class SettingsPage extends ExtensionPage {
       'pointsPlaceholder',
     ];
 
-    this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout'];
+    this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout', 'upVotesOnly'];
 
     this.ranks = app.store.all('ranks');
 
@@ -182,6 +182,14 @@ export default class SettingsPage extends ExtensionPage {
                   className: 'votes-switch',
                 },
                 app.translator.trans('fof-gamification.admin.page.votes.alternate_layout')
+              ),
+              Switch.component(
+                {
+                  state: this.values.upVotesOnly() || false,
+                  onchange: this.values.upVotesOnly,
+                  className: 'votes-switch',
+                },
+                app.translator.trans('fof-gamification.admin.page.votes.upvotes_only')
               ),
               m('label', {}, app.translator.trans('fof-gamification.admin.page.votes.points_title')),
               m('input', {

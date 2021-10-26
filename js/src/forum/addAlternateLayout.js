@@ -45,6 +45,7 @@ export default () => {
     };
 
     const useAlternateLayout = setting('useAlternateLayout', true);
+    const upvotesOnly = setting('upVotesOnly', true);
 
     content.children.unshift(
       <div className={classList('DiscussionListItem-votes', useAlternateLayout && 'alternateLayout')}>
@@ -54,11 +55,13 @@ export default () => {
           ...attrs,
         })}
         <span>{abbreviateNumber(get(discussion, 'votes') || 0)}</span>
-        {icon('fas fa-arrow-down', {
-          style: hasDownvoted ? style : {},
-          onclick: canVote && (() => saveVote(post, false, !hasDownvoted, null, discussion)),
-          ...attrs,
-        })}
+        {upvotesOnly
+          ? ''
+          : icon('fas fa-arrow-down', {
+              style: hasDownvoted ? style : {},
+              onclick: canVote && (() => saveVote(post, false, !hasDownvoted, null, discussion)),
+              ...attrs,
+            })}
       </div>
     );
   });
