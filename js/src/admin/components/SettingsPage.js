@@ -154,7 +154,7 @@ export default class SettingsPage extends ExtensionPage {
               }),
 
               m('label', {}, app.translator.trans('fof-gamification.admin.page.alt_votes.icon_name')),
-              m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.alt_votes.icon_help')),
+              m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.votes.icon_help')),
               m('input', {
                 className: 'FormControl Ranks-default',
                 value: this.values.iconNameAlt() || '',

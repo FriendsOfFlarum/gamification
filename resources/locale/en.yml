@@ -40,6 +40,8 @@ fof-gamification:
         custom_image_1: 1st place image
         custom_image_2: 2nd place image
         custom_image_3: 3rd place image
+      alt_votes:
+        icon_name: Alt layout icon name
       votes:
         points_title: Points Placeholder
         points_placeholder: "Points: "
