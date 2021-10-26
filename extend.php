@@ -63,6 +63,7 @@ return [
             'customRankingImages',
             'useAlternateLayout',
             'upVotesOnly',
+            'iconNameAlt'
         ]),
 
     (new Extend\Routes('api'))

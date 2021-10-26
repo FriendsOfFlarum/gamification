@@ -19,6 +19,7 @@ export default class SettingsPage extends ExtensionPage {
       'iconName',
       'blockedUsers',
       'pointsPlaceholder',
+      'iconNameAlt',
     ];
 
     this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout', 'upVotesOnly'];
@@ -151,6 +152,16 @@ export default class SettingsPage extends ExtensionPage {
                 placeholder: 'thumbs',
                 oninput: withAttr('value', this.values.iconName),
               }),
+
+              m('label', {}, app.translator.trans('fof-gamification.admin.page.alt_votes.icon_name')),
+              m('div', { className: 'helpText' }, app.translator.trans('fof-gamification.admin.page.alt_votes.icon_help')),
+              m('input', {
+                className: 'FormControl Ranks-default',
+                value: this.values.iconNameAlt() || '',
+                placeholder: 'arrow',
+                oninput: withAttr('value', this.values.iconNameAlt),
+              }),
+
               Switch.component(
                 {
                   state: this.values.autoUpvotePosts() || false,
