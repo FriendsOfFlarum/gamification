@@ -51,6 +51,7 @@ export default () => {
     content.children.unshift(
       <div className={classList('DiscussionListItem-votes', useAlternateLayout && 'alternateLayout')}>
         {icon(`fas fa-${altIcon}-up`, {
+          role: canVote ? 'button' : undefined,
           style: hasUpvoted ? style : {},
           onclick: canVote && (() => saveVote(post, !hasUpvoted, false, null, discussion)),
           ...attrs,
@@ -59,6 +60,7 @@ export default () => {
         {upvotesOnly
           ? ''
           : icon(`fas fa-${altIcon}-down`, {
+              role: canVote ? 'button' : undefined,
               style: hasDownvoted ? style : {},
               onclick: canVote && (() => saveVote(post, false, !hasDownvoted, null, discussion)),
               ...attrs,
