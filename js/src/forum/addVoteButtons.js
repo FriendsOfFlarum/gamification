@@ -41,7 +41,7 @@ export default function () {
       'votes',
       <div className={classList('CommentPost-votes', setting('useAlternateLayout', true) && 'alternateLayout')}>
         {Button.component({
-          icon: this.voteLoading || `fas fa-${icon}-up`,
+          icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-up`,
           className: 'Post-vote Post-upvote',
           style: hasUpvoted && {
             color: app.forum.attribute('themePrimaryColor'),
@@ -56,7 +56,7 @@ export default function () {
         {upVotesOnly
           ? ''
           : Button.component({
-              icon: this.voteLoading || `fas fa-${icon}-down`,
+              icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-down`,
               className: 'Post-vote Post-downvote',
               style: hasDownvoted && {
                 color: app.forum.attribute('themePrimaryColor'),

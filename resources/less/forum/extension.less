@@ -2,28 +2,32 @@
 @import "./alternateLayout.less";
 
 @media (min-width: 768px) {
-  .DiscussionListItem-info .item-discussion-votes + .item-tags   {
-    right: 122px !important;
-  }
+    .DiscussionListItem-info .item-discussion-votes + .item-tags {
+        right: 122px !important;
+    }
 }
 
 .item-discussion-votes {
-  margin-left: 5px;
-  position: absolute;
-  right: 80px;
-  top: 15px;
-  max-width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  transition: max-width .2s ease-in-out,-webkit-mask-image .2s;
-  -webkit-mask-image: linear-gradient(to right, #000 140px, rgba(0,0,0,0) 150px);
-  font-size: 14px;
-  line-height: 1;
-  color: @muted-color;
+    margin-left: 5px;
+    position: absolute;
+    right: 80px;
+    top: 15px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: max-width 0.2s ease-in-out, -webkit-mask-image 0.2s;
+    -webkit-mask-image: linear-gradient(
+        to right,
+        #000 140px,
+        rgba(0, 0, 0, 0) 150px
+    );
+    font-size: 14px;
+    line-height: 1;
+    color: @muted-color;
 
-  .icon {
-    margin-right: 8px;
-  }
+    .icon {
+        margin-right: 8px;
+    }
 }
 
 .VotesModal-list {
@@ -73,6 +77,11 @@
         border: none;
         margin: 8px 0 0;
 
+        &.loading {
+            margin-left: 3.25px;
+            margin-right: 3.25px;
+        }
+
         &:focus {
             outline: 0;
         }
@@ -95,7 +104,9 @@
     margin-left: 11px;
 }
 
-.ranking-1, .ranking-2, .ranking-3 {
+.ranking-1,
+.ranking-2,
+.ranking-3 {
     span.username {
         margin-top: 15px;
     }
@@ -108,7 +119,8 @@
 .rankings {
     width: 100%;
 
-    td, th {
+    td,
+    th {
         text-align: center;
         padding: 5px;
     }
@@ -143,7 +155,7 @@
 
     &-3 {
         font-size: 4em;
-        color: #CD7F32;
+        color: #cd7f32;
     }
 
     &-3-avatar {
@@ -193,40 +205,41 @@
         left: 0;
         right: 0;
         margin-top: 15px;
-        border-bottom: 1px solid #e8ecf3
+        border-bottom: 1px solid #e8ecf3;
     }
 
-    .RankingPage .sideNav > ul > li, .RankingPage .sideNav .Dropdown-menu > li {
+    .RankingPage .sideNav > ul > li,
+    .RankingPage .sideNav .Dropdown-menu > li {
         display: inline-block;
         margin: 0 20px 0 0;
-        vertical-align: top
+        vertical-align: top;
     }
 
     .RankingPage .sideNav .Dropdown-separator {
-        display: none
+        display: none;
     }
 
     .RankingPage .sideNav .Dropdown--select .Dropdown-menu > li > a {
-        padding-left: 25px
+        padding-left: 25px;
     }
 
     .RankingPage .sideNav .Dropdown--select .Dropdown-menu > li > a .icon {
-        margin-left: -25px
+        margin-left: -25px;
     }
 
     .RankingPage .sideNav .affix {
-        position: static
+        position: static;
     }
 
     .RankingPage .sideNav:after {
-        display: none
+        display: none;
     }
 
     .RankingPage .sideNav > ul > li:first-child {
-        width: 190px
+        width: 190px;
     }
 
     .RankingPage .sideNavOffset {
-        margin: 15px 0 0
+        margin: 15px 0 0;
     }
 }

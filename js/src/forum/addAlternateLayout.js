@@ -46,7 +46,7 @@ export default () => {
 
     const useAlternateLayout = setting('useAlternateLayout', true);
     const upvotesOnly = setting('upVotesOnly', true);
-    const altIcon = setting('iconNameAlt', false) || 'arrow';
+    const altIcon = setting('iconNameAlt') || 'arrow';
 
     content.children.unshift(
       <div className={classList('DiscussionListItem-votes', useAlternateLayout && 'alternateLayout')}>

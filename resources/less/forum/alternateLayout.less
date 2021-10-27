@@ -9,7 +9,8 @@
     line-height: 24px;
     padding-top: 2px;
 
-    .icon, span {
+    .icon,
+    span {
         display: block;
         margin-top: -2px;
         width: 100%;
@@ -17,7 +18,7 @@
     }
 
     .icon {
-        font-size: .75em;
+        font-size: 0.75em;
     }
 
     + .DiscussionListItem-author {
@@ -27,7 +28,8 @@
 }
 
 .hasPane {
-    &.panePinned, &.paneShowing {
+    &.panePinned,
+    &.paneShowing {
         .DiscussionListItem-votes.alternateLayout {
             left: 6px;
         }
@@ -54,24 +56,10 @@
 
         button {
             padding: 0;
-
-            &.loading {
-                margin-left: -7px;
-            }
         }
 
         .Post-points {
             padding: 0 5px;
-        }
-
-        .Post-upvote {
-            .icon:before {
-                content: "";
-            }
-        }
-
-        .Post-downvote .icon:before {
-            content: "";
         }
     }
 }
