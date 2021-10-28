@@ -47,7 +47,7 @@ export default function useAlternatePostVoteLayout() {
   extend(CommentPost.prototype, 'headerItems', function (items) {
     const post = this.attrs.post;
 
-    if (!post.canVote()) { return; }
+    if (!post.canVote()) return;
 
     const discussion = post.discussion();
 
