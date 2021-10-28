@@ -22,7 +22,15 @@ export default class SettingsPage extends ExtensionPage {
       'iconNameAlt',
     ];
 
-    this.switches = ['autoUpvotePosts', 'customRankingImages', 'rateLimit', 'showVotesOnDiscussionPage', 'useAlternateLayout', 'upVotesOnly'];
+    this.switches = [
+      'autoUpvotePosts',
+      'customRankingImages',
+      'rateLimit',
+      'showVotesOnDiscussionPage',
+      'useAlternateLayout',
+      'altPostVotingUi',
+      'upVotesOnly',
+    ];
 
     this.ranks = app.store.all('ranks');
 
@@ -193,6 +201,14 @@ export default class SettingsPage extends ExtensionPage {
                   className: 'votes-switch',
                 },
                 app.translator.trans('fof-gamification.admin.page.votes.alternate_layout')
+              ),
+              Switch.component(
+                {
+                  state: this.values.altPostVotingUi() || false,
+                  onchange: this.values.altPostVotingUi,
+                  className: 'votes-switch',
+                },
+                app.translator.trans('fof-gamification.admin.page.votes.alternate_post_layout')
               ),
               Switch.component(
                 {

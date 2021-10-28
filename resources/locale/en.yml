@@ -49,7 +49,8 @@ fof-gamification:
         auto_upvote: Auto upvote posts when posted
         rate_limit: Enforce a vote rate limit (10 seconds)
         discussion_page: Show total votes of original post on discussions list
-        alternate_layout: Use alternate layout to show and/or do upvotes/downvotes
+        alternate_layout: Use alternate voting layout on discussions list
+        alternate_post_layout: Use alternate voting layout on posts
         title: Votes
         vote_color: Voted color
         icon_name: Upvote/downvote icon

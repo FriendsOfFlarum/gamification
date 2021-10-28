@@ -51,6 +51,9 @@ app.initializers.add('fof-gamification', (app) => {
 
   if (setting('useAlternateLayout', true)) {
     addAlternateLayout();
+  }
+
+  if (setting('altPostVotingUi', true)) {
     useAlternatePostVoteLayout();
   }
 });
