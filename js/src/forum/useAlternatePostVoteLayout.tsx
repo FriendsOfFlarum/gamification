@@ -57,9 +57,6 @@ export default function useAlternatePostVoteLayout() {
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || post.canVote();
 
-    // Hide voting controls on non-OP
-    if (post.number() !== 1) return;
-
     items.add(
       'votes',
       <div className="Post-votes alternateLayout" data-upvotes-only={upvotesOnly}>
