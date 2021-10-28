@@ -30,11 +30,11 @@ function makeArrowStyles(active) {
 }
 
 export default function useAlternatePostVoteLayout() {
-  extend(CommentPost.prototype, 'actionItems', function (items: ItemList) {
+  extend(CommentPost.prototype, 'actionItems', function (this: CommentPost, items: ItemList) {
     items.remove('votes');
   });
 
-  extend(CommentPost.prototype, 'classes', function (classes: string[]) {
+  extend(CommentPost.prototype, 'classes', function (this: CommentPost, classes: string[]) {
     const upvotesOnly = setting('upVotesOnly', true);
 
     classes.push('votesAlternativeLayout');
@@ -44,7 +44,7 @@ export default function useAlternatePostVoteLayout() {
     }
   });
 
-  extend(CommentPost.prototype, 'headerItems', function (items) {
+  extend(CommentPost.prototype, 'headerItems', function (this: CommentPost, items: ItemList) {
     const post = this.attrs.post;
 
     if (!post.canVote()) return;
