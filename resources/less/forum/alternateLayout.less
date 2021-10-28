@@ -20,18 +20,6 @@
   margin-right: 12px;
 }
 
-.DiscussionListItem-votes.alternateLayout {
-  top: 4px;
-
-  @media @phone {
-    left: 8px;
-  }
-}
-
-.Post-votes {
-  top: 12px;
-}
-
 .DiscussionListItem-votes.alternateLayout,
 .Post-votes {
   position: absolute;
@@ -41,16 +29,6 @@
   width: 36px;
 
   left: 0;
-
-  @screen-tablet-under: @screen-tablet - 0.01px;
-
-  @media (max-width: @screen-tablet-under) {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    top: 0;
-    left: 0;
-  }
 
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 0px 0.5px,
@@ -125,6 +103,28 @@
     span {
       text-align: center;
     }
+  }
+}
+
+@screen-tablet-under: @screen-tablet - 0.01px;
+
+.DiscussionListItem-votes.alternateLayout {
+  top: 4px;
+
+  @media (max-width: @screen-tablet-under) {
+    left: 8px;
+  }
+}
+
+.Post-votes {
+  top: 12px;
+
+  @media (max-width: @screen-tablet-under) {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    top: 0;
+    left: 0;
   }
 }
 
