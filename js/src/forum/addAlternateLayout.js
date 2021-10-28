@@ -1,10 +1,9 @@
 import { extend } from 'flarum/common/extend';
-import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 
-import icon from 'flarum/common/helpers/icon';
+import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 import abbreviateNumber from 'flarum/common/utils/abbreviateNumber';
-import classList from 'flarum/common/utils/classList';
-import Stream from 'flarum/common/utils/Stream';
+import Button from 'flarum/common/components/Button';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 
 import saveVote from './helpers/saveVote';
 import setting from './helpers/setting';
@@ -19,9 +18,17 @@ const get = (discussion, key) => {
   return discussion[key]();
 };
 
-export default () => {
+function makeArrowStyles(active) {
+  if (!active) return {};
+
+  return {
+    color: 'var(--primary-color) !important',
+  };
+}
+
+export default function addAlternateLayout() {
   extend(DiscussionListItem.prototype, 'oninit', function () {
-    this.voteLoading = Stream(false);
+    this.subtree.check(() => this.voteLoading);
   });
 
   extend(DiscussionListItem.prototype, 'view', function (vdom) {
@@ -36,36 +43,43 @@ export default () => {
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || get(discussion, 'canVote');
 
-    const style = {
-      color: app.forum.attribute('themePrimaryColor'),
-    };
-
-    const attrs = {
-      disabled: !canVote,
-    };
-
-    const useAlternateLayout = setting('useAlternateLayout', true);
     const upvotesOnly = setting('upVotesOnly', true);
     const altIcon = setting('iconNameAlt') || 'arrow';
 
     content.children.unshift(
-      <div className={classList('DiscussionListItem-votes', useAlternateLayout && 'alternateLayout')}>
-        {icon(`fas fa-${altIcon}-up`, {
-          role: canVote ? 'button' : undefined,
-          style: hasUpvoted ? style : {},
-          onclick: canVote && (() => saveVote(post, !hasUpvoted, false, null, discussion)),
-          ...attrs,
-        })}
-        <span>{abbreviateNumber(get(discussion, 'votes') || 0)}</span>
-        {upvotesOnly
-          ? ''
-          : icon(`fas fa-${altIcon}-down`, {
-              role: canVote ? 'button' : undefined,
-              style: hasDownvoted ? style : {},
-              onclick: canVote && (() => saveVote(post, false, !hasDownvoted, null, discussion)),
-              ...attrs,
-            })}
+      <div className="DiscussionListItem-votes alternateLayout" data-upvotes-only={upvotesOnly}>
+        <Button
+          className="DiscussionListItem-voteButton DiscussionListItem-voteButton--up Button Button--icon Button--text"
+          icon={`fas fa-fw fa-${altIcon}-up`}
+          style={makeArrowStyles(hasUpvoted)}
+          data-active={hasUpvoted}
+          disabled={!canVote || this.voteLoading}
+          onclick={() => {
+            saveVote(post, !hasUpvoted, false, (val) => {
+              this.voteLoading = val;
+            });
+          }}
+        />
+
+        <span class="DiscussionListItem-voteCount">{abbreviateNumber(get(discussion, 'votes') || 0)}</span>
+
+        {!upvotesOnly && (
+          <Button
+            className="DiscussionListItem-voteButton DiscussionListItem-voteButton--down Button Button--icon Button--text"
+            icon={`fas fa-fw fa-${altIcon}-down`}
+            style={makeArrowStyles(hasDownvoted)}
+            data-active={hasDownvoted}
+            disabled={!canVote || this.voteLoading}
+            onclick={() => {
+              saveVote(post, false, !hasDownvoted, (val) => {
+                this.voteLoading = val;
+              });
+            }}
+          />
+        )}
+
+        {this.voteLoading && <LoadingIndicator display="inline" size="small" />}
       </div>
     );
   });
-};
+}
