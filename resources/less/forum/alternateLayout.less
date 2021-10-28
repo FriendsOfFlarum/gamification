@@ -9,6 +9,10 @@
 
 .CommentPost.votesAlternativeLayout {
   min-height: 165px;
+
+  .Post-header {
+    margin-right: 36px;
+  }
 }
 
 .CommentPost.votesAlternativeLayout.votesUpvotesOnly {
@@ -139,9 +143,9 @@
   @screen-tablet-under: @screen-tablet - 0.01px;
 
   @media (max-width: @screen-tablet-under) {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
+    position: absolute;
+    right: 4px;
+    top: 8px;
   }
 }
 
