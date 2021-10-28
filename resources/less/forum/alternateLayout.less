@@ -20,6 +20,14 @@
   margin-right: 12px;
 }
 
+.DiscussionListItem-votes.alternateLayout {
+  top: 4px;
+}
+
+.Post-votes {
+  top: 12px;
+}
+
 .DiscussionListItem-votes.alternateLayout,
 .Post-votes {
   position: absolute;
@@ -29,7 +37,10 @@
   width: 36px;
 
   left: 0;
-  top: 4px;
+
+  @media @phone {
+    left: 8px;
+  }
 
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 0px 0.5px,
