@@ -28,6 +28,9 @@ export default function () {
 
   extend(CommentPost.prototype, 'actionItems', function (items) {
     const post = this.attrs.post;
+
+    if (!post.canVote()) { return; }
+    
     const hasDownvoted = post.hasDownvoted();
     const hasUpvoted = post.hasUpvoted();
 
