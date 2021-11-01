@@ -24,7 +24,6 @@ use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Api\Serializers;
-use FoF\Gamification\Gambit\HotGambit;
 use FoF\Gamification\Notification\VoteBlueprint;
 
 return [
