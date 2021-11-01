@@ -45,48 +45,48 @@ export default class RankingsPage extends Page {
         {IndexPage.prototype.hero()}
         <div className="container">
           <div className="sideNavContainer">
-          <nav className="IndexPage-nav sideNav">
-            <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
-          </nav>
-          <div className="IndexPage-results sideNavOffset">
-            <table class="rankings">
-              <tr>
-                <th className="rankings-mobile">{app.translator.trans('fof-gamification.forum.ranking.rank')}</th>
-                <th>{app.translator.trans('fof-gamification.forum.ranking.name')}</th>
-                <th>{app.translator.trans('fof-gamification.forum.ranking.amount')}</th>
-              </tr>
-              {this.users.map((user, i) => {
-                ++i;
-                return [
-                  <tr className={'ranking-' + i}>
-                    {i < 4 ? (
-                      setting('customRankingImages', true) ? (
-                        <img
-                          className="rankings-mobile rankings-image"
-                          src={app.forum.attribute('baseUrl') + app.forum.attribute(`fof-gamification.topimage${i}Url`)}
-                        />
+            <nav className="IndexPage-nav sideNav">
+              <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
+            </nav>
+            <div className="IndexPage-results sideNavOffset">
+              <table class="rankings">
+                <tr>
+                  <th className="rankings-mobile">{app.translator.trans('fof-gamification.forum.ranking.rank')}</th>
+                  <th>{app.translator.trans('fof-gamification.forum.ranking.name')}</th>
+                  <th>{app.translator.trans('fof-gamification.forum.ranking.amount')}</th>
+                </tr>
+                {this.users.map((user, i) => {
+                  ++i;
+                  return [
+                    <tr className={'ranking-' + i}>
+                      {i < 4 ? (
+                        setting('customRankingImages', true) ? (
+                          <img
+                            className="rankings-mobile rankings-image"
+                            src={app.forum.attribute('baseUrl') + app.forum.attribute(`fof-gamification.topimage${i}Url`)}
+                          />
+                        ) : (
+                          <td className={'rankings-mobile rankings-' + i}>{icon('fas fa-trophy')}</td>
+                        )
                       ) : (
-                        <td className={'rankings-mobile rankings-' + i}>{icon('fas fa-trophy')}</td>
-                      )
-                    ) : (
-                      <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>
-                    )}
-                    <td>
-                      <div className="PostUser">
-                        <h3 className="rankings-info">
-                          <Link href={app.route.user(user)} force={true}>
-                            {i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : ''} {username(user)}
-                          </Link>
-                        </h3>
-                      </div>
-                    </td>
-                    {i < 4 ? <td className={'rankings-' + i}>{user.points()}</td> : <td className="rankings-4">{user.points()}</td>}
-                  </tr>,
-                ];
-              })}
-            </table>
-            <div className="rankings-loadmore"> {loading}</div>
-          </div>
+                        <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>
+                      )}
+                      <td>
+                        <div className="PostUser">
+                          <h3 className="rankings-info">
+                            <Link href={app.route.user(user)} force={true}>
+                              {i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : ''} {username(user)}
+                            </Link>
+                          </h3>
+                        </div>
+                      </td>
+                      {i < 4 ? <td className={'rankings-' + i}>{user.points()}</td> : <td className="rankings-4">{user.points()}</td>}
+                    </tr>,
+                  ];
+                })}
+              </table>
+              <div className="rankings-loadmore"> {loading}</div>
+            </div>
           </div>
         </div>
       </div>
