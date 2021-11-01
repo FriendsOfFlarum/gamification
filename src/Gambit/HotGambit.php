@@ -23,7 +23,7 @@ class HotGambit extends AbstractRegexGambit
 
     /**
      * @param SearchState $search
-     * @param array              $matches
+     * @param array       $matches
      * @param $negate
      */
     protected function conditions(SearchState $search, array $matches, $negate)
