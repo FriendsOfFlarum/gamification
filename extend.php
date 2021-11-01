@@ -167,7 +167,10 @@ return [
         ->type(VoteBlueprint::class, Serializer\BasicPostSerializer::class, ['alert']),
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
-        ->addGambit(HotGambit::class),
+        ->addGambit(Search\HotFilterGambit::class),
+
+    (new Extend\Filter(DiscussionFilterer::class))
+        ->addFilter(Search\HotFilterGambit::class),
 
     (new Extend\Console())
         ->command(Console\ResyncDiscussionVotes::class),
