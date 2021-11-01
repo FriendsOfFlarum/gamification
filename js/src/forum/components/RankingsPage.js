@@ -1,7 +1,6 @@
 import avatar from 'flarum/common/helpers/avatar';
 import Page from 'flarum/common/components/Page';
 import IndexPage from 'flarum/forum/components/IndexPage';
-import AffixedSidebar from 'flarum/forum/components/AffixedSidebar';
 import Button from 'flarum/common/components/Button';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import listItems from 'flarum/common/helpers/listItems';
@@ -10,6 +9,9 @@ import icon from 'flarum/common/helpers/icon';
 import setting from '../helpers/setting';
 import Link from 'flarum/common/components/Link';
 
+/**
+ * This page re-uses Flarum's IndexPage CSS classes
+ */
 export default class RankingsPage extends Page {
   oninit(vnode) {
     super.oninit(vnode);
@@ -39,15 +41,14 @@ export default class RankingsPage extends Page {
     }
 
     return (
-      <div className="TagsPage">
+      <div className="IndexPage">
         {IndexPage.prototype.hero()}
         <div className="container">
-          <AffixedSidebar>
-            <nav className="RankingPage-nav IndexPage-nav sideNav">
-              <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
-            </nav>
-          </AffixedSidebar>
-          <div className="RankingPage sideNavOffset">
+          <div className="sideNavContainer">
+          <nav className="IndexPage-nav sideNav">
+            <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
+          </nav>
+          <div className="IndexPage-results sideNavOffset">
             <table class="rankings">
               <tr>
                 <th className="rankings-mobile">{app.translator.trans('fof-gamification.forum.ranking.rank')}</th>
@@ -85,6 +86,7 @@ export default class RankingsPage extends Page {
               })}
             </table>
             <div className="rankings-loadmore"> {loading}</div>
+          </div>
           </div>
         </div>
       </div>
