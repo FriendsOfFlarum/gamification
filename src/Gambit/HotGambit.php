@@ -11,8 +11,8 @@
 
 namespace FoF\Gamification\Gambit;
 
-use Flarum\Query\AbstractQueryState;
 use Flarum\Search\AbstractRegexGambit;
+use Flarum\Search\SearchState;
 
 class HotGambit extends AbstractRegexGambit
 {
@@ -22,11 +22,11 @@ class HotGambit extends AbstractRegexGambit
     }
 
     /**
-     * @param AbstractQueryState $search
-     * @param array              $matches
+     * @param SearchState $search
+     * @param array       $matches
      * @param $negate
      */
-    protected function conditions(AbstractQueryState $search, array $matches, $negate)
+    protected function conditions(SearchState $search, array $matches, $negate)
     {
         $search->getQuery()->orderBy('hotness', 'desc');
     }
