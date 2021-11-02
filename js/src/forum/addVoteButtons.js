@@ -10,7 +10,7 @@ import saveVote from './helpers/saveVote';
 
 export default function () {
   extend(PostControls, 'moderationControls', function (items, post) {
-    if (post.canSeeVotes()) {
+    if (post.seeVoters()) {
       items.add('viewVotes', [
         m(
           Button,
@@ -29,13 +29,15 @@ export default function () {
   extend(CommentPost.prototype, 'actionItems', function (items) {
     const post = this.attrs.post;
 
-    if (!post.canVote()) return;
+    //if (!post.canVote()) return;
 
     const hasDownvoted = post.hasDownvoted();
     const hasUpvoted = post.hasUpvoted();
 
     const icon = setting('iconName') || 'thumbs';
     const upVotesOnly = setting('upVotesOnly', true);
+
+    const canSeeVotes = post.canSeeVotes();
 
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || post.canVote();
@@ -50,7 +52,7 @@ export default function () {
             color: app.forum.attribute('themePrimaryColor'),
           },
           loading: this.voteLoading,
-          disabled: this.voteLoading || !canVote,
+          disabled: this.voteLoading || !canVote || !canSeeVotes,
           onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
         })}
 
@@ -65,7 +67,7 @@ export default function () {
                 color: app.forum.attribute('themePrimaryColor'),
               },
               loading: this.voteLoading,
-              disabled: !canVote,
+              disabled: !canVote || !canSeeVotes,
               onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
             })}
       </div>,

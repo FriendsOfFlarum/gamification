@@ -173,4 +173,7 @@ return [
 
     (new Extend\Console())
         ->command(Console\ResyncDiscussionVotes::class),
+
+    (new Extend\Policy())
+        ->modelPolicy(Post::class, Access\PostPolicy::class),
 ];

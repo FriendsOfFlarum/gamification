@@ -28,14 +28,21 @@ function makeArrowStyles(active) {
 
 export default function addAlternateLayout() {
   extend(DiscussionListItem.prototype, 'oninit', function () {
+    const discussion = this.attrs.discussion;
+
+    if (!discussion.seeVotes()) { return; }
+
     this.subtree.check(() => this.voteLoading);
   });
 
   extend(DiscussionListItem.prototype, 'view', function (vdom) {
+    const discussion = this.attrs.discussion;
+
+    if (!discussion.seeVotes()) { return; }
+  
     if (!vdom || !vdom.children) return;
 
     const content = vdom.children.find((v) => v && v.attrs && v.attrs.className && v.attrs.className.includes('DiscussionListItem-content'));
-    const discussion = this.attrs.discussion;
     const post = discussion.firstPost();
 
     const hasUpvoted = get(discussion, 'hasUpvoted');
