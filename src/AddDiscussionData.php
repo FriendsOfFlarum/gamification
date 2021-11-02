@@ -21,7 +21,7 @@ class AddDiscussionData
         $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
         $actor = $serializer->getActor();
 
-        if ($actor->exists && $post) {
+        if (!$actor->isGuest() && $actor->exists && $post) {
             $vote = Vote::query()->where([
                 'post_id' => $post->id,
                 'user_id' => $actor->id,
@@ -31,8 +31,12 @@ class AddDiscussionData
             $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
         }
 
-        $attributes['votes'] = (int) $discussion->votes;
-        $attributes['canVote'] = $post && $actor->can('vote', $post);
+        if ($seeVotes = $actor->can('canSeeVotes', $discussion)) {
+            $attributes['votes'] = (int) $discussion->votes;
+        }
+
+        $attributes['seeVotes'] = $seeVotes;
+        $attributes['canVote'] = $post && $actor->can('votePosts', $discussion) && $actor->can('vote', $post);
 
         return $attributes;
     }

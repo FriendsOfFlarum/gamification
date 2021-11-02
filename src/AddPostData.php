@@ -31,6 +31,7 @@ class AddPostData
 
         $attributes['canVote'] = (bool) $actor->can('vote', $post);
         $attributes['canSeeVotes'] = (bool) $actor->can('canSeeVotes', $post->discussion);
+        $attributes['seeVoters'] = (bool) $actor->can('canSeeVoters', $post->discussion);
 
         return $attributes;
     }

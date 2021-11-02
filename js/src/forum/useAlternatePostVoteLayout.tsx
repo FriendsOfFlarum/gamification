@@ -47,7 +47,7 @@ export default function useAlternatePostVoteLayout() {
   extend(CommentPost.prototype, 'headerItems', function (this: CommentPost, items: ItemList) {
     const post = this.attrs.post;
 
-    if (!post.canVote()) return;
+    if (!post.canSeeVotes()) return;
 
     const discussion = post.discussion();
 
@@ -56,6 +56,8 @@ export default function useAlternatePostVoteLayout() {
 
     const icon = setting('iconName') || 'thumbs';
     const upvotesOnly = setting('upVotesOnly', true);
+
+    const canSeeVotes = post.canSeeVotes();
 
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || post.canVote();
@@ -68,7 +70,7 @@ export default function useAlternatePostVoteLayout() {
           icon={`fas fa-fw fa-${icon}-up`}
           style={makeArrowStyles(hasUpvoted)}
           data-active={hasUpvoted}
-          disabled={!canVote || this.voteLoading}
+          disabled={!canVote || this.voteLoading || !canSeeVotes}
           onclick={() => {
             saveVote(post, !hasUpvoted, false, (val) => {
               this.voteLoading = val;

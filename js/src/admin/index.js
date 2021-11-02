@@ -17,9 +17,18 @@ app.initializers.add('fof-gamification', (app) => {
     )
     .registerPermission(
       {
-        icon: 'fas fa-info-circle',
+        icon: 'fas fa-thumbs-up',
         label: app.translator.trans('fof-gamification.admin.permissions.see_votes_label'),
         permission: 'discussion.canSeeVotes',
+        allowGuest: true,
+      },
+      'view'
+    )
+    .registerPermission(
+      {
+        icon: 'fas fa-info-circle',
+        label: app.translator.trans('fof-gamification.admin.permissions.see_voters_label'),
+        permission: 'discussion.canSeeVoters',
       },
       'view'
     )
@@ -28,6 +37,7 @@ app.initializers.add('fof-gamification', (app) => {
         icon: 'fas fa-trophy',
         label: app.translator.trans('fof-gamification.admin.permissions.see_ranking_page'),
         permission: 'fof.gamification.viewRankingPage',
+        allowGuest: true,
       },
       'view'
     )

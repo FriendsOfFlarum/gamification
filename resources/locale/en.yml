@@ -27,7 +27,8 @@ fof-gamification:
   admin:
     permissions:
       vote_label: Upvote/Downvote posts
-      see_votes_label: See post upvotes/downvotes
+      see_votes_label: See up/down vote count
+      see_voters_label: See who voted
       see_ranking_page: See ranking page
     page:
       rankings:

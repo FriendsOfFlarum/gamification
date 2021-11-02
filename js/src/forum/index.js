@@ -24,6 +24,7 @@ app.initializers.add('fof-gamification', (app) => {
   Discussion.prototype.hasUpvoted = Model.attribute('hasUpvoted');
   Discussion.prototype.hasDownvoted = Model.attribute('hasDownvoted');
   Discussion.prototype.canVote = Model.attribute('canVote');
+  Discussion.prototype.seeVotes = Model.attribute('seeVotes');
 
   User.prototype.points = Model.attribute('points');
   User.prototype.ranks = Model.hasMany('ranks');
@@ -35,6 +36,7 @@ app.initializers.add('fof-gamification', (app) => {
   Post.prototype.canSeeVotes = Model.attribute('canSeeVotes');
   Post.prototype.hasUpvoted = Model.attribute('hasUpvoted');
   Post.prototype.hasDownvoted = Model.attribute('hasDownvoted');
+  Post.prototype.seeVoters = Model.attribute('seeVoters');
 
   app.store.models.ranks = Rank;
 

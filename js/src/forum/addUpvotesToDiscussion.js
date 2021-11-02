@@ -10,6 +10,10 @@ export default function () {
   }
 
   extend(DiscussionListItem.prototype, 'infoItems', function (items) {
+    const discussion = this.attrs.discussion;
+
+    if (!discussion.seeVotes()) { return; }
+
     items.add(
       'discussion-votes',
       <span className="DiscussionListItem-votes" title={app.translator.trans('fof-gamification.forum.votes')}>
