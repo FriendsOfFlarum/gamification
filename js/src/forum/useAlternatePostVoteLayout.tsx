@@ -11,16 +11,6 @@ import type ItemList from 'flarum/common/utils/ItemList';
 import setting from './helpers/setting';
 import saveVote from './helpers/saveVote';
 
-const get = (discussion, key) => {
-  const post = discussion.firstPost();
-
-  if (post && post[key]() !== undefined) {
-    return post[key]();
-  }
-
-  return discussion[key]();
-};
-
 function makeArrowStyles(active) {
   if (!active) return {};
 
@@ -49,8 +39,6 @@ export default function useAlternatePostVoteLayout() {
 
     if (!post.canSeeVotes()) return;
 
-    const discussion = post.discussion();
-
     const hasDownvoted = post.hasDownvoted();
     const hasUpvoted = post.hasUpvoted();
 
@@ -78,7 +66,7 @@ export default function useAlternatePostVoteLayout() {
           }}
         />
 
-        <span class="Post-voteCount">{abbreviateNumber(get(discussion, 'votes') || 0)}</span>
+        <span class="Post-voteCount">{abbreviateNumber(post.votes() || 0)}</span>
 
         {!upvotesOnly && (
           <Button
