@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import Model from 'flarum/common/Model';
 import Discussion from 'flarum/common/models/Discussion';
 import Post from 'flarum/common/models/Post';
@@ -6,7 +7,6 @@ import User from 'flarum/common/models/User';
 import Rank from '../common/models/Rank';
 
 import RankingsPage from './components/RankingsPage';
-import VoteNotification from './components/VoteNotification';
 
 import addHotnessSort from './addHotnessSort';
 import addVoteButtons from './addVoteButtons';
@@ -18,6 +18,7 @@ import addAlternateLayout from './addAlternateLayout';
 import setting from './helpers/setting';
 import addVotesSort from './addVotesSort';
 import useAlternatePostVoteLayout from './useAlternatePostVoteLayout';
+import addNotifications from './addNotifications';
 
 app.initializers.add('fof-gamification', (app) => {
   Discussion.prototype.votes = Model.attribute('votes');
@@ -40,8 +41,6 @@ app.initializers.add('fof-gamification', (app) => {
 
   app.store.models.ranks = Rank;
 
-  app.notificationComponents.vote = VoteNotification;
-
   app.routes.rankings = { path: '/rankings', component: RankingsPage };
 
   addVoteButtons();
@@ -50,6 +49,7 @@ app.initializers.add('fof-gamification', (app) => {
   addUserInfo();
   addUpvotesToDiscussion();
   addPusher();
+  addNotifications();
 
   if (setting('useAlternateLayout', true)) {
     addAlternateLayout();
