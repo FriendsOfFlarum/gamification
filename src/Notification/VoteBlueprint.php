@@ -12,15 +12,17 @@
 namespace FoF\Gamification\Notification;
 
 use Flarum\Notification\Blueprint\BlueprintInterface;
+use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
 use FoF\Gamification\Vote;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class VoteBlueprint implements BlueprintInterface
+class VoteBlueprint implements BlueprintInterface, MailableInterface
 {
     /**
      * @var Vote
      */
-    protected $vote;
+    public $vote;
 
     /**
      * VoteBlueprint constructor.
@@ -70,5 +72,28 @@ class VoteBlueprint implements BlueprintInterface
     public static function getSubjectModel()
     {
         return Post::class;
+    }
+
+    /**
+     * Get the name of the view to construct a notification email with.
+     *
+     * @return string
+     */
+    public function getEmailView()
+    {
+        return ['text' => 'fof-gamification::emails.postVoted'];
+    }
+
+    /**
+     * Get the subject line for the notification email.
+     *
+     * @return string
+     */
+    public function getEmailSubject(TranslatorInterface $translator)
+    {
+        return $translator->trans('fof-gamification.email.subject.postVoted', [
+            '{display_name}'     => $this->vote->user->display_name,
+            '{discussion_title}' => $this->vote->post->discussion->title,
+        ]);
     }
 }
