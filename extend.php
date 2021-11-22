@@ -178,5 +178,5 @@ return [
         ->modelPolicy(Post::class, Access\PostPolicy::class),
 
     (new Extend\View())
-        ->namespace('fof-gamification', __DIR__ . '/resources/views'),
+        ->namespace('fof-gamification', __DIR__.'/resources/views'),
 ];
