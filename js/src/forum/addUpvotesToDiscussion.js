@@ -12,7 +12,9 @@ export default function () {
   extend(DiscussionListItem.prototype, 'infoItems', function (items) {
     const discussion = this.attrs.discussion;
 
-    if (!discussion.seeVotes()) { return; }
+    if (!discussion.seeVotes()) {
+      return;
+    }
 
     items.add(
       'discussion-votes',

@@ -5,13 +5,13 @@ import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 import ItemList from 'flarum/common/utils/ItemList';
 
 export default function addNotifications() {
-    app.notificationComponents.vote = VoteNotification;
+  app.notificationComponents.vote = VoteNotification;
 
-    extend(NotificationGrid.prototype, 'notificationTypes', function (items :ItemList) {
-        items.add('vote', {
-            name: 'vote',
-            icon: 'fas fa-thumbs-up',
-            label: app.translator.trans('fof-gamification.forum.notification.prefrences.vote'),
-        });
+  extend(NotificationGrid.prototype, 'notificationTypes', function (items: ItemList) {
+    items.add('vote', {
+      name: 'vote',
+      icon: 'fas fa-thumbs-up',
+      label: app.translator.trans('fof-gamification.forum.notification.prefrences.vote'),
     });
+  });
 }
