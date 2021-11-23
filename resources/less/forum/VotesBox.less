@@ -1,0 +1,106 @@
+.VotingContainer {
+  padding: 12px;
+  background: @control-bg;
+  border-radius: @border-radius;
+
+  @media @phone {
+    padding: 8px;
+  }
+}
+
+.FoFGamification-voters {
+  @media @phone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .LoadingIndicator-container {
+    @media @tablet-up {
+      width: 100%;
+
+      .LoadingIndicator {
+        margin: auto;
+      }
+    }
+  }
+
+  &-title {
+    margin-bottom: 8px;
+    color: @control-color;
+
+    @media @phone {
+      margin-bottom: 0;
+      margin-right: 8px;
+    }
+
+    &-icon {
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+
+    &-label {
+      text-transform: uppercase;
+      font-weight: bold;
+      padding-left: 4px;
+
+      @media @phone {
+        display: none;
+      }
+
+      &--mobile {
+        display: none;
+
+        @media @phone {
+          display: unset;
+        }
+      }
+    }
+  }
+
+  &-message {
+    color: @control-color;
+
+    @media @phone {
+      display: none;
+    }
+  }
+
+  &-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(24px, 1fr));
+    gap: 4px;
+    text-align: center;
+
+    @media @phone {
+      display: flex;
+      gap: unset;
+    }
+  }
+
+  &-item {
+    &,
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    @media @phone {
+      margin-left: 4px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    .Avatar {
+      --size: 24px;
+    }
+
+    &--plus .Avatar {
+      background-color: @body-bg;
+      color: @control-color;
+      font-size: 13px;
+    }
+  }
+}

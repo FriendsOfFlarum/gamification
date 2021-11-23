@@ -19,6 +19,7 @@ import setting from './helpers/setting';
 import addVotesSort from './addVotesSort';
 import useAlternatePostVoteLayout from './useAlternatePostVoteLayout';
 import addNotifications from './addNotifications';
+import addVotersToDiscussionPageSideBar from './addVotersToDiscussionPageSideBar';
 
 app.initializers.add('fof-gamification', (app) => {
   Discussion.prototype.votes = Model.attribute('votes');
@@ -50,6 +51,7 @@ app.initializers.add('fof-gamification', (app) => {
   addUpvotesToDiscussion();
   addPusher();
   addNotifications();
+  addVotersToDiscussionPageSideBar();
 
   if (setting('useAlternateLayout', true)) {
     addAlternateLayout();
