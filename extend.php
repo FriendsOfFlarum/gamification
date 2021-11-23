@@ -175,9 +175,6 @@ return [
     (new Extend\Console())
         ->command(Console\ResyncDiscussionVotes::class),
 
-    (new Extend\ApiSerializer(PostSerializer::class))
-        ->attributes(ModifyPostData::class),
-
     (new Extend\View())
         ->namespace('fof-gamification', __DIR__.'/resources/views'),
 ];
