@@ -1,3 +1,4 @@
+import app from 'flarum/admin/app';
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Button from 'flarum/common/components/Button';
 import saveSettings from 'flarum/admin/utils/saveSettings';
@@ -31,6 +32,7 @@ export default class SettingsPage extends ExtensionPage {
       'useAlternateLayout',
       'altPostVotingUi',
       'upVotesOnly',
+      'firstPostOnly',
     ];
 
     this.ranks = app.store.all('ranks');
@@ -359,6 +361,14 @@ export default class SettingsPage extends ExtensionPage {
     );
 
     items.add(
+      'firstPostOnly',
+      <Switch state={this.values.firstPostOnly() || false} onchange={this.values.firstPostOnly} className="votes-switch">
+        {app.translator.trans('fof-gamification.admin.page.votes.first_post_only')}
+      </Switch>,
+      20
+    );
+
+    items.add(
       'pointsPlaceholder',
       <>
         <label>{app.translator.trans('fof-gamification.admin.page.votes.points_title')}</label>
@@ -369,7 +379,7 @@ export default class SettingsPage extends ExtensionPage {
           oninput={withAttr('value', this.values.pointsPlaceholder)}
         />
       </>,
-      20
+      10
     );
 
     return items;
