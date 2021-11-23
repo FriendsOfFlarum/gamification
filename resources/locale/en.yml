@@ -59,6 +59,7 @@ fof-gamification:
         icon_name: Upvote/downvote icon
         icon_help: "Input any Font-Awesome icon that is suffixed with -up and -down. Examples: arrow, thumbs, chevron"
         upvotes_only: Only allow upvoting
+        first_post_only: Only allow up/down votes in the first post in a discussion
       save_settings: Save settings
       convert:
         button: Convert likes to upvotes

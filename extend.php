@@ -13,6 +13,7 @@ namespace FoF\Gamification;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
+use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Discussion\Event\Started;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
@@ -174,8 +175,8 @@ return [
     (new Extend\Console())
         ->command(Console\ResyncDiscussionVotes::class),
 
-    (new Extend\Policy())
-        ->modelPolicy(Post::class, Access\PostPolicy::class),
+    (new Extend\ApiSerializer(PostSerializer::class))
+        ->attributes(ModifyPostData::class),
 
     (new Extend\View())
         ->namespace('fof-gamification', __DIR__.'/resources/views'),
