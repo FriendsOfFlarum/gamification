@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification;
 
 use Flarum\Api\Serializer\PostSerializer;
@@ -13,12 +22,12 @@ class ModifyPostData
      * @var SettingsRepositoryInterface
      */
     protected $settings;
-    
+
     public function __construct(SettingsRepositoryInterface $settings)
     {
         $this->settings = $settings;
     }
-    
+
     public function __invoke(PostSerializer $serializer, Post $post, array $attributes): array
     {
         if ((bool) $this->settings->get('fof-gamification.firstPostOnly', false) && $post->number !== 1) {
