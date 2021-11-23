@@ -83,7 +83,9 @@ export default class Voters extends Component {
               </span>
             </span>
           </div>
-          <div className="FoFGamification-voters-message">{voters.length === 0 ? app.translator.trans('fof-gamification.forum.voters.none') : null}</div>
+          <div className="FoFGamification-voters-message">
+            {voters.length === 0 ? app.translator.trans('fof-gamification.forum.voters.none') : null}
+          </div>
           <div className="FoFGamification-voters-list">
             {voters.slice(0, max).map((user: any) => (
               <Link href={app.route('user', { username: user.slug() })} className="FoFGamification-voters-item">

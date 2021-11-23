@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import DiscussionPage from 'flarum/forum/components/DiscussionPage';
 import Voters from './components/Voters';
@@ -16,7 +17,7 @@ export default function addVotersToDiscussionPageSideBar() {
     items.replace('controls', null, 100);
     items.replace('subscription', null, 80);
 
-    if (firstPost?.canSeeVotes?.()) {
+    if (firstPost?.canSeeVotes?.() && !!app.forum.attribute('fof-gamification-op-votes-only')) {
       items.add('op-voters', <Voters post={firstPost} />, 90);
     }
   });
