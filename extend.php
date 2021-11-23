@@ -105,7 +105,8 @@ return [
         })
         ->serializeToForum('fof-gamification.topimage3Url', 'fof-gamification.topimage3_path', function ($value) {
             return $value ? "/assets/$value" : null;
-        }),
+        })
+        ->serializeToForum('fof-gamification-op-votes-only', 'fof-gamification.firstPostOnly', 'boolVal'),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->attributes(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {

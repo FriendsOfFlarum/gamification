@@ -26,6 +26,10 @@ fof-gamification:
       title: Voters
       upvotes_label: 'Upvoters:'
     mod_item: View Voters
+    voters:
+      none: No voters yet
+      label: Voters
+      label_none: No voters
   admin:
     permissions:
       vote_label: Upvote/Downvote posts
