@@ -32,27 +32,26 @@ class AddPostData
     {
         $actor = $serializer->getActor();
 
-        if ($actor->exists) {
-            $vote = Vote::query()->where(['post_id' => $post->id, 'user_id' => $actor->id])->first(['value']);
+        $canSeeVotes = (bool) $actor->can('canSeeVotes', $post->discussion) && (bool) $actor->can('canSeeVotes', $post);
 
-            $attributes['hasUpvoted'] = $vote && $vote->isUpvote();
-            $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
+        if ($canSeeVotes) {
+            if ($actor->exists) {
+                $vote = Vote::query()->where(['post_id' => $post->id, 'user_id' => $actor->id])->first(['value']);
+    
+                $attributes['hasUpvoted'] = $vote && $vote->isUpvote();
+                $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
+            } else {
+                $attributes['hasUpvoted'] = null;
+                $attributes['hasDownvoted'] = null;
+            }
+            $attributes['canSeeVotes'] = $canSeeVotes;
+            $attributes['votes'] = Vote::calculate(['post_id' => $post->id]);
+        } else {
+            $attributes['votes'] = null;
         }
-
-        $attributes['votes'] = Vote::calculate(['post_id' => $post->id]);
 
         $attributes['canVote'] = (bool) $actor->can('vote', $post);
-        $attributes['canSeeVotes'] = (bool) $actor->can('canSeeVotes', $post->discussion);
-        $attributes['seeVoters'] = (bool) $actor->can('canSeeVoters', $post->discussion);
-
-        if ((bool) $this->settings->get('fof-gamification.firstPostOnly', false) && $post->number !== 1) {
-            $attributes['canVote'] = false;
-            $attributes['canSeeVotes'] = false;
-            $attributes['seeVoters'] = false;
-            Arr::pull($attributes, 'votes');
-            Arr::pull($attributes, 'hasUpvoted');
-            Arr::pull($attributes, 'hasDownvoted');
-        }
+        $attributes['seeVoters'] = (bool) $actor->can('canSeeVoters', $post->discussion) && (bool) $actor->can('canSeeVoters', $post);
 
         return $attributes;
     }

@@ -76,6 +76,9 @@ return [
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
 
+    (new Extend\Policy())
+        ->modelPolicy(Post::class, Access\PostPolicy::class),
+
     (new Extend\Event())
         ->listen(Saving::class, Listeners\SaveVotesToDatabase::class)
         ->listen(Posted::class, Listeners\AddVoteHandler::class)
