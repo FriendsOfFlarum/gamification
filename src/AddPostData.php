@@ -14,7 +14,6 @@ namespace FoF\Gamification;
 use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Illuminate\Support\Arr;
 
 class AddPostData
 {
@@ -37,7 +36,7 @@ class AddPostData
         if ($canSeeVotes) {
             if ($actor->exists) {
                 $vote = Vote::query()->where(['post_id' => $post->id, 'user_id' => $actor->id])->first(['value']);
-    
+
                 $attributes['hasUpvoted'] = $vote && $vote->isUpvote();
                 $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
             } else {

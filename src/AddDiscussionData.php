@@ -13,7 +13,6 @@ namespace FoF\Gamification;
 
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Discussion;
-use Flarum\User\User;
 
 class AddDiscussionData
 {

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification\Access;
 
 use Flarum\Post\Post;
@@ -13,17 +22,17 @@ class PostPolicy extends AbstractPolicy
      * @var SettingsRepositoryInterface
      */
     protected $settings;
-    
+
     public function __construct(SettingsRepositoryInterface $settings)
     {
         $this->settings = $settings;
     }
-    
+
     private function isFirstPostOnlyMode(): bool
     {
         return $this->settings->get('fof-gamification.firstPostOnly', false);
     }
-    
+
     public function vote(User $actor, Post $post)
     {
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
@@ -38,7 +47,7 @@ class PostPolicy extends AbstractPolicy
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
             return $this->deny();
         }
-        
+
         return $actor->can('canSeeVotes', $post->discussion);
     }
 
