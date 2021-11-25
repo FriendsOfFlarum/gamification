@@ -13,6 +13,7 @@ namespace FoF\Gamification;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
+use Flarum\Discussion\Event\Started;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event\Deleted;
@@ -23,7 +24,6 @@ use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Api\Serializers;
-use FoF\Gamification\Gambit\HotGambit;
 use FoF\Gamification\Notification\VoteBlueprint;
 
 return [
@@ -62,6 +62,9 @@ return [
             'customRankingImages',
             'useAlternateLayout',
             'allowSelfVote'
+            'upVotesOnly',
+            'iconNameAlt',
+            'altPostVotingUi',
         ]),
 
     (new Extend\Routes('api'))
@@ -74,8 +77,14 @@ return [
         ->delete('/ranks/{id}', 'ranks.delete', Controllers\DeleteRankController::class)
         ->get('/rankings', 'rankings', Controllers\OrderByPointsController::class),
 
+    (new Extend\Policy())
+        ->modelPolicy(Post::class, Access\PostPolicy::class),
+
     (new Extend\Event())
-        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class),
+        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class)
+        ->listen(Posted::class, Listeners\AddVoteHandler::class)
+        ->listen(Deleted::class, Listeners\RemoveVoteHandler::class)
+        ->listen(Started::class, Listeners\AddDiscussionVotes::class),
 
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
         ->hasMany('upvotes', Serializer\BasicUserSerializer::class),
@@ -100,7 +109,8 @@ return [
         })
         ->serializeToForum('fof-gamification.topimage3Url', 'fof-gamification.topimage3_path', function ($value) {
             return $value ? "/assets/$value" : null;
-        }),
+        })
+        ->serializeToForum('fof-gamification-op-votes-only', 'fof-gamification.firstPostOnly', 'boolVal'),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->attributes(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {
@@ -135,7 +145,8 @@ return [
         ->addInclude('posts.user.ranks'),
 
     (new Extend\ApiController(Controller\ListDiscussionsController::class))
-        ->addSortField('hotness'),
+        ->addSortField('hotness')
+        ->addSortField('votes'),
 
     (new Extend\ApiController(Controller\ListPostsController::class))
         ->addInclude('user.ranks')
@@ -159,10 +170,15 @@ return [
     (new Extend\Notification())
         ->type(VoteBlueprint::class, Serializer\BasicPostSerializer::class, ['alert']),
 
-    (new Extend\Event())
-        ->listen(Posted::class, Listeners\AddVoteHandler::class)
-        ->listen(Deleted::class, Listeners\RemoveVoteHandler::class),
-
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
-        ->addGambit(HotGambit::class),
+        ->addGambit(Search\HotFilterGambit::class),
+
+    (new Extend\Filter(DiscussionFilterer::class))
+        ->addFilter(Search\HotFilterGambit::class),
+
+    (new Extend\Console())
+        ->command(Console\ResyncDiscussionVotes::class),
+
+    (new Extend\View())
+        ->namespace('fof-gamification', __DIR__.'/resources/views'),
 ];

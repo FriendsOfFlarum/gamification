@@ -43,7 +43,7 @@ class AddVoteHandler
 
     public function handle(Posted $event)
     {
-        if ('0' !== $this->settings->get('fof-gamification.autoUpvotePosts') && $event->post->exists()) {
+        if ((bool) $this->settings->get('fof-gamification.autoUpvotePosts') && $event->post->exists()) {
             $actor = $event->actor;
 
             Vote::updateUserVotes($actor)->save();

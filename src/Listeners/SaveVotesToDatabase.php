@@ -123,9 +123,9 @@ class SaveVotesToDatabase
                 $vote->delete();
             } else {
                 if ($vote->isUpvote()) {
-                    $vote->value = -1;
-                } else {
                     $vote->value = 1;
+                } else {
+                    $vote->value = -1;
                 }
 
                 $vote->save();

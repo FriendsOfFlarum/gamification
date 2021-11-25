@@ -13,20 +13,9 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Christian Lopez",
-            "email": "Christian.Lopez@redevs.org",
-            "homepage": "https://redevs.org"
-        },
-
-        {
-          "name": "Charlie K",
-          "email": "Charlie.K@redevs.org",
-          "homepage": "https://redevs.org"
-        },
-        {
-            "name": "David Sevilla Martin",
-            "email": "me+fof@datitisev.me",
-            "homepage": "https://datitisev.me"
+            "name": "FoF Team",
+            "email": "team@friendsofflarum.org",
+            "homepage": "https://friendsofflarum.org"
         }
     ],
     "support": {
@@ -64,7 +53,7 @@
             }
         },
         "flagrow": {
-            "discuss": "https://discuss.flarum.org/d/20671-friendsofflarum-gamification"
+            "discuss": "https://discuss.flarum.org/d/20671"
         }
     }
 }

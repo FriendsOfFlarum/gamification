@@ -2,6 +2,7 @@ core:
   forum:
     index_sort:
       hot_button: Trending
+      votes_button: Upvotes
 
 fof-gamification:
   forum:
@@ -16,6 +17,8 @@ fof-gamification:
     notification:
       upvote: "{username} upvoted your post"
       downvote: "{username} downvoted your post"
+      prefrences:
+        vote: When one of my posts is up/down voted
     user:
       points: "Points: {points}"
       rank: "{rank}"
@@ -24,10 +27,15 @@ fof-gamification:
       upvotes_label: 'Upvoters:'
     mod_item: View Voters
     no_autovote_message: You are not allowed to vote your own post
+    voters:
+      none: No voters yet
+      label: Voters
+      label_none: No voters
   admin:
     permissions:
       vote_label: Upvote/Downvote posts
-      see_votes_label: See post upvotes/downvotes
+      see_votes_label: See up/down vote count
+      see_voters_label: See who voted
       see_ranking_page: See ranking page
     page:
       rankings:
@@ -40,6 +48,8 @@ fof-gamification:
         custom_image_1: 1st place image
         custom_image_2: 2nd place image
         custom_image_3: 3rd place image
+      alt_votes:
+        icon_name: Alt layout icon name
       votes:
         points_title: Points Placeholder
         points_placeholder: "Points: "
@@ -48,11 +58,14 @@ fof-gamification:
         auto_upvote: Auto upvote posts when posted (works only when the self vote option is enabled)
         rate_limit: Enforce a vote rate limit (10 seconds)
         discussion_page: Show total votes of original post on discussions list
-        alternate_layout: Use alternate layout to show and/or do upvotes/downvotes
+        alternate_layout: Use alternate voting layout on discussions list
+        alternate_post_layout: Use alternate voting layout on posts
         title: Votes
         vote_color: Voted color
         icon_name: Upvote/downvote icon
         icon_help: "Input any Font-Awesome icon that is suffixed with -up and -down. Examples: arrow, thumbs, chevron"
+        upvotes_only: Only allow upvoting
+        first_post_only: Only allow up/down votes in the first post in a discussion
       save_settings: Save settings
       convert:
         button: Convert likes to upvotes
@@ -68,3 +81,14 @@ fof-gamification:
           help: "Input the required number of upvotes, the name of the rank, and the hex color of the rank"
           points: Points
           name: Name
+
+  email:
+    body:
+      postVoted: |
+        Hey {recipient_display_name},
+
+        {actor_display_name} just voted on your post in {discussion_title}.
+
+        View it here: {discussion_url}
+    subject:
+      postVoted: Your post was voted on by {display_name}

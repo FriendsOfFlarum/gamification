@@ -9,68 +9,74 @@ import setting from './helpers/setting';
 import saveVote from './helpers/saveVote';
 
 export default function () {
-    extend(PostControls, 'moderationControls', function (items, post) {
-        if (post.canSeeVotes()) {
-            items.add('viewVotes', [
-                m(
-                    Button,
-                    {
-                        icon: 'fas fa-thumbs-up',
-                        onclick: () => {
-                            app.modal.show(VotesModal, { post });
-                        },
-                    },
-                    app.translator.trans('fof-gamification.forum.mod_item')
-                ),
-            ]);
-        }
-    });
+  extend(PostControls, 'moderationControls', function (items, post) {
+    if (post.seeVoters()) {
+      items.add('viewVotes', [
+        m(
+          Button,
+          {
+            icon: 'fas fa-thumbs-up',
+            onclick: () => {
+              app.modal.show(VotesModal, { post });
+            },
+          },
+          app.translator.trans('fof-gamification.forum.mod_item')
+        ),
+      ]);
+    }
+  });
 
     extend(CommentPost.prototype, 'actionItems', function (items) {
-        const post = this.attrs.post;
-        const user = app.session.user;
-        const hasDownvoted = post.hasDownvoted();
-        const hasUpvoted = post.hasUpvoted();
+      const post = this.attrs.post;
+      const user = app.session.user;
 
-        const icon = setting('iconName') || 'thumbs';
+    //if (!post.canVote()) return;
+      
+      const hasDownvoted = post.hasDownvoted();
+      const hasUpvoted = post.hasUpvoted();
 
-        // We set canVote to true for guest users so that they can access the login by clicking the button
-        let canVote = !user || post.canVote();
+      const icon = setting('iconName') || 'thumbs';
+      const upVotesOnly = setting('upVotesOnly', true);
 
-        if (user && user.id() === post.user()?.id() && !setting('allowSelfVote')) {
-            canVote = false;
-        }
+      const canSeeVotes = post.canSeeVotes();
 
-        items.add(
-            'votes',
-            <div className={classList('CommentPost-votes', setting('useAlternateLayout', true) && 'alternateLayout')}>
-                {Button.component({
-                    icon: this.voteLoading || `fas fa-${icon}-up`,
-                    className: 'Post-vote Post-upvote',
-                    style: hasUpvoted && {
-                        color: app.forum.attribute('themePrimaryColor'),
-                    },
-                    loading: this.voteLoading,
-                    disabled: this.voteLoading || !canVote,
-                    title: !canVote ? app.translator.trans('fof-gamification.forum.no_autovote_message') : '',
-                    onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
-                })}
+    // We set canVote to true for guest users so that they can access the login by clicking the button
+    const canVote = !user || post.canVote();
+      
+      if (user && user.id() === post.user()?.id() && !setting('allowSelfVote')) {
+          canVote = false;
+      }
 
-                <label className="Post-points">{post.votes()}</label>
+    items.add(
+      'votes',
+      <div className={classList('CommentPost-votes', setting('useAlternateLayout', true) && 'alternateLayout')}>
+        {Button.component({
+          icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-up`,
+          className: 'Post-vote Post-upvote',
+          style: hasUpvoted && {
+            color: app.forum.attribute('themePrimaryColor'),
+          },
+          loading: this.voteLoading,
+          disabled: this.voteLoading || !canVote || !canSeeVotes,
+          onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
+        })}
 
-                {Button.component({
-                    icon: this.voteLoading || `fas fa-${icon}-down`,
-                    className: 'Post-vote Post-downvote',
-                    style: hasDownvoted && {
-                        color: app.forum.attribute('themePrimaryColor'),
-                    },
-                    loading: this.voteLoading,
-                    disabled: !canVote,
-                    title: !canVote ? app.translator.trans('fof-gamification.forum.no_autovote_message') : '',
-                    onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
-                })}
-            </div>,
-            10
-        );
-    });
+        <label className="Post-points">{post.votes()}</label>
+
+        {upVotesOnly
+          ? ''
+          : Button.component({
+              icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-down`,
+              className: 'Post-vote Post-downvote',
+              style: hasDownvoted && {
+                color: app.forum.attribute('themePrimaryColor'),
+              },
+              loading: this.voteLoading,
+              disabled: !canVote || !canSeeVotes,
+              onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
+            })}
+      </div>,
+      10
+    );
+  });
 }
