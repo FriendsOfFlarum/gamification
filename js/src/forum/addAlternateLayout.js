@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 
 import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
@@ -49,6 +50,8 @@ export default function addAlternateLayout() {
     const upvotesOnly = setting('upVotesOnly', true);
     const altIcon = setting('iconNameAlt') || 'arrow';
 
+    const onclick = (upvoted, downvoted) => saveVote(post, upvoted, downvoted, (val) => (this.voteLoading = val));
+
     content.children.unshift(
       <div className="DiscussionListItem-votes alternateLayout" data-upvotes-only={upvotesOnly}>
         <Button
@@ -56,11 +59,8 @@ export default function addAlternateLayout() {
           icon={`fas fa-fw fa-${altIcon}-up`}
           data-active={hasUpvoted}
           disabled={!canVote || this.voteLoading}
-          onclick={() => {
-            saveVote(post, !hasUpvoted, false, (val) => {
-              this.voteLoading = val;
-            });
-          }}
+          onclick={() => onclick(!hasUpvoted, false)}
+          aria-label={app.translator.trans('fof-gamification.forum.post.upvote_button')}
         />
 
         <span class="DiscussionListItem-voteCount">{abbreviateNumber(get(discussion, 'votes') || 0)}</span>
@@ -71,11 +71,8 @@ export default function addAlternateLayout() {
             icon={`fas fa-fw fa-${altIcon}-down`}
             data-active={hasDownvoted}
             disabled={!canVote || this.voteLoading}
-            onclick={() => {
-              saveVote(post, false, !hasDownvoted, (val) => {
-                this.voteLoading = val;
-              });
-            }}
+            onclick={() => onclick(false, !hasDownvoted)}
+            aria-label={app.translator.trans('fof-gamification.forum.post.downvote_button')}
           />
         )}
 

@@ -42,6 +42,8 @@ export default function () {
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || post.canVote();
 
+    const onclick = (upvoted, downvoted) => saveVote(post, upvoted, downvoted, (val) => (this.voteLoading = val));
+
     items.add(
       'votes',
       <div className={classList('CommentPost-votes', setting('useAlternateLayout', true) && 'alternateLayout')}>
@@ -50,7 +52,8 @@ export default function () {
           className: classList('Post-vote Post-upvote', hasUpvoted && 'Post-vote--active'),
           loading: this.voteLoading,
           disabled: this.voteLoading || !canVote || !canSeeVotes,
-          onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
+          onclick: () => onclick(!hasUpvoted, false),
+          'aria-label': app.translator.trans('fof-gamification.forum.post.upvote_button'),
         })}
 
         <label className="Post-points">{post.votes()}</label>
