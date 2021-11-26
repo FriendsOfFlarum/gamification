@@ -18,14 +18,6 @@ const get = (discussion, key) => {
   return discussion[key]();
 };
 
-function makeArrowStyles(active) {
-  if (!active) return {};
-
-  return {
-    color: 'var(--primary-color) !important',
-  };
-}
-
 export default function addAlternateLayout() {
   extend(DiscussionListItem.prototype, 'oninit', function () {
     const discussion = this.attrs.discussion;
@@ -62,7 +54,6 @@ export default function addAlternateLayout() {
         <Button
           className="DiscussionListItem-voteButton DiscussionListItem-voteButton--up Button Button--icon Button--text"
           icon={`fas fa-fw fa-${altIcon}-up`}
-          style={makeArrowStyles(hasUpvoted)}
           data-active={hasUpvoted}
           disabled={!canVote || this.voteLoading}
           onclick={() => {
@@ -78,7 +69,6 @@ export default function addAlternateLayout() {
           <Button
             className="DiscussionListItem-voteButton DiscussionListItem-voteButton--down Button Button--icon Button--text"
             icon={`fas fa-fw fa-${altIcon}-down`}
-            style={makeArrowStyles(hasDownvoted)}
             data-active={hasDownvoted}
             disabled={!canVote || this.voteLoading}
             onclick={() => {

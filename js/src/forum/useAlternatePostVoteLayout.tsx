@@ -11,14 +11,6 @@ import type ItemList from 'flarum/common/utils/ItemList';
 import setting from './helpers/setting';
 import saveVote from './helpers/saveVote';
 
-function makeArrowStyles(active) {
-  if (!active) return {};
-
-  return {
-    color: 'var(--primary-color) !important',
-  };
-}
-
 export default function useAlternatePostVoteLayout() {
   extend(CommentPost.prototype, 'actionItems', function (this: CommentPost, items: ItemList) {
     items.remove('votes');
@@ -56,7 +48,6 @@ export default function useAlternatePostVoteLayout() {
         <Button
           className="Post-voteButton Post-voteButton--up Button Button--icon Button--text"
           icon={`fas fa-fw fa-${icon}-up`}
-          style={makeArrowStyles(hasUpvoted)}
           data-active={hasUpvoted}
           disabled={!canVote || this.voteLoading || !canSeeVotes}
           onclick={() => {
@@ -72,7 +63,6 @@ export default function useAlternatePostVoteLayout() {
           <Button
             className="Post-voteButton Post-voteButton--down Button Button--icon Button--text"
             icon={`fas fa-fw fa-${icon}-down`}
-            style={makeArrowStyles(hasDownvoted)}
             data-active={hasDownvoted}
             disabled={!canVote || this.voteLoading}
             onclick={() => {

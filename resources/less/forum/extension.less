@@ -68,15 +68,21 @@
 
 .CommentPost-votes {
     .Post-points {
-        background-color: rgba(0, 0, 0, 0);
+        background-color: transparent;
         border: none;
         margin-right: 0.5em;
     }
 
     .Post-vote {
-        background-color: rgba(0, 0, 0, 0);
+        background-color: transparent;
         border: none;
         margin: 8px 0 0;
+        color: @text-color;
+        cursor: pointer;
+
+        &--active {
+          color: @primary-color;
+        }
 
         &.loading {
             margin-left: 3.25px;
