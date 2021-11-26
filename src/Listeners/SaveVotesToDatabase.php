@@ -106,6 +106,9 @@ class SaveVotesToDatabase
 
     public function vote($post, $isDownvoted, $isUpvoted, $actor, $user)
     {
+        /**
+         * @var Vote $vote
+         */
         $vote = Vote::where([
             'post_id' => $post->id,
             'user_id' => $actor->id,
@@ -117,9 +120,9 @@ class SaveVotesToDatabase
 
                 $vote->delete();
             } else {
-                if ($vote->isUpvote()) {
+                if ($isUpvoted) {
                     $vote->value = 1;
-                } else {
+                } else if ($isDownvoted) {
                     $vote->value = -1;
                 }
 
