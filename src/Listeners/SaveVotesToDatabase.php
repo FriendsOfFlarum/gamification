@@ -122,7 +122,7 @@ class SaveVotesToDatabase
             } else {
                 if ($isUpvoted) {
                     $vote->value = 1;
-                } else if ($isDownvoted) {
+                } elseif ($isDownvoted) {
                     $vote->value = -1;
                 }
 
