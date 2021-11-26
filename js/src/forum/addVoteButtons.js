@@ -42,34 +42,31 @@ export default function () {
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || post.canVote();
 
+    const onclick = (upvoted, downvoted) => saveVote(post, upvoted, downvoted, (val) => (this.voteLoading = val));
+
     items.add(
       'votes',
       <div className={classList('CommentPost-votes', setting('useAlternateLayout', true) && 'alternateLayout')}>
         {Button.component({
           icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-up`,
-          className: 'Post-vote Post-upvote',
-          style: hasUpvoted && {
-            color: app.forum.attribute('themePrimaryColor'),
-          },
+          className: classList('Post-vote Post-upvote', hasUpvoted && 'Post-vote--active'),
           loading: this.voteLoading,
           disabled: this.voteLoading || !canVote || !canSeeVotes,
-          onclick: () => saveVote(post, !hasUpvoted, false, (val) => (this.voteLoading = val)),
+          onclick: () => onclick(!hasUpvoted, false),
+          'aria-label': app.translator.trans('fof-gamification.forum.post.upvote_button'),
         })}
 
         <label className="Post-points">{post.votes()}</label>
 
-        {upVotesOnly
-          ? ''
-          : Button.component({
-              icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-down`,
-              className: 'Post-vote Post-downvote',
-              style: hasDownvoted && {
-                color: app.forum.attribute('themePrimaryColor'),
-              },
-              loading: this.voteLoading,
-              disabled: !canVote || !canSeeVotes,
-              onclick: () => saveVote(post, false, !hasDownvoted, (val) => (this.voteLoading = val)),
-            })}
+        {!upVotesOnly &&
+          Button.component({
+            icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-down`,
+            className: classList('Post-vote Post-downvote', hasDownvoted && 'Post-vote--active'),
+            loading: this.voteLoading,
+            disabled: !canVote || !canSeeVotes,
+            onclick: () => onclick(false, !hasDownvoted),
+            'aria-label': app.translator.trans('fof-gamification.forum.post.downvote_button'),
+          })}
       </div>,
       10
     );

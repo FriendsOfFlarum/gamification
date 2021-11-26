@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 
 import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
@@ -17,14 +18,6 @@ const get = (discussion, key) => {
 
   return discussion[key]();
 };
-
-function makeArrowStyles(active) {
-  if (!active) return {};
-
-  return {
-    color: 'var(--primary-color) !important',
-  };
-}
 
 export default function addAlternateLayout() {
   extend(DiscussionListItem.prototype, 'oninit', function () {
@@ -57,19 +50,17 @@ export default function addAlternateLayout() {
     const upvotesOnly = setting('upVotesOnly', true);
     const altIcon = setting('iconNameAlt') || 'arrow';
 
+    const onclick = (upvoted, downvoted) => saveVote(post, upvoted, downvoted, (val) => (this.voteLoading = val));
+
     content.children.unshift(
       <div className="DiscussionListItem-votes alternateLayout" data-upvotes-only={upvotesOnly}>
         <Button
           className="DiscussionListItem-voteButton DiscussionListItem-voteButton--up Button Button--icon Button--text"
           icon={`fas fa-fw fa-${altIcon}-up`}
-          style={makeArrowStyles(hasUpvoted)}
           data-active={hasUpvoted}
           disabled={!canVote || this.voteLoading}
-          onclick={() => {
-            saveVote(post, !hasUpvoted, false, (val) => {
-              this.voteLoading = val;
-            });
-          }}
+          onclick={() => onclick(!hasUpvoted, false)}
+          aria-label={app.translator.trans('fof-gamification.forum.post.upvote_button')}
         />
 
         <span class="DiscussionListItem-voteCount">{abbreviateNumber(get(discussion, 'votes') || 0)}</span>
@@ -78,14 +69,10 @@ export default function addAlternateLayout() {
           <Button
             className="DiscussionListItem-voteButton DiscussionListItem-voteButton--down Button Button--icon Button--text"
             icon={`fas fa-fw fa-${altIcon}-down`}
-            style={makeArrowStyles(hasDownvoted)}
             data-active={hasDownvoted}
             disabled={!canVote || this.voteLoading}
-            onclick={() => {
-              saveVote(post, false, !hasDownvoted, (val) => {
-                this.voteLoading = val;
-              });
-            }}
+            onclick={() => onclick(false, !hasDownvoted)}
+            aria-label={app.translator.trans('fof-gamification.forum.post.downvote_button')}
           />
         )}
 

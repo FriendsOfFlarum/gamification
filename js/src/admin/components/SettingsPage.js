@@ -139,10 +139,10 @@ export default class SettingsPage extends ExtensionPage {
 
     saveSettings(this.prepareSubmissionData())
       .then(this.onsaved.bind(this))
-      .catch(() => {})
+      .then(() => window.location.reload())
+      .catch(console.error)
       .then(() => {
         this.loading = false;
-        window.location.reload();
       });
   }
 
