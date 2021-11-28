@@ -1,9 +1,12 @@
 :root {
-  --vote-box-hover-color: #f4f6f8;
   --primary-color: @primary-color;
 
+  & when (@config-dark-mode = false) {
+    --vote-box-hover-color: #f4f6f8;
+  }
+
   & when (@config-dark-mode = true) {
-    --vote-box-hover-color: lighten(@body-bg, 8%);
+    --vote-box-hover-color: lighten(@body-bg, 3%);
   }
 }
 
@@ -37,8 +40,16 @@
   background: @body-bg;
 
   border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 0px 0.5px,
-    rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
+
+  & when (@config-dark-mode = true) {
+    box-shadow: rgba(255, 255, 255, 0.12) 0px 0px 0px 0.5px,
+      rgba(255, 255, 255, 0.1) 0px 1px 4px 0px;
+  }
+
+  & when (@config-dark-mode = false) {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 0px 0.5px,
+      rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
+  }
 
   line-height: 24px;
 
