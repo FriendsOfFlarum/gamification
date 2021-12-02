@@ -164,6 +164,7 @@ export default class SettingsPage extends ExtensionPage {
           <Button
             type="button"
             className="Button Button--warning Ranks-button"
+            aria-label={app.translator.trans('fof-gamification.admin.page.convert.button')}
             onclick={() => {
               app
                 .request({
@@ -237,7 +238,7 @@ export default class SettingsPage extends ExtensionPage {
             oninput={withAttr('value', this.newRank.color)}
           />
 
-          <Button type="button" className="Button Button--warning Ranks-button" icon="fa fa-plus" onclick={this.addRank.bind(this)} />
+          <Button type="button" className="Button Button--warning Ranks-button" icon="fa fa-plus" aria-label="add" onclick={this.addRank.bind(this)} />
         </div>
         <label>{app.translator.trans('fof-gamification.admin.page.ranks.number_title')}</label>
         <input
@@ -417,7 +418,7 @@ export default class SettingsPage extends ExtensionPage {
         {[1, 2, 3].map((num) => (
           <>
             <label className="Upload-label">{app.translator.trans(`fof-gamification.admin.page.rankings.custom_image_${num}`)}</label>
-            <UploadImageButton className="Upload-button" name={`fof-gamification.topimage${num}`} path={`fof/gamification/topimage${num}`} />
+            <UploadImageButton className="Upload-button" name={`fof-gamification.topimage${num}`} path={`fof/gamification/topimage${num}`} aria-label={app.translator.trans(`fof-gamification.admin.page.rankings.custom_image_${num}`)} />
             <br />
           </>
         ))}
