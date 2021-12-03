@@ -40,12 +40,12 @@
   border-radius: 4px;
 
   & when (@config-dark-mode = true) {
-    box-shadow: rgba(255, 255, 255, 0.12) 0px 0px 0px 0.5px,
+    box-shadow: @primary-color 0px 0px 0px 0.5px,
       rgba(255, 255, 255, 0.1) 0px 1px 4px 0px;
   }
 
   & when (@config-dark-mode = false) {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 0px 0.5px,
+    box-shadow: @primary-color 0px 0px 0px 0.5px,
       rgba(0, 0, 0, 0.1) 0px 1px 4px 0px;
   }
 
