@@ -1,7 +1,7 @@
-import SettingsPage from './SettingsPage';
+import GamificationSettingsPage from './GamificationSettingsPage';
 import UploadImageButton from './UploadImageButton';
 
 export const components = {
-  SettingsPage,
+  GamificationSettingsPage,
   UploadImageButton,
 };
