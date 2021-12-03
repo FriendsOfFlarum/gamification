@@ -74,6 +74,7 @@ fof-gamification:
         help: Convert your previous likes from flarum-ext-likes into upvotes, as well as calculate the hotness for all current discussions.
         converting: Your likes are now being converted. Refresh your site after a few minutes to see the process finished. (Conversion time might take a while depending on your total forum likes)
         converted: "Successfully converted all {number} likes"
+        title: Convert likes
       ranks:
         title: Ranks
         ranks: Custom ranks

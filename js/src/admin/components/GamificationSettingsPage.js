@@ -13,20 +13,46 @@ export default class GamificationSettingsPage extends ExtensionPage {
     this.ranks = app.store.all('ranks');
 
     this.newRank = {
-        points: Stream(''),
-        name: Stream(''),
-        color: Stream(''),
-      };
-
-    this.values = {};
+      points: Stream(''),
+      name: Stream(''),
+      color: Stream(''),
+    };
   }
 
   content() {
+    const settings = app.data.settings;
+    const convertedLikes = Stream(settings['fof-gamification.convertedLikes']);
+
     return (
       <div className="container">
         <div className="SettingsPage">
-        {this.settingsItems().toArray()}
-            {this.submitButton()}
+          {this.settingsItems().toArray()}
+          {this.submitButton()}
+          <div className="SettingsPage-convert">
+            <h2>{app.translator.trans('fof-gamification.admin.page.convert.title')}</h2>
+            <p className="helpText">{app.translator.trans('fof-gamification.admin.page.convert.help')}</p>
+            {convertedLikes() === undefined ? (
+              <Button
+                type="button"
+                className="Button Button--warning Ranks-button"
+                aria-label={app.translator.trans('fof-gamification.admin.page.convert.button')}
+                onclick={() => {
+                  app
+                    .request({
+                      url: app.forum.attribute('apiUrl') + '/fof/gamification/convert',
+                      method: 'POST',
+                    })
+                    .then(convertedLikes('converting'));
+                }}
+              >
+                {app.translator.trans('fof-gamification.admin.page.convert.button')}
+              </Button>
+            ) : convertedLikes() === 'converting' ? (
+              <label>{app.translator.trans('fof-gamification.admin.page.convert.converting')}</label>
+            ) : (
+              <label> {app.translator.trans('fof-gamification.admin.page.convert.converted', { number: convertedLikes() })}</label>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -36,77 +62,77 @@ export default class GamificationSettingsPage extends ExtensionPage {
     const items = new ItemList();
 
     items.add(
-        'ranks',
-        <fieldset className="SettingsPage-ranks">
-          <h2>{app.translator.trans('fof-gamification.admin.page.ranks.title')}</h2>
-          <label>{app.translator.trans('fof-gamification.admin.page.ranks.ranks')}</label>
-          <div className="helpText">{app.translator.trans('fof-gamification.admin.page.ranks.help.help')}</div>
-          <div className="Ranks--Container">
-            {this.ranks.map((rank) => (
-              <div>
-                <input
-                  className="FormControl Ranks-number"
-                  type="number"
-                  value={rank.points()}
-                  placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.points')}
-                  oninput={withAttr('value', this.updatePoints.bind(this, rank))}
-                />
-                <input
-                  className="FormControl Ranks-name"
-                  value={rank.name()}
-                  placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.name')}
-                  oninput={withAttr('value', this.updateName.bind(this, rank))}
-                />
-                <input
-                  className="FormControl Ranks-color"
-                  value={rank.color()}
-                  placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.color')}
-                  oninput={withAttr('value', this.updateColor.bind(this, rank))}
-                />
-                <Button type="button" className="Button Button--warning Ranks-button" icon="fa fa-times" onclick={this.deleteRank.bind(this, rank)} />
-              </div>
-            ))}
-          </div>
-          <div>
-            <input
-              className="FormControl Ranks-number"
-              value={this.newRank.points()}
-              placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.points')}
-              type="number"
-              oninput={withAttr('value', this.newRank.points)}
-            />
-            <input
-              className="FormControl Ranks-name"
-              value={this.newRank.name()}
-              placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.name')}
-              oninput={withAttr('value', this.newRank.name)}
-            />
-            <input
-              className="FormControl Ranks-color"
-              value={this.newRank.color()}
-              placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.color')}
-              oninput={withAttr('value', this.newRank.color)}
-            />
-  
-            <Button
-              type="button"
-              className="Button Button--warning Ranks-button"
-              icon="fa fa-plus"
-              aria-label="add"
-              onclick={this.addRank.bind(this)}
-            />
-          </div>
-          {this.buildSettingComponent({
-              class: 'FormControl Ranks-default',
-              label: app.translator.trans('fof-gamification.admin.page.ranks.number_title'),
-              setting: 'fof-gamification.rankAmt',
-              type: 'number',
-              placeholder: '2',
-              min: 0
-          })}
-        </fieldset>,
-        90
-      );
+      'ranks',
+      <fieldset className="SettingsPage-ranks">
+        <h2>{app.translator.trans('fof-gamification.admin.page.ranks.title')}</h2>
+        <label>{app.translator.trans('fof-gamification.admin.page.ranks.ranks')}</label>
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.ranks.help.help')}</div>
+        <div className="Ranks--Container">
+          {this.ranks.map((rank) => (
+            <div>
+              <input
+                className="FormControl Ranks-number"
+                type="number"
+                value={rank.points()}
+                placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.points')}
+                oninput={withAttr('value', this.updatePoints.bind(this, rank))}
+              />
+              <input
+                className="FormControl Ranks-name"
+                value={rank.name()}
+                placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.name')}
+                oninput={withAttr('value', this.updateName.bind(this, rank))}
+              />
+              <input
+                className="FormControl Ranks-color"
+                value={rank.color()}
+                placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.color')}
+                oninput={withAttr('value', this.updateColor.bind(this, rank))}
+              />
+              <Button type="button" className="Button Button--warning Ranks-button" icon="fa fa-times" onclick={this.deleteRank.bind(this, rank)} />
+            </div>
+          ))}
+        </div>
+        <div>
+          <input
+            className="FormControl Ranks-number"
+            value={this.newRank.points()}
+            placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.points')}
+            type="number"
+            oninput={withAttr('value', this.newRank.points)}
+          />
+          <input
+            className="FormControl Ranks-name"
+            value={this.newRank.name()}
+            placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.name')}
+            oninput={withAttr('value', this.newRank.name)}
+          />
+          <input
+            className="FormControl Ranks-color"
+            value={this.newRank.color()}
+            placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.color')}
+            oninput={withAttr('value', this.newRank.color)}
+          />
+
+          <Button
+            type="button"
+            className="Button Button--warning Ranks-button"
+            icon="fa fa-plus"
+            aria-label="add"
+            onclick={this.addRank.bind(this)}
+          />
+        </div>
+        {this.buildSettingComponent({
+          class: 'FormControl Ranks-default',
+          label: app.translator.trans('fof-gamification.admin.page.ranks.number_title'),
+          setting: 'fof-gamification.rankAmt',
+          type: 'number',
+          placeholder: '2',
+          min: 0,
+        })}
+      </fieldset>,
+      90
+    );
 
     items.add(
       'voteSettings',
@@ -148,7 +174,7 @@ export default class GamificationSettingsPage extends ExtensionPage {
     items.add(
       'altIcon',
       this.buildSettingComponent({
-          class: 'FormControl Ranks-default',
+        class: 'FormControl Ranks-default',
         label: app.translator.trans('fof-gamification.admin.page.alt_votes.icon_name'),
         help: app.translator.trans('fof-gamification.admin.page.votes.icon_help'),
         type: 'string',
@@ -221,7 +247,7 @@ export default class GamificationSettingsPage extends ExtensionPage {
     items.add(
       'pointsPlaceholder',
       this.buildSettingComponent({
-          class: 'FormControl Ranks-default',
+        class: 'FormControl Ranks-default',
         label: app.translator.trans('fof-gamification.admin.page.votes.points_title'),
         type: 'string',
         setting: 'fof-gamification.pointsPlaceholder',
@@ -237,19 +263,9 @@ export default class GamificationSettingsPage extends ExtensionPage {
     const items = new ItemList();
 
     items.add(
-      'useCustomImages',
-      this.buildSettingComponent({
-        label: app.translator.trans('fof-gamification.admin.page.rankings.enable'),
-        type: 'boolean',
-        setting: 'fof-gamification.customRankingImages',
-      }),
-      90
-    );
-
-    items.add(
       'ignoredUsers',
       this.buildSettingComponent({
-          class: 'FormControl Ranks-default',
+        class: 'FormControl Ranks-default',
         label: app.translator.trans('fof-gamification.admin.page.rankings.blocked.title'),
         help: app.translator.trans('fof-gamification.admin.page.rankings.blocked.help'),
         type: 'string',
@@ -257,6 +273,16 @@ export default class GamificationSettingsPage extends ExtensionPage {
         placeholder: app.translator.trans('fof-gamification.admin.page.rankings.blocked.placeholder'),
       }),
       100
+    );
+
+    items.add(
+      'useCustomImages',
+      this.buildSettingComponent({
+        label: app.translator.trans('fof-gamification.admin.page.rankings.enable'),
+        type: 'boolean',
+        setting: 'fof-gamification.customRankingImages',
+      }),
+      90
     );
 
     items.add(
