@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification\Jobs;
 
 use Flarum\Discussion\Discussion;
@@ -30,14 +39,14 @@ class ConvertLikesToUpvotes implements ShouldQueue
 
         $settings->set('fof-gamification.convertedLikes', 'converting');
 
-        Likes::orderBy('post_id')->chunk(self::CHUNK_SIZE, function(Collection $likes) use ($gamification, &$counter) {
+        Likes::orderBy('post_id')->chunk(self::CHUNK_SIZE, function (Collection $likes) use ($gamification, &$counter) {
             foreach ($likes as $like) {
                 $gamification->convertLike($like->post_id, $like->user_id);
                 $counter++;
             }
         });
 
-        Discussion::chunkById(self::CHUNK_SIZE, function(Collection $discussions) use ($gamification) {
+        Discussion::chunkById(self::CHUNK_SIZE, function (Collection $discussions) use ($gamification) {
             foreach ($discussions as $discussion) {
                 /** @var Discussion $discussion */
                 $gamification->calculateHotness($discussion);

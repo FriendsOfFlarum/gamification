@@ -52,7 +52,6 @@ class ConvertLikesController implements RequestHandlerInterface
         RequestUtil::getActor($request)->assertAdmin();
 
         if ('POST' === $request->getMethod() && false == $this->settings->get('fof-gamification.convertedLikes')) {
-            
             resolve('flarum.queue.connection')->push(
                 new Jobs\ConvertLikesToUpvotes()
             );
