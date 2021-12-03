@@ -6,7 +6,7 @@ import Stream from 'flarum/common/utils/Stream';
 import withAttr from 'flarum/common/utils/withAttr';
 import UploadImageButton from './UploadImageButton';
 
-export default class GamificationSettingsPage extends ExtensionPage {
+export default class SettingsPage extends ExtensionPage {
   oninit(vnode) {
     super.oninit(vnode);
 
