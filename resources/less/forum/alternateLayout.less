@@ -20,9 +20,17 @@
   min-height: 150px;
 }
 
-.DiscussionListItem-votes.alternateLayout + .DiscussionListItem-author {
-  margin-left: -2px;
-  margin-right: 12px;
+.DiscussionListItem-votes.alternateLayout {
+  + .DiscussionListItem-author {
+    margin-left: -2px;
+    margin-right: 12px;
+  }
+
+  + .DiscussionListItem-main {
+    @media @phone {
+      padding-right: 28px;
+    }
+  }
 }
 
 .DiscussionListItem-votes.alternateLayout,
