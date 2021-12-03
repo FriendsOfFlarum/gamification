@@ -11,12 +11,11 @@
 
 namespace FoF\Gamification\Api\Controllers;
 
-use Flarum\Discussion\Discussion;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Gamification\Gamification;
-use FoF\Gamification\Likes;
-use Laminas\Diactoros\Response\JsonResponse;
+use FoF\Gamification\Jobs;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -50,29 +49,14 @@ class ConvertLikesController implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $actor = RequestUtil::getActor($request);
+        RequestUtil::getActor($request)->assertAdmin();
 
-        if (null !== $actor && $actor->isAdmin() && 'POST' === $request->getMethod() && false == $this->settings->get('fof-gamification.convertedLikes')) {
-            $likes = Likes::all();
-
-            $this->settings->set('fof-gamification.convertedLikes', 'converting');
-
-            $counter = 0;
-
-            foreach ($likes as $like) {
-                $this->gamification->convertLike($like->post_id, $like->user_id);
-                $counter++;
-            }
-
-            $discussions = Discussion::all();
-
-            foreach ($discussions as $discussion) {
-                $this->gamification->calculateHotness($discussion);
-            }
-
-            $this->settings->set('fof-gamification.convertedLikes', $counter);
-
-            return new JsonResponse($counter, 200);
+        if ('POST' === $request->getMethod() && false == $this->settings->get('fof-gamification.convertedLikes')) {
+            resolve('flarum.queue.connection')->push(
+                new Jobs\ConvertLikesToUpvotes()
+            );
         }
+
+        return new EmptyResponse();
     }
 }

@@ -15,5 +15,13 @@ use Flarum\Database\AbstractModel;
 
 class Likes extends AbstractModel
 {
+    /**
+     * {@inheritDoc}
+     */
     protected $table = 'post_likes';
+
+    /**
+     * {@inheritDoc}
+     */
+    public $incrementing = false;
 }
