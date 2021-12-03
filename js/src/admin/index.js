@@ -1,6 +1,7 @@
 import app from 'flarum/admin/app';
 import SettingsPage from './components/SettingsPage';
 import Rank from '../common/models/Rank';
+import GamificationSettingsPage from './components/GamificationSettingsPage';
 
 app.initializers.add('fof-gamification', (app) => {
   app.store.models.ranks = Rank;
@@ -41,7 +42,8 @@ app.initializers.add('fof-gamification', (app) => {
       },
       'view'
     )
-    .registerPage(SettingsPage);
+    //.registerPage(SettingsPage);
+    .registerPage(GamificationSettingsPage);
 });
 
 export * from '../common/helpers';
