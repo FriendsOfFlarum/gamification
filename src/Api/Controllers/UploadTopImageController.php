@@ -37,12 +37,18 @@ class UploadTopImageController extends ShowForumController
     protected $paths;
 
     /**
+     * @var ImageManager
+     */
+    protected $imageManager;
+
+    /**
      * @param SettingsRepositoryInterface $settings
      */
-    public function __construct(SettingsRepositoryInterface $settings, Paths $paths)
+    public function __construct(SettingsRepositoryInterface $settings, Paths $paths, ImageManager $imageManager)
     {
         $this->settings = $settings;
         $this->paths = $paths;
+        $this->imageManager = $imageManager;
     }
 
     public function data(ServerRequestInterface $request, Document $document)
@@ -64,9 +70,7 @@ class UploadTopImageController extends ShowForumController
             $size = 50;
         }
 
-        $manager = new ImageManager();
-
-        $encodedImage = $manager->make($tmpFile)->resize($size, $size)->encode('png');
+        $encodedImage = $this->imageManager->make($tmpFile)->resize($size, $size)->encode('png');
         file_put_contents($tmpFile, $encodedImage);
 
         $extension = 'png';
