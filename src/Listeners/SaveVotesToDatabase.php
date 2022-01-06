@@ -192,10 +192,12 @@ class SaveVotesToDatabase
                 $notif->save();
             }
         } elseif ($user && $user->id !== $vote->user->id && $vote->value !== 0) {
-            $this->notifications->sync(
-                new VoteBlueprint($vote),
-                [$user]
-            );
+            if ($user->can('canSeeVoters', $post->discussion)) {
+                $this->notifications->sync(
+                    new VoteBlueprint($vote),
+                    [$user]
+                );
+            }
         }
 
         $this->events->dispatch(
