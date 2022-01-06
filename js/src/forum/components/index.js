@@ -7,5 +7,5 @@ export const components = {
   RankingsPage,
   VoteNotification,
   VotesModal,
-  Voters
+  Voters,
 };
