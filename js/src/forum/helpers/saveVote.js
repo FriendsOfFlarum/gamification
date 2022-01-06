@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import DiscussionControls from 'flarum/forum/utils/DiscussionControls';
 
 export default (post, upvoted, downvoted, load, discussion = post.discussion()) => {

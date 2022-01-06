@@ -8,12 +8,14 @@ import avatar from 'flarum/common/helpers/avatar';
 import icon from 'flarum/common/helpers/icon';
 import SubtreeRetainer from 'flarum/common/utils/SubtreeRetainer';
 
+import type Mithril from 'mithril';
+
 export default class Voters extends Component {
   subtreeRetainer!: SubtreeRetainer;
   lastRenderVotes: number = -1;
   loading: boolean = false;
 
-  oninit(vnode) {
+  oninit(vnode: Mithril.Vnode) {
     super.oninit(vnode);
 
     this.loading = !this.attrs.post.upvotes();
@@ -29,13 +31,13 @@ export default class Voters extends Component {
     );
   }
 
-  onbeforeupdate(vnode) {
+  onbeforeupdate(vnode: Mithril.Vnode) {
     super.onbeforeupdate(vnode);
 
     return this.subtreeRetainer.needsRebuild();
   }
 
-  onupdate(vnode) {
+  onupdate(vnode: Mithril.Vnode) {
     if (this.lastRenderVotes !== this.attrs.post.votes()) {
       this.loading = true;
       setTimeout(() => m.redraw(), 0);
