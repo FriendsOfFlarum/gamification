@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import Modal from 'flarum/common/components/Modal';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import avatar from 'flarum/common/helpers/avatar';
@@ -16,7 +17,7 @@ export default class VotesModal extends Modal {
   oninit(vnode) {
     super.oninit(vnode);
 
-    this.loading = !this.attrs.post.upvotes();
+    this.loading = !this.attrs.post.upvotes() || !this.attrs.post.downvotes();
 
     if (this.loading) {
       this.load();
@@ -35,7 +36,7 @@ export default class VotesModal extends Modal {
     return (
       <div className="Modal-body">
         <ul className="VotesModal-list">
-          {['upvotes'].map((type) => {
+          {['upvotes', 'downvotes'].map((type) => {
             const voters = this.attrs.post[type]();
 
             if (!voters || !voters.length) return;
@@ -62,6 +63,7 @@ export default class VotesModal extends Modal {
     return app.store
       .find('posts', this.attrs.post.id(), {
         include: 'upvotes',
+        include: 'downvotes',
       })
       .then(this.loaded.bind(this));
   }
