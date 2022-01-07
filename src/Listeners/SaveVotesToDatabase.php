@@ -13,7 +13,6 @@ namespace FoF\Gamification\Listeners;
 
 use Carbon\Carbon;
 use Flarum\Foundation\DispatchEventsTrait;
-use Flarum\Notification\Notification;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Saving;
 use Flarum\Post\Exception\FloodingException;
@@ -23,7 +22,6 @@ use Flarum\User\User;
 use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Events\UserPointsUpdated;
 use FoF\Gamification\Gamification;
-use FoF\Gamification\Notification\VoteBlueprint;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
 use Illuminate\Contracts\Container\Container;
