@@ -13,7 +13,6 @@ namespace FoF\Gamification\Listeners;
 
 use Carbon\Carbon;
 use Flarum\Foundation\DispatchEventsTrait;
-use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Saving;
 use Flarum\Post\Exception\FloodingException;
 use Flarum\Post\Post;
@@ -38,11 +37,6 @@ class SaveVotesToDatabase
     protected $events;
 
     /**
-     * @var NotificationSyncer
-     */
-    protected $notifications;
-
-    /**
      * @var Gamification
      */
     protected $gamification;
@@ -59,14 +53,12 @@ class SaveVotesToDatabase
 
     /**
      * @param Dispatcher                  $events
-     * @param NotificationSyncer          $notifications
      * @param Gamification                $gamification
      * @param SettingsRepositoryInterface $settings
      */
-    public function __construct(Dispatcher $events, NotificationSyncer $notifications, Gamification $gamification, SettingsRepositoryInterface $settings, Container $container)
+    public function __construct(Dispatcher $events, Gamification $gamification, SettingsRepositoryInterface $settings, Container $container)
     {
         $this->events = $events;
-        $this->notifications = $notifications;
         $this->gamification = $gamification;
         $this->settings = $settings;
         $this->container = $container;
