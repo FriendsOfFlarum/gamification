@@ -62,8 +62,7 @@ export default class VotesModal extends Modal {
   load() {
     return app.store
       .find('posts', this.attrs.post.id(), {
-        include: 'upvotes',
-        include: 'downvotes',
+        include: 'upvotes,downvotes',
       })
       .then(this.loaded.bind(this));
   }
