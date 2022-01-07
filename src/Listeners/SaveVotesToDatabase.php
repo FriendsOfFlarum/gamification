@@ -141,12 +141,12 @@ class SaveVotesToDatabase
             $voteUser->ranks()->sync($ranks);
         }
 
+        $actor->last_vote_time = Carbon::now();
+        $actor->save();
+
         $this->events->dispatch(
             new PostWasVoted($vote)
         );
-
-        $actor->last_vote_time = Carbon::now();
-        $actor->save();
     }
 
     /**
