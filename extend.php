@@ -87,7 +87,8 @@ return [
         ->listen(Saving::class, Listeners\SaveVotesToDatabase::class)
         ->listen(Posted::class, Listeners\AddVoteHandler::class)
         ->listen(Deleted::class, Listeners\RemoveVoteHandler::class)
-        ->listen(Started::class, Listeners\AddDiscussionVotes::class),
+        ->listen(Started::class, Listeners\AddDiscussionVotes::class)
+        ->subscribe(Listeners\QueueJobs::class),
 
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
         ->hasMany('upvotes', Serializer\BasicUserSerializer::class)

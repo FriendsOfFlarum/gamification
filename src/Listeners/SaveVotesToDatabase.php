@@ -13,8 +13,6 @@ namespace FoF\Gamification\Listeners;
 
 use Carbon\Carbon;
 use Flarum\Foundation\DispatchEventsTrait;
-use Flarum\Notification\Notification;
-use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Saving;
 use Flarum\Post\Exception\FloodingException;
 use Flarum\Post\Post;
@@ -23,7 +21,6 @@ use Flarum\User\User;
 use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Events\UserPointsUpdated;
 use FoF\Gamification\Gamification;
-use FoF\Gamification\Notification\VoteBlueprint;
 use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
 use Illuminate\Contracts\Container\Container;
@@ -38,11 +35,6 @@ class SaveVotesToDatabase
      * @var Dispatcher
      */
     protected $events;
-
-    /**
-     * @var NotificationSyncer
-     */
-    protected $notifications;
 
     /**
      * @var Gamification
@@ -61,14 +53,12 @@ class SaveVotesToDatabase
 
     /**
      * @param Dispatcher                  $events
-     * @param NotificationSyncer          $notifications
      * @param Gamification                $gamification
      * @param SettingsRepositoryInterface $settings
      */
-    public function __construct(Dispatcher $events, NotificationSyncer $notifications, Gamification $gamification, SettingsRepositoryInterface $settings, Container $container)
+    public function __construct(Dispatcher $events, Gamification $gamification, SettingsRepositoryInterface $settings, Container $container)
     {
         $this->events = $events;
-        $this->notifications = $notifications;
         $this->gamification = $gamification;
         $this->settings = $settings;
         $this->container = $container;
@@ -145,10 +135,18 @@ class SaveVotesToDatabase
 
         $this->updatePoints($user, $post);
 
-        $this->sendData($vote);
+        if ($voteUser = $vote->post->user) {
+            $ranks = Rank::where('points', '<=', $voteUser->votes)->pluck('id');
+
+            $voteUser->ranks()->sync($ranks);
+        }
 
         $actor->last_vote_time = Carbon::now();
         $actor->save();
+
+        $this->events->dispatch(
+            new PostWasVoted($vote)
+        );
     }
 
     /**
@@ -170,44 +168,6 @@ class SaveVotesToDatabase
             $this->gamification->calculateHotness(
                 Vote::updateDiscussionVotes($discussion)
             );
-        }
-    }
-
-    public function sendData(Vote $vote)
-    {
-        $post = $vote->post;
-        $user = $post->user;
-
-        $notif = Notification::query()->where([
-            'from_user_id'  => $vote->user->id,
-            'type'          => 'vote',
-            'subject_id'    => $post->id,
-        ])->first();
-
-        if ($notif) {
-            if ($vote->value === 0) {
-                $notif->delete();
-            } else {
-                $notif->data = $vote->value;
-                $notif->save();
-            }
-        } elseif ($user && $user->id !== $vote->user->id && $vote->value !== 0) {
-            if ($user->can('canSeeVoters', $post->discussion)) {
-                $this->notifications->sync(
-                    new VoteBlueprint($vote),
-                    [$user]
-                );
-            }
-        }
-
-        $this->events->dispatch(
-            new PostWasVoted($vote)
-        );
-
-        if ($user) {
-            $ranks = Rank::where('points', '<=', $user->votes)->pluck('id');
-
-            $user->ranks()->sync($ranks);
         }
     }
 
