@@ -145,7 +145,15 @@ class SaveVotesToDatabase
 
         $this->updatePoints($user, $post);
 
-        $this->sendData($vote);
+        if ($voteUser = $vote->post->user) {
+            $ranks = Rank::where('points', '<=', $voteUser->votes)->pluck('id');
+
+            $voteUser->ranks()->sync($ranks);
+        }
+
+        $this->events->dispatch(
+            new PostWasVoted($vote)
+        );
 
         $actor->last_vote_time = Carbon::now();
         $actor->save();
@@ -170,44 +178,6 @@ class SaveVotesToDatabase
             $this->gamification->calculateHotness(
                 Vote::updateDiscussionVotes($discussion)
             );
-        }
-    }
-
-    public function sendData(Vote $vote)
-    {
-        $post = $vote->post;
-        $user = $post->user;
-
-        $notif = Notification::query()->where([
-            'from_user_id'  => $vote->user->id,
-            'type'          => 'vote',
-            'subject_id'    => $post->id,
-        ])->first();
-
-        if ($notif) {
-            if ($vote->value === 0) {
-                $notif->delete();
-            } else {
-                $notif->data = $vote->value;
-                $notif->save();
-            }
-        } elseif ($user && $user->id !== $vote->user->id && $vote->value !== 0) {
-            if ($user->can('canSeeVoters', $post->discussion)) {
-                $this->notifications->sync(
-                    new VoteBlueprint($vote),
-                    [$user]
-                );
-            }
-        }
-
-        $this->events->dispatch(
-            new PostWasVoted($vote)
-        );
-
-        if ($user) {
-            $ranks = Rank::where('points', '<=', $user->votes)->pluck('id');
-
-            $user->ranks()->sync($ranks);
         }
     }
 
