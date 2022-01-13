@@ -13,12 +13,16 @@ import saveVote from './helpers/saveVote';
 
 export default function useAlternatePostVoteLayout() {
   extend(CommentPost.prototype, 'actionItems', function (this: CommentPost, items: ItemList) {
+    if (this.attrs.post.isHidden()) return;
+
     items.remove('votes');
   });
 
   extend(CommentPost.prototype, 'classes', function (this: CommentPost, classes: string[]) {
+    if (this.attrs.post.isHidden()) return;
+ 
     const upvotesOnly = setting('upVotesOnly', true);
-
+    
     classes.push('votesAlternativeLayout');
 
     if (upvotesOnly) {
@@ -29,6 +33,7 @@ export default function useAlternatePostVoteLayout() {
   extend(CommentPost.prototype, 'headerItems', function (this: CommentPost, items: ItemList) {
     const post = this.attrs.post;
 
+    if (post.isHidden()) return;
     if (!post.canSeeVotes()) return;
 
     const hasDownvoted = post.hasDownvoted();
