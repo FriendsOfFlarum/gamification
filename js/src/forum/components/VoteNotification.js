@@ -1,12 +1,15 @@
 import app from 'flarum/forum/app';
 import Notification from 'flarum/forum/components/Notification';
+import setting from '../helpers/setting';
 
 export default class UpvotedNotification extends Notification {
   icon() {
+    const icon = setting('iconName') || 'thumbs';
+
     if (this.attrs.notification.content() > 0) {
-      return 'fas fa-thumbs-up';
+      return `fas fa-${icon}-up`;
     } else {
-      return 'fas fa-thumbs-down';
+      return `fas fa-${icon}-down`;
     }
   }
 
