@@ -13,10 +13,6 @@ export default function addVotersToDiscussionPageSideBar() {
     const posts = discussion.posts();
     const firstPost = posts[0];
 
-    // interim workaround until Flarum 1.2
-    items.replace('controls', null, 100);
-    items.replace('subscription', null, 80);
-
     if (firstPost?.canSeeVotes?.() && !!app.forum.attribute('fof-gamification-op-votes-only')) {
       items.add('op-voters', <Voters post={firstPost} />, 90);
     }
