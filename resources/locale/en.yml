@@ -41,6 +41,8 @@ fof-gamification:
       see_votes_label: See up/down vote count
       see_voters_label: See who voted
       see_ranking_page: See ranking page
+      upvote_notifications: Receive notifications on upvote
+      downvote_notifications: Receive notifications on downvote
     page:
       rankings:
         blocked:

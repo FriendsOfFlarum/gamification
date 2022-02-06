@@ -41,6 +41,22 @@ app.initializers.add('fof-gamification', (app) => {
       },
       'view'
     )
+    .registerPermission(
+      {
+        icon: 'fas fa-bell',
+        label: app.translator.trans('fof-gamification.admin.permissions.upvote_notifications'),
+        permission: 'discussion.upvote_notifications'
+      },
+      'view'
+    )
+    .registerPermission(
+      {
+        icon: 'fas fa-bell',
+        label: app.translator.trans('fof-gamification.admin.permissions.downvote_notifications'),
+        permission: 'discussion.downvote_notifications'
+      },
+      'view'
+    )
     .registerPage(SettingsPage);
 });
 
