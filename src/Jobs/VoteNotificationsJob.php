@@ -54,7 +54,6 @@ class VoteNotificationsJob implements ShouldQueue
             }
         } elseif ($user && $user->id !== $this->vote->user->id && $this->vote->value !== 0) {
             if ($user->can('canSeeVoters', $post->discussion)) {
-
                 if ($this->vote->value === 1 && $user->can('upvote_notifications', $post->discussion) || $this->vote->value === -1 && $user->can('downvote_notifications', $post->discussion)) {
                     $notifications->sync(
                         new VoteBlueprint($this->vote),
