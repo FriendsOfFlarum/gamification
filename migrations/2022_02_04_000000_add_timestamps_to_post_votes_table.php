@@ -17,4 +17,9 @@ return Migration::addColumns('post_votes', [
         'null'       => false,
         'useCurrent' => true,
     ],
+    'updated_at' => [
+        'timestamp',
+        'null'       => false,
+        'useCurrent' => true,
+    ],
 ]);
