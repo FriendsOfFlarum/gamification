@@ -14,12 +14,10 @@ use Flarum\Database\Migration;
 return Migration::addColumns('post_votes', [
     'created_at' => [
         'timestamp',
-        'null'       => false,
-        'useCurrent' => true,
+        'nullable'   => true,
     ],
     'updated_at' => [
         'timestamp',
-        'null'       => false,
-        'useCurrent' => true,
+        'nullable'   => true,
     ],
 ]);
