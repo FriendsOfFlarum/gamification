@@ -28,6 +28,13 @@ class Vote extends AbstractModel
 {
     protected $table = 'post_votes';
 
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
+
+    public $timestamps = true;
+
     /**
      * @param Post $post
      * @param User $user
