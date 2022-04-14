@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import avatar from 'flarum/common/helpers/avatar';
 import Page from 'flarum/common/components/Page';
 import IndexPage from 'flarum/forum/components/IndexPage';
@@ -16,7 +17,7 @@ export default class RankingsPage extends Page {
   oninit(vnode) {
     super.oninit(vnode);
 
-    if (!app.session.user || app.session.user.data.attributes.canViewRankingPage !== true) {
+    if (!app.forum.attribute('canViewRankingPage')) {
       m.route.set('/');
     }
 

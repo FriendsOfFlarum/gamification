@@ -98,7 +98,12 @@ return [
         ->hasMany('ranks', Serializers\RankSerializer::class),
 
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
-        ->hasMany('ranks', Serializers\RankSerializer::class),
+        ->hasMany('ranks', Serializers\RankSerializer::class)
+        ->attributes(function (Serializer\ForumSerializer $serializer, $forum, $attributes) {
+            $attributes['canViewRankingPage'] = $serializer->getActor()->can('fof.gamification.viewRankingPage');
+
+            return $attributes;
+        }),
 
     (new Extend\ApiController(Controller\ShowForumController::class))
         ->prepareDataForSerialization(function (Controller\ShowForumController $controller, &$data) {
@@ -119,7 +124,6 @@ return [
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->attributes(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {
-            $attributes['canViewRankingPage'] = (bool) $serializer->getActor()->can('fof.gamification.viewRankingPage');
             $attributes['points'] = $user->votes;
 
             return $attributes;

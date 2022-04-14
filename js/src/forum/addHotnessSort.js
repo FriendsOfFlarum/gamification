@@ -6,9 +6,10 @@ import LinkButton from 'flarum/common/components/LinkButton';
 
 export default function () {
   extend(IndexPage.prototype, 'navItems', function (items) {
-    if (!app.session.user || app.session.user.data.attributes.canViewRankingPage !== true) {
+    if (!app.forum.attribute('canViewRankingPage')) {
       return;
     }
+
     items.add(
       'rankings',
       LinkButton.component(

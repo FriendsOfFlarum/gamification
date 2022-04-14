@@ -20,9 +20,9 @@ export default function useAlternatePostVoteLayout() {
 
   extend(CommentPost.prototype, 'classes', function (this: CommentPost, classes: string[]) {
     if (this.attrs.post.isHidden()) return;
- 
+
     const upvotesOnly = setting('upVotesOnly', true);
-    
+
     classes.push('votesAlternativeLayout');
 
     if (upvotesOnly) {

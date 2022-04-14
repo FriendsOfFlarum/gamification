@@ -45,7 +45,7 @@ app.initializers.add('fof-gamification', (app) => {
       {
         icon: 'fas fa-bell',
         label: app.translator.trans('fof-gamification.admin.permissions.upvote_notifications'),
-        permission: 'discussion.upvote_notifications'
+        permission: 'discussion.upvote_notifications',
       },
       'view'
     )
@@ -53,7 +53,7 @@ app.initializers.add('fof-gamification', (app) => {
       {
         icon: 'fas fa-bell',
         label: app.translator.trans('fof-gamification.admin.permissions.downvote_notifications'),
-        permission: 'discussion.downvote_notifications'
+        permission: 'discussion.downvote_notifications',
       },
       'view'
     )
