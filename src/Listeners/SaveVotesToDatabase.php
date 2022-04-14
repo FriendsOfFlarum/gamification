@@ -109,7 +109,7 @@ class SaveVotesToDatabase
             if (!$isUpvoted && !$isDownvoted) {
                 $vote->value = 0;
 
-                $vote->delete();
+                $vote->save();
             } else {
                 if ($isUpvoted) {
                     $vote->value = 1;
