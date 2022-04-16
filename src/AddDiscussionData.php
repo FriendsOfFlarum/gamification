@@ -18,8 +18,6 @@ use Flarum\Discussion\Discussion;
 class AddDiscussionData
 {
     /**
-     * Undocumented function
-     *
      * @param DiscussionSerializer|BasicDiscussionSerializer $serializer
      */
     public function __invoke($serializer, Discussion $discussion, array $attributes): array
