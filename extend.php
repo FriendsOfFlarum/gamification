@@ -28,14 +28,14 @@ use FoF\Gamification\Notification\VoteBlueprint;
 
 return [
     (new Extend\Frontend('admin'))
-        ->css(__DIR__.'/resources/less/admin/extension.less')
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->css(__DIR__ . '/resources/less/admin/extension.less')
+        ->js(__DIR__ . '/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/resources/less/forum/extension.less')
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/resources/less/forum/extension.less')
         ->route('/rankings', 'rankings'),
 
-    new Extend\Locales(__DIR__.'/resources/locale'),
+    new Extend\Locales(__DIR__ . '/resources/locale'),
 
     (new Extend\Model(User::class))
         ->belongsToMany('allVotes', User::class, 'user_id'),
@@ -132,6 +132,9 @@ return [
     (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
         ->attributes(AddDiscussionData::class),
 
+    (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
+        ->attributes(AddDiscussionData::class),
+
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
         ->attributes(AddPostData::class),
 
@@ -189,5 +192,5 @@ return [
         ->command(Console\ResyncDiscussionVotes::class),
 
     (new Extend\View())
-        ->namespace('fof-gamification', __DIR__.'/resources/views'),
+        ->namespace('fof-gamification', __DIR__ . '/resources/views'),
 ];
