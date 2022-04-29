@@ -11,12 +11,12 @@
 
 namespace FoF\Gamification;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Api\Serializer\BasicDiscussionSerializer;
 use Flarum\Discussion\Discussion;
 
 class AddDiscussionData
 {
-    public function __invoke(DiscussionSerializer $serializer, Discussion $discussion, array $attributes): array
+    public function __invoke(BasicDiscussionSerializer $serializer, Discussion $discussion, array $attributes): array
     {
         $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
         $actor = $serializer->getActor();
