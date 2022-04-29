@@ -129,9 +129,6 @@ return [
             return $attributes;
         }),
 
-    (new Extend\ApiSerializer(Serializer\DiscussionSerializer::class))
-        ->attributes(AddDiscussionData::class),
-
     (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
         ->attributes(AddDiscussionData::class),
 
