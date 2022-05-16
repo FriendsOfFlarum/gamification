@@ -25,6 +25,7 @@ use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Api\Serializers;
 use FoF\Gamification\Notification\VoteBlueprint;
+use FoF\Gamification\Provider\GamificationSortOptionsProvider;
 
 return [
     (new Extend\Frontend('admin'))
@@ -190,4 +191,7 @@ return [
 
     (new Extend\View())
         ->namespace('fof-gamification', __DIR__.'/resources/views'),
+
+    (new Extend\ServiceProvider())
+        ->register(GamificationSortOptionsProvider::class),
 ];
