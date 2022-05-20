@@ -4,6 +4,7 @@ import PostUser from 'flarum/forum/components/PostUser';
 import UserCard from 'flarum/forum/components/UserCard';
 import rankLabel from '../common/helpers/rankLabel';
 import setting from './helpers/setting';
+import icon from 'flarum/common/helpers/icon';
 
 export default function () {
   const matchClass = (className) => {
@@ -33,17 +34,17 @@ export default function () {
   };
 
   extend(UserCard.prototype, 'infoItems', function (items) {
-    const placeholder = setting('pointsPlaceholder');
-    const pts = String(this.attrs.user.points());
-    let points;
+    const user = this.attrs.user;
 
-    if (placeholder) {
-      points = <div>{placeholder.replace('{points}', pts)}</div>;
-    } else {
-      points = app.translator.trans('fof-gamification.forum.user.points', { points: pts });
-    }
-
-    items.add('points', points);
+    items.add(
+      'points',
+      <div>
+        {icon('fas fa-medal')}
+        {app.translator.trans('fof-gamification.forum.user.card.points', {
+          count: user.points(),
+        })}
+      </div>
+    );
   });
 
   extend(UserCard.prototype, 'view', function (vnode) {

@@ -20,7 +20,6 @@ export default class SettingsPage extends ExtensionPage {
       'rankAmt',
       'iconName',
       'blockedUsers',
-      'pointsPlaceholder',
       'iconNameAlt',
     ];
 
@@ -373,20 +372,6 @@ export default class SettingsPage extends ExtensionPage {
         {app.translator.trans('fof-gamification.admin.page.votes.first_post_only')}
       </Switch>,
       20
-    );
-
-    items.add(
-      'pointsPlaceholder',
-      <>
-        <label>{app.translator.trans('fof-gamification.admin.page.votes.points_title')}</label>
-        <input
-          className="FormControl Ranks-default"
-          value={this.values.pointsPlaceholder() || ''}
-          placeholder={app.translator.trans('fof-gamification.admin.page.votes.points_placeholder') + '{points}'}
-          oninput={withAttr('value', this.values.pointsPlaceholder)}
-        />
-      </>,
-      10
     );
 
     return items;

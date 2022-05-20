@@ -20,7 +20,8 @@ fof-gamification:
       prefrences:
         vote: When one of my posts is up/down voted
     user:
-      points: "Points: {points}"
+      card:
+        points: "{count, plural, one { {count} point} other {{count} points}}"
       rank: "{rank}"
     modal:
       downvotes_label: 'Downvoters:'
