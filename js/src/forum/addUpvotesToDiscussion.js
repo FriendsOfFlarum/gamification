@@ -10,6 +10,14 @@ export default function () {
     return;
   }
 
+  extend(DiscussionListItem.prototype, 'elementAttrs', function (attrs) {
+    if (!this.attrs.discussion.seeVotes()) {
+      return;
+    }
+
+    attrs.className += ' DiscussionListItem--withVotes';
+  })
+
   extend(DiscussionListItem.prototype, 'infoItems', function (items) {
     const discussion = this.attrs.discussion;
 
