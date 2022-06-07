@@ -43,7 +43,8 @@ export default function () {
         {app.translator.trans('fof-gamification.forum.user.card.points', {
           count: user.points(),
         })}
-      </div>
+      </div>,
+      50
     );
   });
 
