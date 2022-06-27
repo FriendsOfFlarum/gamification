@@ -8,8 +8,7 @@ export default class VotesUserPage extends PostsUserPage {
   /**
    * Load a new page of the user's activity feed.
    *
-   * @param {Integer} [offset] The position to start getting results from.
-   * @return {Promise}
+   * @param offset The position to start getting results from.
    * @protected
    */
   loadResults(offset: number) {
