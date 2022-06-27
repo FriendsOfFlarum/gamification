@@ -19,6 +19,7 @@ use Flarum\Extend;
 use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
 use Flarum\Post\Event\Saving;
+use Flarum\Post\Filter\PostFilterer;
 use Flarum\Post\Post;
 use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
@@ -112,6 +113,7 @@ return [
         }),
 
     (new Extend\Settings())
+        ->default('fof-gamification.firstPostOnly', false)
         ->serializeToForum('fof-gamification.topimage1Url', 'fof-gamification.topimage1_path', function ($value) {
             return $value ? "/assets/$value" : null;
         })
@@ -194,4 +196,7 @@ return [
 
     (new Extend\ServiceProvider())
         ->register(GamificationSortOptionsProvider::class),
+
+    (new Extend\Filter(PostFilterer::class))
+        ->addFilter(Filter\VotedFilter::class),
 ];

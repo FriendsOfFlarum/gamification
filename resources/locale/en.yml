@@ -23,6 +23,7 @@ fof-gamification:
       card:
         points: "{count, plural, one { {count} point} other {{count} points}}"
       rank: "{rank}"
+      votes_link: Votes
     modal:
       downvotes_label: 'Downvoters:'
       title: Voters
