@@ -12,14 +12,9 @@ export default function addUpvoteTabToUserProfile() {
     const icon = setting('iconName') || 'thumbs';
     items.add(
       'votes',
-      LinkButton.component(
-        {
-          href: app.route('user.votes', { username: user.slug() }),
-          name: 'votes',
-          icon: `fas fa-fw fa-${icon}-up`,
-        },
-        app.translator.trans('fof-gamification.forum.user.votes_link')
-      ),
+      <LinkButton href={app.route('user.votes', { username: user.slug() })} name='votes' icon={`fas fa-fw fa-${icon}-up`}>
+        {app.translator.trans('fof-gamification.forum.user.votes_link')}
+      </LinkButton>,      
       85
     );
   });
