@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification\Filter;
 
 use Flarum\Filter\FilterInterface;
@@ -12,12 +21,12 @@ class VotedFilter implements FilterInterface
      * @var SettingsRepositoryInterface
      */
     public $settings;
-    
+
     public function __construct(SettingsRepositoryInterface $settings)
     {
         $this->settings = $settings;
     }
-    
+
     public function getFilterKey(): string
     {
         return 'voted';
