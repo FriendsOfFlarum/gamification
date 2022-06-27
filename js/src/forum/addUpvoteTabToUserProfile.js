@@ -6,21 +6,21 @@ import VotesUserPage from './components/VotesUserPage';
 import setting from './helpers/setting';
 
 export default function addUpvoteTabToUserProfile() {
-    app.routes['user.votes'] = { path: '/u/:username/votes', component: VotesUserPage };
-    extend(UserPage.prototype, 'navItems', function (items) {
-      const user = this.user;
-      const icon = setting('iconName') || 'thumbs';
-      items.add(
-        'votes',
-        LinkButton.component(
-          {
-            href: app.route('user.votes', { username: user.slug() }),
-            name: 'votes',
-            icon: `fas fa-fw fa-${icon}-up`,
-          },
-          app.translator.trans('fof-gamification.forum.user.votes_link')
-        ),
-        85
-      );
-    });
+  app.routes['user.votes'] = { path: '/u/:username/votes', component: VotesUserPage };
+  extend(UserPage.prototype, 'navItems', function (items) {
+    const user = this.user;
+    const icon = setting('iconName') || 'thumbs';
+    items.add(
+      'votes',
+      LinkButton.component(
+        {
+          href: app.route('user.votes', { username: user.slug() }),
+          name: 'votes',
+          icon: `fas fa-fw fa-${icon}-up`,
+        },
+        app.translator.trans('fof-gamification.forum.user.votes_link')
+      ),
+      85
+    );
+  });
 }
