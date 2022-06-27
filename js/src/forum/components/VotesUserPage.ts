@@ -12,7 +12,7 @@ export default class VotesUserPage extends PostsUserPage {
    * @return {Promise}
    * @protected
    */
-  loadResults(offset) {
+  loadResults(offset: number) {
     return app.store.find('posts', {
       filter: {
         type: 'comment',
