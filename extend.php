@@ -14,6 +14,7 @@ namespace FoF\Gamification;
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
 use Flarum\Discussion\Event\Started;
+use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event\Deleted;
@@ -189,6 +190,7 @@ return [
         ->addFilter(Search\HotFilterGambit::class),
 
     (new Extend\Console())
+        ->command(Console\ResyncUserVotes::class)
         ->command(Console\ResyncDiscussionVotes::class),
 
     (new Extend\View())
