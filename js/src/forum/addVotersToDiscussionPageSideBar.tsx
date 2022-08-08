@@ -13,7 +13,7 @@ export default function addVotersToDiscussionPageSideBar() {
     const posts = discussion.posts();
     const firstPost = posts[0];
 
-    if (firstPost?.canSeeVotes?.() && !!app.forum.attribute('fof-gamification-op-votes-only')) {
+    if (firstPost?.seeVoters?.() && !!app.forum.attribute('fof-gamification-op-votes-only')) {
       items.add('op-voters', <Voters post={firstPost} />, 90);
     }
   });
