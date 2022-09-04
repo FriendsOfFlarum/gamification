@@ -7,6 +7,7 @@ import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import ItemList from 'flarum/common/utils/ItemList';
 import UploadImageButton from './UploadImageButton';
+import GroupSettings from './GroupSettings';
 
 export default class SettingsPage extends ExtensionPage {
   oninit(vnode) {
@@ -21,6 +22,7 @@ export default class SettingsPage extends ExtensionPage {
       'iconName',
       'blockedUsers',
       'iconNameAlt',
+      'autoAssignedGroups',
     ];
 
     this.switches = [
@@ -273,6 +275,8 @@ export default class SettingsPage extends ExtensionPage {
       </>,
       70
     );
+
+    items.add('groups', <GroupSettings value={this.values.autoAssignedGroups()} onchange={this.values.autoAssignedGroups} />, 60);
 
     items.add(
       'submit',
