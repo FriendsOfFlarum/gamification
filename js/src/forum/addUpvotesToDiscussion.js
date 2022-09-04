@@ -16,7 +16,7 @@ export default function () {
     }
 
     attrs.className += ' DiscussionListItem--withVotes';
-  })
+  });
 
   extend(DiscussionListItem.prototype, 'infoItems', function (items) {
     const discussion = this.attrs.discussion;
