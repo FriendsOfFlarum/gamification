@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification\Jobs;
 
 use Flarum\Group\Group;
@@ -36,7 +45,7 @@ class AutoAssignUserGroups
         $currentUserGroupIds = $this->user->groups->pluck('id');
 
         foreach ($entries as $entry) {
-            $id = (int)Arr::get($entry, 'groupId');
+            $id = (int) Arr::get($entry, 'groupId');
             $min = Arr::get($entry, 'minPoints');
             $max = Arr::get($entry, 'maxPoints');
 
