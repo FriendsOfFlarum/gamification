@@ -13,7 +13,10 @@ namespace FoF\Gamification\Jobs;
 
 use Flarum\Group\Group;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Event\GroupsChanged;
 use Flarum\User\User;
+use FoF\Gamification\Events\GroupsAutomaticallyChanged;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -28,7 +31,7 @@ class AutoAssignUserGroups
         $this->user = $user;
     }
 
-    public function handle(SettingsRepositoryInterface $settings)
+    public function handle(SettingsRepositoryInterface $settings, Dispatcher $dispatcher)
     {
         $entries = json_decode($settings->get('fof-gamification.autoAssignedGroups'), true);
 
@@ -70,12 +73,27 @@ class AutoAssignUserGroups
             }
         }
 
-        if ($this->statsAdded = count($groupsToAdd)) {
-            $this->user->groups()->attach($groupsToAdd);
-        }
+        $this->statsAdded = count($groupsToAdd);
+        $this->statsRemoved = count($groupsToRemove);
 
-        if ($this->statsRemoved = count($groupsToRemove)) {
-            $this->user->groups()->detach($groupsToRemove);
+        if ($this->statsAdded + $this->statsRemoved > 0) {
+            $oldGroups = $this->user->groups->all();
+
+            if ($this->statsAdded > 0) {
+                $this->user->groups()->attach($groupsToAdd);
+            }
+
+            if ($this->statsRemoved > 0) {
+                $this->user->groups()->detach($groupsToRemove);
+            }
+
+            // Same as in EditUserHandler. Avoids any issue with extensions using the old relation data that was previously loaded
+            $this->user->unsetRelation('groups');
+
+            // Must trigger both our custom event and Flarum original event
+            // because event listeners don't automatically receive our custom event even if it extends the original
+            $dispatcher->dispatch(new GroupsAutomaticallyChanged($this->user, $oldGroups));
+            $dispatcher->dispatch(new GroupsChanged($this->user, $oldGroups));
         }
     }
 }
