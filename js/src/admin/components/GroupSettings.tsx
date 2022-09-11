@@ -1,10 +1,12 @@
 import app from 'flarum/admin/app';
 import Component from 'flarum/common/Component';
+import Button from 'flarum/common/components/Button';
 import Select from 'flarum/common/components/Select';
+import Tooltip from 'flarum/common/components/Tooltip';
+import extractText from 'flarum/common/utils/extractText';
 import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import Group from 'flarum/common/models/Group';
-import Button from 'flarum/common/components/Button';
 
 interface SettingsEntry {
   groupId?: number;
@@ -72,9 +74,9 @@ export default class GroupSettings extends Component<GroupSettingsAttrs> {
       <table>
         <thead>
           <tr>
-            <th>Group</th>
-            <th>Minimum points (inclusive)</th>
-            <th>Maximum points (inclusive)</th>
+            <th>{app.translator.trans('fof-gamification.admin.page.groups.column.group')}</th>
+            <th>{app.translator.trans('fof-gamification.admin.page.groups.column.minPoints')}</th>
+            <th>{app.translator.trans('fof-gamification.admin.page.groups.column.maxPoints')}</th>
           </tr>
         </thead>
         <tbody>
@@ -119,9 +121,11 @@ export default class GroupSettings extends Component<GroupSettingsAttrs> {
                   />
                 </td>
                 <td>
-                  <Button className="Button Button--icon" icon="fas fa-times" onclick={deleteHandler}>
-                    Delete
-                  </Button>
+                  <Tooltip text={extractText(app.translator.trans('fof-gamification.admin.page.groups.delete'))}>
+                    <Button className="Button Button--icon" icon="fas fa-times" onclick={deleteHandler}>
+                      Delete
+                    </Button>
+                  </Tooltip>
                 </td>
               </tr>
             );
@@ -137,9 +141,11 @@ export default class GroupSettings extends Component<GroupSettingsAttrs> {
               <input className="FormControl" type="number" bidi={this.newMaxPoints} />
             </td>
             <td>
-              <Button className="Button Button--icon" icon="fas fa-plus" onclick={addHandler} disabled={!this.newGroupId()}>
-                Add
-              </Button>
+              <Tooltip text={extractText(app.translator.trans('fof-gamification.admin.page.groups.add'))}>
+                <Button className="Button Button--icon" icon="fas fa-plus" onclick={addHandler} disabled={!this.newGroupId()}>
+                  Add
+                </Button>
+              </Tooltip>
             </td>
           </tr>
         </tbody>

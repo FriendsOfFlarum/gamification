@@ -276,7 +276,15 @@ export default class SettingsPage extends ExtensionPage {
       70
     );
 
-    items.add('groups', <GroupSettings value={this.values.autoAssignedGroups()} onchange={this.values.autoAssignedGroups} />, 60);
+    items.add(
+      'groups',
+      <fieldset className="SettingsPage-groups">
+        <legend>{app.translator.trans('fof-gamification.admin.page.groups.title')}</legend>
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.groups.help')}</div>
+        <GroupSettings value={this.values.autoAssignedGroups()} onchange={this.values.autoAssignedGroups} />
+      </fieldset>,
+      60
+    );
 
     items.add(
       'submit',
