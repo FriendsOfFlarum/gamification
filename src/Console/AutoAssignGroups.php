@@ -15,6 +15,7 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use FoF\Gamification\Jobs\AutoAssignUserGroups;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AutoAssignGroups extends Command
 {
@@ -28,10 +29,12 @@ class AutoAssignGroups extends Command
     public function handle(SettingsRepositoryInterface $settings)
     {
         $this->output->progressStart(User::query()->count());
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = resolve(Dispatcher::class);
 
-        User::query()->each(function (User $user) use ($settings) {
+        User::query()->each(function (User $user) use ($settings, $dispatcher) {
             $job = new AutoAssignUserGroups($user);
-            $job->handle($settings);
+            $job->handle($settings, $dispatcher);
 
             $this->totalAdded += $job->statsAdded;
             $this->totalRemoved += $job->statsRemoved;
