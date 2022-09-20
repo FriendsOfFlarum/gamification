@@ -91,6 +91,7 @@ return [
         ->listen(Posted::class, Listeners\AddVoteHandler::class)
         ->listen(Deleted::class, Listeners\RemoveVoteHandler::class)
         ->listen(Started::class, Listeners\AddDiscussionVotes::class)
+        ->listen(Events\UserPointsUpdated::class, Listeners\UpdateAutoAssignedGroups::class)
         ->subscribe(Listeners\QueueJobs::class),
 
     (new Extend\ApiSerializer(Serializer\PostSerializer::class))
@@ -190,6 +191,7 @@ return [
         ->addFilter(Search\HotFilterGambit::class),
 
     (new Extend\Console())
+        ->command(Console\AutoAssignGroups::class)
         ->command(Console\ResyncDiscussionVotes::class),
 
     (new Extend\View())
