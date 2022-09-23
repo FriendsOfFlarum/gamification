@@ -16,12 +16,18 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Event\GroupsChanged;
 use Flarum\User\User;
 use FoF\Gamification\Events\GroupsAutomaticallyChanged;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
-class AutoAssignUserGroups
+class AutoAssignUserGroups implements ShouldQueue
 {
+    use Queueable;
+    use SerializesModels;
+    
     protected $user;
     public $statsAdded = 0;
     public $statsRemoved = 0;
