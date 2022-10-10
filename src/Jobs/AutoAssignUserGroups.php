@@ -27,7 +27,7 @@ class AutoAssignUserGroups implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
-    
+
     protected $user;
     public $statsAdded = 0;
     public $statsRemoved = 0;
