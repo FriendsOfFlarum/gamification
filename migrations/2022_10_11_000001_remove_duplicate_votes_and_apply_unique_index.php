@@ -21,12 +21,19 @@ return [
             ->havingRaw('COUNT(*) > 1')
             ->orderBy('id', 'desc')
             ->each(function ($row) use ($schema) {
+                $keep = $schema->getConnection()
+                    ->table('post_votes')
+                    ->where('user_id', $row->user_id)
+                    ->where('post_id', $row->post_id)
+                    ->orderBy('id', 'asc')
+                    ->first();
+
                 $schema->getConnection()
                     ->table('post_votes')
                     ->where('user_id', $row->user_id)
                     ->where('post_id', $row->post_id)
+                    ->where('id', '!=', $keep->id)
                     ->orderBy('id', 'desc')
-                    ->skip(1)
                     ->delete();
             });
 
