@@ -54,7 +54,7 @@ class ResyncUserVotes extends Command
         });
 
         $this->output->progressFinish();
-        
+
         $this->info("Updated {$this->updateCount} users.");
     }
 }
