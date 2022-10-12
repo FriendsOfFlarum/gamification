@@ -20,7 +20,7 @@ export default () => {
   extend(DiscussionPage.prototype, 'oncreate', function () {
     if (app.pusher) {
       app.pusher.then((channels) => {
-        channels.main.bind('newVote', (data) => {
+        channels.pusher.bind('newVote', (data) => {
           const post = app.store.getById('posts', data.post_id);
           const userId = data.user_id;
 
@@ -35,7 +35,7 @@ export default () => {
   extend(DiscussionPage.prototype, 'onremove', function () {
     if (app.pusher) {
       app.pusher.then((channels) => {
-        channels.main.unbind('newVote');
+        channels.pusher.unbind('newVote');
       });
     }
   });
