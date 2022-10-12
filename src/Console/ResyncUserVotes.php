@@ -11,34 +11,50 @@
 
 namespace FoF\Gamification\Console;
 
-use Flarum\Console\AbstractCommand;
 use Flarum\User\User;
+use FoF\Gamification\Events\UserPointsUpdated;
 use FoF\Gamification\Vote;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Console\Command;
+use Illuminate\Events\Dispatcher;
 
-class ResyncUserVotes extends AbstractCommand
+class ResyncUserVotes extends Command
 {
-    protected function configure()
+    protected $signature = 'fof:gamification:resyncUsers';
+    protected $description = 'Resync user vote counts';
+
+    protected $events;
+
+    protected $updateCount = 0;
+
+    public function __construct(Dispatcher $events)
     {
-        $this
-            ->setName('fof:gamification:resyncUsers')
-            ->setDescription('Resync user vote counts');
+        $this->events = $events;
+
+        parent::__construct();
     }
 
-    protected function fire()
+    public function handle()
     {
         $this->info('Syncing user votes. This may take some time if you have many users!');
 
-        User::chunk(50, function (Collection $users) {
-            foreach ($users as $user) {
-                /** @var User $user */
-                $this->info("Syncing user $user->id, current votes $user->votes");
-                $user = Vote::updateUserVotes($user);
+        $this->output->progressStart(User::query()->count());
+
+        User::query()->each(function (User $user) {
+            $pre = $user->votes;
+            $user = Vote::updateUserVotes($user);
+
+            if ($pre !== $user->votes) {
+                $this->updateCount++;
                 $user->save();
-                $this->info("Finished user $user->id, now calculated with $user->votes votes");
+
+                $this->events->dispatch(new UserPointsUpdated($user));
             }
+
+            $this->output->progressAdvance();
         });
 
-        $this->info('Sync complete.');
+        $this->output->progressFinish();
+        
+        $this->info("Updated {$this->updateCount} users.");
     }
 }
