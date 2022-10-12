@@ -88,6 +88,19 @@ fof-gamification:
           help: "Input the required number of upvotes, the name of the rank, and the hex color of the rank"
           points: Points
           name: Name
+      groups:
+        title: Automatically assigned groups
+        help: >
+          The selected groups will be automatically added or removed as needed when the number of points of a user changes.
+          If you made changes to the configuration, you should run the <code>php flarum fof:gamification:assign-groups</code> command to update existing users.
+          If you wish to delete a rule and remove all users from the group, set both minimum and maximum values to an empty string, save the settings and run the command line command.
+          Finally you can delete the rule entirely from the settings.
+        column:
+          group: Group
+          minPoints: Minimum points (inclusive)
+          maxPoints: Maximum points (inclusive)
+        add: Add new rule
+        delete: Delete rule
 
   email:
     body:

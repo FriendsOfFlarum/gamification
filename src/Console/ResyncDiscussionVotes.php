@@ -11,34 +11,37 @@
 
 namespace FoF\Gamification\Console;
 
-use Flarum\Console\AbstractCommand;
 use Flarum\Discussion\Discussion;
 use FoF\Gamification\Vote;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Console\Command;
 
-class ResyncDiscussionVotes extends AbstractCommand
+class ResyncDiscussionVotes extends Command
 {
-    protected function configure()
-    {
-        $this
-            ->setName('fof:gamification:resync')
-            ->setDescription('Resync discussion vote counts');
-    }
+    protected $signature = 'fof:gamification:resync';
+    protected $description = 'Resync discussion vote counts';
 
-    protected function fire()
+    protected $updateCount = 0;
+
+    public function handle()
     {
         $this->info('Syncing discussion votes. This may take some time if you have many discussions!');
 
-        Discussion::chunk(50, function (Collection $discussions) {
-            foreach ($discussions as $discussion) {
-                /** @var Discussion $discussion */
-                $this->info("Syncing discussion $discussion->id, current votes $discussion->votes");
-                $discussion = Vote::updateDiscussionVotes($discussion);
+        $this->output->progressStart(Discussion::query()->count());
+
+        Discussion::query()->each(function (Discussion $discussion) {
+            $pre = $discussion->votes;
+            $discussion = Vote::updateDiscussionVotes($discussion);
+
+            if ($pre !== $discussion->votes) {
+                $this->updateCount++;
                 $discussion->save();
-                $this->info("Finished discussion $discussion->id, now calculated with $discussion->votes votes");
             }
+
+            $this->output->progressAdvance();
         });
 
-        $this->info('Sync complete.');
+        $this->output->progressFinish();
+
+        $this->info("Updated {$this->updateCount} discussions.");
     }
 }
