@@ -87,16 +87,16 @@ class SaveVotesToDatabase
                     $this->assertNotFlooding($actor);
                 }
 
-                $isUpvoted = Arr::get($data, 0);
+                $isUpvoted = Arr::get($data, 0, false);
 
-                $isDownvoted = Arr::get($data, 1);
+                $isDownvoted = Arr::get($data, 1, false);
 
                 $this->vote($post, $isDownvoted, $isUpvoted, $actor, $user);
             }
         }
     }
 
-    public function vote($post, $isDownvoted, $isUpvoted, $actor, $user)
+    public function vote(Post $post, bool $isDownvoted, bool $isUpvoted, User $actor, User $user)
     {
         $vote = Vote::build($post, $actor);
 
