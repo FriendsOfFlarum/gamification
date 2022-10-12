@@ -34,8 +34,8 @@ class Vote extends AbstractModel
     ];
 
     protected $fillable = [
-        'user_id', 
-        'post_id'
+        'user_id',
+        'post_id',
     ];
 
     public $timestamps = true;

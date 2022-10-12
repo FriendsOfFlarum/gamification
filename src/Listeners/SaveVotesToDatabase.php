@@ -109,7 +109,7 @@ class SaveVotesToDatabase
                 $vote->value = -1;
             }
         }
-        
+
         $vote->save();
 
         $this->pushNewVote($vote);
