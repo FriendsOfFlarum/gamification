@@ -191,6 +191,7 @@ return [
         ->addFilter(Search\HotFilterGambit::class),
 
     (new Extend\Console())
+        ->command(Console\ResyncUserVotes::class)
         ->command(Console\AutoAssignGroups::class)
         ->command(Console\ResyncDiscussionVotes::class),
 
