@@ -45,6 +45,10 @@ Even if a user was manually assigned to a group, the group will still be removed
 
 Updates all discussions with their total first post votes.
 
+#### `php flarum fof:gamification:resyncUsers`
+
+Updates all users with a forced recalculation of points.
+
 ### Links
 
 [<img src="https://opencollective.com/fof/donate/button@2x.png?color=blue" height="25" />](https://opencollective.com/fof/donate)
