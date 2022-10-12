@@ -104,7 +104,7 @@ class Gamification
         if ($post && $post->user && $user) {
             Vote::updateUserVotes($post->user)->save();
 
-            if ($post->number = 1) {
+            if ($post->number === 1) {
                 Vote::updateDiscussionVotes($post->discussion);
             }
 
