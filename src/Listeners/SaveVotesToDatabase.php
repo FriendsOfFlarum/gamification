@@ -25,6 +25,7 @@ use FoF\Gamification\Rank;
 use FoF\Gamification\Vote;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 use Pusher;
 
 class SaveVotesToDatabase
@@ -73,10 +74,10 @@ class SaveVotesToDatabase
     public function handle(Saving $event)
     {
         $post = $event->post;
-        if ($post->id) {
-            $data = $event->data;
+        if ($post->exists()) {
+            $data = Arr::get($event->data, 'attributes', []);
 
-            if (array_key_exists(2, $data['attributes'])) {
+            if (Arr::exists($data, 2) && Arr::get($data, 2) === 'vote') {
                 $actor = $event->actor;
                 $user = $post->user;
 
@@ -86,9 +87,9 @@ class SaveVotesToDatabase
                     $this->assertNotFlooding($actor);
                 }
 
-                $isUpvoted = $data['attributes'][0];
+                $isUpvoted = Arr::get($data, 0);
 
-                $isDownvoted = $data['attributes'][1];
+                $isDownvoted = Arr::get($data, 1);
 
                 $this->vote($post, $isDownvoted, $isUpvoted, $actor, $user);
             }
@@ -97,39 +98,19 @@ class SaveVotesToDatabase
 
     public function vote($post, $isDownvoted, $isUpvoted, $actor, $user)
     {
-        /**
-         * @var Vote $vote
-         */
-        $vote = Vote::where([
-            'post_id' => $post->id,
-            'user_id' => $actor->id,
-        ])->first();
+        $vote = Vote::build($post, $actor);
 
-        if ($vote) {
-            if (!$isUpvoted && !$isDownvoted) {
-                $vote->value = 0;
-
-                $vote->save();
-            } else {
-                if ($isUpvoted) {
-                    $vote->value = 1;
-                } elseif ($isDownvoted) {
-                    $vote->value = -1;
-                }
-
-                $vote->save();
-            }
+        if (!$isDownvoted && !$isUpvoted) {
+            $vote->value = 0;
         } else {
-            $vote = Vote::build($post, $actor);
-
-            if ($isDownvoted) {
-                $vote->value = -1;
-            } elseif ($isUpvoted) {
+            if ($isUpvoted) {
                 $vote->value = 1;
+            } elseif ($isDownvoted) {
+                $vote->value = -1;
             }
-
-            $vote->save();
         }
+        
+        $vote->save();
 
         $this->pushNewVote($vote);
 

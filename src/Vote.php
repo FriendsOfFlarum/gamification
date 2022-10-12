@@ -33,22 +33,25 @@ class Vote extends AbstractModel
         'updated_at',
     ];
 
+    protected $fillable = [
+        'user_id', 
+        'post_id'
+    ];
+
     public $timestamps = true;
 
     /**
      * @param Post $post
      * @param User $user
      *
-     * @return static
+     * @return Vote
      */
-    public static function build(Post $post, User $user)
+    public static function build(Post $post, User $user): Vote
     {
-        $vote = new static();
-
-        $vote->post_id = $post->id;
-        $vote->user_id = $user->id;
-
-        return $vote;
+        return Vote::firstOrNew([
+            'post_id' => $post->id,
+            'user_id' => $user->id,
+        ]);
     }
 
     public static function calculate($paramsOrQuery): int
