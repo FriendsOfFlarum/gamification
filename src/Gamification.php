@@ -68,7 +68,7 @@ class Gamification
      */
     public function orderByPoints($limit, $offset)
     {
-        $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers'));
+        $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers', ''));
 
         if ($limit > self::MAXIMUM_USER_EXPOSED) {
             $limit = self::MAXIMUM_USER_EXPOSED;
