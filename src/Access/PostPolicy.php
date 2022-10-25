@@ -30,12 +30,21 @@ class PostPolicy extends AbstractPolicy
 
     private function isFirstPostOnlyMode(): bool
     {
-        return $this->settings->get('fof-gamification.firstPostOnly', false);
+        return $this->settings->get('fof-gamification.firstPostOnly');
+    }
+
+    private function voteForSelfEnabled(): bool
+    {
+        return $this->settings->get('fof-gamification.allowSelfVotes');
     }
 
     public function vote(User $actor, Post $post)
     {
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
+            return $this->deny();
+        }
+
+        if ($actor->id === $post->user_id && !$this->voteForSelfEnabled()) {
             return $this->deny();
         }
 

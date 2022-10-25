@@ -31,14 +31,14 @@ use FoF\Gamification\Provider\GamificationSortOptionsProvider;
 
 return [
     (new Extend\Frontend('admin'))
-        ->css(__DIR__.'/resources/less/admin/extension.less')
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->css(__DIR__ . '/resources/less/admin/extension.less')
+        ->js(__DIR__ . '/js/dist/admin.js'),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js')
-        ->css(__DIR__.'/resources/less/forum/extension.less')
+        ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/resources/less/forum/extension.less')
         ->route('/rankings', 'rankings'),
 
-    new Extend\Locales(__DIR__.'/resources/locale'),
+    new Extend\Locales(__DIR__ . '/resources/locale'),
 
     (new Extend\Model(User::class))
         ->belongsToMany('allVotes', User::class, 'user_id'),
@@ -115,7 +115,10 @@ return [
         }),
 
     (new Extend\Settings())
+        ->default('fof-gamification.blockedUsers', '')
+        ->default('fof-gamification.rankAmt', 2)
         ->default('fof-gamification.firstPostOnly', false)
+        ->default('fof-gamification.allowSelfVotes', true)
         ->serializeToForum('fof-gamification.topimage1Url', 'fof-gamification.topimage1_path', function ($value) {
             return $value ? "/assets/$value" : null;
         })
@@ -192,15 +195,11 @@ return [
         ->command(Console\ResyncDiscussionVotes::class),
 
     (new Extend\View())
-        ->namespace('fof-gamification', __DIR__.'/resources/views'),
+        ->namespace('fof-gamification', __DIR__ . '/resources/views'),
 
     (new Extend\ServiceProvider())
         ->register(GamificationSortOptionsProvider::class),
 
     (new Extend\Filter(PostFilterer::class))
         ->addFilter(Filter\VotedFilter::class),
-
-    (new Extend\Settings())
-        ->default('fof-gamification.blockedUsers', '')
-        ->default('fof-gamification.rankAmt', 2),
 ];
