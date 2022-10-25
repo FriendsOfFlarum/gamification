@@ -199,4 +199,7 @@ return [
 
     (new Extend\Filter(PostFilterer::class))
         ->addFilter(Filter\VotedFilter::class),
+
+    (new Extend\Settings())
+        ->default('fof-gamification.blockedUsers', ''),
 ];
