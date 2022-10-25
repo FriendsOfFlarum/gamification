@@ -201,5 +201,6 @@ return [
         ->addFilter(Filter\VotedFilter::class),
 
     (new Extend\Settings())
-        ->default('fof-gamification.blockedUsers', ''),
+        ->default('fof-gamification.blockedUsers', '')
+        ->default('fof-gamification.rankAmt', 2),
 ];

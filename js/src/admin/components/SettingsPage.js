@@ -250,8 +250,9 @@ export default class SettingsPage extends ExtensionPage {
         <label>{app.translator.trans('fof-gamification.admin.page.ranks.number_title')}</label>
         <input
           className="FormControl Ranks-default"
-          value={this.values.rankAmt() || ''}
-          placeholder="2"
+          value={this.values.rankAmt()}
+          type="number"
+          min="0"
           oninput={withAttr('value', this.values.rankAmt)}
         />
       </fieldset>,

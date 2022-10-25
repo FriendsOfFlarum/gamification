@@ -48,7 +48,7 @@ fof-gamification:
     page:
       rankings:
         blocked:
-          placeholder: CDK2020, Ralkage, AngelAvila
+          placeholder: admin, user1, user2
           title: Ignored Users
           help: These users will not be shown on the ranking page. Usernames should be separated by a comma followed by a space.
         title: Rankings Page
