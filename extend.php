@@ -115,7 +115,10 @@ return [
         }),
 
     (new Extend\Settings())
+        ->default('fof-gamification.blockedUsers', '')
+        ->default('fof-gamification.rankAmt', 2)
         ->default('fof-gamification.firstPostOnly', false)
+        ->default('fof-gamification.allowSelfVotes', true)
         ->serializeToForum('fof-gamification.topimage1Url', 'fof-gamification.topimage1_path', function ($value) {
             return $value ? "/assets/$value" : null;
         })
@@ -128,11 +131,7 @@ return [
         ->serializeToForum('fof-gamification-op-votes-only', 'fof-gamification.firstPostOnly', 'boolVal'),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
-        ->attributes(function (Serializer\UserSerializer $serializer, User $user, array $attributes) {
-            $attributes['points'] = $user->votes;
-
-            return $attributes;
-        }),
+        ->attributes(AddUserAttributes::class),
 
     (new Extend\ApiSerializer(Serializer\BasicDiscussionSerializer::class))
         ->attributes(AddDiscussionData::class),

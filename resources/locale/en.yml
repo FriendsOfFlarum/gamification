@@ -48,7 +48,7 @@ fof-gamification:
     page:
       rankings:
         blocked:
-          placeholder: CDK2020, Ralkage, AngelAvila
+          placeholder: admin, user1, user2
           title: Ignored Users
           help: These users will not be shown on the ranking page. Usernames should be separated by a comma followed by a space.
         title: Rankings Page
@@ -73,6 +73,7 @@ fof-gamification:
         icon_help: "Input any Font-Awesome icon that is suffixed with -up and -down. Examples: arrow, thumbs, chevron"
         upvotes_only: Only allow upvoting
         first_post_only: Only allow up/down votes in the first post in a discussion
+        allow_self_votes: Users may vote on their own posts
       save_settings: Save settings
       convert:
         button: Convert likes to upvotes

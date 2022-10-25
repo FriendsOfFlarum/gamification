@@ -7,7 +7,11 @@ import ItemList from 'flarum/common/utils/ItemList';
 export default function addNotifications() {
   app.notificationComponents.vote = VoteNotification;
 
-  extend(NotificationGrid.prototype, 'notificationTypes', function (items: ItemList) {
+  extend(NotificationGrid.prototype, 'notificationTypes', function (items: ItemList<{ name: string; icon: string; label: any }>) {
+    const user = app.session?.user;
+
+    if (!user?.canHaveVotingNotifications?.()) return;
+
     items.add('vote', {
       name: 'vote',
       icon: 'fas fa-thumbs-up',

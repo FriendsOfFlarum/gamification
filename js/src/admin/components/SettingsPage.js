@@ -34,6 +34,7 @@ export default class SettingsPage extends ExtensionPage {
       'altPostVotingUi',
       'upVotesOnly',
       'firstPostOnly',
+      'allowSelfVotes',
     ];
 
     this.ranks = app.store.all('ranks');
@@ -250,8 +251,9 @@ export default class SettingsPage extends ExtensionPage {
         <label>{app.translator.trans('fof-gamification.admin.page.ranks.number_title')}</label>
         <input
           className="FormControl Ranks-default"
-          value={this.values.rankAmt() || ''}
-          placeholder="2"
+          value={this.values.rankAmt()}
+          type="number"
+          min="0"
           oninput={withAttr('value', this.values.rankAmt)}
         />
       </fieldset>,
@@ -384,6 +386,14 @@ export default class SettingsPage extends ExtensionPage {
         {app.translator.trans('fof-gamification.admin.page.votes.first_post_only')}
       </Switch>,
       20
+    );
+
+    items.add(
+      'allowSelfVotes',
+      <Switch state={this.values.allowSelfVotes()} onchange={this.values.allowSelfVotes} className="votes-switch">
+        {app.translator.trans('fof-gamification.admin.page.votes.allow_self_votes')}
+      </Switch>,
+      10
     );
 
     return items;

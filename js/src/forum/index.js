@@ -22,7 +22,7 @@ import addNotifications from './addNotifications';
 import addVotersToDiscussionPageSideBar from './addVotersToDiscussionPageSideBar';
 import addUpvoteTabToUserProfile from './addUpvoteTabToUserProfile';
 
-app.initializers.add('fof-gamification', (app) => {
+app.initializers.add('fof-gamification', () => {
   Discussion.prototype.votes = Model.attribute('votes');
   Discussion.prototype.hasUpvoted = Model.attribute('hasUpvoted');
   Discussion.prototype.hasDownvoted = Model.attribute('hasDownvoted');
@@ -31,6 +31,7 @@ app.initializers.add('fof-gamification', (app) => {
 
   User.prototype.points = Model.attribute('points');
   User.prototype.ranks = Model.hasMany('ranks');
+  User.prototype.canHaveVotingNotifications = Model.attribute('canHaveVotingNotifications');
 
   Post.prototype.upvotes = Model.hasMany('upvotes');
   Post.prototype.downvotes = Model.hasMany('downvotes');
