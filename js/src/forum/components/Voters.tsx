@@ -69,7 +69,8 @@ export default class Voters extends Component {
     }
 
     const max = 15;
-    const voters = this.attrs.post.upvotes();
+    // const voters = this.attrs.post.upvotes();
+    const voters = this.attrs.post.upvotes().flatMap(i => Array(25).fill(i));
 
     return (
       <div className="VotingContainer">

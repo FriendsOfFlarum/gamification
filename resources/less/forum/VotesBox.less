@@ -28,6 +28,7 @@
   &-title {
     margin-bottom: 8px;
     color: @control-color;
+    white-space: nowrap;
 
     @media @phone {
       margin-bottom: 0;
@@ -74,6 +75,7 @@
 
     @media @phone {
       display: flex;
+      flex-wrap: wrap;
       gap: unset;
     }
   }
@@ -87,10 +89,6 @@
 
     @media @phone {
       margin-left: 4px;
-
-      &:first-child {
-        margin-left: 0;
-      }
     }
 
     .Avatar {
