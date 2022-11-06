@@ -29,6 +29,7 @@ app.initializers.add('fof-gamification', (app) => {
         icon: 'fas fa-info-circle',
         label: app.translator.trans('fof-gamification.admin.permissions.see_voters_label'),
         permission: 'discussion.canSeeVoters',
+        allowGuest: true,
       },
       'view'
     )
