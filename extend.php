@@ -70,7 +70,6 @@ return [
             'useAlternateLayout',
             'upVotesOnly',
             'iconNameAlt',
-            'altPostVotingUi',
         ]),
 
     (new Extend\Routes('api'))

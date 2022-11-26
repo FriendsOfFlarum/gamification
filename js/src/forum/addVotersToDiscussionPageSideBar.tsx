@@ -1,22 +1,19 @@
-import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import DiscussionPage from 'flarum/forum/components/DiscussionPage';
-import Voters from './components/Voters';
 import type ItemList from 'flarum/common/utils/ItemList';
+import CommentPost from 'flarum/forum/components/CommentPost';
 
 import type Mithril from 'mithril';
+import VotingWidget from './components/VotingWidget';
 
 /**
- * Adds our custom {@link Voters} component to the discussion sidebar.
+ * Adds our custom {@link VotingWidget} component to the post footer.
  */
 export default function addVotersToDiscussionPageSideBar() {
-  extend(DiscussionPage.prototype, 'sidebarItems', function (this: DiscussionPage, items: ItemList<Mithril.Chilren>) {
-    const discussion = this.discussion;
-    const posts = discussion!.posts() || [];
-    const firstPost = posts?.[0];
+  extend(CommentPost.prototype, 'footerItems', function (items: ItemList<Mithril.Children>) {
+    const post = this.attrs.post;
 
-    if (firstPost?.canSeeVotes?.() && firstPost?.seeVoters?.() && !!app.forum.attribute('fof-gamification-op-votes-only')) {
-      items.add('op-voters', <Voters post={firstPost} />, 90);
+    if (post?.canSeeVotes() && post?.seeVoters()) {
+      items.add('post-voters', <VotingWidget post={post} />, -7);
     }
   });
 }

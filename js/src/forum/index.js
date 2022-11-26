@@ -17,7 +17,6 @@ import addAlternateLayout from './addAlternateLayout';
 
 import setting from './helpers/setting';
 import addVotesSort from './addVotesSort';
-import useAlternatePostVoteLayout from './useAlternatePostVoteLayout';
 import addNotifications from './addNotifications';
 import addVotersToDiscussionPageSideBar from './addVotersToDiscussionPageSideBar';
 import addUpvoteTabToUserProfile from './addUpvoteTabToUserProfile';
@@ -61,9 +60,6 @@ app.initializers.add('fof-gamification', () => {
     addAlternateLayout();
   }
 
-  if (setting('altPostVotingUi', true)) {
-    useAlternatePostVoteLayout();
-  }
 });
 
 export * from './components';
