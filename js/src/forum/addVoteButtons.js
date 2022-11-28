@@ -7,7 +7,7 @@ import VotesModal from './components/VotesModal';
 
 export default function () {
   extend(PostControls, 'moderationControls', function (items, post) {
-    if (post.seeVoters()) {
+    if (post.contentType() === 'comment' && post.seeVoters()) {
       items.add(
         'viewVotes',
         <Button

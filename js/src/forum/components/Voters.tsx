@@ -66,8 +66,20 @@ export default class Voters extends Component<IAttrs> {
           <span className="FoFGamification-voters-title-label">{app.translator.trans('fof-gamification.forum.voters.label')}</span>
         </div>
         <div className="Voters-info--sections">
-          {votes && upvotes ? <div className="Upvotes"><span>Upvoters</span>{this.buildVoters(upvotes, max)}</div> : <LoadingIndicator display="inline" />}
-          {votes && downvotes && downvotesEnabled ? <div className="Downvotes"><span>Downvoters</span>{this.buildVoters(upvotes, max)}</div> : null}
+          {votes && upvotes ? (
+            <div className="Upvotes">
+              <span>Upvoters</span>
+              {this.buildVoters(upvotes, max)}
+            </div>
+          ) : (
+            <LoadingIndicator display="inline" />
+          )}
+          {votes && downvotes && downvotesEnabled ? (
+            <div className="Downvotes">
+              <span>Downvoters</span>
+              {this.buildVoters(upvotes, max)}
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -129,11 +141,7 @@ export default class Voters extends Component<IAttrs> {
 
   buildVoters(voters: User[], max: number) {
     if (voters.length === 0) {
-      return (
-        <div className="FoFGamification-voters-message">
-          {app.translator.trans('fof-gamification.forum.voters.none')}
-        </div>
-      );
+      return <div className="FoFGamification-voters-message">{app.translator.trans('fof-gamification.forum.voters.none')}</div>;
     }
     return (
       <div className="FoFGamification-voters-list">

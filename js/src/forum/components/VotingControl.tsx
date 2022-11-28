@@ -36,14 +36,14 @@ export default class VotingControl extends Component<IAttrs> {
     return (
       <div className="VotingControl" data-upvotes-only={upvotesOnly}>
         <Tooltip text={app.translator.trans('fof-gamification.forum.post.upvote_tooltip')}>
-        <Button
-          className="Post-voteButton Post-voteButton--up Button Button--icon Button--text"
-          icon={`fas fa-fw fa-${icon}-up`}
-          data-active={hasUpvoted}
-          disabled={!canVote || this.attrs.voteLoading || !canSeeVotes}
-          onclick={() => onclick(!hasUpvoted, false)}
-          aria-label={app.translator.trans('fof-gamification.forum.post.upvote_button')}
-        />
+          <Button
+            className="Post-voteButton Post-voteButton--up Button Button--icon Button--text"
+            icon={`fas fa-fw fa-${icon}-up`}
+            data-active={hasUpvoted}
+            disabled={!canVote || this.attrs.voteLoading || !canSeeVotes}
+            onclick={() => onclick(!hasUpvoted, false)}
+            aria-label={app.translator.trans('fof-gamification.forum.post.upvote_button')}
+          />
         </Tooltip>
 
         <span class="Post-voteCount">{abbreviateNumber(post.votes() || 0)}</span>
@@ -51,13 +51,13 @@ export default class VotingControl extends Component<IAttrs> {
         {!upvotesOnly && (
           <Tooltip text={app.translator.trans('fof-gamification.forum.post.downvote_tooltip')} position="bottom">
             <Button
-            className="Post-voteButton Post-voteButton--down Button Button--icon Button--text"
-            icon={`fas fa-fw fa-${icon}-down`}
-            data-active={hasDownvoted}
-            disabled={!canVote || this.attrs.voteLoading}
-            onclick={() => onclick(false, !hasDownvoted)}
-            aria-label={app.translator.trans('fof-gamification.forum.post.downvote_button')}
-          />
+              className="Post-voteButton Post-voteButton--down Button Button--icon Button--text"
+              icon={`fas fa-fw fa-${icon}-down`}
+              data-active={hasDownvoted}
+              disabled={!canVote || this.attrs.voteLoading}
+              onclick={() => onclick(false, !hasDownvoted)}
+              aria-label={app.translator.trans('fof-gamification.forum.post.downvote_button')}
+            />
           </Tooltip>
         )}
 

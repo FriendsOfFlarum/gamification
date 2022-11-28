@@ -8,7 +8,7 @@ import VotingWidget from './components/VotingWidget';
 /**
  * Adds our custom {@link VotingWidget} component to the post footer.
  */
-export default function addVotersToDiscussionPageSideBar() {
+export default function addVotersToEligiblePosts() {
   extend(CommentPost.prototype, 'footerItems', function (items: ItemList<Mithril.Children>) {
     const post = this.attrs.post;
 
