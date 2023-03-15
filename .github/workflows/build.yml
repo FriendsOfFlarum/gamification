@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Restore npm cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('js/package-lock.json') }}
@@ -24,7 +24,7 @@ jobs:
       # Our action will install npm, cd into `./js`, run `npm run build` and
       # `npm run build-typings`, then commit and upload any changes
       - name: Build production JS
-        uses: flarum/action-build@2
+        uses: flarum/action-build@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           build_script: build
