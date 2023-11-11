@@ -41,23 +41,19 @@ return [
     new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(User::class))
-        ->belongsToMany('allVotes', User::class, 'user_id'),
-
-    (new Extend\Model(User::class))
         ->belongsToMany('ranks', Rank::class, 'rank_users'),
 
     (new Extend\Model(Post::class))
+        ->belongsToMany('votes', User::class, 'post_votes', 'post_id', 'user_id')
         ->relationship('upvotes', function (Post $post) {
-            return $post->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')
-                ->where('value', '>', 0);
+            return $post->votes()->where('value', '>', 0);
         })
         ->relationship('downvotes', function (Post $post) {
-            return $post->belongsToMany(User::class, 'post_votes', 'post_id', 'user_id', null, null, 'upvotes')
-                ->where('value', -1);
+            return $post->votes()->where('value', -1);
+        })
+        ->relationship('actualvotes', function (Post $post) {
+            return $post->hasMany(Vote::class, 'post_id');
         }),
-
-    (new Extend\Model(Post::class))
-        ->belongsToMany('votes', User::class, 'post_votes', 'post_id', 'user_id'),
 
     (new ExtensionSettings())
         ->setPrefix('fof-gamification.')
@@ -155,19 +151,27 @@ return [
         ->addInclude('ranks'),
 
     (new Extend\ApiController(Controller\ShowDiscussionController::class))
-        ->addInclude('posts.user.ranks'),
+        ->addInclude('posts.user.ranks')
+        ->loadWhere('posts.actualvotes', [LoadActorVoteRelationship::class, 'mutateRelation'])
+        ->prepareDataForSerialization([LoadActorVoteRelationship::class, 'sumRelation']),
 
     (new Extend\ApiController(Controller\ListDiscussionsController::class))
         ->addSortField('hotness')
-        ->addSortField('votes'),
+        ->addSortField('votes')
+        ->loadWhere('firstPost.actualvotes', [LoadActorVoteRelationship::class, 'mutateRelation'])
+        ->prepareDataForSerialization([LoadActorVoteRelationship::class, 'sumRelation']),
 
     (new Extend\ApiController(Controller\ListPostsController::class))
         ->addInclude('user.ranks')
-        ->addOptionalInclude(['upvotes', 'downvotes']),
+        ->addOptionalInclude(['upvotes', 'downvotes'])
+        ->loadWhere('actualvotes', [LoadActorVoteRelationship::class, 'mutateRelation'])
+        ->prepareDataForSerialization([LoadActorVoteRelationship::class, 'sumRelation']),
 
     (new Extend\ApiController(Controller\ShowPostController::class))
         ->addInclude('user.ranks')
-        ->addOptionalInclude(['upvotes', 'downvotes']),
+        ->addOptionalInclude(['upvotes', 'downvotes'])
+        ->loadWhere('actualvotes', [LoadActorVoteRelationship::class, 'mutateRelation'])
+        ->prepareDataForSerialization([LoadActorVoteRelationship::class, 'sumRelation']),
 
     (new Extend\ApiController(Controller\CreatePostController::class))
         ->addInclude('user.ranks')
@@ -175,7 +179,9 @@ return [
 
     (new Extend\ApiController(Controller\UpdatePostController::class))
         ->addInclude('user.ranks')
-        ->addOptionalInclude(['upvotes', 'downvotes']),
+        ->addOptionalInclude(['upvotes', 'downvotes'])
+        ->loadWhere('actualvotes', [LoadActorVoteRelationship::class, 'mutateRelation'])
+        ->prepareDataForSerialization([LoadActorVoteRelationship::class, 'sumRelation']),
 
     (new Extend\ApiController(Controller\ShowForumController::class))
         ->addInclude('ranks'),

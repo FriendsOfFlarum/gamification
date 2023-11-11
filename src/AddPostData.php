@@ -35,7 +35,7 @@ class AddPostData
 
         if ($canSeeVotes) {
             if ($actor->exists) {
-                $vote = Vote::query()->where(['post_id' => $post->id, 'user_id' => $actor->id])->first(['value']);
+                $vote = $post->actualvotes->first();
 
                 $attributes['hasUpvoted'] = $vote && $vote->isUpvote();
                 $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
@@ -44,7 +44,7 @@ class AddPostData
                 $attributes['hasDownvoted'] = null;
             }
             $attributes['canSeeVotes'] = $canSeeVotes;
-            $attributes['votes'] = Vote::calculate(['post_id' => $post->id]);
+            $attributes['votes'] = $post->actualvotes_sum_value;
         } else {
             $attributes['votes'] = null;
         }
