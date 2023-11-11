@@ -22,10 +22,7 @@ class AddDiscussionData
         $actor = $serializer->getActor();
 
         if (!$actor->isGuest() && $actor->exists && $post) {
-            $vote = Vote::query()->where([
-                'post_id' => $post->id,
-                'user_id' => $actor->id,
-            ])->first(['value']);
+            $vote = $post->actualvotes->first();
 
             $attributes['hasUpvoted'] = $vote && $vote->isUpvote();
             $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
