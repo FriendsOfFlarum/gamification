@@ -52,7 +52,7 @@ class HotFilterGambit extends AbstractRegexGambit implements FilterInterface
     /**
      * @param SearchState $search
      * @param array       $matches
-     * @param $negate
+     * @param             $negate
      */
     protected function conditions(SearchState $search, array $matches, $negate)
     {
