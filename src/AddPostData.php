@@ -46,7 +46,7 @@ class AddPostData
                 $attributes['hasDownvoted'] = null;
             }
             $attributes['canSeeVotes'] = $canSeeVotes;
-            $attributes['votes'] = $post->actualvotes_count;
+            $attributes['votes'] = $post->actualvotes_sum_value;
         } else {
             $attributes['votes'] = null;
         }
