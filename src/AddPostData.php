@@ -35,8 +35,6 @@ class AddPostData
 
         if ($canSeeVotes) {
             if ($actor->exists) {
-                $post = $post->id === $post->discussion->first_post_id ? $post->discussion->firstPost : $post;
-
                 $vote = $post->actualvotes->first();
 
                 $attributes['hasUpvoted'] = $vote && $vote->isUpvote();

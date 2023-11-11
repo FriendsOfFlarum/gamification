@@ -179,7 +179,9 @@ return [
 
     (new Extend\ApiController(Controller\UpdatePostController::class))
         ->addInclude('user.ranks')
-        ->addOptionalInclude(['upvotes', 'downvotes']),
+        ->addOptionalInclude(['upvotes', 'downvotes'])
+        ->loadWhere('actualvotes', [LoadActorVoteRelationship::class, 'mutateRelation'])
+        ->prepareDataForSerialization([LoadActorVoteRelationship::class, 'sumRelation']),
 
     (new Extend\ApiController(Controller\ShowForumController::class))
         ->addInclude('ranks'),

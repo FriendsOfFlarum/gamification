@@ -39,7 +39,7 @@ class LoadActorVoteRelationship
             });
         } elseif ($data instanceof Collection) {
             $loadable = $data->map(function ($model) {
-                return $model instanceof Discussion ? $model->firstPost : $model;
+                return $model instanceof Discussion ? ($model->mostRelevantPost ?? $model->firstPost) : $model;
             });
         } elseif ($data instanceof Post) {
             $loadable = $data->newCollection([$data]);
