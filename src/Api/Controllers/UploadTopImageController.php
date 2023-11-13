@@ -41,9 +41,6 @@ class UploadTopImageController extends ShowForumController
      */
     protected $imageManager;
 
-    /**
-     * @param SettingsRepositoryInterface $settings
-     */
     public function __construct(SettingsRepositoryInterface $settings, Paths $paths, ImageManager $imageManager)
     {
         $this->settings = $settings;

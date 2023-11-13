@@ -1,6 +1,6 @@
 {
     "name": "fof/gamification",
-    "description":  "Upvotes and downvotes for your Flarum community",
+    "description": "Upvotes and downvotes for your Flarum community",
     "keywords": [
         "flarum",
         "friendsofflarum",
@@ -55,6 +55,22 @@
         },
         "flagrow": {
             "discuss": "https://discuss.flarum.org/d/20671"
+        },
+        "flarum-cli": {
+            "modules": {
+                "githubActions": true
+            }
         }
+    },
+    "scripts": {
+        "analyse:phpstan": "phpstan analyse",
+        "clear-cache:phpstan": "phpstan clear-result-cache"
+    },
+    "scripts-descriptions": {
+        "analyse:phpstan": "Run static analysis"
+    },
+    "require-dev": {
+        "flarum/phpstan": "*",
+        "flarum/pusher": "*"
     }
 }

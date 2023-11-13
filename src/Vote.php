@@ -17,10 +17,10 @@ use Flarum\Post\Post;
 use Flarum\User\User;
 
 /**
- * @property int id
- * @property int user_id
- * @property int post_id
- * @property int value
+ * @property int  $id
+ * @property int  $user_id
+ * @property int  $post_id
+ * @property int  $value
  * @property Post $post
  * @property User $user
  */
@@ -28,9 +28,9 @@ class Vote extends AbstractModel
 {
     protected $table = 'post_votes';
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     protected $fillable = [

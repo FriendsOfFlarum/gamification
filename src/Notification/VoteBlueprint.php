@@ -77,7 +77,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface
     /**
      * Get the name of the view to construct a notification email with.
      *
-     * @return string
+     * @return array<string, string>
      */
     public function getEmailView()
     {

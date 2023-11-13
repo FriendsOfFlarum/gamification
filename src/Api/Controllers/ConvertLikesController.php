@@ -32,21 +32,12 @@ class ConvertLikesController implements RequestHandlerInterface
      */
     protected $gamification;
 
-    /**
-     * @param SettingsRepositoryInterface $settings
-     * @param Gamification                $gamification
-     */
     public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
     {
         $this->settings = $settings;
         $this->gamification = $gamification;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return int
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         RequestUtil::getActor($request)->assertAdmin();

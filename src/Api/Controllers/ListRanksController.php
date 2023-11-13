@@ -19,17 +19,8 @@ use Tobscure\JsonApi\Document;
 
 class ListRanksController extends AbstractListController
 {
-    /**
-     * @var RankSerializer
-     */
     public $serializer = RankSerializer::class;
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param Document               $document
-     *
-     * @return mixed
-     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         return Rank::all();

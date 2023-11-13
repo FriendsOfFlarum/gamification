@@ -25,17 +25,11 @@ class DeleteRankController extends AbstractDeleteController
      */
     protected $bus;
 
-    /**
-     * @param Dispatcher $bus
-     */
     public function __construct(Dispatcher $bus)
     {
         $this->bus = $bus;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     */
     protected function delete(ServerRequestInterface $request)
     {
         $this->bus->dispatch(

@@ -13,6 +13,7 @@ namespace FoF\Gamification;
 
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer;
+use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Started;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Discussion\Search\DiscussionSearcher;
@@ -41,6 +42,9 @@ return [
     new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Model(User::class))
+        ->cast('votes', 'int')
+        ->cast('rank', 'string')
+        ->cast('last_vote_time', 'datetime')
         ->belongsToMany('ranks', Rank::class, 'rank_users'),
 
     (new Extend\Model(Post::class))
@@ -54,6 +58,10 @@ return [
         ->relationship('actualvotes', function (Post $post) {
             return $post->hasMany(Vote::class, 'post_id');
         }),
+
+    (new Extend\Model(Discussion::class))
+        ->cast('votes', 'int')
+        ->cast('hotness', 'float'),
 
     (new ExtensionSettings())
         ->setPrefix('fof-gamification.')

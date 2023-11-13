@@ -55,9 +55,9 @@ class AddVoteHandler
             $vote->value = 1;
             $vote->save();
 
-            $ranks = Rank::where('points', '<=', $actor->votes)->get();
+            $ranks = Rank::query()->where('points', '<=', $actor->votes)->get();
 
-            if ($ranks) {
+            if (count($ranks) > 0) {
                 $actor->ranks()->detach();
                 $actor->ranks()->attach($ranks);
             }

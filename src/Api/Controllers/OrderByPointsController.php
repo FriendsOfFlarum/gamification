@@ -23,9 +23,6 @@ class OrderByPointsController extends AbstractListController
 {
     public $serializer = UserSerializer::class;
 
-    /**
-     * @var array
-     */
     public $include = ['ranks'];
 
     /**
@@ -33,19 +30,11 @@ class OrderByPointsController extends AbstractListController
      */
     protected $gamification;
 
-    /**
-     * @param Gamification $gamification
-     */
     public function __construct(Gamification $gamification)
     {
         $this->gamification = $gamification;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     *
-     * @return mixed
-     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         if (RequestUtil::getActor($request)->cannot('fof.gamification.viewRankingPage')) {

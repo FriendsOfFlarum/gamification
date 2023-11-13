@@ -29,20 +29,11 @@ class CreateRankController extends AbstractCreateController
      */
     protected $bus;
 
-    /**
-     * @param Dispatcher $bus
-     */
     public function __construct(Dispatcher $bus)
     {
         $this->bus = $bus;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param Document               $document
-     *
-     * @return mixed
-     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
         return $this->bus->dispatch(
