@@ -46,6 +46,7 @@ class LoadActorVoteRelationship
         }
 
         if ($loadable) {
+            /** @phpstan-ignore-next-line */
             $loadable->loadSum('actualvotes', 'value');
         }
     }

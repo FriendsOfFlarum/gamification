@@ -33,18 +33,12 @@ class DeleteTopImageController extends AbstractDeleteController
      */
     protected $paths;
 
-    /**
-     * @param SettingsRepositoryInterface $settings
-     */
     public function __construct(SettingsRepositoryInterface $settings, Paths $paths)
     {
         $this->settings = $settings;
         $this->paths = $paths;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function delete(ServerRequestInterface $request)
     {
         $id = Arr::get($request->getQueryParams(), 'id');

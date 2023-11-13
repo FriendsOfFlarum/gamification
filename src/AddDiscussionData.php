@@ -22,6 +22,7 @@ class AddDiscussionData
         $actor = $serializer->getActor();
 
         if (!$actor->isGuest() && $actor->exists && $post) {
+            /** @phpstan-ignore-next-line */
             $vote = $post->actualvotes->first();
 
             $attributes['hasUpvoted'] = $vote && $vote->isUpvote();

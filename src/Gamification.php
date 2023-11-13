@@ -66,7 +66,7 @@ class Gamification
     /**
      * @return mixed
      */
-    public function orderByPoints($limit, $offset)
+    public function orderByPoints(int $limit, int $offset)
     {
         $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers'));
 

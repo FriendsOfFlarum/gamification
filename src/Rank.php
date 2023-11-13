@@ -14,6 +14,12 @@ namespace FoF\Gamification;
 use Flarum\Database\AbstractModel;
 use Flarum\User\User;
 
+/**
+ * @property int    $id
+ * @property string $name
+ * @property string $color
+ * @property int    $points
+ */
 class Rank extends AbstractModel
 {
     /**
