@@ -17,10 +17,10 @@ use Flarum\Post\Post;
 use Flarum\User\User;
 
 /**
- * @property int $id
- * @property int $user_id
- * @property int $post_id
- * @property int $value
+ * @property int  $id
+ * @property int  $user_id
+ * @property int  $post_id
+ * @property int  $value
  * @property Post $post
  * @property User $user
  */
