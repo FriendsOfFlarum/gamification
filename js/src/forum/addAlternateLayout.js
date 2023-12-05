@@ -47,7 +47,7 @@ export default function addAlternateLayout() {
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || get(discussion, 'canVote');
 
-    if (setting('hideIfNoPermissions', true) && !post.canVote()) {
+    if (setting('hideIfNoPermissions', true) && !post.canVote() && !post.canSeeVotes()) {
       return;
     }
 
