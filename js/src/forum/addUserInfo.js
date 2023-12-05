@@ -56,7 +56,7 @@ export default function () {
     if (!profile_node) return;
 
     let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
-    console.log(user.ranks())
+    alert(user.ranks())
     if (user.ranks()) {
       if (!badges_node) {
         profile_node.children.splice(
@@ -105,6 +105,7 @@ export default function () {
     const header_node = vnode.children.find(matchTag('h3'));
     const amt = Number(setting('rankAmt')) ?? user.ranks().length;
 
+    alert(user.ranks())
     header_node.children = header_node.children
       .concat(
         user
