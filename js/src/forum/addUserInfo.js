@@ -56,6 +56,7 @@ export default function () {
     if (!profile_node) return;
 
     let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
+    console.log(user.ranks())
     if (user.ranks()) {
       if (!badges_node) {
         profile_node.children.splice(
