@@ -73,6 +73,7 @@ return [
             'customRankingImages',
             'useAlternateLayout',
             'upVotesOnly',
+            'hideIfNoPermissions',
             'iconNameAlt',
             'altPostVotingUi',
         ]),
