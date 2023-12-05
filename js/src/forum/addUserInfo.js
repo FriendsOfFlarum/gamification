@@ -56,7 +56,6 @@ export default function () {
     if (!profile_node) return;
 
     let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
-    alert(user.ranks())
     if (user.ranks()) {
       if (!badges_node) {
         profile_node.children.splice(
@@ -105,19 +104,21 @@ export default function () {
     const header_node = vnode.children.find(matchTag('h3'));
     const amt = Number(setting('rankAmt')) ?? user.ranks().length;
 
-    alert(user.ranks())
-    header_node.children = header_node.children
-      .concat(
-        user
-          .ranks()
-          .reverse()
-          .splice(0, amt)
-          .map((rank) => {
-            return <span className="Post-Rank">{rankLabel(rank)}</span>;
-          })
-      )
-      .filter(function (el) {
-        return el.tag !== undefined;
-      });
+    if (user.ranks()) {
+
+      header_node.children = header_node.children
+        .concat(
+          user
+            .ranks()
+            .reverse()
+            .splice(0, amt)
+            .map((rank) => {
+              return <span className="Post-Rank">{rankLabel(rank)}</span>;
+            })
+        )
+        .filter(function (el) {
+          return el.tag !== undefined;
+        });
+    }
   });
 }
