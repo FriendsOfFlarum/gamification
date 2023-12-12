@@ -71,8 +71,6 @@ class UploadTopImageController extends ShowForumController
         if (!$file instanceof UploadedFile) {
             if (is_array($file)) {
                 $file = Arr::first($file);
-            } else {
-                throw new ValidationException(['file' => 'Not an UploadFile instance']);
             }
         }
 
