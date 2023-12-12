@@ -33,6 +33,7 @@ export default class SettingsPage extends ExtensionPage {
       'useAlternateLayout',
       'altPostVotingUi',
       'upVotesOnly',
+      'hideIfNoPermissions',
       'firstPostOnly',
       'allowSelfVotes',
     ];
@@ -376,6 +377,14 @@ export default class SettingsPage extends ExtensionPage {
       'upvotesOnly',
       <Switch state={this.values.upVotesOnly() || false} onchange={this.values.upVotesOnly} className="votes-switch">
         {app.translator.trans('fof-gamification.admin.page.votes.upvotes_only')}
+      </Switch>,
+      30
+    );
+
+    items.add(
+      'hideIfNoPermissions',
+      <Switch state={this.values.hideIfNoPermissions() || false} onchange={this.values.hideIfNoPermissions} className="votes-switch">
+        {app.translator.trans('fof-gamification.admin.page.votes.hide_if_no_permissions')}
       </Switch>,
       30
     );

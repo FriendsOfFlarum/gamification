@@ -72,6 +72,7 @@ fof-gamification:
         icon_name: Upvote/downvote icon
         icon_help: "Input any Font-Awesome icon that is suffixed with -up and -down. Examples: arrow, thumbs, chevron"
         upvotes_only: Only allow upvoting
+        hide_if_no_permissions: Only show voting options when user has permission to vote on this post
         first_post_only: Only allow up/down votes in the first post in a discussion
         allow_self_votes: Users may vote on their own posts
       save_settings: Save settings
