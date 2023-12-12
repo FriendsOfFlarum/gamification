@@ -40,12 +40,12 @@ class LoadActorVoteRelationship
         } elseif ($data instanceof Collection) {
             $loadable = (new Post())->newCollection($data->map(function ($model) {
                 return $model instanceof Discussion ? ($model->mostRelevantPost ?? $model->firstPost) : $model;
-            }));
+            })->filter());
         } elseif ($data instanceof Post) {
             $loadable = $data->newCollection([$data]);
         }
 
-        if ($loadable) {
+        if ($loadable && $loadable instanceof Collection) {
             $loadable->loadSum('actualvotes', 'value');
         }
     }
