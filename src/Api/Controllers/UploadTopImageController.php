@@ -71,7 +71,6 @@ class UploadTopImageController extends ShowForumController
         if (!$file instanceof UploadedFile) {
             if (is_array($file)) {
                 $file = Arr::first($file);
-
             } else {
                 throw new ValidationException(['file' => 'Not an UploadFile instance']);
             }
@@ -82,7 +81,7 @@ class UploadTopImageController extends ShowForumController
 
         switch ($id) {
             case 1:
-                $size = 150;;
+                $size = 150;
                 break;
             case 2:
                 $size = 125;

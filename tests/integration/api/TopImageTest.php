@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
@@ -8,7 +17,7 @@ use FoF\Gamification\Tests\EnhancedTestCase;
 class TopImageTest extends EnhancedTestCase
 {
     use RetrievesAuthorizedUsers;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -18,8 +27,8 @@ class TopImageTest extends EnhancedTestCase
         $this->prepareDatabase([
             'users' => [
                 $this->normalUser(),
-            ]
-            ]);
+            ],
+        ]);
     }
 
     public function topImagesProvider()
@@ -33,6 +42,7 @@ class TopImageTest extends EnhancedTestCase
 
     /**
      * @dataProvider topImagesProvider
+     *
      * @test
      */
     public function normal_user_cannot_upload_top_image(int $imageNo)
@@ -52,6 +62,7 @@ class TopImageTest extends EnhancedTestCase
 
     /**
      * @dataProvider topImagesProvider
+     *
      * @test
      */
     public function admin_can_upload_top_image(int $imageNo)
