@@ -6,9 +6,8 @@ import Button from 'flarum/common/components/Button';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import listItems from 'flarum/common/helpers/listItems';
 import username from 'flarum/common/helpers/username';
-import icon from 'flarum/common/helpers/icon';
-import setting from '../helpers/setting';
 import Link from 'flarum/common/components/Link';
+import RankingImage from './RankingImage';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -60,18 +59,7 @@ export default class RankingsPage extends Page {
                   ++i;
                   return [
                     <tr className={'ranking-' + i}>
-                      {i < 4 ? (
-                        setting('customRankingImages', true) ? (
-                          <img
-                            className="rankings-mobile rankings-image"
-                            src={app.forum.attribute('baseUrl') + app.forum.attribute(`fof-gamification.topimage${i}Url`)}
-                          />
-                        ) : (
-                          <td className={'rankings-mobile rankings-' + i}>{icon('fas fa-trophy')}</td>
-                        )
-                      ) : (
-                        <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>
-                      )}
+                      {i < 4 ? <RankingImage place={i} /> : <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>}
                       <td>
                         <div className="PostUser">
                           <h3 className="rankings-info">

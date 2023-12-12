@@ -12,13 +12,12 @@
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractDeleteController;
-use Flarum\Foundation\Paths;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Illuminate\Contracts\Filesystem\Cloud;
+use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\EmptyResponse;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
 use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteTopImageController extends AbstractDeleteController
@@ -29,14 +28,14 @@ class DeleteTopImageController extends AbstractDeleteController
     protected $settings;
 
     /**
-     * @var Paths
+     * @var Cloud
      */
-    protected $paths;
+    protected $uploadDir;
 
-    public function __construct(SettingsRepositoryInterface $settings, Paths $paths)
+    public function __construct(SettingsRepositoryInterface $settings, Factory $factory)
     {
         $this->settings = $settings;
-        $this->paths = $paths;
+        $this->uploadDir = $factory->disk('flarum-assets');
     }
 
     protected function delete(ServerRequestInterface $request)
@@ -49,10 +48,8 @@ class DeleteTopImageController extends AbstractDeleteController
 
         $this->settings->set($key, null);
 
-        $uploadDir = new Filesystem(new Local($this->paths->public.'/assets'));
-
-        if ($uploadDir->has($path)) {
-            $uploadDir->delete($path);
+        if ($this->uploadDir->exists($path)) {
+            $this->uploadDir->delete($path);
         }
 
         return new EmptyResponse(204);
