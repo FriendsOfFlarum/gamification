@@ -15,8 +15,8 @@ use Flarum\Api\Controller\ShowForumController;
 use Flarum\Foundation\Paths;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\Filesystem\Cloud;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -80,13 +80,11 @@ class UploadTopImageController extends ShowForumController
 
         $encodedImage = $image->fit($size, $size)->encode('png');
 
-        
-
         $key = "fof-gamification.topimage{$id}_path";
         $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.png';
 
         $this->uploadDir->put($uploadName, $encodedImage);
-        
+
         $this->settings->set($key, $uploadName);
 
         return parent::data($request, $document);
