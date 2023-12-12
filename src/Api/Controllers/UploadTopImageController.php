@@ -13,6 +13,7 @@ namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\ShowForumController;
 use Flarum\Foundation\Paths;
+use Flarum\Foundation\ValidationException;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Filesystem\Cloud;
@@ -20,6 +21,7 @@ use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
+use Laminas\Diactoros\UploadedFile;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -57,19 +59,37 @@ class UploadTopImageController extends ShowForumController
     {
         RequestUtil::getActor($request)->assertAdmin();
 
-        $id = Arr::get($request->getQueryParams(), 'id');
+        $id = (int) Arr::get($request->getQueryParams(), 'id', 0);
 
+        /** @var UploadedFile | null */
         $file = Arr::first($request->getUploadedFiles());
 
-        $tmpFile = tempnam($this->paths->storage.'/tmp', 'topimage.'.$id);
+        if (!$file) {
+            throw new ValidationException(['file' => 'No file was uploaded']);
+        }
+
+        if (!$file instanceof UploadedFile) {
+            if (is_array($file)) {
+                $file = Arr::first($file);
+
+            } else {
+                throw new ValidationException(['file' => 'Not an UploadFile instance']);
+            }
+        }
+
+        $tmpFile = @tempnam($this->paths->storage.'/tmp', 'topimage.'.$id);
         $file->moveTo($tmpFile);
 
-        if ('1' == $id) {
-            $size = 200;
-        } elseif ('2' == $id) {
-            $size = 150;
-        } else {
-            $size = 100;
+        switch ($id) {
+            case 1:
+                $size = 150;;
+                break;
+            case 2:
+                $size = 125;
+                break;
+            default:
+                $size = 100;
+                break;
         }
 
         $image = $this->imageManager->make($tmpFile);
@@ -86,6 +106,8 @@ class UploadTopImageController extends ShowForumController
         $this->uploadDir->put($uploadName, $encodedImage);
 
         $this->settings->set($key, $uploadName);
+
+        unlink($tmpFile);
 
         return parent::data($request, $document);
     }
