@@ -13,14 +13,15 @@ namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\ShowForumController;
 use Flarum\Foundation\Paths;
+use Flarum\Foundation\ValidationException;
 use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Illuminate\Contracts\Filesystem\Cloud;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use League\Flysystem\MountManager;
+use Laminas\Diactoros\UploadedFile;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -41,51 +42,69 @@ class UploadTopImageController extends ShowForumController
      */
     protected $imageManager;
 
-    public function __construct(SettingsRepositoryInterface $settings, Paths $paths, ImageManager $imageManager)
+    /**
+     * @var Cloud
+     */
+    protected $uploadDir;
+
+    public function __construct(SettingsRepositoryInterface $settings, Paths $paths, ImageManager $imageManager, FilesystemFactory $factory)
     {
         $this->settings = $settings;
         $this->paths = $paths;
         $this->imageManager = $imageManager;
+        $this->uploadDir = $factory->disk('flarum-assets');
     }
 
     public function data(ServerRequestInterface $request, Document $document)
     {
         RequestUtil::getActor($request)->assertAdmin();
 
-        $id = Arr::get($request->getQueryParams(), 'id');
+        $id = (int) Arr::get($request->getQueryParams(), 'id', 0);
 
+        /** @var UploadedFile | null */
         $file = Arr::first($request->getUploadedFiles());
 
-        $tmpFile = tempnam($this->paths->storage.'/tmp', 'topimage.'.$id);
+        if (!$file) {
+            throw new ValidationException(['file' => 'No file was uploaded']);
+        }
+
+        if (!$file instanceof UploadedFile) {
+            if (is_array($file)) {
+                $file = Arr::first($file);
+            }
+        }
+
+        $tmpFile = @tempnam($this->paths->storage.'/tmp', 'topimage.'.$id);
         $file->moveTo($tmpFile);
 
-        if ('1' == $id) {
-            $size = 125;
-        } elseif ('2' == $id) {
-            $size = 75;
-        } else {
-            $size = 50;
+        switch ($id) {
+            case 1:
+                $size = 150;
+                break;
+            case 2:
+                $size = 125;
+                break;
+            default:
+                $size = 100;
+                break;
         }
 
-        $encodedImage = $this->imageManager->make($tmpFile)->resize($size, $size)->encode('png');
-        file_put_contents($tmpFile, $encodedImage);
+        $image = $this->imageManager->make($tmpFile);
 
-        $extension = 'png';
-
-        $mount = new MountManager([
-            'source' => new Filesystem(new Local(pathinfo($tmpFile, PATHINFO_DIRNAME))),
-            'target' => new Filesystem(new Local($this->paths->public.'/assets')),
-        ]);
-
-        if (($path = $this->settings->get($key = "fof-gamification.topimage{$id}_path")) && $mount->has($file = "target://$path")) {
-            $mount->delete($file);
+        if (extension_loaded('exif')) {
+            $image->orientate();
         }
 
-        $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.'.$extension;
+        $encodedImage = $image->fit($size, $size)->encode('png');
 
-        $mount->move('source://'.pathinfo($tmpFile, PATHINFO_BASENAME), "target://$uploadName");
+        $key = "fof-gamification.topimage{$id}_path";
+        $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.png';
+
+        $this->uploadDir->put($uploadName, $encodedImage);
 
         $this->settings->set($key, $uploadName);
+
+        unlink($tmpFile);
 
         return parent::data($request, $document);
     }

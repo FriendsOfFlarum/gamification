@@ -107,11 +107,7 @@ return [
 
     (new Extend\ApiSerializer(Serializer\ForumSerializer::class))
         ->hasMany('ranks', Serializers\RankSerializer::class)
-        ->attributes(function (Serializer\ForumSerializer $serializer, $forum, $attributes) {
-            $attributes['canViewRankingPage'] = $serializer->getActor()->can('fof.gamification.viewRankingPage');
-
-            return $attributes;
-        }),
+        ->attributes(Api\AddForumAttributes::class),
 
     (new Extend\ApiController(Controller\ShowForumController::class))
         ->prepareDataForSerialization(function (Controller\ShowForumController $controller, &$data) {
@@ -122,17 +118,7 @@ return [
         ->default('fof-gamification.blockedUsers', '')
         ->default('fof-gamification.rankAmt', 2)
         ->default('fof-gamification.firstPostOnly', false)
-        ->default('fof-gamification.allowSelfVotes', true)
-        ->serializeToForum('fof-gamification.topimage1Url', 'fof-gamification.topimage1_path', function ($value) {
-            return $value ? "/assets/$value" : null;
-        })
-        ->serializeToForum('fof-gamification.topimage2Url', 'fof-gamification.topimage2_path', function ($value) {
-            return $value ? "/assets/$value" : null;
-        })
-        ->serializeToForum('fof-gamification.topimage3Url', 'fof-gamification.topimage3_path', function ($value) {
-            return $value ? "/assets/$value" : null;
-        })
-        ->serializeToForum('fof-gamification-op-votes-only', 'fof-gamification.firstPostOnly', 'boolVal'),
+        ->default('fof-gamification.allowSelfVotes', true),
 
     (new Extend\ApiSerializer(Serializer\UserSerializer::class))
         ->attributes(AddUserAttributes::class),
