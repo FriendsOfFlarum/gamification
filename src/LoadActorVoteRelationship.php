@@ -38,15 +38,14 @@ class LoadActorVoteRelationship
                 return $post instanceof Post;
             });
         } elseif ($data instanceof Collection) {
-            $loadable = $data->map(function ($model) {
+            $loadable = (new Post())->newCollection($data->map(function ($model) {
                 return $model instanceof Discussion ? ($model->mostRelevantPost ?? $model->firstPost) : $model;
-            });
+            }));
         } elseif ($data instanceof Post) {
             $loadable = $data->newCollection([$data]);
         }
 
         if ($loadable) {
-            /** @phpstan-ignore-next-line */
             $loadable->loadSum('actualvotes', 'value');
         }
     }
