@@ -38,10 +38,13 @@ class VotedFilter implements FilterInterface
 
         $filterState
             ->getQuery()
-            ->whereIn('id', function ($query) use ($votedId, $negate) {
+            ->whereIn('id', function ($query) use ($votedId, $negate, $filterState) {
                 $query->select('post_id')
                     ->from('post_votes')
                     ->where('user_id', $negate ? '!=' : '=', $votedId);
+				if (!$filterState->getActor()->hasPermission('canSeeVoters')) {
+                    $query->where('user_id', '=', $filterState->getActor()->id);
+				}
             })
             ->when((bool) $this->settings->get('fof-gamification.firstPostOnly'), function ($query) {
                 $query->where('number', '1');
