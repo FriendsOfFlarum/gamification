@@ -11,10 +11,6 @@ export default function () {
     return (node) => node && node.attrs && node.attrs.className && String(node.attrs.className).split(' ').includes(className);
   };
 
-  const matchTag = (tagName) => {
-    return (node) => node && node.tag && node.tag === tagName;
-  };
-
   const findMatchClass = function (node, className) {
     const arr = [];
 
@@ -101,7 +97,7 @@ export default function () {
       return vnode;
     }
 
-    const header_node = vnode.children.find(matchTag('h3'));
+    const header_node = vnode.children.find(matchClass('PostUser-name'));
     const amt = Number(setting('rankAmt')) ?? user.ranks().length;
 
     header_node.children = header_node.children
