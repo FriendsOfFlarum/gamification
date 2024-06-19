@@ -1,5 +1,5 @@
 .VotingContainer {
-  padding: 12px;
+  padding: 2px;
   background: @control-bg;
   border-radius: @border-radius;
 
@@ -36,7 +36,7 @@
     }
 
     &-icon {
-      font-size: 0.9rem;
+      font-size: 0.7rem;
       vertical-align: middle;
     }
 
@@ -68,7 +68,8 @@
   }
 
   &-list {
-    display: grid;
+    display: inline-flex;
+    flex-wrap: wrap;
     grid-template-columns: repeat(auto-fill, minmax(16px, 1fr));
     gap: 4px;
     text-align: center;

@@ -31,7 +31,6 @@ export default class SettingsPage extends ExtensionPage {
       'rateLimit',
       'showVotesOnDiscussionPage',
       'useAlternateLayout',
-      'altPostVotingUi',
       'upVotesOnly',
       'firstPostOnly',
       'allowSelfVotes',
@@ -362,14 +361,6 @@ export default class SettingsPage extends ExtensionPage {
         {app.translator.trans('fof-gamification.admin.page.votes.alternate_layout')}
       </Switch>,
       50
-    );
-
-    items.add(
-      'altPostLayout',
-      <Switch state={this.values.altPostVotingUi() || false} onchange={this.values.altPostVotingUi} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.alternate_post_layout')}
-      </Switch>,
-      40
     );
 
     items.add(
