@@ -39,6 +39,12 @@ class AutoAssignUserGroups implements ShouldQueue
 
     public function handle(SettingsRepositoryInterface $settings, Dispatcher $dispatcher)
     {
+        $autoAssignGroups = $settings->get('fof-gamification.autoAssignGroups');
+
+        if (empty($autoAssignGroups)) {
+            return;
+        }
+
         $entries = json_decode($settings->get('fof-gamification.autoAssignedGroups'), true);
 
         // If there are no entries, or if the subject user is an admin, we can skip this job
