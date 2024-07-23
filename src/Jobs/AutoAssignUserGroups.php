@@ -41,14 +41,14 @@ class AutoAssignUserGroups implements ShouldQueue
     {
         $autoAssignGroups = $settings->get('fof-gamification.autoAssignGroups');
 
-        if (empty($autoAssignGroups)) {
+        if (empty($autoAssignGroups) || $this->user->isAdmin()) {
             return;
         }
 
-        $entries = json_decode($settings->get('fof-gamification.autoAssignedGroups'), true);
+        $entries = json_decode($autoAssignGroups, true);
 
         // If there are no entries, or if the subject user is an admin, we can skip this job
-        if (!is_array($entries) || $this->user->isAdmin()) {
+        if (!is_array($entries)) {
             return;
         }
 
