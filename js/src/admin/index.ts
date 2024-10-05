@@ -1,6 +1,5 @@
 import app from 'flarum/admin/app';
 import SettingsPage from './components/SettingsPage';
-import Rank from '../common/models/Rank';
 
 export { default as extend } from './extend';
 
