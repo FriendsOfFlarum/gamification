@@ -6,6 +6,8 @@ import Discussion from 'flarum/common/models/Discussion';
 import Post from 'flarum/common/models/Post';
 import User from 'flarum/common/models/User';
 
+import Rank from '../common/models/Rank';
+
 export default [
   ...commonExtend,
 
@@ -31,6 +33,6 @@ export default [
 
   new Extend.Model(User) //
     .attribute<number>('points')
-    .hasMany('ranks')
+    .hasMany<Rank>('ranks')
     .attribute<boolean>('canHaveVotingNotifications'),
 ];
