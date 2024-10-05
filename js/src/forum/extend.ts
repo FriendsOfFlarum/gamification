@@ -24,7 +24,7 @@ export default [
   new Extend.Model(Post) //
     .hasMany('upvotes')
     .hasMany('downvotes')
-    .attribute('votes')
+    .attribute<number>('votes')
     .attribute<boolean>('canVote')
     .attribute<boolean>('canSeeVotes')
     .attribute<boolean>('hasUpvoted')
