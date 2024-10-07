@@ -51,7 +51,10 @@
                 "name": "fas fa-thumbs-up",
                 "backgroundColor": "#e74c3c",
                 "color": "#fff"
-            }
+            },
+            "optional-dependencies": [
+                "flarum/likes"
+            ]
         },
         "flagrow": {
             "discuss": "https://discuss.flarum.org/d/20671"

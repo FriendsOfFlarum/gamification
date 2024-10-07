@@ -9,6 +9,9 @@ export default function addUpvoteTabToUserProfile() {
   app.routes['user.votes'] = { path: '/u/:username/votes', component: VotesUserPage };
   extend(UserPage.prototype, 'navItems', function (items) {
     const user = this.user;
+
+    if (!user) return;
+
     const icon = setting('iconName') || 'thumbs';
     items.add(
       'votes',

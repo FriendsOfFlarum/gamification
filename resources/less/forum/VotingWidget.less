@@ -1,0 +1,114 @@
+.VotingWidgetContainer {
+    padding: 12px;
+    background: @control-bg;
+    border-radius: @border-radius;
+    display: flex;
+
+    @media @phone {
+        padding: 8px;
+    }
+
+    .VotingWidget-voters {
+        display: inline-flex;
+
+        .VotingWidget-voters-list {
+            padding: 0 20px;
+            display: inline-flex;
+
+            .Voters-info {
+                .Voters-info--sections {
+                    display: grid;
+                    column-gap: 50px;
+                    grid-template-columns: auto auto;
+                }
+            }
+        }
+    }
+}
+
+.VotingControl {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  cursor: pointer;
+
+  height: 42px;
+  width: 36px;
+
+  left: 0;
+
+  background: @body-bg;
+
+  border-radius: 4px;
+  border: 1px solid fade(@primary-color, 80%);
+
+  line-height: 24px;
+
+  .LoadingIndicator-container {
+    color: @control-color;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  button {
+    position: relative;
+    display: block;
+
+    width: 100%;
+
+    &[data-active] {
+      color: @primary-color !important;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: var(--vote-box-hover-color) !important;
+    }
+
+    .icon {
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      margin-right: 0;
+      transform: translateX(-50%);
+
+      font-size: 1.2em !important;
+    }
+  }
+
+  &[data-upvotes-only] {
+    button {
+      height: 100%;
+    }
+
+    grid-template-rows: 1fr auto;
+
+    .DiscussionListItem-voteCount,
+    .Post-voteCount {
+      bottom: 0;
+      width: 100%;
+
+      pointer-events: none;
+      text-align: center;
+
+      display: block;
+      height: 24px;
+    }
+  }
+
+  &:not([data-upvotes-only]) {
+    height: 56px;
+
+    grid-template-rows: 1fr auto 1fr;
+
+    line-height: 1;
+
+    span {
+      text-align: center;
+    }
+  }
+}

@@ -35,7 +35,9 @@ fof-gamification:
       label_none: No voters
     post:
       upvote_button: Upvote post
+      upvote_tooltip: Upvote
       downvote_button: Downvote post
+      downvote_tooltip: Downvote
 
   admin:
     permissions:
@@ -66,7 +68,6 @@ fof-gamification:
         rate_limit: Enforce a vote rate limit (10 seconds)
         discussion_page: Show total votes of original post on discussions list
         alternate_layout: Use alternate voting layout on discussions list
-        alternate_post_layout: Use alternate voting layout on posts
         title: Votes
         vote_color: Voted color
         icon_name: Upvote/downvote icon
