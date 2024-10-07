@@ -62,7 +62,7 @@ export default class RankingsPage extends Page {
                       {i < 4 ? <RankingImage place={i} /> : <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>}
                       <td>
                         <div className="PostUser">
-                          <h3 className="rankings-info">
+                          <h3 className="PostUser-name rankings-info">
                             <Link href={app.route.user(user)} force={true}>
                               {i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : ''} {username(user)}
                             </Link>
