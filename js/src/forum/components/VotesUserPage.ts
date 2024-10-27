@@ -14,7 +14,7 @@ export default class VotesUserPage extends PostsUserPage {
    * @param offset The position to start getting results from.
    * @protected
    */
-  loadResults(offset: number = 0) {
+  loadResults(offset: number) {
     const params: ApiQueryParamsPlural = {
       filter: {
         type: 'comment',
