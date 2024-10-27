@@ -109,7 +109,11 @@ export default class Voters extends Component<VotersAttrs> {
   }
 
   async load() {
-    await app.store.find<Post[]>('posts', this.attrs.post.id(), {
+    const postId = this.attrs.post.id();
+
+    if (!postId) return;
+
+    await app.store.find<Post>('posts', postId, {
       include: 'upvotes',
     });
 

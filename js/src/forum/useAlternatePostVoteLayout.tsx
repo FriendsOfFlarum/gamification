@@ -6,13 +6,14 @@ import CommentPost from 'flarum/forum/components/CommentPost';
 import Button from 'flarum/common/components/Button';
 import abbreviateNumber from 'flarum/common/utils/abbreviateNumber';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
-import type ItemList from 'flarum/common/utils/ItemList';
-
 import setting from './helpers/setting';
 import saveVote from './helpers/saveVote';
 
+import type ItemList from 'flarum/common/utils/ItemList';
+import type Mithril from 'mithril';
+
 export default function useAlternatePostVoteLayout() {
-  extend(CommentPost.prototype, 'actionItems', function (this: CommentPost, items: ItemList) {
+  extend(CommentPost.prototype, 'actionItems', function (this: CommentPost, items: ItemList<Mithril.Children>) {
     if (this.attrs.post.isHidden()) return;
 
     items.remove('votes');
@@ -30,7 +31,11 @@ export default function useAlternatePostVoteLayout() {
     }
   });
 
-  extend(CommentPost.prototype, 'headerItems', function (this: CommentPost, items: ItemList) {
+  extend(CommentPost.prototype, 'oninit', function () {
+    (this as any).voteLoading = false;
+  });
+
+  extend(CommentPost.prototype, 'headerItems', function (this: CommentPost, items: ItemList<Mithril.Children>) {
     const post = this.attrs.post;
 
     if (post.isHidden()) return;
@@ -47,9 +52,9 @@ export default function useAlternatePostVoteLayout() {
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || post.canVote();
 
-    const onclick = (upvoted, downvoted) =>
-      saveVote(post, upvoted, downvoted, (val) => {
-        this.voteLoading = val;
+    const onclick = (upvoted: boolean, downvoted: boolean) =>
+      saveVote(post, upvoted, downvoted, (val: boolean) => {
+        (this as any).voteLoading = val;
       });
 
     items.add(
@@ -59,7 +64,7 @@ export default function useAlternatePostVoteLayout() {
           className="Post-voteButton Post-voteButton--up Button Button--icon Button--text"
           icon={`fas fa-fw fa-${icon}-up`}
           data-active={hasUpvoted}
-          disabled={!canVote || this.voteLoading || !canSeeVotes}
+          disabled={!canVote || (this as any).voteLoading || !canSeeVotes}
           onclick={() => onclick(!hasUpvoted, false)}
           aria-label={app.translator.trans('fof-gamification.forum.post.upvote_button')}
         />
@@ -71,13 +76,13 @@ export default function useAlternatePostVoteLayout() {
             className="Post-voteButton Post-voteButton--down Button Button--icon Button--text"
             icon={`fas fa-fw fa-${icon}-down`}
             data-active={hasDownvoted}
-            disabled={!canVote || this.voteLoading}
+            disabled={!canVote || (this as any).voteLoading}
             onclick={() => onclick(false, !hasDownvoted)}
             aria-label={app.translator.trans('fof-gamification.forum.post.downvote_button')}
           />
         )}
 
-        {this.voteLoading && <LoadingIndicator display="inline" size="small" />}
+        {(this as any).voteLoading && <LoadingIndicator display="inline" size="small" />}
       </div>,
       10000
     );
