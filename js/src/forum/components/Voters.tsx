@@ -1,6 +1,5 @@
 import app from 'flarum/forum/app';
-
-import Component from 'flarum/common/Component';
+import Component, { ComponentAttrs } from 'flarum/common/Component';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import Link from 'flarum/common/components/Link';
 import Tooltip from 'flarum/common/components/Tooltip';
@@ -9,8 +8,13 @@ import icon from 'flarum/common/helpers/icon';
 import SubtreeRetainer from 'flarum/common/utils/SubtreeRetainer';
 
 import type Mithril from 'mithril';
+import type Post from 'flarum/common/models/Post';
 
-export default class Voters extends Component {
+export interface VotersAttrs extends ComponentAttrs {
+  post: Post;
+}
+
+export default class Voters extends Component<VotersAttrs> {
   subtreeRetainer!: SubtreeRetainer;
   lastRenderVotes: number = -1;
   loading: boolean = false;
@@ -37,7 +41,7 @@ export default class Voters extends Component {
     return this.subtreeRetainer.needsRebuild();
   }
 
-  onupdate(vnode: Mithril.Vnode) {
+  onupdate() {
     if (this.lastRenderVotes !== this.attrs.post.votes()) {
       this.loading = true;
       setTimeout(() => m.redraw(), 0);
@@ -47,8 +51,7 @@ export default class Voters extends Component {
   }
 
   view() {
-    // if (this.loading) {
-    if (this.attrs.post.votes() === false || this.attrs.post.upvotes() === false) {
+    if (this.attrs.post.votes() === 0 || this.attrs.post.upvotes().length === 0) {
       return (
         <div className="VotingContainer">
           <div className="FoFGamification-voters">
@@ -106,7 +109,7 @@ export default class Voters extends Component {
   }
 
   async load() {
-    await app.store.find('posts', this.attrs.post.id(), {
+    await app.store.find<Post[]>('posts', this.attrs.post.id(), {
       include: 'upvotes',
     });
 
