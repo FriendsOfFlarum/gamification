@@ -100,6 +100,8 @@ export default function () {
     const header_node = vnode.children.find(matchClass('PostUser-name'));
     const amt = Number(setting('rankAmt')) ?? user.ranks().length;
 
+    if (!user.ranks()) return;
+
     header_node.children = header_node.children
       .concat(
         user
