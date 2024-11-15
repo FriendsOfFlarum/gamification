@@ -1,5 +1,7 @@
+import IndexSidebar from 'flarum/forum/components/IndexSidebar';
+import PageStructure from 'flarum/forum/components/PageStructure';
 import app from 'flarum/forum/app';
-import avatar from 'flarum/common/helpers/avatar';
+import Avatar from 'flarum/common/components/Avatar';
 import Page from 'flarum/common/components/Page';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import Button from 'flarum/common/components/Button';
@@ -41,44 +43,34 @@ export default class RankingsPage extends Page {
     }
 
     return (
-      <div className="IndexPage">
-        {IndexPage.prototype.hero()}
-        <div className="container">
-          <div className="sideNavContainer">
-            <nav className="IndexPage-nav sideNav">
-              <ul>{listItems(IndexPage.prototype.sidebarItems().toArray())}</ul>
-            </nav>
-            <div className="IndexPage-results sideNavOffset">
-              <table class="rankings">
-                <tr>
-                  <th className="rankings-mobile">{app.translator.trans('fof-gamification.forum.ranking.rank')}</th>
-                  <th>{app.translator.trans('fof-gamification.forum.ranking.name')}</th>
-                  <th>{app.translator.trans('fof-gamification.forum.ranking.amount')}</th>
-                </tr>
-                {this.users.map((user, i) => {
-                  ++i;
-                  return [
-                    <tr className={'ranking-' + i}>
-                      {i < 4 ? <RankingImage place={i} /> : <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>}
-                      <td>
-                        <div className="PostUser">
-                          <h3 className="PostUser-name rankings-info">
-                            <Link href={app.route.user(user)} force={true}>
-                              {i < 4 ? avatar(user, { className: 'info-avatar rankings-' + i + '-avatar' }) : ''} {username(user)}
-                            </Link>
-                          </h3>
-                        </div>
-                      </td>
-                      {i < 4 ? <td className={'rankings-' + i}>{user.points()}</td> : <td className="rankings-4">{user.points()}</td>}
-                    </tr>,
-                  ];
-                })}
-              </table>
-              <div className="rankings-loadmore"> {loading}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageStructure className="RankingsPage" hero={() => IndexPage.prototype.hero()} sidebar={() => <IndexSidebar />}>
+        <table class="rankings">
+          <tr>
+            <th className="rankings-mobile">{app.translator.trans('fof-gamification.forum.ranking.rank')}</th>
+            <th>{app.translator.trans('fof-gamification.forum.ranking.name')}</th>
+            <th>{app.translator.trans('fof-gamification.forum.ranking.amount')}</th>
+          </tr>
+          {this.users.map((user, i) => {
+            ++i;
+            return [
+              <tr className={'ranking-' + i}>
+                {i < 4 ? <RankingImage place={i} /> : <td className="rankings-4 rankings-mobile">{this.addOrdinalSuffix(i)}</td>}
+                <td>
+                  <div className="PostUser">
+                    <h3 className="PostUser-name rankings-info">
+                      <Link href={app.route.user(user)} force={true}>
+                        {i < 4 ? <Avatar user={user} className={'info-avatar rankings-' + i + '-avatar'} /> : ''} {username(user)}
+                      </Link>
+                    </h3>
+                  </div>
+                </td>
+                {i < 4 ? <td className={'rankings-' + i}>{user.points()}</td> : <td className="rankings-4">{user.points()}</td>}
+              </tr>,
+            ];
+          })}
+        </table>
+        <div className="rankings-loadmore"> {loading}</div>
+      </PageStructure>
     );
   }
 
