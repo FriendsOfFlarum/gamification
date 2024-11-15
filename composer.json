@@ -31,8 +31,8 @@
         }
     ],
     "require": {
-        "flarum/core": "^1.7",
-        "fof/extend": "^1.0.0",
+        "flarum/core": "^2.0.0",
+        "fof/extend": "^2.0.0",
         "ext-json": "*"
     },
     "replace": {
@@ -84,7 +84,7 @@
     "require-dev": {
         "flarum/phpstan": "*",
         "flarum/pusher": "*",
-        "flarum/testing": "^1.0.0"
+        "flarum/testing": "^2.0.0"
     },
     "autoload-dev": {
         "psr-4": {
