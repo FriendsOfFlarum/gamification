@@ -74,7 +74,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface, AlertableI
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-gamification::emails.postVoted'];
+        return ['text' => 'fof-gamification::email.plain.postVoted', 'html' => 'fof-gamification::email.html.postVoted'];
     }
 
     /**
