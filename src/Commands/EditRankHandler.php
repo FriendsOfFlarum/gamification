@@ -18,17 +18,8 @@ use Illuminate\Support\Arr;
 
 class EditRankHandler
 {
-    /**
-     * @var RankValidator
-     */
-    protected $validator;
-
-    /**
-     * @param RankValidator $validator
-     */
-    public function __construct(RankValidator $validator)
+    public function __construct(protected RankValidator $validator)
     {
-        $this->validator = $validator;
     }
 
     /**

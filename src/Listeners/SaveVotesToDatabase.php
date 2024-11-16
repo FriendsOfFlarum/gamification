@@ -32,37 +32,12 @@ class SaveVotesToDatabase
 {
     use DispatchEventsTrait;
 
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
-     * @var Gamification
-     */
-    protected $gamification;
-
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @param Dispatcher                  $events
-     * @param Gamification                $gamification
-     * @param SettingsRepositoryInterface $settings
-     */
-    public function __construct(Dispatcher $events, Gamification $gamification, SettingsRepositoryInterface $settings, Container $container)
-    {
-        $this->events = $events;
-        $this->gamification = $gamification;
-        $this->settings = $settings;
-        $this->container = $container;
+    public function __construct(
+        protected Dispatcher $events,
+        protected Gamification $gamification,
+        protected SettingsRepositoryInterface $settings,
+        protected Container $container
+    ) {
     }
 
     /**

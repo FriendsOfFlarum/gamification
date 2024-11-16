@@ -11,33 +11,26 @@
 
 namespace FoF\Gamification\Notification;
 
+use Flarum\Database\AbstractModel;
+use Flarum\Locale\TranslatorInterface;
+use Flarum\Notification\AlertableInterface;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
+use Flarum\User\User;
 use FoF\Gamification\Vote;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
-class VoteBlueprint implements BlueprintInterface, MailableInterface
+class VoteBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var Vote
-     */
-    public $vote;
-
-    /**
-     * VoteBlueprint constructor.
-     *
-     * @param Vote $vote
-     */
-    public function __construct(Vote $vote)
-    {
-        $this->vote = $vote;
+    public function __construct(
+        public Vote $vote
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getSubject(): ?AbstractModel
     {
         return $this->vote->post;
     }
@@ -45,7 +38,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getFromUser(): ?User
     {
         return $this->vote->user;
     }
@@ -53,7 +46,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->vote->value;
     }
@@ -61,7 +54,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'vote';
     }
@@ -69,7 +62,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Post::class;
     }
@@ -79,7 +72,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return array<string, string>
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
         return ['text' => 'fof-gamification::emails.postVoted'];
     }
@@ -89,7 +82,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface
      *
      * @return string
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(TranslatorInterface $translator): string
     {
         return $translator->trans('fof-gamification.email.subject.postVoted', [
             '{display_name}'     => $this->vote->user->display_name,

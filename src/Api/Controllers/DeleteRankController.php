@@ -20,14 +20,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteRankController extends AbstractDeleteController
 {
-    /**
-     * @var Dispatcher
-     */
-    protected $bus;
-
-    public function __construct(Dispatcher $bus)
+    public function __construct(protected Dispatcher $bus)
     {
-        $this->bus = $bus;
     }
 
     protected function delete(ServerRequestInterface $request)

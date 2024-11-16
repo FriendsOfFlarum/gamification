@@ -18,17 +18,9 @@ use Illuminate\Support\Arr;
 
 class CreateRankHandler
 {
-    /**
-     * @var RankValidator
-     */
-    protected $validator;
-
-    /**
-     * @param RankValidator $validator
-     */
-    public function __construct(RankValidator $validator)
-    {
-        $this->validator = $validator;
+    public function __construct(
+        protected RankValidator $validator
+    ) {
     }
 
     /**
