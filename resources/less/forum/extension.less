@@ -24,7 +24,7 @@
   );
   font-size: 14px;
   line-height: 1;
-  color: @muted-color;
+  color: var(--muted-color);
 
   .icon {
     margin-right: 8px;
@@ -47,7 +47,7 @@
   margin: 0;
 
   a {
-    color: @text-color;
+    color: var(--text-color);
     font-size: 15px;
     font-weight: bold;
     display: block;
@@ -83,11 +83,11 @@
     background-color: transparent;
     border: none;
     margin: 8px 0 0;
-    color: @text-color;
+    color: var(--text-color);
     cursor: pointer;
 
     &--active {
-      color: @primary-color;
+      color: var(--primary-color);
     }
 
     &.loading {
