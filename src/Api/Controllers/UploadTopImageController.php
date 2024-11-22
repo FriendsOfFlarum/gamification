@@ -82,13 +82,13 @@ class UploadTopImageController extends ShowForumController
                 break;
         }
 
-        $image = $this->imageManager->make($tmpFile);
+        $image = $this->imageManager->read($tmpFile);
 
         if (extension_loaded('exif')) {
-            $image->orientate();
+            $image->orient();
         }
 
-        $encodedImage = $image->fit($size, $size)->encode('png');
+        $encodedImage = $image->resize($size, $size)->toPng();
 
         $key = "fof-gamification.topimage{$id}_path";
         $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.png';
