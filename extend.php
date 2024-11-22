@@ -17,14 +17,14 @@ use Flarum\Api\Resource;
 use Flarum\Api\Sort\SortColumn;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Started;
-use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
 use Flarum\Post\Event\Saving;
-use Flarum\Post\Filter\PostFilterer;
+use Flarum\Post\Filter\PostSearcher;
 use Flarum\Post\Post;
+use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
@@ -145,12 +145,6 @@ return [
     (new Extend\Notification())
         ->type(VoteBlueprint::class, ['alert']),
 
-    (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
-        ->addGambit(Search\HotFilterGambit::class),
-
-    (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilter(Search\HotFilterGambit::class),
-
     (new Extend\Console())
         ->command(Console\ResyncUserVotes::class)
         ->command(Console\AutoAssignGroups::class)
@@ -162,9 +156,8 @@ return [
     (new Extend\ServiceProvider())
         ->register(GamificationSortOptionsProvider::class),
 
-    (new Extend\Filter(PostFilterer::class))
-        ->addFilter(Filter\VotedFilter::class),
-
-    (new Extend\Filter(UserFilterer::class))
-        ->addFilter(Filter\RankableFilter::class),
+    (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
+        ->addFilter(DiscussionSearcher::class, Search\HotFilter::class)
+        ->addFilter(PostSearcher::class, Filter\VotedFilter::class)
+        ->addFilter(UserSearcher::class, Filter\RankableFilter::class),
 ];

@@ -11,8 +11,8 @@
 
 namespace FoF\Gamification\Filter;
 
-use Flarum\Filter\FilterInterface;
-use Flarum\Filter\FilterState;
+use Flarum\Search\Filter\FilterInterface;
+use Flarum\Search\SearchState;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Exception\PermissionDeniedException;
 
@@ -28,15 +28,15 @@ class RankableFilter implements FilterInterface
         return 'rankable';
     }
 
-    public function filter(FilterState $filterState, string $filterValue, bool $negate)
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        if ($filterState->getActor()->cannot('fof.gamification.viewRankingPage')) {
+        if ($state->getActor()->cannot('fof.gamification.viewRankingPage')) {
             throw new PermissionDeniedException();
         }
 
         $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers'));
 
-        $filterState
+        $state
             ->getQuery()
             ->whereIn('username', $blockedUsers, 'and', ! $negate);
     }

@@ -11,8 +11,8 @@
 
 namespace FoF\Gamification\Filter;
 
-use Flarum\Filter\FilterInterface;
-use Flarum\Filter\FilterState;
+use Flarum\Search\Filter\FilterInterface;
+use Flarum\Search\SearchState;
 use Flarum\Settings\SettingsRepositoryInterface;
 
 class VotedFilter implements FilterInterface
@@ -27,11 +27,11 @@ class VotedFilter implements FilterInterface
         return 'voted';
     }
 
-    public function filter(FilterState $filterState, string $filterValue, bool $negate)
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $votedId = trim($filterValue, '"');
+        $votedId = trim($value, '"');
 
-        $filterState
+        $state
             ->getQuery()
             ->whereIn('id', function ($query) use ($votedId, $negate) {
                 $query->select('post_id')
