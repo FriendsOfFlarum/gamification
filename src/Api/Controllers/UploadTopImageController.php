@@ -12,6 +12,7 @@
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\ShowForumController;
+use Flarum\Api\JsonApi;
 use Flarum\Foundation\Paths;
 use Flarum\Foundation\ValidationException;
 use Flarum\Http\RequestUtil;
@@ -22,9 +23,12 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Laminas\Diactoros\UploadedFile;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 
+/**
+ * @todo extend \Flarum\Api\Controller\UploadImageController
+ */
 class UploadTopImageController extends ShowForumController
 {
     /**
@@ -33,15 +37,18 @@ class UploadTopImageController extends ShowForumController
     protected $uploadDir;
 
     public function __construct(
+        JsonApi $api,
         protected SettingsRepositoryInterface $settings,
         protected Paths $paths,
         protected ImageManager $imageManager,
         FilesystemFactory $factory
     ) {
+        parent::__construct($api);
+
         $this->uploadDir = $factory->disk('flarum-assets');
     }
 
-    public function data(ServerRequestInterface $request, Document $document)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         RequestUtil::getActor($request)->assertAdmin();
 
@@ -92,6 +99,10 @@ class UploadTopImageController extends ShowForumController
 
         unlink($tmpFile);
 
-        return parent::data($request, $document);
+        return parent::handle(
+            // The parent controller expects a show forum request.
+            // `GET /api/forum`
+            $request->withMethod('GET')->withUri($request->getUri()->withPath('/api/forum'))
+        );
     }
 }
