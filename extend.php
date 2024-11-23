@@ -29,7 +29,6 @@ use Flarum\User\User;
 use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Notification\VoteBlueprint;
-use FoF\Gamification\Provider\GamificationSortOptionsProvider;
 
 return [
     (new Extend\Frontend('admin'))

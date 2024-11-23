@@ -48,7 +48,7 @@ class ForumResourceFields
             Schema\Relationship\ToMany::make('ranks')
                 ->type('ranks')
                 ->includable()
-                ->get(fn () => Rank::all()),
+                ->get(fn () => Rank::query()->get()->all()),
         ];
     }
 

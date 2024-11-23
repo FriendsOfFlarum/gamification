@@ -49,11 +49,14 @@ class RankResource extends Resource\AbstractDatabaseResource
         return [
 
             Schema\Number::make('points')
-                ->requiredOnCreate(),
+                ->requiredOnCreate()
+                ->writable(),
             Schema\Str::make('name')
-                ->requiredOnCreate(),
+                ->requiredOnCreate()
+                ->writable(),
             Schema\Str::make('color')
-                ->requiredOnCreate(),
+                ->requiredOnCreate()
+                ->writable(),
 
         ];
     }
