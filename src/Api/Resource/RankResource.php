@@ -28,7 +28,7 @@ class RankResource extends Resource\AbstractDatabaseResource
 
     public function scope(Builder $query, OriginalContext $context): void
     {
-        $query->whereVisibleTo($context->getActor());
+        // $query->whereVisibleTo($context->getActor());
     }
 
     public function endpoints(): array

@@ -31,7 +31,7 @@ class ForumResourceFields
     {
         return [
             Schema\Boolean::make('canViewRankingPage')
-                ->get(function (Context $context) {
+                ->get(function ($forum, Context $context) {
                     return $context->getActor()->can('fof.gamification.viewRankingPage');
                 }),
             Schema\Boolean::make('fof-gamification-op-votes-only')

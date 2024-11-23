@@ -30,7 +30,7 @@ export default function useAlternatePostVoteLayout() {
     }
   });
 
-  extend(CommentPost.prototype, 'headerItems', function (this: CommentPost, items: ItemList) {
+  extend(CommentPost.prototype, 'sideItems', function (this: CommentPost, items: ItemList) {
     const post = this.attrs.post;
 
     if (post.isHidden()) return;
@@ -78,8 +78,7 @@ export default function useAlternatePostVoteLayout() {
         )}
 
         {this.voteLoading && <LoadingIndicator display="inline" size="small" />}
-      </div>,
-      10000
+      </div>
     );
   });
 }

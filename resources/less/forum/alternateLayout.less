@@ -1,41 +1,22 @@
-:root {
-  [data-theme^=light] & {
-    --vote-box-hover-color: #f4f6f8;
-  }
+[data-theme^=light] {
+  --vote-box-hover-color: #f4f6f8;
+}
 
-  [data-theme^=dark] & {
-    --vote-box-hover-color: lighten(@body-bg-dark, 3%);
-  }
+[data-theme^=dark] {
+  --vote-box-hover-color: lighten(@body-bg-dark, 3%);
 }
 
 .CommentPost.votesAlternativeLayout {
   min-height: 165px;
-
-  .Post-header {
-    margin-right: 36px;
-  }
 }
 
 .CommentPost.votesAlternativeLayout.votesUpvotesOnly {
   min-height: 150px;
 }
 
-.DiscussionListItem-votes.alternateLayout {
-  + .DiscussionListItem-author {
-    margin-left: -2px;
-    margin-right: 12px;
-  }
-
-  + .DiscussionListItem-main {
-    @media @phone {
-      padding-right: 28px;
-    }
-  }
-}
-
 .DiscussionListItem-votes.alternateLayout,
 .Post-votes {
-  position: absolute;
+  position: relative;
   cursor: pointer;
 
   height: 42px;
@@ -47,6 +28,7 @@
 
   border-radius: 4px;
   border: 1px solid fade(@primary-color, 80%);
+  color: var(--muted-color);
 
   line-height: 24px;
 
@@ -120,42 +102,31 @@
   }
 }
 
-@screen-tablet-under: @screen-tablet - 0.01px;
+@screen-tablet-under: calc(@screen-tablet - 0.01px);
 
 .DiscussionListItem-votes.alternateLayout {
-  top: 4px;
+  margin: -8px 0;
+}
+
+.Post-votes {
+  margin-top: 12px;
 
   @media (max-width: @screen-tablet-under) {
-    left: 8px;
+    margin-top: -8px;
+    float: right;
   }
 }
 
 .Post-votes {
-  top: 12px;
-
-  @media (max-width: @screen-tablet-under) {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    top: 0;
-    left: 0;
-  }
-}
-
-.Post-header .item-votes {
   @media @tablet-up {
-    position: absolute;
-    left: 34px !important;
-    top: 84px !important;
-    margin-right: 0;
+    margin-left: 12px;
   }
 
   @screen-tablet-under: @screen-tablet - 0.01px;
 
   @media (max-width: @screen-tablet-under) {
-    position: absolute;
-    right: 4px;
-    top: 8px;
+    margin-right: 4px;
+    margin-top: 8px;
   }
 }
 
