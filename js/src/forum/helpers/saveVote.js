@@ -15,12 +15,26 @@ export default (post, upvoted, downvoted, load, discussion = post.discussion()) 
     downvoted = false;
   }
 
+  let action;
+
+  switch (true) {
+    case (upvoted && downvoted) || (!upvoted && !downvoted):
+      action = null;
+      break;
+    case upvoted:
+      action = 'up';
+      break;
+    case downvoted:
+      action = 'down';
+      break;
+  }
+
   if (load) load(true);
 
   m.redraw();
 
   return post
-    .save([upvoted, downvoted, 'vote'])
+    .save({ vote: action })
     .then(
       () => null,
       () => null

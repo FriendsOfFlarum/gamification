@@ -20,25 +20,11 @@ use FoF\Gamification\Vote;
 class AddVoteHandler
 {
     /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Gamification
-     */
-    protected $gamification;
-
-    /**
      * EventHandlers constructor.
      *
-     * @param SettingsRepositoryInterface $settings
-     * @param Gamification                $gamification
      */
-    public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected Gamification $gamification)
     {
-        $this->settings = $settings;
-        $this->gamification = $gamification;
     }
 
     public function handle(Posted $event)

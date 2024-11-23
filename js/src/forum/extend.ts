@@ -1,5 +1,5 @@
+import commonExtend from '../common/extend';
 import Extend from 'flarum/common/extenders';
-import { default as commonExtend } from '../common/extend';
 
 import RankingsPage from './components/RankingsPage';
 import Discussion from 'flarum/common/models/Discussion';

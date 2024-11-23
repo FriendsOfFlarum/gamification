@@ -1,7 +1,7 @@
 .VotingContainer {
   padding: 12px;
-  background: @control-bg;
-  border-radius: @border-radius;
+  background: var(--control-bg);
+  border-radius: var(--border-radius);
 
   @media @phone {
     padding: 8px;
@@ -27,7 +27,7 @@
 
   &-title {
     margin-bottom: 8px;
-    color: @control-color;
+    color: var(--control-color);
     white-space: nowrap;
 
     @media @phone {
@@ -60,7 +60,7 @@
   }
 
   &-message {
-    color: @control-color;
+    color: var(--control-color);
 
     @media @phone {
       display: none;
@@ -98,8 +98,8 @@
     }
 
     &--plus .Avatar {
-      background-color: @body-bg;
-      color: @control-color;
+      background-color: var(--body-bg);
+      color: var(--control-color);
       font-size: 13px;
     }
   }

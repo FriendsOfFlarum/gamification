@@ -30,16 +30,13 @@ export default function addAlternateLayout() {
     this.subtree.check(() => this.voteLoading);
   });
 
-  extend(DiscussionListItem.prototype, 'view', function (vdom) {
+  extend(DiscussionListItem.prototype, 'contentItems', function (items) {
     const discussion = this.attrs.discussion;
 
     if (!discussion.seeVotes()) {
       return;
     }
 
-    if (!vdom || !vdom.children) return;
-
-    const content = vdom.children.find((v) => v && v.attrs && v.attrs.className && v.attrs.className.includes('DiscussionListItem-content'));
     const post = discussion.firstPost();
 
     const hasUpvoted = get(discussion, 'hasUpvoted');
@@ -52,7 +49,8 @@ export default function addAlternateLayout() {
 
     const onclick = (upvoted, downvoted) => saveVote(post, upvoted, downvoted, (val) => (this.voteLoading = val));
 
-    content.children.unshift(
+    items.add(
+      'votes-alt',
       <div className="DiscussionListItem-votes alternateLayout" data-upvotes-only={upvotesOnly}>
         <Button
           className="DiscussionListItem-voteButton DiscussionListItem-voteButton--up Button Button--icon Button--text"
@@ -77,7 +75,8 @@ export default function addAlternateLayout() {
         )}
 
         {this.voteLoading && <LoadingIndicator display="inline" size="small" />}
-      </div>
+      </div>,
+      110
     );
   });
 }

@@ -17,11 +17,8 @@ use Illuminate\Contracts\Queue\Queue;
 
 class UpdateAutoAssignedGroups
 {
-    protected $queue;
-
-    public function __construct(Queue $queue)
+    public function __construct(protected Queue $queue)
     {
-        $this->queue = $queue;
     }
 
     public function handle(UserPointsUpdated $event)

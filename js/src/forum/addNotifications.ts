@@ -1,13 +1,12 @@
 import { extend } from 'flarum/common/extend';
 import app from 'flarum/forum/app';
 import VoteNotification from './components/VoteNotification';
-import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 import ItemList from 'flarum/common/utils/ItemList';
 
 export default function addNotifications() {
   app.notificationComponents.vote = VoteNotification;
 
-  extend(NotificationGrid.prototype, 'notificationTypes', function (items: ItemList<{ name: string; icon: string; label: any }>) {
+  extend('flarum/forum/components/NotificationGrid', 'notificationTypes', function (items: ItemList<{ name: string; icon: string; label: any }>) {
     const user = app.session?.user;
 
     if (!user?.canHaveVotingNotifications?.()) return;

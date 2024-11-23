@@ -14,8 +14,9 @@ namespace FoF\Gamification\Filter;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\Exception\PermissionDeniedException;
 
-class VotedFilter implements FilterInterface
+class RankableFilter implements FilterInterface
 {
     public function __construct(
         public SettingsRepositoryInterface $settings
@@ -24,22 +25,19 @@ class VotedFilter implements FilterInterface
 
     public function getFilterKey(): string
     {
-        return 'voted';
+        return 'rankable';
     }
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $votedId = trim($value, '"');
+        if ($state->getActor()->cannot('fof.gamification.viewRankingPage')) {
+            throw new PermissionDeniedException();
+        }
+
+        $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers'));
 
         $state
             ->getQuery()
-            ->whereIn('id', function ($query) use ($votedId, $negate) {
-                $query->select('post_id')
-                    ->from('post_votes')
-                    ->where('user_id', $negate ? '!=' : '=', $votedId);
-            })
-            ->when((bool) $this->settings->get('fof-gamification.firstPostOnly'), function ($query) {
-                $query->where('number', '1');
-            });
+            ->whereIn('username', $blockedUsers, 'and', ! $negate);
     }
 }

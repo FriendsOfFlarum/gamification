@@ -4,7 +4,7 @@ import PostUser from 'flarum/forum/components/PostUser';
 import UserCard from 'flarum/forum/components/UserCard';
 import rankLabel from '../common/helpers/rankLabel';
 import setting from './helpers/setting';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 
 export default function () {
   const matchClass = (className) => {
@@ -35,7 +35,7 @@ export default function () {
     items.add(
       'points',
       <div>
-        {icon('fas fa-medal')}
+        <Icon name="fas fa-medal" />
         {app.translator.trans('fof-gamification.forum.user.card.points', {
           count: user.points(),
         })}
