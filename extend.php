@@ -116,8 +116,10 @@ return [
     (new Extend\ApiResource(Resource\DiscussionResource::class))
         ->fields(Api\DiscussionResourceFields::class)
         ->sorts(fn () => [
-            SortColumn::make('hotness'),
-            SortColumn::make('votes'),
+            SortColumn::make('hotness')
+                ->descendingAlias('hot'),
+            SortColumn::make('votes')
+                ->descendingAlias('votes'),
         ])
         ->endpoint('index', function (Endpoint\Index $endpoint) {
             return $endpoint->eagerLoadWhere('firstPost.actualvotes', function ($query, Context $context) {
@@ -152,9 +154,6 @@ return [
 
     (new Extend\View())
         ->namespace('fof-gamification', __DIR__.'/resources/views'),
-
-    (new Extend\ServiceProvider())
-        ->register(GamificationSortOptionsProvider::class),
 
     (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
         ->addFilter(DiscussionSearcher::class, Search\HotFilter::class)
