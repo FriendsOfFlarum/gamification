@@ -87,7 +87,6 @@ return [
         ->modelPolicy(Post::class, Access\PostPolicy::class),
 
     (new Extend\Event())
-        ->listen(Saving::class, Listeners\SaveVotesToDatabase::class)
         ->listen(Posted::class, Listeners\AddVoteHandler::class)
         ->listen(Deleted::class, Listeners\RemoveVoteHandler::class)
         ->listen(Started::class, Listeners\AddDiscussionVotes::class)
