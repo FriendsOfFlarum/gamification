@@ -1,9 +1,8 @@
 import app from 'flarum/forum/app';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
-import type Mithril from 'mithril';
 import icon from 'flarum/common/helpers/icon';
 
-interface RankingImageAttrs extends ComponentAttrs {
+export interface RankingImageAttrs extends ComponentAttrs {
   place: number;
 }
 

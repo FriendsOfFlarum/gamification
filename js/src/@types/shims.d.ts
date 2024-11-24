@@ -1,4 +1,9 @@
+import 'flarum/common/models/Discussion';
+import 'flarum/common/models/Post';
+import 'flarum/common/models/User';
+
 import Rank from '../common/models/Rank';
+import type User from 'flarum/common/models/User';
 
 declare module 'flarum/common/models/Discussion' {
   export default interface Discussion {
@@ -12,8 +17,8 @@ declare module 'flarum/common/models/Discussion' {
 
 declare module 'flarum/common/models/Post' {
   export default interface Post {
-    upvotes(): unknown;
-    downvotes(): unknown;
+    upvotes(): User[];
+    downvotes(): User[];
     votes(): number;
     canVote(): boolean;
     canSeeVotes(): boolean;
