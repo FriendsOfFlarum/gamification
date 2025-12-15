@@ -31,8 +31,8 @@
         }
     ],
     "require": {
-        "flarum/core": "^1.7",
-        "fof/extend": "^1.0.0",
+        "flarum/core": "^2.0.0-beta",
+        "fof/extend": "^2.0.0",
         "ext-json": "*"
     },
     "replace": {
@@ -82,9 +82,9 @@
         "test:setup": "Sets up a database for use with integration tests. Execute this only once."
     },
     "require-dev": {
-        "flarum/phpstan": "*",
+        "flarum/phpstan": "^2.0.0-beta",
         "flarum/pusher": "*",
-        "flarum/testing": "^1.0.0"
+        "flarum/testing": "^2.0.0-beta"
     },
     "autoload-dev": {
         "psr-4": {
