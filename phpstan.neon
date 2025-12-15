@@ -5,6 +5,7 @@ parameters:
   level: 6
   paths:
     - extend.php
+    - vendor/flarum/likes/extend.php
     - src
   excludePaths:
     - *.blade.php

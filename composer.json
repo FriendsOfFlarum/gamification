@@ -81,7 +81,8 @@
     "require-dev": {
         "flarum/phpstan": "^2.0.0",
         "flarum/pusher": "*",
-        "flarum/testing": "^2.0.0"
+        "flarum/testing": "^2.0.0",
+        "flarum/likes": "*"
     },
     "autoload-dev": {
         "psr-4": {

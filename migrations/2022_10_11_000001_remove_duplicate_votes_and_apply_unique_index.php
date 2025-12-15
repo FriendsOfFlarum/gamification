@@ -17,9 +17,9 @@ return [
         // Find duplicate votes based on `user_id` and `post_id` columns and delete them.
         $schema->getConnection()
             ->table('post_votes')
+            ->select('user_id', 'post_id')
             ->groupBy('user_id', 'post_id')
             ->havingRaw('COUNT(*) > 1')
-            ->orderBy('id', 'desc')
             ->each(function ($row) use ($schema) {
                 $keep = $schema->getConnection()
                     ->table('post_votes')
