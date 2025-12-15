@@ -64,7 +64,7 @@ class UploadTopImageController extends ShowForumController
             }
         }
 
-        $tmpFile = @tempnam($this->paths->storage . '/tmp', 'topimage.' . $id);
+        $tmpFile = @tempnam($this->paths->storage.'/tmp', 'topimage.'.$id);
         $file->moveTo($tmpFile);
 
         switch ($id) {
@@ -88,7 +88,7 @@ class UploadTopImageController extends ShowForumController
         $encodedImage = $image->resize($size, $size)->toPng();
 
         $key = "fof-gamification.topimage{$id}_path";
-        $uploadName = 'topimage-' . Str::lower(Str::random(8)) . '.png';
+        $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.png';
 
         $this->uploadDir->put($uploadName, $encodedImage);
 

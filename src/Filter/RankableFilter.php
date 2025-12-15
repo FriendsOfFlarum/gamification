@@ -38,6 +38,6 @@ class RankableFilter implements FilterInterface
 
         $state
             ->getQuery()
-            ->whereIn('username', $blockedUsers, 'and', ! $negate);
+            ->whereIn('username', $blockedUsers, 'and', !$negate);
     }
 }

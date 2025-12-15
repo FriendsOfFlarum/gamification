@@ -15,15 +15,12 @@ use Flarum\Api\Context;
 use Flarum\Api\Endpoint;
 use Flarum\Api\Resource;
 use Flarum\Api\Sort\SortColumn;
-use Flarum\Api\Controller;
-use Flarum\Api\Serializer;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Started;
 use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event\Deleted;
 use Flarum\Post\Event\Posted;
-use Flarum\Post\Event\Saving;
 use Flarum\Post\Filter\PostSearcher;
 use Flarum\Post\Post;
 use Flarum\User\Search\UserSearcher;
@@ -109,7 +106,7 @@ return [
             SortColumn::make('votes')
                 ->visible(function (Context $context) {
                     return $context->getActor()->can('fof.gamification.viewRankingPage');
-                })
+                }),
         ]),
 
     (new Extend\ApiResource(Resource\DiscussionResource::class))

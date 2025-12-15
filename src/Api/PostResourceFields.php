@@ -121,9 +121,9 @@ class PostResourceFields
         $vote = Vote::build($post, $actor);
 
         $vote->value = match (true) {
-            $voteValue === 'up' => 1,
+            $voteValue === 'up'   => 1,
             $voteValue === 'down' => -1,
-            default => 0,
+            default               => 0,
         };
 
         $vote->save();

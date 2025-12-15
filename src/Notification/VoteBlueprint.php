@@ -16,7 +16,6 @@ use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
 use FoF\Gamification\Vote;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class VoteBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
@@ -70,7 +69,7 @@ class VoteBlueprint implements BlueprintInterface, MailableInterface, AlertableI
      *
      * @return array<string, string>
      */
-        public function getEmailViews(): array
+    public function getEmailViews(): array
     {
         return ['text' => 'fof-gamification::email.plain.postVoted', 'html' => 'fof-gamification::email.html.postVoted'];
     }

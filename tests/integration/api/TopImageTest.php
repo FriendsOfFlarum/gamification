@@ -12,10 +12,10 @@
 namespace FoF\Gamification\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
+use Flarum\User\User;
 use FoF\Gamification\Tests\EnhancedTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Flarum\User\User;
 
 class TopImageTest extends EnhancedTestCase
 {

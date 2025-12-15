@@ -24,7 +24,7 @@ class DiscussionResourceFields
                 ->visible($hasUpvotedVisible = function (Discussion $discussion, Context $context) {
                     $postExists = $discussion->firstPost || $discussion->posts()->where('number', 1)->first();
 
-                    return ! $context->getActor()->isGuest() && $context->getActor()->exists && $postExists;
+                    return !$context->getActor()->isGuest() && $context->getActor()->exists && $postExists;
                 })
                 ->get(function (Discussion $discussion) {
                     $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
