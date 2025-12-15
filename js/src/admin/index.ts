@@ -4,7 +4,7 @@ import SettingsPage from './components/SettingsPage';
 export { default as extend } from './extend';
 
 app.initializers.add('fof-gamification', (app) => {
-  app.extensionData
+  app.registry
     .for('fof-gamification')
     .registerPermission(
       {
