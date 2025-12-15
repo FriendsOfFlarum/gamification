@@ -17,14 +17,8 @@ use Flarum\Settings\SettingsRepositoryInterface;
 
 class VotedFilter implements FilterInterface
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    public $settings;
-
-    public function __construct(SettingsRepositoryInterface $settings)
+    public function __construct(public SettingsRepositoryInterface $settings)
     {
-        $this->settings = $settings;
     }
 
     public function getFilterKey(): string

@@ -181,7 +181,7 @@ return [
         ->addInclude('ranks'),
 
     (new Extend\Notification())
-        ->type(VoteBlueprint::class, Serializer\BasicPostSerializer::class, ['alert']),
+        ->type(VoteBlueprint::class, ['alert']),
 
     (new Extend\SimpleFlarumSearch(DiscussionSearcher::class))
         ->addGambit(Search\HotFilterGambit::class),

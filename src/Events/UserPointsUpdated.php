@@ -15,10 +15,7 @@ use Flarum\User\User;
 
 class UserPointsUpdated
 {
-    public $user;
-
-    public function __construct(User $user)
+    public function __construct(public User $user)
     {
-        $this->user = $user;
     }
 }

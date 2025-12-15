@@ -27,14 +27,11 @@ class AutoAssignUserGroups implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
-
-    protected $user;
     public $statsAdded = 0;
     public $statsRemoved = 0;
 
-    public function __construct(User $user)
+    public function __construct(protected User $user)
     {
-        $this->user = $user;
     }
 
     public function handle(SettingsRepositoryInterface $settings, Dispatcher $dispatcher)

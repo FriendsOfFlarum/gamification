@@ -23,22 +23,16 @@ use Psr\Http\Message\ServerRequestInterface;
 class DeleteTopImageController extends AbstractDeleteController
 {
     /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
      * @var Cloud
      */
     protected $uploadDir;
 
-    public function __construct(SettingsRepositoryInterface $settings, Factory $factory)
+    public function __construct(protected SettingsRepositoryInterface $settings, Factory $factory)
     {
-        $this->settings = $settings;
         $this->uploadDir = $factory->disk('flarum-assets');
     }
 
-    protected function delete(ServerRequestInterface $request)
+    protected function delete(ServerRequestInterface $request): void
     {
         $id = Arr::get($request->getQueryParams(), 'id');
 

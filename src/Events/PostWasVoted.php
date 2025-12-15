@@ -16,17 +16,10 @@ use FoF\Gamification\Vote;
 class PostWasVoted
 {
     /**
-     * @var Vote
-     */
-    public $vote;
-
-    /**
      * PostWasVoted constructor.
      *
-     * @param Vote $vote
-     */
-    public function __construct(Vote $vote)
+    
+    public function __construct(public Vote $vote)
     {
-        $this->vote = $vote;
     }
 }

@@ -28,30 +28,12 @@ use Tobscure\JsonApi\Document;
 class UploadTopImageController extends ShowForumController
 {
     /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Paths
-     */
-    protected $paths;
-
-    /**
-     * @var ImageManager
-     */
-    protected $imageManager;
-
-    /**
      * @var Cloud
      */
     protected $uploadDir;
 
-    public function __construct(SettingsRepositoryInterface $settings, Paths $paths, ImageManager $imageManager, FilesystemFactory $factory)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected Paths $paths, protected ImageManager $imageManager, FilesystemFactory $factory)
     {
-        $this->settings = $settings;
-        $this->paths = $paths;
-        $this->imageManager = $imageManager;
         $this->uploadDir = $factory->disk('flarum-assets');
     }
 

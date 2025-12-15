@@ -22,20 +22,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ConvertLikesController implements RequestHandlerInterface
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Gamification
-     */
-    protected $gamification;
-
-    public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected Gamification $gamification)
     {
-        $this->settings = $settings;
-        $this->gamification = $gamification;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

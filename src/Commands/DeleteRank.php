@@ -16,21 +16,9 @@ use Flarum\User\User;
 class DeleteRank
 {
     /**
-     * @var int
-     */
-    public $rankId;
-    /**
-     * @var User
-     */
-    public $actor;
-
-    /**
      * @param int  $rankId
-     * @param User $actor
-     */
-    public function __construct($rankId, User $actor)
+    
+    public function __construct(public $rankId, public User $actor)
     {
-        $this->rankId = $rankId;
-        $this->actor = $actor;
     }
 }

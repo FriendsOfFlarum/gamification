@@ -16,29 +16,9 @@ use Flarum\User\User;
 class EditRank
 {
     /**
-     * @var int
-     */
-    public $rankId;
-
-    /**
-     * @var User
-     */
-    public $actor;
-
-    /**
-     * @var array
-     */
-    public $data;
-
-    /**
      * @param int   $rankId
-     * @param User  $actor
-     * @param array $data
      */
-    public function __construct($rankId, User $actor, array $data)
+    public function __construct(public $rankId, public User $actor, public array $data)
     {
-        $this->rankId = $rankId;
-        $this->actor = $actor;
-        $this->data = $data;
     }
 }

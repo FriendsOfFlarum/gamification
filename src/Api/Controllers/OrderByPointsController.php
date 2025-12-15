@@ -25,14 +25,8 @@ class OrderByPointsController extends AbstractListController
 
     public $include = ['ranks'];
 
-    /**
-     * @var Gamification
-     */
-    protected $gamification;
-
-    public function __construct(Gamification $gamification)
+    public function __construct(protected Gamification $gamification)
     {
-        $this->gamification = $gamification;
     }
 
     protected function data(ServerRequestInterface $request, Document $document)

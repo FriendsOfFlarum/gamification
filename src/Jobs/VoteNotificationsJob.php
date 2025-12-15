@@ -24,14 +24,8 @@ class VoteNotificationsJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var Vote
-     */
-    protected $vote;
-
-    public function __construct(Vote $vote)
+    public function __construct(protected Vote $vote)
     {
-        $this->vote = $vote;
     }
 
     public function handle(NotificationSyncer $notifications)
