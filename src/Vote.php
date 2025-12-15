@@ -54,7 +54,7 @@ class Vote extends AbstractModel
         ]);
     }
 
-    public static function calculate($paramsOrQuery): int
+    public static function calculate(array|\Illuminate\Database\Eloquent\Builder $paramsOrQuery): int
     {
         $query = $paramsOrQuery;
 
@@ -84,22 +84,22 @@ class Vote extends AbstractModel
         return $discussion;
     }
 
-    public function isUpvote()
+    public function isUpvote(): bool
     {
         return $this->value > 0;
     }
 
-    public function isDownvote()
+    public function isDownvote(): bool
     {
         return $this->value < 0;
     }
 
-    public function post()
+    public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Post::class);
     }
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
     }

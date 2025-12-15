@@ -22,7 +22,7 @@ class UpdateAutoAssignedGroups
     ) {
     }
 
-    public function handle(UserPointsUpdated $event)
+    public function handle(UserPointsUpdated $event): void
     {
         $this->queue->push(new AutoAssignUserGroups($event->user));
     }

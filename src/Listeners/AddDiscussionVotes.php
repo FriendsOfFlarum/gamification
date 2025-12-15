@@ -17,7 +17,7 @@ use FoF\Gamification\Vote;
 
 class AddDiscussionVotes
 {
-    public function handle(Started $event)
+    public function handle(Started $event): void
     {
         /** @var Discussion $discussion */
         $discussion = Vote::updateDiscussionVotes($event->discussion);

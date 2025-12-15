@@ -33,7 +33,7 @@ class PostPolicy extends AbstractPolicy
         return $this->settings->get('fof-gamification.allowSelfVotes');
     }
 
-    public function vote(User $actor, Post $post)
+    public function vote(User $actor, Post $post): string|bool|null
     {
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
             return $this->deny();
@@ -46,7 +46,7 @@ class PostPolicy extends AbstractPolicy
         return $actor->can('votePosts', $post->discussion);
     }
 
-    public function canSeeVotes(User $actor, Post $post)
+    public function canSeeVotes(User $actor, Post $post): string|bool|null
     {
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
             return $this->deny();
@@ -55,7 +55,7 @@ class PostPolicy extends AbstractPolicy
         return $actor->can('canSeeVotes', $post->discussion);
     }
 
-    public function canSeeVoters(User $actor, Post $post)
+    public function canSeeVoters(User $actor, Post $post): string|bool|null
     {
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
             return $this->deny();

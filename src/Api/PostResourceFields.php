@@ -116,7 +116,7 @@ class PostResourceFields
         ];
     }
 
-    public function vote(Post $post, ?string $voteValue, User $actor)
+    public function vote(Post $post, ?string $voteValue, User $actor): void
     {
         $vote = Vote::build($post, $actor);
 
@@ -146,7 +146,7 @@ class PostResourceFields
         );
     }
 
-    public function updatePoints(?User $user, Post $post)
+    public function updatePoints(?User $user, Post $post): void
     {
         if ($user) {
             $user = Vote::updateUserVotes($user);
@@ -164,7 +164,7 @@ class PostResourceFields
         }
     }
 
-    public function pushNewVote(Vote $vote)
+    public function pushNewVote(Vote $vote): void
     {
         if ($this->container->bound(Pusher::class)) {
             $this->container->make(Pusher::class)->trigger('public', 'newVote', [

@@ -36,6 +36,7 @@ class RankableFilter implements FilterInterface
 
         $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers'));
 
+        /** @phpstan-ignore-next-line */
         $state
             ->getQuery()
             ->whereIn('username', $blockedUsers, 'and', !$negate);

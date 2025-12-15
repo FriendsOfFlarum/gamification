@@ -25,7 +25,7 @@ class AddVoteHandler
     ) {
     }
 
-    public function handle(Posted $event)
+    public function handle(Posted $event): void
     {
         if ((bool) $this->settings->get('fof-gamification.autoUpvotePosts') && $event->post->exists()) {
             $actor = $event->actor;

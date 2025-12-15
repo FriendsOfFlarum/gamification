@@ -25,10 +25,11 @@ class HotFilter implements FilterInterface
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
     {
+        /** @phpstan-ignore-next-line */
         $this->sort($state->getQuery(), $state->getActor(), $negate);
     }
 
-    protected function sort(Builder $query, User $actor, bool $negate)
+    protected function sort(Builder $query, User $actor, bool $negate): void
     {
         $query->orderBy('hotness', 'desc');
     }

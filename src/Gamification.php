@@ -30,9 +30,9 @@ class Gamification
     /**
      * The Reddit hotness algorithm from https://github.com/reddit/reddit.
      *
-     * @param $discussion
+     * @param \Flarum\Discussion\Discussion $discussion
      */
-    public function calculateHotness($discussion)
+    public function calculateHotness(\Flarum\Discussion\Discussion $discussion): void
     {
         $date = strtotime($discussion->created_at);
 
@@ -85,10 +85,10 @@ class Gamification
     }
 
     /**
-     * @param $postId
-     * @param $userId
+     * @param int $postId
+     * @param int $userId
      */
-    public function convertLike($postId, $userId)
+    public function convertLike(int $postId, int $userId): void
     {
         $user = User::find($userId);
         $post = Post::find($postId);

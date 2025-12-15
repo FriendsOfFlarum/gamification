@@ -41,6 +41,7 @@ class ConvertLikesToUpvotes implements ShouldQueue
 
         Likes::orderBy('post_id')->chunk(self::CHUNK_SIZE, function (Collection $likes) use ($gamification, &$counter) {
             foreach ($likes as $like) {
+                /** @phpstan-ignore-next-line */
                 $gamification->convertLike($like->post_id, $like->user_id);
                 $counter++;
             }

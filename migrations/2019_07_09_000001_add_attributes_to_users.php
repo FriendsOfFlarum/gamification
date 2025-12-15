@@ -19,7 +19,7 @@ return [
         }
 
         $schema->table('users', function (Blueprint $table) {
-            $table->integer('votes');
+            $table->integer('votes')->default(0);
             $table->string('rank')->nullable();
             $table->dateTime('last_vote_time')->nullable();
         });

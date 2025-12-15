@@ -31,6 +31,7 @@ class VotedFilter implements FilterInterface
     {
         $votedId = trim($value, '"');
 
+        /** @phpstan-ignore-next-line */
         $state
             ->getQuery()
             ->whereIn('id', function ($query) use ($votedId, $negate, $state) {

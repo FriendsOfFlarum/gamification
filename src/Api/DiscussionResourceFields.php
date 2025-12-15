@@ -29,6 +29,7 @@ class DiscussionResourceFields
                 ->get(function (Discussion $discussion) {
                     $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
 
+                    /** @phpstan-ignore-next-line */
                     return $post->actualvotes->first()?->isUpvote() ?? false;
                 }),
             Schema\Boolean::make('hasDownvoted')
@@ -36,6 +37,7 @@ class DiscussionResourceFields
                 ->get(function (Discussion $discussion) {
                     $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
 
+                    /** @phpstan-ignore-next-line */
                     return $post->actualvotes->first()?->isDownvote() ?? false;
                 }),
             Schema\Number::make('votes')

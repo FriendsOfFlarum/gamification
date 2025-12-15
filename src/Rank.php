@@ -45,11 +45,11 @@ class Rank extends AbstractModel
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return $this
      */
-    public function updateName($name)
+    public function updateName(string $name): self
     {
         $this->name = $name;
 
@@ -57,11 +57,11 @@ class Rank extends AbstractModel
     }
 
     /**
-     * @param $points
+     * @param int $points
      *
      * @return $this
      */
-    public function updatePoints($points)
+    public function updatePoints(int $points): self
     {
         $this->points = $points;
 
@@ -69,18 +69,18 @@ class Rank extends AbstractModel
     }
 
     /**
-     * @param $color
+     * @param string $color
      *
      * @return $this
      */
-    public function updateColor($color)
+    public function updateColor(string $color): self
     {
         $this->color = $color;
 
         return $this;
     }
 
-    public function users()
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }

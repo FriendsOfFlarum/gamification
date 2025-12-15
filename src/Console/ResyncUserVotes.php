@@ -22,14 +22,14 @@ class ResyncUserVotes extends Command
     protected $signature = 'fof:gamification:resyncUsers';
     protected $description = 'Resync user vote counts';
 
-    protected $updateCount = 0;
+    protected int $updateCount = 0;
 
     public function __construct(protected Dispatcher $events)
     {
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Syncing user votes. This may take some time if you have many users!');
 
