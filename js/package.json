@@ -7,8 +7,8 @@
   },
   "devDependencies": {
     "@flarum/prettier-config": "^1.0.0",
-    "flarum-tsconfig": "^1.0.3",
-    "flarum-webpack-config": "^2.0.0",
+    "flarum-tsconfig": "^2.0.0",
+    "flarum-webpack-config": "^3.0.2",
     "prettier": "^3.0.3",
     "typescript-coverage-report": "^0.6.1",
     "webpack": "^5.89.0",

@@ -113,11 +113,16 @@ export default class RankingsPage extends Page {
   loadResults(offset) {
     const params = {};
     params.page = {
+      filter: {
+        rankable: true,
+      },
+      include: 'ranks',
+      sort: '-votes',
       offset: offset,
       limit: '10',
     };
 
-    return app.store.find('rankings', params);
+    return app.store.find('users', params);
   }
 
   loadMore() {

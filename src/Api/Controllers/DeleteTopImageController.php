@@ -27,8 +27,10 @@ class DeleteTopImageController extends AbstractDeleteController
      */
     protected $uploadDir;
 
-    public function __construct(protected SettingsRepositoryInterface $settings, Factory $factory)
-    {
+    public function __construct(
+        protected SettingsRepositoryInterface $settings,
+        Factory $factory
+    ) {
         $this->uploadDir = $factory->disk('flarum-assets');
     }
 
@@ -45,7 +47,5 @@ class DeleteTopImageController extends AbstractDeleteController
         if ($this->uploadDir->exists($path)) {
             $this->uploadDir->delete($path);
         }
-
-        return new EmptyResponse(204);
     }
 }

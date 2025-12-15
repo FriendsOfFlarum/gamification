@@ -22,8 +22,9 @@ class Gamification
      */
     const MAXIMUM_USER_EXPOSED = 25;
 
-    public function __construct(protected SettingsRepositoryInterface $settings)
-    {
+    public function __construct(
+        protected SettingsRepositoryInterface $settings
+    ) {
     }
 
     /**

@@ -113,3 +113,8 @@ fof-gamification:
         View it here: {discussion_url}
     subject:
       postVoted: Your post was voted on by {display_name}
+
+lib:
+    gambits:
+      hot:
+        key: hot

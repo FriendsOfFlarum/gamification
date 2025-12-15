@@ -35,6 +35,3 @@ app.initializers.add('fof-gamification', () => {
     useAlternatePostVoteLayout();
   }
 });
-
-export * from './components';
-export * from './helpers';

@@ -31,12 +31,9 @@
         }
     ],
     "require": {
-        "flarum/core": "^2.0.0-beta",
+        "flarum/core": "^2.0.0",
         "fof/extend": "^2.0.0",
         "ext-json": "*"
-    },
-    "replace": {
-        "reflar/gamification": "*"
     },
     "autoload": {
         "psr-4": {
@@ -53,14 +50,14 @@
                 "color": "#fff"
             }
         },
-        "flagrow": {
-            "discuss": "https://discuss.flarum.org/d/20671"
-        },
         "flarum-cli": {
             "modules": {
                 "githubActions": true,
                 "backendTesting": true
             }
+        },
+        "branch-alias": {
+            "2.x": "2.x-dev"
         }
     },
     "scripts": {
@@ -82,13 +79,15 @@
         "test:setup": "Sets up a database for use with integration tests. Execute this only once."
     },
     "require-dev": {
-        "flarum/phpstan": "^2.0.0-beta",
+        "flarum/phpstan": "^2.0.0",
         "flarum/pusher": "*",
-        "flarum/testing": "^2.0.0-beta"
+        "flarum/testing": "^2.0.0"
     },
     "autoload-dev": {
         "psr-4": {
             "FoF\\Gamification\\Tests\\": "tests/"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

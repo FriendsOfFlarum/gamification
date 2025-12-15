@@ -15,11 +15,8 @@ use FoF\Gamification\Vote;
 
 class PostWasVoted
 {
-    /**
-     * PostWasVoted constructor.
-     *
-    
-    public function __construct(public Vote $vote)
-    {
+    public function __construct(
+        public Vote $vote
+    ) {
     }
 }

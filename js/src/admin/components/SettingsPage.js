@@ -6,6 +6,9 @@ import Switch from 'flarum/common/components/Switch';
 import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import ItemList from 'flarum/common/utils/ItemList';
+import Form from 'flarum/common/components/Form';
+import FormSection from 'flarum/admin/components/FormSection';
+import FormSectionGroup from 'flarum/admin/components/FormSectionGroup';
 import UploadImageButton from './UploadImageButton';
 import GroupSettings from './GroupSettings';
 
@@ -99,10 +102,12 @@ export default class SettingsPage extends ExtensionPage {
         name: this.newRank.name(),
         color: this.newRank.color(),
       })
-      .then(() => {
+      .then((rank) => {
         this.newRank.color('');
         this.newRank.name('');
         this.newRank.points('');
+
+        this.ranks.push(rank);
 
         m.redraw();
       });
@@ -160,7 +165,7 @@ export default class SettingsPage extends ExtensionPage {
 
     items.add(
       'convertLikesToUpvotes',
-      <div>
+      <div className="Form-group">
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.convert.help')}</div>
         {this.values.convertedLikes() === undefined ? (
           <Button
@@ -187,39 +192,106 @@ export default class SettingsPage extends ExtensionPage {
       100
     );
 
+    items.add('firstSectionGroup', <FormSectionGroup>{this.firstSectionGroupItems().toArray()}</FormSectionGroup>, 80);
+
+    items.add('secondSectionGroup', <FormSectionGroup>{this.secondSectionGroupItems().toArray()}</FormSectionGroup>, 70);
+
+    items.add(
+      'submit',
+      <Button type="submit" className="Button Button--primary Ranks-save" loading={this.loading} disabled={!this.changed()}>
+        {app.translator.trans('fof-gamification.admin.page.save_settings')}
+      </Button>,
+      0
+    );
+
+    return items;
+  }
+
+  firstSectionGroupItems() {
+    const items = new ItemList();
+
     items.add(
       'ranks',
-      <fieldset className="SettingsPage-ranks">
-        <legend>{app.translator.trans('fof-gamification.admin.page.ranks.title')}</legend>
+      <FormSection label={app.translator.trans('fof-gamification.admin.page.ranks.title')} className="SettingsPage-ranks">
+        <Form>{this.rankItems().toArray()}</Form>
+      </FormSection>,
+      90
+    );
+
+    items.add(
+      'voteSettings',
+      <FormSection label={app.translator.trans('fof-gamification.admin.page.votes.title')}>
+        <Form>{this.voteItems().toArray()}</Form>
+      </FormSection>,
+      80
+    );
+
+    return items;
+  }
+
+  secondSectionGroupItems() {
+    const items = new ItemList();
+
+    items.add(
+      'rankingsPage',
+      <FormSection label={app.translator.trans('fof-gamification.admin.page.rankings.title')}>{this.rankingsItems().toArray()}</FormSection>,
+      70
+    );
+
+    items.add(
+      'groups',
+      <FormSection label={app.translator.trans('fof-gamification.admin.page.groups.title')} className="SettingsPage-groups">
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.groups.help')}</div>
+        <GroupSettings value={this.values.autoAssignedGroups()} onchange={this.values.autoAssignedGroups} />
+      </FormSection>,
+      60
+    );
+
+    return items;
+  }
+
+  rankItems() {
+    const items = new ItemList();
+
+    items.add(
+      'ranks',
+      <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.ranks.ranks')}</label>
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.ranks.help.help')}</div>
-        <div className="Ranks--Container">
-          {this.ranks.map((rank) => (
-            <div>
-              <input
-                className="FormControl Ranks-number"
-                type="number"
-                value={rank.points()}
-                placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.points')}
-                oninput={withAttr('value', this.updatePoints.bind(this, rank))}
-              />
-              <input
-                className="FormControl Ranks-name"
-                value={rank.name()}
-                placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.name')}
-                oninput={withAttr('value', this.updateName.bind(this, rank))}
-              />
-              <input
-                className="FormControl Ranks-color"
-                value={rank.color()}
-                placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.color')}
-                oninput={withAttr('value', this.updateColor.bind(this, rank))}
-              />
-              <Button type="button" className="Button Button--warning Ranks-button" icon="fa fa-times" onclick={this.deleteRank.bind(this, rank)} />
-            </div>
-          ))}
-        </div>
-        <div>
+        {this.ranks.length > 0 ? (
+          <div className="Ranks--Container">
+            {this.ranks.map((rank) => (
+              <div className="Ranks--Container-row">
+                <input
+                  className="FormControl Ranks-number"
+                  type="number"
+                  value={rank.points()}
+                  placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.points')}
+                  oninput={withAttr('value', this.updatePoints.bind(this, rank))}
+                />
+                <input
+                  className="FormControl Ranks-name"
+                  value={rank.name()}
+                  placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.name')}
+                  oninput={withAttr('value', this.updateName.bind(this, rank))}
+                />
+                <input
+                  className="FormControl Ranks-color"
+                  value={rank.color()}
+                  placeholder={app.translator.trans('fof-gamification.admin.page.ranks.help.color')}
+                  oninput={withAttr('value', this.updateColor.bind(this, rank))}
+                />
+                <Button
+                  type="button"
+                  className="Button Button--warning Button--icon Ranks-button"
+                  icon="fa fa-times"
+                  onclick={this.deleteRank.bind(this, rank)}
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+        <div className="Ranks--Container-row">
           <input
             className="FormControl Ranks-number"
             value={this.newRank.points()}
@@ -242,12 +314,19 @@ export default class SettingsPage extends ExtensionPage {
 
           <Button
             type="button"
-            className="Button Button--warning Ranks-button"
+            className="Button Button--primary Button--icon Ranks-button"
             icon="fa fa-plus"
             aria-label="add"
             onclick={this.addRank.bind(this)}
           />
         </div>
+      </div>,
+      100
+    );
+
+    items.add(
+      'rankNumbers',
+      <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.ranks.number_title')}</label>
         <input
           className="FormControl Ranks-default"
@@ -256,44 +335,8 @@ export default class SettingsPage extends ExtensionPage {
           min="0"
           oninput={withAttr('value', this.values.rankAmt)}
         />
-      </fieldset>,
-      90
-    );
-
-    items.add(
-      'voteSettings',
-      <>
-        <legend>{app.translator.trans('fof-gamification.admin.page.votes.title')}</legend>
-        {this.voteItems().toArray()}
-      </>,
+      </div>,
       80
-    );
-
-    items.add(
-      'rankingsPage',
-      <>
-        <legend>{app.translator.trans('fof-gamification.admin.page.rankings.title')}</legend>
-        {this.rankingsItems().toArray()}
-      </>,
-      70
-    );
-
-    items.add(
-      'groups',
-      <fieldset className="SettingsPage-groups">
-        <legend>{app.translator.trans('fof-gamification.admin.page.groups.title')}</legend>
-        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.groups.help')}</div>
-        <GroupSettings value={this.values.autoAssignedGroups()} onchange={this.values.autoAssignedGroups} />
-      </fieldset>,
-      60
-    );
-
-    items.add(
-      'submit',
-      <Button type="submit" className="Button Button--primary Ranks-save" loading={this.loading} disabled={!this.changed()}>
-        {app.translator.trans('fof-gamification.admin.page.save_settings')}
-      </Button>,
-      0
     );
 
     return items;
@@ -304,7 +347,7 @@ export default class SettingsPage extends ExtensionPage {
 
     items.add(
       'icon',
-      <>
+      <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.votes.icon_name')}</label>
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.votes.icon_help')}</div>
         <input
@@ -313,13 +356,13 @@ export default class SettingsPage extends ExtensionPage {
           placeholder="thumbs"
           oninput={withAttr('value', this.values.iconName)}
         />
-      </>,
+      </div>,
       100
     );
 
     items.add(
       'altIcon',
-      <>
+      <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.alt_votes.icon_name')}</label>
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.votes.icon_help')}</div>
         <input
@@ -328,71 +371,87 @@ export default class SettingsPage extends ExtensionPage {
           placeholder="arrow"
           oninput={withAttr('value', this.values.iconNameAlt)}
         />
-      </>,
+      </div>,
       90
     );
 
     items.add(
       'autoUpvote',
-      <Switch state={this.values.autoUpvotePosts() || false} onchange={this.values.autoUpvotePosts} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.auto_upvote')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.autoUpvotePosts() || false} onchange={this.values.autoUpvotePosts} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.auto_upvote')}
+        </Switch>
+      </div>,
       80
     );
 
     items.add(
       'rateLimit',
-      <Switch state={this.values.rateLimit() || false} onchange={this.values.rateLimit} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.rate_limit')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.rateLimit() || false} onchange={this.values.rateLimit} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.rate_limit')}
+        </Switch>
+      </div>,
       70
     );
 
     items.add(
       'opVotesOnDiscussionList',
-      <Switch state={this.values.showVotesOnDiscussionPage() || false} onchange={this.values.showVotesOnDiscussionPage} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.discussion_page')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.showVotesOnDiscussionPage() || false} onchange={this.values.showVotesOnDiscussionPage} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.discussion_page')}
+        </Switch>
+      </div>,
       60
     );
 
     items.add(
       'altDiscussionListLayout',
-      <Switch state={this.values.useAlternateLayout() || false} onchange={this.values.useAlternateLayout} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.alternate_layout')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.useAlternateLayout() || false} onchange={this.values.useAlternateLayout} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.alternate_layout')}
+        </Switch>
+      </div>,
       50
     );
 
     items.add(
       'altPostLayout',
-      <Switch state={this.values.altPostVotingUi() || false} onchange={this.values.altPostVotingUi} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.alternate_post_layout')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.altPostVotingUi() || false} onchange={this.values.altPostVotingUi} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.alternate_post_layout')}
+        </Switch>
+      </div>,
       40
     );
 
     items.add(
       'upvotesOnly',
-      <Switch state={this.values.upVotesOnly() || false} onchange={this.values.upVotesOnly} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.upvotes_only')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.upVotesOnly() || false} onchange={this.values.upVotesOnly} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.upvotes_only')}
+        </Switch>
+      </div>,
       30
     );
 
     items.add(
       'firstPostOnly',
-      <Switch state={this.values.firstPostOnly() || false} onchange={this.values.firstPostOnly} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.first_post_only')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.firstPostOnly() || false} onchange={this.values.firstPostOnly} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.first_post_only')}
+        </Switch>
+      </div>,
       20
     );
 
     items.add(
       'allowSelfVotes',
-      <Switch state={this.values.allowSelfVotes()} onchange={this.values.allowSelfVotes} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.votes.allow_self_votes')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.allowSelfVotes()} onchange={this.values.allowSelfVotes} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.votes.allow_self_votes')}
+        </Switch>
+      </div>,
       10
     );
 
@@ -404,15 +463,17 @@ export default class SettingsPage extends ExtensionPage {
 
     items.add(
       'customImages',
-      <Switch state={this.values.customRankingImages() || false} onchange={this.values.customRankingImages} className="votes-switch">
-        {app.translator.trans('fof-gamification.admin.page.rankings.enable')}
-      </Switch>,
+      <div className="Form-group">
+        <Switch state={this.values.customRankingImages() || false} onchange={this.values.customRankingImages} className="votes-switch">
+          {app.translator.trans('fof-gamification.admin.page.rankings.enable')}
+        </Switch>
+      </div>,
       100
     );
 
     items.add(
       'ignoredUsers',
-      <>
+      <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.rankings.blocked.title')}</label>
         <input
           className="FormControl Ranks-blocked"
@@ -420,16 +481,15 @@ export default class SettingsPage extends ExtensionPage {
           value={this.values.blockedUsers() || ''}
           oninput={withAttr('value', this.values.blockedUsers)}
         />
-      </>,
+      </div>,
       90
     );
 
     items.add(
       'customImages',
       <>
-        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.blocked.help')}</div>
         {[1, 2, 3].map((num) => (
-          <>
+          <div className="Form-group">
             <label className="Upload-label">{app.translator.trans(`fof-gamification.admin.page.rankings.custom_image_${num}`)}</label>
             <UploadImageButton
               className="Upload-button"
@@ -438,7 +498,7 @@ export default class SettingsPage extends ExtensionPage {
               aria-label={app.translator.trans(`fof-gamification.admin.page.rankings.custom_image_${num}`)}
             />
             <br />
-          </>
+          </div>
         ))}
       </>,
       80

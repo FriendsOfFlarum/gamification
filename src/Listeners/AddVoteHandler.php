@@ -19,12 +19,10 @@ use FoF\Gamification\Vote;
 
 class AddVoteHandler
 {
-    /**
-     * EventHandlers constructor.
-     *
-     */
-    public function __construct(protected SettingsRepositoryInterface $settings, protected Gamification $gamification)
-    {
+    public function __construct(
+        protected SettingsRepositoryInterface $settings,
+        protected Gamification $gamification
+    ) {
     }
 
     public function handle(Posted $event)

@@ -18,8 +18,9 @@ use Flarum\User\User;
 
 class PostPolicy extends AbstractPolicy
 {
-    public function __construct(protected SettingsRepositoryInterface $settings)
-    {
+    public function __construct(
+        protected SettingsRepositoryInterface $settings
+    ) {
     }
 
     private function isFirstPostOnlyMode(): bool

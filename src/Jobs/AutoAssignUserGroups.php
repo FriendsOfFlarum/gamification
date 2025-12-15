@@ -30,8 +30,9 @@ class AutoAssignUserGroups implements ShouldQueue
     public $statsAdded = 0;
     public $statsRemoved = 0;
 
-    public function __construct(protected User $user)
-    {
+    public function __construct(
+        protected User $user
+    ) {
     }
 
     public function handle(SettingsRepositoryInterface $settings, Dispatcher $dispatcher)

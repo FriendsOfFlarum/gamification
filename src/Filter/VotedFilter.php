@@ -11,14 +11,15 @@
 
 namespace FoF\Gamification\Filter;
 
-use Flarum\Filter\FilterInterface;
-use Flarum\Filter\FilterState;
+use Flarum\Search\Filter\FilterInterface;
+use Flarum\Search\SearchState;
 use Flarum\Settings\SettingsRepositoryInterface;
 
 class VotedFilter implements FilterInterface
 {
-    public function __construct(public SettingsRepositoryInterface $settings)
-    {
+    public function __construct(
+        public SettingsRepositoryInterface $settings
+    ) {
     }
 
     public function getFilterKey(): string
@@ -26,18 +27,18 @@ class VotedFilter implements FilterInterface
         return 'voted';
     }
 
-    public function filter(FilterState $filterState, string $filterValue, bool $negate)
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $votedId = trim($filterValue, '"');
+        $votedId = trim($value, '"');
 
-        $filterState
+        $state
             ->getQuery()
-            ->whereIn('id', function ($query) use ($votedId, $negate, $filterState) {
+            ->whereIn('id', function ($query) use ($votedId, $negate, $state) {
                 $query->select('post_id')
                     ->from('post_votes')
                     ->where('user_id', $negate ? '!=' : '=', $votedId);
-                if (!$filterState->getActor()->hasPermission('canSeeVoters')) {
-                    $query->where('user_id', '=', $filterState->getActor()->id);
+                if (!$state->getActor()->hasPermission('canSeeVoters')) {
+                    $query->where('user_id', '=', $state->getActor()->id);
                 }
             })
             ->when((bool) $this->settings->get('fof-gamification.firstPostOnly'), function ($query) {

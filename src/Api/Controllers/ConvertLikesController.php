@@ -15,6 +15,7 @@ use Flarum\Http\RequestUtil;
 use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Gamification\Gamification;
 use FoF\Gamification\Jobs;
+use Illuminate\Contracts\Queue\Queue;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -22,8 +23,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ConvertLikesController implements RequestHandlerInterface
 {
-    public function __construct(protected SettingsRepositoryInterface $settings, protected Gamification $gamification)
-    {
+    public function __construct(
+        protected SettingsRepositoryInterface $settings,
+        protected Gamification $gamification,
+        protected Queue $queue
+    ) {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -31,7 +35,7 @@ class ConvertLikesController implements RequestHandlerInterface
         RequestUtil::getActor($request)->assertAdmin();
 
         if ('POST' === $request->getMethod() && false == $this->settings->get('fof-gamification.convertedLikes')) {
-            resolve('flarum.queue.connection')->push(
+            $this->queue->push(
                 new Jobs\ConvertLikesToUpvotes()
             );
         }
