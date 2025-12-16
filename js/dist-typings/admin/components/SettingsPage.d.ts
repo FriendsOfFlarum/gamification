@@ -35,6 +35,9 @@ export default class SettingsPage extends ExtensionPage<import("flarum/admin/com
      */
     addPrefix(key: any): string;
     settingsItems(): ItemList<any>;
+    firstSectionGroupItems(): ItemList<any>;
+    secondSectionGroupItems(): ItemList<any>;
+    rankItems(): ItemList<any>;
     voteItems(): ItemList<any>;
     rankingsItems(): ItemList<any>;
 }

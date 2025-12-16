@@ -1,7 +1,6 @@
-/// <reference types="flarum/@types/translator-icu-rich" />
 export default class VotesModal extends Modal<import("flarum/common/components/Modal").IInternalModalAttrs, undefined> {
     constructor();
-    title(): import("@askvortsov/rich-icu-message-formatter").NestedStringArray;
+    title(): string | any[];
     oninit(vnode: any): void;
     content(): JSX.Element;
     load(): Promise<void>;
