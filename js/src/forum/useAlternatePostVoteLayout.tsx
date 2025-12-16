@@ -6,7 +6,6 @@ import CommentPost from 'flarum/forum/components/CommentPost';
 import Button from 'flarum/common/components/Button';
 import abbreviateNumber from 'flarum/common/utils/abbreviateNumber';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
-import setting from './helpers/setting';
 import saveVote from './helpers/saveVote';
 
 import type ItemList from 'flarum/common/utils/ItemList';
@@ -14,15 +13,23 @@ import type Mithril from 'mithril';
 
 export default function useAlternatePostVoteLayout() {
   extend(CommentPost.prototype, 'actionItems', function (this: CommentPost, items: ItemList<Mithril.Children>) {
+    if (!app.forum.attribute('fof-gamification.altPostVotingUi')) {
+      return;
+    }
+
     if (this.attrs.post.isHidden()) return;
 
     items.remove('votes');
   });
 
   extend(CommentPost.prototype, 'classes', function (this: CommentPost, classes: string[]) {
+    if (!app.forum.attribute('fof-gamification.altPostVotingUi')) {
+      return;
+    }
+
     if (this.attrs.post.isHidden()) return;
 
-    const upvotesOnly = setting('upVotesOnly', true);
+    const upvotesOnly = app.forum.attribute('fof-gamification.upVotesOnly');
 
     classes.push('votesAlternativeLayout');
 
@@ -32,10 +39,18 @@ export default function useAlternatePostVoteLayout() {
   });
 
   extend(CommentPost.prototype, 'oninit', function () {
+    if (!app.forum.attribute('fof-gamification.altPostVotingUi')) {
+      return;
+    }
+
     (this as any).voteLoading = false;
   });
 
   extend(CommentPost.prototype, 'sideItems', function (this: CommentPost, items: ItemList<Mithril.Children>) {
+    if (!app.forum.attribute('fof-gamification.altPostVotingUi')) {
+      return;
+    }
+
     const post = this.attrs.post;
 
     if (post.isHidden()) return;
@@ -44,8 +59,8 @@ export default function useAlternatePostVoteLayout() {
     const hasDownvoted = post.hasDownvoted();
     const hasUpvoted = post.hasUpvoted();
 
-    const icon = setting('iconName') || 'thumbs';
-    const upvotesOnly = setting('upVotesOnly', true);
+    const icon = app.forum.attribute('fof-gamification.iconName');
+    const upvotesOnly = app.forum.attribute('fof-gamification.upVotesOnly');
 
     const canSeeVotes = post.canSeeVotes();
 

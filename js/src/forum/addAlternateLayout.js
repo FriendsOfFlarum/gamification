@@ -7,7 +7,6 @@ import Button from 'flarum/common/components/Button';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 
 import saveVote from './helpers/saveVote';
-import setting from './helpers/setting';
 
 const get = (discussion, key) => {
   const post = discussion.firstPost();
@@ -21,6 +20,10 @@ const get = (discussion, key) => {
 
 export default function addAlternateLayout() {
   extend(DiscussionListItem.prototype, 'oninit', function () {
+    if (app.forum.attribute('fof-gamification.useAlternateLayout')) {
+      return;
+    }
+
     const discussion = this.attrs.discussion;
 
     if (!discussion.seeVotes()) {
@@ -31,6 +34,10 @@ export default function addAlternateLayout() {
   });
 
   extend(DiscussionListItem.prototype, 'contentItems', function (items) {
+    if (!app.forum.attribute('fof-gamification.useAlternateLayout')) {
+      return;
+    }
+
     const discussion = this.attrs.discussion;
 
     if (!discussion.seeVotes()) {
@@ -44,8 +51,8 @@ export default function addAlternateLayout() {
     // We set canVote to true for guest users so that they can access the login by clicking the button
     const canVote = !app.session.user || get(discussion, 'canVote');
 
-    const upvotesOnly = setting('upVotesOnly', true);
-    const altIcon = setting('iconNameAlt') || 'arrow';
+    const upvotesOnly = app.forum.attribute('fof-gamification.upVotesOnly');
+    const altIcon = app.forum.attribute('fof-gamification.iconNameAlt');
 
     const onclick = (upvoted, downvoted) => saveVote(post, upvoted, downvoted, (val) => (this.voteLoading = val));
 

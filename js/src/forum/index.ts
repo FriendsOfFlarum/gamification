@@ -6,8 +6,6 @@ import addUpvotesToDiscussion from './addUpvotesToDiscussion';
 import addUserInfo from './addUserInfo';
 import addPusher from './addPusher';
 import addAlternateLayout from './addAlternateLayout';
-
-import setting from './helpers/setting';
 import addVotesSort from './addVotesSort';
 import useAlternatePostVoteLayout from './useAlternatePostVoteLayout';
 import addNotifications from './addNotifications';
@@ -27,11 +25,7 @@ app.initializers.add('fof-gamification', () => {
   addVotersToDiscussionPageSideBar();
   addUpvoteTabToUserProfile();
 
-  if (setting('useAlternateLayout', true)) {
-    addAlternateLayout();
-  }
+  addAlternateLayout();
 
-  if (setting('altPostVotingUi', true)) {
-    useAlternatePostVoteLayout();
-  }
+  useAlternatePostVoteLayout();
 });

@@ -11,6 +11,7 @@ import FormSection from 'flarum/admin/components/FormSection';
 import FormSectionGroup from 'flarum/admin/components/FormSectionGroup';
 import UploadImageButton from './UploadImageButton';
 import GroupSettings from './GroupSettings';
+import Icon from 'flarum/common/components/Icon';
 
 export default class SettingsPage extends ExtensionPage {
   oninit(vnode) {
@@ -350,12 +351,19 @@ export default class SettingsPage extends ExtensionPage {
       <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.votes.icon_name')}</label>
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.votes.icon_help')}</div>
-        <input
-          className="FormControl Ranks-default"
-          value={this.values.iconName() || ''}
-          placeholder="thumbs"
-          oninput={withAttr('value', this.values.iconName)}
-        />
+        <input className="FormControl Ranks-default" value={this.values.iconName() || ''} oninput={withAttr('value', this.values.iconName)} />
+        {this.values.iconName() && (
+          <div className="IconPreview">
+            <span>
+              <Icon name={`fas fa-fw fa-${this.values.iconName()}-up`} />
+              <span>{app.translator.trans('fof-gamification.admin.page.votes.icon_preview_upvote')}</span>
+            </span>
+            <span>
+              <Icon name={`fas fa-fw fa-${this.values.iconName()}-down`} />
+              <span>{app.translator.trans('fof-gamification.admin.page.votes.icon_preview_downvote')}</span>
+            </span>
+          </div>
+        )}
       </div>,
       100
     );
@@ -365,12 +373,19 @@ export default class SettingsPage extends ExtensionPage {
       <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.alt_votes.icon_name')}</label>
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.votes.icon_help')}</div>
-        <input
-          className="FormControl Ranks-default"
-          value={this.values.iconNameAlt() || ''}
-          placeholder="arrow"
-          oninput={withAttr('value', this.values.iconNameAlt)}
-        />
+        <input className="FormControl Ranks-default" value={this.values.iconNameAlt() || ''} oninput={withAttr('value', this.values.iconNameAlt)} />
+        {this.values.iconNameAlt() && (
+          <div className="IconPreview">
+            <span>
+              <Icon name={`fas fa-fw fa-${this.values.iconNameAlt()}-up`} />
+              <span>{app.translator.trans('fof-gamification.admin.page.votes.icon_preview_upvote')}</span>
+            </span>
+            <span>
+              <Icon name={`fas fa-fw fa-${this.values.iconNameAlt()}-down`} />
+              <span>{app.translator.trans('fof-gamification.admin.page.votes.icon_preview_downvote')}</span>
+            </span>
+          </div>
+        )}
       </div>,
       90
     );

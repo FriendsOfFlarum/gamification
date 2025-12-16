@@ -71,13 +71,15 @@ fof-gamification:
         vote_color: Voted color
         icon_name: Upvote/downvote icon
         icon_help: "Input any Font-Awesome icon that is suffixed with -up and -down. Examples: arrow, thumbs, chevron"
+        icon_preview_upvote: Upvote
+        icon_preview_downvote: Downvote
         upvotes_only: Only allow upvoting
         first_post_only: Only allow up/down votes in the first post in a discussion
         allow_self_votes: Users may vote on their own posts
       save_settings: Save settings
       convert:
         button: Convert likes to upvotes
-        help: Convert your previous likes from flarum-ext-likes into upvotes, as well as calculate the hotness for all current discussions.
+        help: Convert your previous likes from flarum/likes into upvotes, as well as calculate the hotness for all current discussions.
         converting: Your likes are now being converted. Refresh your site after a few minutes to see the process finished. (Conversion time might take a while depending on your total forum likes)
         converted: "Successfully converted all {number} likes"
       ranks:

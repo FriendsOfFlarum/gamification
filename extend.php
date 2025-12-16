@@ -25,7 +25,6 @@ use Flarum\Post\Filter\PostSearcher;
 use Flarum\Post\Post;
 use Flarum\User\Search\UserSearcher;
 use Flarum\User\User;
-use FoF\Extend\Extend\ExtensionSettings;
 use FoF\Gamification\Api\Controllers;
 use FoF\Gamification\Notification\VoteBlueprint;
 
@@ -62,21 +61,8 @@ return [
         ->cast('votes', 'int')
         ->cast('hotness', 'float'),
 
-    (new ExtensionSettings())
-        ->setPrefix('fof-gamification.')
-        ->addKeys([
-            'iconName',
-            'pointsPlaceholder',
-            'showVotesOnDiscussionPage',
-            'rankAmt',
-            'customRankingImages',
-            'useAlternateLayout',
-            'upVotesOnly',
-            'iconNameAlt',
-            'altPostVotingUi',
-        ]),
-
     (new Extend\Routes('api'))
+        ->post('/fof/gamification/convert', 'fof.gamification.convert', Controllers\ConvertLikesController::class)
         ->post('/fof/gamification/topimage{id}', 'fof.topImage.add', Controllers\UploadTopImageController::class),
 
     (new Extend\Policy())
@@ -92,10 +78,24 @@ return [
     new Extend\ApiResource(Api\Resource\RankResource::class),
 
     (new Extend\Settings())
+        ->default('fof-gamification.iconName', 'thumbs')
+        ->default('fof-gamification.iconNameAlt', 'arrow')
+        ->default('fof-gamification.showVotesOnDiscussionPage', true)
+        ->default('fof-gamification.useAlternateLayout', false)
+        ->default('fof-gamification.upVotesOnly', false)
+        ->default('fof-gamification.altPostVotingUi', false)
         ->default('fof-gamification.blockedUsers', '')
         ->default('fof-gamification.rankAmt', 2)
-        ->default('fof-gamification.firstPostOnly', false)
-        ->default('fof-gamification.allowSelfVotes', true),
+        ->default('fof-gamification.firstPostOnly', true)
+        ->default('fof-gamification.allowSelfVotes', true)
+        ->serializeToForum('fof-gamification.showVotesOnDiscussionPage', 'fof-gamification.showVotesOnDiscussionPage', 'boolval')
+        ->serializeToForum('fof-gamification.useAlternateLayout', 'fof-gamification.useAlternateLayout', 'boolval')
+        ->serializeToForum('fof-gamification.upVotesOnly', 'fof-gamification.upVotesOnly', 'boolval')
+        ->serializeToForum('fof-gamification.altPostVotingUi', 'fof-gamification.altPostVotingUi', 'boolval')
+        ->serializeToForum('fof-gamification.iconName', 'fof-gamification.iconName')
+        ->serializeToForum('fof-gamification.iconNameAlt', 'fof-gamification.iconNameAlt')
+        ->serializeToForum('fof-gamification.rankAmt', 'fof-gamification.rankAmt', 'intval')
+        ->serializeToForum('fof-gamification.firstPostOnly', 'fof-gamification.firstPostOnly', 'boolval'),
 
     (new Extend\ApiResource(Resource\UserResource::class))
         ->endpoint(['show', 'update', 'create', 'index'], function (Endpoint\Show|Endpoint\Update|Endpoint\Create|Endpoint\Index $endpoint) {

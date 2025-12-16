@@ -32,7 +32,6 @@
     ],
     "require": {
         "flarum/core": "^2.0.0",
-        "fof/extend": "^2.0.0",
         "ext-json": "*"
     },
     "autoload": {

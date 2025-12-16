@@ -60,4 +60,34 @@
     flex-direction: column;
     gap: 6px;
   }
+
+  .IconPreview {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    align-items: center;
+
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      > span {
+        opacity: 0.7;
+      }
+    }
+
+    i {
+      font-size: 24px;
+      color: var(--primary-color);
+      transition: all 0.2s ease;
+    }
+
+    i:hover {
+      transform: scale(1.2);
+    }
+  }
 }
