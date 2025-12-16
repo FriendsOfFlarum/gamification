@@ -12,6 +12,7 @@
 namespace FoF\Gamification\Api\Controllers;
 
 use Flarum\Api\Controller\ShowForumController;
+use Flarum\Api\JsonApi;
 use Flarum\Foundation\Paths;
 use Flarum\Foundation\ValidationException;
 use Flarum\Http\RequestUtil;
@@ -22,40 +23,29 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Laminas\Diactoros\UploadedFile;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 
 class UploadTopImageController extends ShowForumController
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Paths
-     */
-    protected $paths;
-
-    /**
-     * @var ImageManager
-     */
-    protected $imageManager;
-
     /**
      * @var Cloud
      */
     protected $uploadDir;
 
-    public function __construct(SettingsRepositoryInterface $settings, Paths $paths, ImageManager $imageManager, FilesystemFactory $factory)
-    {
-        $this->settings = $settings;
-        $this->paths = $paths;
-        $this->imageManager = $imageManager;
+    public function __construct(
+        JsonApi $api,
+        protected SettingsRepositoryInterface $settings,
+        protected Paths $paths,
+        protected ImageManager $imageManager,
+        FilesystemFactory $factory
+    ) {
+        parent::__construct($api);
+
         $this->uploadDir = $factory->disk('flarum-assets');
     }
 
-    public function data(ServerRequestInterface $request, Document $document)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         RequestUtil::getActor($request)->assertAdmin();
 
@@ -89,13 +79,13 @@ class UploadTopImageController extends ShowForumController
                 break;
         }
 
-        $image = $this->imageManager->make($tmpFile);
+        $image = $this->imageManager->read($tmpFile);
 
         if (extension_loaded('exif')) {
-            $image->orientate();
+            $image->orient();
         }
 
-        $encodedImage = $image->fit($size, $size)->encode('png');
+        $encodedImage = $image->resize($size, $size)->toPng();
 
         $key = "fof-gamification.topimage{$id}_path";
         $uploadName = 'topimage-'.Str::lower(Str::random(8)).'.png';
@@ -106,6 +96,10 @@ class UploadTopImageController extends ShowForumController
 
         unlink($tmpFile);
 
-        return parent::data($request, $document);
+        return parent::handle(
+            // The parent controller expects a show forum request.
+            // `GET /api/forum`
+            $request->withMethod('GET')->withUri($request->getUri()->withPath('/api/forum'))
+        );
     }
 }

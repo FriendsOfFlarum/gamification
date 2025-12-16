@@ -22,11 +22,11 @@ class AutoAssignGroups extends Command
     protected $signature = 'fof:gamification:assign-groups';
     protected $description = 'Updates the auto-assigned groups of all users';
 
-    protected $totalAdded = 0;
-    protected $totalRemoved = 0;
-    protected $totalUsersUpdated = 0;
+    protected int $totalAdded = 0;
+    protected int $totalRemoved = 0;
+    protected int $totalUsersUpdated = 0;
 
-    public function handle(SettingsRepositoryInterface $settings)
+    public function handle(SettingsRepositoryInterface $settings): void
     {
         $this->output->progressStart(User::query()->count());
         /** @var Dispatcher $dispatcher */

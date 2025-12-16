@@ -24,17 +24,12 @@ class VoteNotificationsJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    /**
-     * @var Vote
-     */
-    protected $vote;
-
-    public function __construct(Vote $vote)
-    {
-        $this->vote = $vote;
+    public function __construct(
+        protected Vote $vote
+    ) {
     }
 
-    public function handle(NotificationSyncer $notifications)
+    public function handle(NotificationSyncer $notifications): void
     {
         $post = $this->vote->post;
         $user = $post->user;
@@ -49,6 +44,7 @@ class VoteNotificationsJob implements ShouldQueue
             if ($this->vote->value === 0) {
                 $notif->delete();
             } else {
+                /** @phpstan-ignore-next-line */
                 $notif->data = $this->vote->value;
                 $notif->save();
             }

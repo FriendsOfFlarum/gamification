@@ -3,17 +3,7 @@
 .SettingsPage {
   padding: 20px 0;
 
-
-  legend {
-    margin-top: 25px;
-  }
-
   @media @desktop-up {
-    .container {
-      max-width: 600px;
-      margin: 0;
-    }
-
     fieldset {
       margin-bottom: 30px;
 
@@ -30,42 +20,16 @@
     margin-top: 5px;
     margin-bottom: 5px
   }
-  
+
   .Upload-label {
     margin-right: 15px;
   }
-  
+
   .Upload-button {
     margin-top: 7.5px;
     margin-bottom: 7.5px;
   }
 
-  .helpText {
-    margin-bottom: 20px;
-  }
-  
-  .SettingsPage-ranks {
-      margin-top: 20px;
-  }
-  
-  .Ranks-number {
-    width: 15%;
-    float: left;
-    margin: 5px 5px 5px;
-  }
-  .Ranks-name {
-    width: 30%;
-    float: left;
-    margin: 5px 5px 5px;
-  }
-  .Ranks-color {
-    width: 18%;
-    float: left;
-    margin: 5px 5px 5px;
-  }
-  .Ranks-button {
-    margin: 5px 0 5px;
-  }
   .Ranks-default {
     width: 30%;
     margin-top: 5px;
@@ -74,8 +38,56 @@
   .Ranks-save {
     margin-top: 15px;
   }
-  .votes-switch {
-    margin-top: 20px;
-    margin-bottom: 20px;
+
+    .Ranks--Container-row {
+    display: flex;
+    gap: 4px;
+    width: auto;
+  }
+
+  .Ranks--Container-row > * {
+    flex-shrink: 1;
+    flex-grow: 0;
+  }
+
+  .Ranks--Container-row > button {
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+
+  .Ranks--Container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .IconPreview {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    align-items: center;
+
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      > span {
+        opacity: 0.7;
+      }
+    }
+
+    i {
+      font-size: 24px;
+      color: var(--primary-color);
+      transition: all 0.2s ease;
+    }
+
+    i:hover {
+      transform: scale(1.2);
+    }
   }
 }

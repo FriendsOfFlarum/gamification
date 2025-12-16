@@ -17,7 +17,7 @@ use FoF\Gamification\Vote;
 
 class RemoveVoteHandler
 {
-    public function handle(Deleted $event)
+    public function handle(Deleted $event): void
     {
         $post = $event->post;
 

@@ -1,10 +1,9 @@
 import app from 'flarum/forum/app';
 import Notification from 'flarum/forum/components/Notification';
-import setting from '../helpers/setting';
 
 export default class UpvotedNotification extends Notification {
   icon() {
-    const icon = setting('iconName') || 'thumbs';
+    const icon = app.forum.attribute('fof-gamification.iconName');
 
     if (this.attrs.notification.content() > 0) {
       return `fas fa-${icon}-up`;

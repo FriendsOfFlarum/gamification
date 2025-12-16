@@ -20,9 +20,9 @@ class ResyncDiscussionVotes extends Command
     protected $signature = 'fof:gamification:resync';
     protected $description = 'Resync discussion vote counts';
 
-    protected $updateCount = 0;
+    protected int $updateCount = 0;
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Syncing discussion votes. This may take some time if you have many discussions!');
 

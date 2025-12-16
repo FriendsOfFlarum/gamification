@@ -12,7 +12,10 @@
 namespace FoF\Gamification\Tests\integration\api;
 
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
+use Flarum\User\User;
 use FoF\Gamification\Tests\EnhancedTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class TopImageTest extends EnhancedTestCase
 {
@@ -25,13 +28,13 @@ class TopImageTest extends EnhancedTestCase
         $this->extension('fof-gamification');
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
             ],
         ]);
     }
 
-    public function topImagesProvider()
+    public static function topImagesProvider()
     {
         return [
             [1],
@@ -40,11 +43,8 @@ class TopImageTest extends EnhancedTestCase
         ];
     }
 
-    /**
-     * @dataProvider topImagesProvider
-     *
-     * @test
-     */
+    #[Test]
+    #[DataProvider('topImagesProvider')]
     public function normal_user_cannot_upload_top_image(int $imageNo)
     {
         $response = $this->send(
@@ -60,11 +60,8 @@ class TopImageTest extends EnhancedTestCase
         $this->assertEquals(403, $response->getStatusCode());
     }
 
-    /**
-     * @dataProvider topImagesProvider
-     *
-     * @test
-     */
+    #[Test]
+    #[DataProvider('topImagesProvider')]
     public function admin_can_upload_top_image(int $imageNo)
     {
         $response = $this->send(

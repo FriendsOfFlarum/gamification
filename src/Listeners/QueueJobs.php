@@ -14,18 +14,22 @@ namespace FoF\Gamification\Listeners;
 use FoF\Gamification\Events\PostWasVoted;
 use FoF\Gamification\Jobs;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Queue\Queue;
 
 class QueueJobs
 {
-    public function subscribe(Dispatcher $events)
+    public function __construct(
+        protected Queue $queue
+    ) {
+    }
+
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen(PostWasVoted::class, [$this, 'notifications']);
     }
 
-    public function notifications(PostWasVoted $event)
+    public function notifications(PostWasVoted $event): void
     {
-        resolve('flarum.queue.connection')->push(
-            new Jobs\VoteNotificationsJob($event->vote)
-        );
+        $this->queue->push(new Jobs\VoteNotificationsJob($event->vote));
     }
 }

@@ -17,14 +17,12 @@ use Illuminate\Contracts\Queue\Queue;
 
 class UpdateAutoAssignedGroups
 {
-    protected $queue;
-
-    public function __construct(Queue $queue)
-    {
-        $this->queue = $queue;
+    public function __construct(
+        protected Queue $queue
+    ) {
     }
 
-    public function handle(UserPointsUpdated $event)
+    public function handle(UserPointsUpdated $event): void
     {
         $this->queue->push(new AutoAssignUserGroups($event->user));
     }

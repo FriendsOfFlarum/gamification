@@ -19,29 +19,13 @@ use FoF\Gamification\Vote;
 
 class AddVoteHandler
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var Gamification
-     */
-    protected $gamification;
-
-    /**
-     * EventHandlers constructor.
-     *
-     * @param SettingsRepositoryInterface $settings
-     * @param Gamification                $gamification
-     */
-    public function __construct(SettingsRepositoryInterface $settings, Gamification $gamification)
-    {
-        $this->settings = $settings;
-        $this->gamification = $gamification;
+    public function __construct(
+        protected SettingsRepositoryInterface $settings,
+        protected Gamification $gamification
+    ) {
     }
 
-    public function handle(Posted $event)
+    public function handle(Posted $event): void
     {
         if ((bool) $this->settings->get('fof-gamification.autoUpvotePosts') && $event->post->exists()) {
             $actor = $event->actor;

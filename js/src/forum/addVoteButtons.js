@@ -6,7 +6,6 @@ import classList from 'flarum/common/utils/classList';
 import PostControls from 'flarum/forum/utils/PostControls';
 
 import VotesModal from './components/VotesModal';
-import setting from './helpers/setting';
 import saveVote from './helpers/saveVote';
 
 export default function () {
@@ -35,8 +34,8 @@ export default function () {
     const hasDownvoted = post.hasDownvoted();
     const hasUpvoted = post.hasUpvoted();
 
-    const icon = setting('iconName') || 'thumbs';
-    const upVotesOnly = setting('upVotesOnly', true);
+    const icon = app.forum.attribute('fof-gamification.iconName');
+    const upVotesOnly = app.forum.attribute('fof-gamification.upVotesOnly');
 
     const canSeeVotes = post.canSeeVotes();
 
@@ -47,7 +46,7 @@ export default function () {
 
     items.add(
       'votes',
-      <div className={classList('CommentPost-votes', setting('useAlternateLayout', true) && 'alternateLayout')}>
+      <div className={classList('CommentPost-votes', app.forum.attribute('fof-gamification.useAlternateLayout') && 'alternateLayout')}>
         {Button.component({
           icon: this.voteLoading ? undefined : `fas fa-fw fa-${icon}-up`,
           className: classList('Post-vote Post-upvote', hasUpvoted && 'Post-vote--active'),

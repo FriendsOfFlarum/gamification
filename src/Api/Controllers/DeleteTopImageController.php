@@ -17,28 +17,23 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Filesystem\Cloud;
 use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Support\Arr;
-use Laminas\Diactoros\Response\EmptyResponse;
 use Psr\Http\Message\ServerRequestInterface;
 
 class DeleteTopImageController extends AbstractDeleteController
 {
     /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
      * @var Cloud
      */
     protected $uploadDir;
 
-    public function __construct(SettingsRepositoryInterface $settings, Factory $factory)
-    {
-        $this->settings = $settings;
+    public function __construct(
+        protected SettingsRepositoryInterface $settings,
+        Factory $factory
+    ) {
         $this->uploadDir = $factory->disk('flarum-assets');
     }
 
-    protected function delete(ServerRequestInterface $request)
+    protected function delete(ServerRequestInterface $request): void
     {
         $id = Arr::get($request->getQueryParams(), 'id');
 
@@ -51,7 +46,5 @@ class DeleteTopImageController extends AbstractDeleteController
         if ($this->uploadDir->exists($path)) {
             $this->uploadDir->delete($path);
         }
-
-        return new EmptyResponse(204);
     }
 }

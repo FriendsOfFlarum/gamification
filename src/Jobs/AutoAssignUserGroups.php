@@ -27,17 +27,15 @@ class AutoAssignUserGroups implements ShouldQueue
 {
     use Queueable;
     use SerializesModels;
+    public int $statsAdded = 0;
+    public int $statsRemoved = 0;
 
-    protected $user;
-    public $statsAdded = 0;
-    public $statsRemoved = 0;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
+    public function __construct(
+        protected User $user
+    ) {
     }
 
-    public function handle(SettingsRepositoryInterface $settings, Dispatcher $dispatcher)
+    public function handle(SettingsRepositoryInterface $settings, Dispatcher $dispatcher): void
     {
         if ($this->user->isAdmin()) {
             return;

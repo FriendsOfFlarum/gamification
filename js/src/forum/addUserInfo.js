@@ -3,8 +3,7 @@ import { extend } from 'flarum/common/extend';
 import PostUser from 'flarum/forum/components/PostUser';
 import UserCard from 'flarum/forum/components/UserCard';
 import rankLabel from '../common/helpers/rankLabel';
-import setting from './helpers/setting';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 
 export default function () {
   const matchClass = (className) => {
@@ -35,7 +34,7 @@ export default function () {
     items.add(
       'points',
       <div>
-        {icon('fas fa-medal')}
+        <Icon name="fas fa-medal" />
         {app.translator.trans('fof-gamification.forum.user.card.points', {
           count: user.points(),
         })}
@@ -47,7 +46,7 @@ export default function () {
   extend(UserCard.prototype, 'view', function (vnode) {
     const user = this.attrs.user;
     const profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
-    const amt = Number(setting('rankAmt'));
+    const amt = app.forum.attribute('fof-gamification.rankAmt') ?? user.ranks().length;
 
     if (!profile_node) return;
 
@@ -98,7 +97,7 @@ export default function () {
     }
 
     const header_node = vnode.children.find(matchClass('PostUser-name'));
-    const amt = Number(setting('rankAmt')) ?? user.ranks().length;
+    const amt = app.forum.attribute('fof-gamification.rankAmt') ?? user.ranks().length;
 
     if (!user.ranks()) return;
 

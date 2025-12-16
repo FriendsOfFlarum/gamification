@@ -3,8 +3,8 @@ import Component, { ComponentAttrs } from 'flarum/common/Component';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import Link from 'flarum/common/components/Link';
 import Tooltip from 'flarum/common/components/Tooltip';
-import avatar from 'flarum/common/helpers/avatar';
-import icon from 'flarum/common/helpers/icon';
+import Avatar from 'flarum/common/components/Avatar';
+import Icon from 'flarum/common/components/Icon';
 import SubtreeRetainer from 'flarum/common/utils/SubtreeRetainer';
 
 import type Mithril from 'mithril';
@@ -57,7 +57,7 @@ export default class Voters extends Component<VotersAttrs> {
           <div className="FoFGamification-voters">
             <div className="FoFGamification-voters-title">
               <span className="FoFGamification-voters-title-icon">
-                {icon('fas fa-users')}
+                <Icon name="fas fa-users" />
                 <span className="FoFGamification-voters-title-label">{app.translator.trans('fof-gamification.forum.voters.label')}</span>
                 <span className="FoFGamification-voters-title-label FoFGamification-voters-title-label--mobile">
                   {app.translator.trans('fof-gamification.forum.voters.label')}
@@ -79,7 +79,7 @@ export default class Voters extends Component<VotersAttrs> {
         <div className="FoFGamification-voters">
           <div className="FoFGamification-voters-title">
             <span className="FoFGamification-voters-title-icon">
-              {icon('fas fa-users')}
+              <Icon name="fas fa-users" />
               <span className="FoFGamification-voters-title-label">{app.translator.trans('fof-gamification.forum.voters.label')}</span>
               <span className="FoFGamification-voters-title-label FoFGamification-voters-title-label--mobile">
                 {voters.length === 0
@@ -94,7 +94,9 @@ export default class Voters extends Component<VotersAttrs> {
           <div className="FoFGamification-voters-list">
             {voters.slice(0, max).map((user: any) => (
               <Link href={app.route('user', { username: user.slug() })} className="FoFGamification-voters-item">
-                <Tooltip text={user.displayName()}>{avatar(user)}</Tooltip>
+                <Tooltip text={user.displayName()}>
+                  <Avatar user={user} />
+                </Tooltip>
               </Link>
             ))}
             {voters.length > max ? (
