@@ -36,7 +36,7 @@ class AddPostData
         if ($canSeeVotes) {
             if ($actor->exists) {
                 /** @phpstan-ignore-next-line */
-                $vote = $post->actualvotes->first();
+                $vote = $post->actualvotes->firstWhere('user_id', $actor->id);
 
                 $attributes['hasUpvoted'] = $vote && $vote->isUpvote();
                 $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
