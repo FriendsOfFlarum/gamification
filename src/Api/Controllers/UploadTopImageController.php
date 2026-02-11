@@ -51,8 +51,11 @@ class UploadTopImageController extends ShowForumController
 
         $id = (int) Arr::get($request->getQueryParams(), 'id', 0);
 
-        /** @var UploadedFile | null */
-        $file = Arr::first($request->getUploadedFiles());
+        /** @var array<string, UploadedFile|array<string, UploadedFile>> $uploadedFiles */
+        $uploadedFiles = $request->getUploadedFiles();
+
+        /** @var UploadedFile|array<string, UploadedFile>|null $file */
+        $file = Arr::first($uploadedFiles);
 
         if (!$file) {
             throw new ValidationException(['file' => 'No file was uploaded']);
