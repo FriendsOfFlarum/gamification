@@ -23,7 +23,7 @@ class AddDiscussionData
 
         if (!$actor->isGuest() && $actor->exists && $post) {
             /** @phpstan-ignore-next-line */
-            $vote = $post->actualvotes->first();
+            $vote = $post->actualvotes->firstWhere('user_id', $actor->id);
 
             $attributes['hasUpvoted'] = $vote && $vote->isUpvote();
             $attributes['hasDownvoted'] = $vote && $vote->isDownvote();
