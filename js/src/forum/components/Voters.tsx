@@ -51,10 +51,8 @@ export default class Voters extends Component<VotersAttrs> {
   }
 
   view() {
-    const votes = this.attrs.post.votes();
-    const upvotes = this.attrs.post.upvotes();
-
-    if (votes == null || !upvotes) {
+    // @ts-ignore
+    if (this.attrs.post.votes() === false || this.attrs.post.upvotes() === false) {
       return (
         <div className="VotingContainer">
           <div className="FoFGamification-voters">
