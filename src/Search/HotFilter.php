@@ -11,11 +11,15 @@
 
 namespace FoF\Gamification\Search;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\User\User;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class HotFilter implements FilterInterface
 {
     public function getFilterKey(): string
@@ -25,7 +29,6 @@ class HotFilter implements FilterInterface
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        /** @phpstan-ignore-next-line */
         $this->sort($state->getQuery(), $state->getActor(), $negate);
     }
 

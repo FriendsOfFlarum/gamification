@@ -11,10 +11,14 @@
 
 namespace FoF\Gamification\Filter;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\Settings\SettingsRepositoryInterface;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class VotedFilter implements FilterInterface
 {
     public function __construct(
@@ -31,7 +35,6 @@ class VotedFilter implements FilterInterface
     {
         $votedId = trim($value, '"');
 
-        /** @phpstan-ignore-next-line */
         $state
             ->getQuery()
             ->whereIn('id', function ($query) use ($votedId, $negate, $state) {
