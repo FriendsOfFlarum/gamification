@@ -11,11 +11,15 @@
 
 namespace FoF\Gamification\Filter;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Exception\PermissionDeniedException;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class RankableFilter implements FilterInterface
 {
     public function __construct(
@@ -36,7 +40,6 @@ class RankableFilter implements FilterInterface
 
         $blockedUsers = explode(', ', $this->settings->get('fof-gamification.blockedUsers'));
 
-        /** @phpstan-ignore-next-line */
         $state
             ->getQuery()
             ->whereIn('username', $blockedUsers, 'and', !$negate);

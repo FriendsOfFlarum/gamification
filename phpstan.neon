@@ -5,8 +5,11 @@ parameters:
   level: 6
   paths:
     - extend.php
-    - vendor/flarum/likes/extend.php
     - src
+  scanFiles:
+    # Loaded for symbol resolution (we convert likes to upvotes) but not analysed:
+    # its optional flarum-realtime integration references classes we don't install.
+    - vendor/flarum/likes/extend.php
   excludePaths:
     - *.blade.php
   databaseMigrationsPath: ['migrations']
