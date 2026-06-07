@@ -6,9 +6,14 @@
     "lodash.debounce": "^4.0.8"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.29.7",
+    "@flarum/jest-config": "^2.0.0",
     "@flarum/prettier-config": "^1.0.0",
+    "cross-env": "^10.1.0",
     "flarum-tsconfig": "^2.0.0",
     "flarum-webpack-config": "^3.0.2",
+    "jquery": "^3.6.0",
+    "mithril": "^2.2",
     "prettier": "^3.0.3",
     "typescript-coverage-report": "^0.6.1",
     "webpack": "^5.89.0",
@@ -24,6 +29,7 @@
     "build-typings": "yarn run clean-typings && ([ -e src/@types ] && cp -r src/@types dist-typings/@types || true) && tsc && yarn run post-build-typings",
     "post-build-typings": "find dist-typings -type f -name '*.d.ts' -print0 | xargs -0 sed -i 's,../src/@types,@types,g'",
     "check-typings": "tsc --noEmit --emitDeclarationOnly false",
-    "check-typings-coverage": "typescript-coverage-report"
+    "check-typings-coverage": "typescript-coverage-report",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   }
 }
