@@ -26,19 +26,19 @@ class DiscussionResourceFields
 
                     return !$context->getActor()->isGuest() && $context->getActor()->exists && $postExists;
                 })
-                ->get(function (Discussion $discussion) {
+                ->get(function (Discussion $discussion, Context $context) {
                     $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
 
                     /** @phpstan-ignore-next-line */
-                    return $post->actualvotes->first()?->isUpvote() ?? false;
+                    return $post->actualvotes->firstWhere('user_id', $context->getActor()->id)?->isUpvote() ?? false;
                 }),
             Schema\Boolean::make('hasDownvoted')
                 ->visible($hasUpvotedVisible)
-                ->get(function (Discussion $discussion) {
+                ->get(function (Discussion $discussion, Context $context) {
                     $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
 
                     /** @phpstan-ignore-next-line */
-                    return $post->actualvotes->first()?->isDownvote() ?? false;
+                    return $post->actualvotes->firstWhere('user_id', $context->getActor()->id)?->isDownvote() ?? false;
                 }),
             Schema\Number::make('votes')
                 ->visible(fn (Discussion $discussion, Context $context) => $context->getActor()->can('canSeeVotes', $discussion))

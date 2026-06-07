@@ -48,7 +48,7 @@ class PostResourceFields
                 ->get(function (Post $post, Context $context) {
                     if ($context->getActor()->exists) {
                         /** @phpstan-ignore-next-line */
-                        $vote = $post->actualvotes->first();
+                        $vote = $post->actualvotes->firstWhere('user_id', $context->getActor()->id);
 
                         return $vote && $vote->isUpvote();
                     }
@@ -63,7 +63,7 @@ class PostResourceFields
                 ->get(function (Post $post, Context $context) {
                     if ($context->getActor()->exists) {
                         /** @phpstan-ignore-next-line */
-                        $vote = $post->actualvotes->first();
+                        $vote = $post->actualvotes->firstWhere('user_id', $context->getActor()->id);
 
                         return $vote && $vote->isDownvote();
                     }
