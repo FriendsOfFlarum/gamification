@@ -19,8 +19,8 @@ return [
         }
 
         $schema->table('discussions', function (Blueprint $table) {
-            $table->integer('votes');
-            $table->float('hotness', 10, 4);
+            $table->integer('votes')->default(0);
+            $table->float('hotness', 10, 4)->default(0);
         });
     },
     'down' => function (Builder $schema) {
