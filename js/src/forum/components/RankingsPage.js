@@ -10,6 +10,7 @@ import listItems from 'flarum/common/helpers/listItems';
 import username from 'flarum/common/helpers/username';
 import Link from 'flarum/common/components/Link';
 import RankingImage from './RankingImage';
+import rankingsQuery from '../utils/rankingsQuery';
 
 /**
  * This page re-uses Flarum's IndexPage CSS classes
@@ -111,18 +112,7 @@ export default class RankingsPage extends Page {
   }
 
   loadResults(offset) {
-    const params = {};
-    params.page = {
-      filter: {
-        rankable: true,
-      },
-      include: 'ranks',
-      sort: '-votes',
-      offset: offset,
-      limit: '10',
-    };
-
-    return app.store.find('users', params);
+    return app.store.find('users', rankingsQuery(offset));
   }
 
   loadMore() {
