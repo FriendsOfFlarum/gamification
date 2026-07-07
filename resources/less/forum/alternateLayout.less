@@ -150,7 +150,12 @@
   }
 }
 
-.CommentPost .Post-actions {
+// Only apply this when the actions row actually holds the absolute-positioned
+// vote box (the `useAlternateLayout` mode). Applying `width: 100%` to every
+// `.Post-actions` overrides core's `float: right` auto-width, so on the default
+// (inline) and side-column vote layouts it drops the likes/replies footer onto
+// its own line with a large gap. See flarum/framework#4765.
+.CommentPost .Post-actions:has(.CommentPost-votes.alternateLayout) {
   width: 100%;
   text-align: right;
 
