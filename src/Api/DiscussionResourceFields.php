@@ -24,7 +24,10 @@ class DiscussionResourceFields
      * independently, so a single discussion cost one query per field on top of
      * the batched eager load.
      *
-     * @var \WeakMap<Discussion, ?Post>
+     * WeakMap's value template is invariant, so it is not annotated with the
+     * narrowed value type; firstPost() declares what comes back out.
+     *
+     * @var \WeakMap<Discussion, mixed>
      */
     private \WeakMap $firstPosts;
 
