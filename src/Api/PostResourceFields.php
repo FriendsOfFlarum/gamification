@@ -86,7 +86,7 @@ class PostResourceFields
                     return $context->getActor()->can('vote', $post);
                 }),
             Schema\Boolean::make('seeVoters')
-                ->get(function (Post $post, Context $context) {
+                ->get($seesVoters = function (Post $post, Context $context) {
                     return $context->getActor()->can('canSeeVoters', $post->discussion)
                         && $context->getActor()->can('canSeeVoters', $post);
                 }),
@@ -107,12 +107,18 @@ class PostResourceFields
                     $this->vote($post, $value, $context->getActor());
                 }),
 
+            // These name the people who voted, so they answer to the same
+            // permission as the seeVoters flag above. Being includable is not
+            // a permission of its own: without this, an actor refused the flag
+            // could still ask for the relationship and be told who voted.
             Schema\Relationship\ToMany::make('upvotes')
                 ->includable()
-                ->type('users'),
+                ->type('users')
+                ->visible($seesVoters),
             Schema\Relationship\ToMany::make('downvotes')
                 ->includable()
-                ->type('users'),
+                ->type('users')
+                ->visible($seesVoters),
         ];
     }
 
