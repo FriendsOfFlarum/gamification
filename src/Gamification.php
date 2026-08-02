@@ -28,11 +28,14 @@ class Gamification
     }
 
     /**
-     * The Reddit hotness algorithm from https://github.com/reddit/reddit.
+     * Reddit's "hot" ranking algorithm, from https://github.com/reddit/reddit.
+     *
+     * Scores a discussion by vote count decayed against its age, so that a
+     * busy old thread does not outrank a lively new one.
      *
      * @param \Flarum\Discussion\Discussion $discussion
      */
-    public function calculateHotness(\Flarum\Discussion\Discussion $discussion): void
+    public function calculateTrending(\Flarum\Discussion\Discussion $discussion): void
     {
         $date = strtotime($discussion->created_at);
 
@@ -50,7 +53,7 @@ class Gamification
 
         $seconds = $date - 1134028003;
 
-        $discussion->hotness = round($order + (($sign * $seconds) / 45000), 10);
+        $discussion->trending = round($order + (($sign * $seconds) / 45000), 10);
 
         $discussion->save();
     }

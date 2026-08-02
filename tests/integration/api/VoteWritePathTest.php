@@ -229,22 +229,22 @@ class VoteWritePathTest extends EnhancedTestCase
     }
 
     #[Test]
-    public function hotness_tracks_the_discussion_tally()
+    public function trending_score_tracks_the_discussion_tally()
     {
         $this->boot();
 
-        $this->assertSame(0.0, (float) $this->discussionRow()->hotness);
+        $this->assertSame(0.0, (float) $this->discussionRow()->trending);
 
         $this->vote(self::VOTER, 'up');
-        $positive = (float) $this->discussionRow()->hotness;
+        $positive = (float) $this->discussionRow()->trending;
         $this->assertGreaterThan(0, $positive);
 
         // A net-negative discussion mirrors it: same magnitude, opposite sign.
         $this->vote(self::VOTER, 'down');
-        $this->assertSame(-$positive, (float) $this->discussionRow()->hotness);
+        $this->assertSame(-$positive, (float) $this->discussionRow()->trending);
 
         $this->vote(self::VOTER, null);
-        $this->assertSame(0.0, (float) $this->discussionRow()->hotness);
+        $this->assertSame(0.0, (float) $this->discussionRow()->trending);
     }
 
     #[Test]

@@ -82,7 +82,9 @@
         "flarum/phpstan": "^2.0.0",
         "flarum/pusher": "*",
         "flarum/testing": "^2.0.0",
-        "flarum/likes": "*"
+        "flarum/likes": "*",
+        "flarum/suspend": "*",
+        "flarum/gdpr": "*"
     },
     "autoload-dev": {
         "psr-4": {

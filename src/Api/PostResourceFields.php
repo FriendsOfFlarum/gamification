@@ -164,7 +164,7 @@ class PostResourceFields
         $discussion = $post->discussion;
 
         if ($post->id === $discussion->first_post_id) {
-            $this->gamification->calculateHotness(
+            $this->gamification->calculateTrending(
                 Vote::updateDiscussionVotes($discussion)
             );
         }

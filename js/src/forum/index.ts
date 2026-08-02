@@ -1,6 +1,6 @@
 import app from 'flarum/forum/app';
 
-import addHotnessSort from './addHotnessSort';
+import addTrendingSort from './addTrendingSort';
 import addVoteButtons from './addVoteButtons';
 import addUpvotesToDiscussion from './addUpvotesToDiscussion';
 import addUserInfo from './addUserInfo';
@@ -16,7 +16,7 @@ export { default as extend } from './extend';
 
 app.initializers.add('fof-gamification', () => {
   addVoteButtons();
-  addHotnessSort();
+  addTrendingSort();
   addVotesSort();
   addUserInfo();
   addUpvotesToDiscussion();

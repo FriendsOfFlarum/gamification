@@ -59,7 +59,7 @@ return [
 
     (new Extend\Model(Discussion::class))
         ->cast('votes', 'int')
-        ->cast('hotness', 'float'),
+        ->cast('trending', 'float'),
 
     (new Extend\Routes('api'))
         ->post('/fof/gamification/convert', 'fof.gamification.convert', Controllers\ConvertLikesController::class)
@@ -76,6 +76,7 @@ return [
         ->subscribe(Listeners\QueueJobs::class),
 
     new Extend\ApiResource(Api\Resource\RankResource::class),
+    new Extend\ApiResource(Api\Resource\LeaderboardResource::class),
 
     (new Extend\Settings())
         ->default('fof-gamification.iconName', 'thumbs')
@@ -85,6 +86,11 @@ return [
         ->default('fof-gamification.upVotesOnly', false)
         ->default('fof-gamification.altPostVotingUi', false)
         ->default('fof-gamification.blockedUsers', '')
+        ->default(LeaderboardEligibility::EXCLUDED_USERS, '[]')
+        ->default(LeaderboardEligibility::EXCLUDED_GROUPS, '[]')
+        ->default(LeaderboardEligibility::EXCLUDE_SUSPENDED, true)
+        ->default(Leaderboard\MetricRegistry::DEFAULT_METRIC, Leaderboard\Metric\PostsWritten::KEY)
+        ->default(Leaderboard\Period::DEFAULT_PERIOD, Leaderboard\Period::Year->value)
         ->default('fof-gamification.rankAmt', 2)
         ->default('fof-gamification.firstPostOnly', true)
         ->default('fof-gamification.allowSelfVotes', true)
@@ -113,8 +119,8 @@ return [
     (new Extend\ApiResource(Resource\DiscussionResource::class))
         ->fields(Api\DiscussionResourceFields::class)
         ->sorts(fn () => [
-            SortColumn::make('hotness')
-                ->descendingAlias('hot'),
+            SortColumn::make('trending')
+                ->descendingAlias('trending'),
             SortColumn::make('votes')
                 ->descendingAlias('votes'),
         ])
@@ -166,6 +172,9 @@ return [
     (new Extend\Notification())
         ->type(VoteBlueprint::class, ['alert']),
 
+    (new Extend\ServiceProvider())
+        ->register(Provider\LeaderboardProvider::class),
+
     (new Extend\Console())
         ->command(Console\ResyncUserVotes::class)
         ->command(Console\AutoAssignGroups::class)
@@ -175,7 +184,7 @@ return [
         ->namespace('fof-gamification', __DIR__.'/resources/views'),
 
     (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
-        ->addFilter(DiscussionSearcher::class, Search\HotFilter::class)
+        ->addFilter(DiscussionSearcher::class, Search\TrendingFilter::class)
         ->addFilter(PostSearcher::class, Filter\VotedFilter::class)
         ->addFilter(UserSearcher::class, Filter\RankableFilter::class),
 ];

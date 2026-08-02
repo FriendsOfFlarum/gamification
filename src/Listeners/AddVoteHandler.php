@@ -33,7 +33,7 @@ class AddVoteHandler
             Vote::updateUserVotes($actor)->save();
 
             Vote::updateDiscussionVotes($event->post->discussion);
-            $this->gamification->calculateHotness($event->post->discussion);
+            $this->gamification->calculateTrending($event->post->discussion);
 
             $vote = Vote::build($event->post, $actor);
             $vote->value = 1;

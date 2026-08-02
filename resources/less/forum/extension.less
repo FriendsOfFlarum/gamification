@@ -66,12 +66,6 @@
   }
 }
 
-@media only screen and (max-width: 529px) {
-  .rankings-mobile {
-    display: none !important;
-  }
-}
-
 .CommentPost-votes {
   .Post-points {
     background-color: transparent;
@@ -129,77 +123,538 @@
   }
 }
 
+.RankingsPage {
+  &-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  // The three selectors share the row on anything wider than a phone, and
+  // each takes a full line below that rather than being squeezed.
+  &-metric,
+  &-period {
+    flex: 1 1 180px;
+    min-width: 0;
+  }
+
+  // --- Podium -------------------------------------------------------------
+  //
+  // Laid out as a grid so the order can differ from the document order: the
+  // markup is 1-2-3 for screen readers and for the stacked layout, while a
+  // wide screen puts second-first-third with the winner raised.
+  &-podium {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+  }
+
+  &-podiumPlace {
+    display: flex;
+  }
+
+  &-podiumLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: var(--border-radius);
+    background: var(--control-bg);
+    color: var(--text-color);
+    position: relative;
+    overflow: hidden;
+    // The medal colour is set per place below and tints everything here, so
+    // the card itself reads as gold/silver/bronze rather than the colour
+    // being confined to a small icon.
+    border-top: 3px solid var(--medal, transparent);
+    transition: transform 0.15s ease, filter 0.15s ease;
+
+    &:hover,
+    &:focus {
+      color: var(--text-color);
+      text-decoration: none;
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    // A wash of the medal colour, strongest at the top.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, var(--medal, transparent), transparent 70%);
+      opacity: 0.14;
+      pointer-events: none;
+    }
+  }
+
+  &-podiumMedal {
+    flex: none;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  &-podiumAvatar {
+    .Avatar--size(40px);
+    flex: none;
+  }
+
+  &-podiumName {
+    flex: 1;
+    min-width: 0;
+    font-weight: bold;
+    // Long usernames truncate rather than forcing the card wider.
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-podiumScore {
+    flex: none;
+    font-size: 20px;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    color: var(--medal, var(--text-color));
+  }
+
+  // Redundant beside the medal once the cards are side by side, but it is
+  // the only place the position is stated while they are stacked.
+  &-podiumPosition {
+    flex: none;
+    color: var(--muted-color);
+    font-size: 12px;
+  }
+
+  &-podiumPlace--1 {
+    --medal: #f5c518;
+  }
+
+  &-podiumPlace--2 {
+    --medal: #b9c2cc;
+  }
+
+  &-podiumPlace--3 {
+    --medal: #cd7f32;
+  }
+
+  // --- Highlights ---------------------------------------------------------
+  //
+  // One per line on a phone, sharing the row from tablet up.
+  &-highlights {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+  }
+
+  &-highlight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--border-radius);
+    background: var(--control-bg);
+    border-left: 3px solid var(--highlight, var(--primary-color));
+  }
+
+  &-highlight--climber {
+    --highlight: #4caf50;
+  }
+
+  &-highlight--busiest {
+    --highlight: #ff7043;
+  }
+
+  &-highlight--newcomer {
+    --highlight: #42a5f5;
+  }
+
+  &-highlightIcon {
+    flex: none;
+    font-size: 18px;
+    color: var(--highlight);
+  }
+
+  &-highlightBody {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-highlightLabel {
+    color: var(--muted-color);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &-highlightName {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-highlightValue {
+    flex: none;
+    font-size: 18px;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+    color: var(--highlight);
+  }
+
+  // --- Rows ---------------------------------------------------------------
+  &-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &-username {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-avatar {
+    .Avatar--size(28px);
+    flex: none;
+  }
+
+  &-bar {
+    display: block;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--medal, var(--primary-color)));
+    opacity: 0.7;
+    // Grows to its width on first paint, so the board arrives rather than
+    // simply being there.
+    animation: RankingsPage-grow 0.5s ease-out both;
+    transform-origin: left center;
+  }
+
+  // The viewer's own row. Previously a slightly lighter background, which
+  // was indistinguishable from the hover state — this has to be findable at
+  // a glance in a list of twenty.
+  &-row--you {
+    background: fade(@primary-color, 12%);
+
+    td {
+      font-weight: bold;
+    }
+
+    // The accent runs the height of the row, on the first cell so it reads
+    // as an edge to the row rather than a border on a box.
+    td:first-child {
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--primary-color);
+      }
+    }
+  }
+
+  // One line, so the avatar, the name and the chip share a centre.
+  &-identity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &-youChip {
+    flex: none;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: var(--primary-color);
+    color: var(--body-bg);
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+  }
+
+  // Sits under the name, so the gap reads as belonging to this person.
+  &-toNext {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted-color);
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  &-jump {
+    flex: none;
+  }
+
+  // --- Movement -----------------------------------------------------------
+  &-movement {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    flex: none;
+    font-size: 11px;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+
+    &--up {
+      color: #4caf50;
+    }
+
+    &--down {
+      color: #ef5350;
+      opacity: 0.75;
+    }
+
+    // Not a direction, so it is not coloured like one.
+    &--new {
+      padding: 0 5px;
+      border-radius: 8px;
+      background: var(--control-bg);
+      color: var(--muted-color);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+  }
+
+}
+
+// From tablet up the podium becomes a real podium: three across, the winner
+// centred and lifted.
+@media @tablet-up {
+  .RankingsPage {
+    // Only a podium when there is something to stand on. With one or two
+    // entrants a three-column grid leaves a card marooned in an empty
+    // column, and the raised centre column makes it worse.
+    &-podium--of3 {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: end;
+      gap: 16px;
+    }
+
+    &-podium--of2 {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    // Highlights share the row, however many there are.
+    &-highlights {
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+    }
+
+    &-podiumLink {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+      padding: 20px 16px;
+    }
+
+    &-podiumName {
+      flex: none;
+      width: 100%;
+    }
+
+    &-podiumScore {
+      font-size: 28px;
+    }
+
+    // First is centre, tallest, and biggest in every dimension — the layout
+    // itself should say who won before any of the text is read. Only applies
+    // to a full podium: reordering two cards, or centring one, is noise.
+    &-podium--of3 &-podiumPlace--1 {
+      order: 2;
+
+      .RankingsPage-podiumLink {
+        padding-block: 36px;
+      }
+
+      .RankingsPage-podiumAvatar {
+        .Avatar--size(88px);
+      }
+
+      .RankingsPage-podiumMedal {
+        font-size: 32px;
+      }
+
+      .RankingsPage-podiumScore {
+        font-size: 40px;
+      }
+
+      .RankingsPage-podiumName {
+        font-size: 16px;
+      }
+    }
+
+    &-podium--of3 &-podiumPlace--2 {
+      order: 1;
+
+      .RankingsPage-podiumAvatar {
+        .Avatar--size(56px);
+      }
+    }
+
+    &-podium--of3 &-podiumPlace--3 {
+      order: 3;
+
+      .RankingsPage-podiumAvatar {
+        .Avatar--size(48px);
+      }
+
+      .RankingsPage-podiumScore {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
 .rankings {
   width: 100%;
+  border-collapse: collapse;
 
-  td,
   th {
-    text-align: center;
-    padding: 5px;
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid var(--control-bg);
+    font-weight: bold;
+    font-size: 12px;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
-  &-1 {
-    font-size: 8em;
-    color: gold;
+  td {
+    padding: 8px;
+    border-bottom: 1px solid var(--control-bg);
+    vertical-align: middle;
   }
 
-  &-1-avatar {
-    width: 80px;
-    height: 80px;
-    font-size: 40px;
-    line-height: 80px;
+  // A table cell, so it stays display: table-cell — making it a flex
+  // container takes it out of the column sizing and the column grows to fill
+  // the table.
+  &-place {
+    width: 1%;
+    white-space: nowrap;
+    color: var(--muted-color);
+    font-variant-numeric: tabular-nums;
+
+    // Core's .tooltip-inner sets max-width and overflow-wrap but never resets
+    // white-space, so a nowrap inherited from this cell keeps the bubble on
+    // one line and its text runs out past the background. Undo it for the
+    // tooltip only.
+    .tooltip-inner {
+      white-space: normal;
+    }
+  }
+
+  // The place and its badge share a line, inside the cell rather than as the
+  // cell. A tooltip renders in here too, and it must be free to wrap: a
+  // nowrap on the cell is inherited by the bubble and pushes long tooltip
+  // text out of its own background.
+  &-placeInner {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  // Sized to its content, so the name sits next to the avatar rather than
+  // being stretched away from it.
+  &-user {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  // Takes all the slack. The bar is what should grow on a wide screen — that
+  // is the whole point of it — rather than the gap between name and score.
+  &-bar {
+    width: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  &-score {
+    width: 4.5em;
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    font-weight: bold;
   }
 
   a:hover {
     text-decoration: none;
   }
 
+  // The medal colours land on whatever marks the place. That is the icon
+  // itself, which carries the class directly.
+  &-1 {
+    color: gold;
+  }
+
   &-2 {
-    font-size: 6em;
     color: silver;
   }
 
-  &-2-avatar {
-    width: 60px;
-    height: 60px;
-    font-size: 30px;
-    line-height: 60px;
-  }
-
   &-3 {
-    font-size: 4em;
     color: #cd7f32;
-  }
-
-  &-3-avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    line-height: 40px;
   }
 
   &-image {
     display: block;
-    margin: 10% auto;
+    width: 28px;
+    height: 28px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+}
+
+@media @phone {
+  .rankings {
+    &-bar {
+      display: none;
+    }
+
+    &-place {
+      width: 3em;
+    }
   }
 
-  &-info {
-    padding-left: 38.6%;
+  .RankingsPage-podiumScore {
+    font-size: 18px;
   }
 
-  &-points {
-    font-size: 50px;
-  }
+}
 
-  span.username {
-    display: block;
+@keyframes RankingsPage-grow {
+  from {
+    transform: scaleX(0);
   }
+  to {
+    transform: scaleX(1);
+  }
+}
 
-  .info-avatar {
-    display: block;
-    margin: 0 auto 15px;
-    position: inherit;
-  }
+.rankings-loadmore {
+  text-align: center;
+  margin-top: 16px;
 }
 
 .UserCard {
@@ -208,9 +663,4 @@
       margin-right: 5px;
     }
   }
-}
-
-.rankings-loadmore {
-  text-align: center;
-  margin-top: 10px;
 }

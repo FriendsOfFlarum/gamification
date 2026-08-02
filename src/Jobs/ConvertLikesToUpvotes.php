@@ -50,7 +50,7 @@ class ConvertLikesToUpvotes implements ShouldQueue
         Discussion::chunkById(self::CHUNK_SIZE, function (Collection $discussions) use ($gamification) {
             foreach ($discussions as $discussion) {
                 /** @var Discussion $discussion */
-                $gamification->calculateHotness($discussion);
+                $gamification->calculateTrending($discussion);
             }
         });
 
