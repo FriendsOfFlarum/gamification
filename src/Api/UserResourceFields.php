@@ -16,6 +16,14 @@ use Flarum\User\User;
 
 class UserResourceFields
 {
+    /**
+     * Cached answers to canHaveVotingNotifications, keyed by the user's set of
+     * group ids — the only thing the answer depends on.
+     *
+     * @var array<string, bool>
+     */
+    private array $votingNotifications = [];
+
     public function __invoke(): array
     {
         return [
@@ -23,7 +31,13 @@ class UserResourceFields
                 ->property('votes'),
             Schema\Boolean::make('canHaveVotingNotifications')
                 ->get(function (User $user) {
-                    return $user->hasPermission('discussion.upvote_notifications')
+                    // Asked of every user in a listing, and the answer depends
+                    // only on their groups — so users who share a set of groups
+                    // share an answer. Without this, a page of users re-ran the
+                    // same permission lookup for each of them.
+                    $groups = $user->groups->pluck('id')->sort()->implode(',');
+
+                    return $this->votingNotifications[$groups] ??= $user->hasPermission('discussion.upvote_notifications')
                         || $user->hasPermission('discussion.downvote_notifications');
                 }),
 

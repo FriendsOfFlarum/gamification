@@ -43,7 +43,7 @@ class VoteQueryCountTest extends EnhancedTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->extension('fof-gamification');
+        $this->extension(...(getenv('NOGAM') ? [] : ['fof-gamification']));
 
         $now = Carbon::now()->toDateTimeString();
         $users = [$this->normalUser()];
@@ -101,6 +101,12 @@ class VoteQueryCountTest extends EnhancedTestCase
     public function probe_posts_member()
     {
         $this->assertSame(200, $this->get('/api/posts?filter[discussion]=1', 3));
+    }
+
+    #[Test]
+    public function probe_users_member()
+    {
+        $this->assertSame(200, $this->get('/api/users', 3));
     }
 
     #[Test]
