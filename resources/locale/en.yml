@@ -59,6 +59,8 @@ fof-gamification:
       alt_votes:
         icon_name: Alt layout icon name
       votes:
+        enabled_tags: Tags with voting enabled
+        enabled_tags_help: Voting only appears in discussions carrying one of these tags. Leave empty to disable voting everywhere. This applies to everyone, including administrators — permissions still control who may vote within these tags.
         points_title: Points Placeholder
         points_placeholder: "Points: "
         color_holder: '#ffffff'

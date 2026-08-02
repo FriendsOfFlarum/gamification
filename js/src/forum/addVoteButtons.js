@@ -29,7 +29,10 @@ export default function () {
   extend(CommentPost.prototype, 'actionItems', function (items) {
     const post = this.attrs.post;
 
-    //if (!post.canVote()) return;
+    // Render nothing at all where voting does not apply — a disabled control
+    // still tells the reader that voting exists here. The alternate layout
+    // already does this; the two now behave the same way.
+    if (!post.canSeeVotes()) return;
 
     const hasDownvoted = post.hasDownvoted();
     const hasUpvoted = post.hasUpvoted();

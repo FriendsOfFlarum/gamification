@@ -7,6 +7,7 @@ import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import ItemList from 'flarum/common/utils/ItemList';
 import Form from 'flarum/common/components/Form';
+import FormGroup from 'flarum/common/components/FormGroup';
 import FormSection from 'flarum/admin/components/FormSection';
 import FormSectionGroup from 'flarum/admin/components/FormSectionGroup';
 import UploadImageButton from './UploadImageButton';
@@ -27,6 +28,7 @@ export default class SettingsPage extends ExtensionPage {
       'blockedUsers',
       'iconNameAlt',
       'autoAssignedGroups',
+      'enabled-tags',
     ];
 
     this.switches = [
@@ -345,6 +347,18 @@ export default class SettingsPage extends ExtensionPage {
 
   voteItems() {
     const items = new ItemList();
+
+    items.add(
+      'enabledTags',
+      <FormGroup
+        type="flarum-tags.select-tags"
+        label={app.translator.trans('fof-gamification.admin.page.votes.enabled_tags')}
+        help={app.translator.trans('fof-gamification.admin.page.votes.enabled_tags_help')}
+        stream={this.values['enabled-tags']}
+        options={{ requireParentTag: false }}
+      />,
+      100
+    );
 
     items.add(
       'icon',

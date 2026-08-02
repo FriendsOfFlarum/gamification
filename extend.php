@@ -88,6 +88,7 @@ return [
         ->default('fof-gamification.rankAmt', 2)
         ->default('fof-gamification.firstPostOnly', true)
         ->default('fof-gamification.allowSelfVotes', true)
+        ->default(EnabledTags::SETTING, '')
         ->serializeToForum('fof-gamification.showVotesOnDiscussionPage', 'fof-gamification.showVotesOnDiscussionPage', 'boolval')
         ->serializeToForum('fof-gamification.useAlternateLayout', 'fof-gamification.useAlternateLayout', 'boolval')
         ->serializeToForum('fof-gamification.upVotesOnly', 'fof-gamification.upVotesOnly', 'boolval')
