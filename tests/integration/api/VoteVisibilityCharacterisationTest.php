@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Flarum\Discussion\Discussion;
 use Flarum\Group\Group;
 use Flarum\Post\Post;
+use Flarum\Tags\Tag;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\User\User;
 use FoF\Gamification\Tests\EnhancedTestCase;
@@ -62,7 +63,7 @@ class VoteVisibilityCharacterisationTest extends EnhancedTestCase
             $this->setting($key, $value);
         }
 
-        $this->extension('fof-gamification');
+        $this->extension('flarum-tags', 'fof-gamification');
 
         $now = Carbon::now()->toDateTimeString();
 
@@ -82,6 +83,12 @@ class VoteVisibilityCharacterisationTest extends EnhancedTestCase
                 fn (string $permission) => ['group_id' => self::VOTER_GROUP, 'permission' => $permission],
                 $permissions ?? ['discussion.canSeeVotes', 'discussion.canSeeVoters', 'discussion.votePosts']
             ),
+            Tag::class => [
+                ['id' => 1, 'name' => 'Gamified', 'slug' => 'gamified', 'position' => 0, 'is_restricted' => 0],
+            ],
+            'discussion_tag' => [
+                ['discussion_id' => 1, 'tag_id' => 1],
+            ],
             Discussion::class => [
                 ['id' => 1, 'title' => 'D', 'created_at' => $now, 'last_posted_at' => $now, 'user_id' => self::AUTHOR, 'first_post_id' => 1, 'comment_count' => 2, 'is_private' => 0, 'votes' => 1],
             ],

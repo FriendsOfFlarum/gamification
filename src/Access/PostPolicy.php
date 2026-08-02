@@ -15,11 +15,13 @@ use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Access\AbstractPolicy;
 use Flarum\User\User;
+use FoF\Gamification\TagGate;
 
 class PostPolicy extends AbstractPolicy
 {
     public function __construct(
-        protected SettingsRepositoryInterface $settings
+        protected SettingsRepositoryInterface $settings,
+        protected TagGate $tags
     ) {
     }
 
@@ -35,6 +37,12 @@ class PostPolicy extends AbstractPolicy
 
     public function vote(User $actor, Post $post): string|bool|null
     {
+        // Availability first, and deliberately before any permission check:
+        // this gate applies to admins too, who bypass permissions entirely.
+        if (! $this->tags->allowsPost($post)) {
+            return $this->deny();
+        }
+
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
             return $this->deny();
         }
@@ -48,6 +56,12 @@ class PostPolicy extends AbstractPolicy
 
     public function canSeeVotes(User $actor, Post $post): string|bool|null
     {
+        // Availability first, and deliberately before any permission check:
+        // this gate applies to admins too, who bypass permissions entirely.
+        if (! $this->tags->allowsPost($post)) {
+            return $this->deny();
+        }
+
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
             return $this->deny();
         }
@@ -57,6 +71,12 @@ class PostPolicy extends AbstractPolicy
 
     public function canSeeVoters(User $actor, Post $post): string|bool|null
     {
+        // Availability first, and deliberately before any permission check:
+        // this gate applies to admins too, who bypass permissions entirely.
+        if (! $this->tags->allowsPost($post)) {
+            return $this->deny();
+        }
+
         if ($post->number !== 1 && $this->isFirstPostOnlyMode()) {
             return $this->deny();
         }

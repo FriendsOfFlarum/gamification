@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Flarum\Discussion\Discussion;
 use Flarum\Group\Group;
 use Flarum\Post\Post;
+use Flarum\Tags\Tag;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\User\User;
 use FoF\Gamification\Tests\EnhancedTestCase;
@@ -51,7 +52,7 @@ class VoteWritePathTest extends EnhancedTestCase
             $this->setting($key, $value);
         }
 
-        $this->extension('fof-gamification');
+        $this->extension('flarum-tags', 'fof-gamification');
 
         $now = Carbon::now()->toDateTimeString();
 
@@ -73,12 +74,22 @@ class VoteWritePathTest extends EnhancedTestCase
                 ['group_id' => self::VOTER_GROUP, 'permission' => 'discussion.votePosts'],
                 ['group_id' => self::VOTER_GROUP, 'permission' => 'discussion.canSeeVotes'],
             ],
+            Tag::class => [
+                ['id' => 1, 'name' => 'Gamified', 'slug' => 'gamified', 'position' => 0, 'is_restricted' => 0],
+            ],
+            'discussion_tag' => [
+                ['discussion_id' => 1, 'tag_id' => 1],
+            ],
             Discussion::class => [
                 ['id' => 1, 'title' => 'D', 'created_at' => $now, 'last_posted_at' => $now, 'user_id' => self::AUTHOR, 'first_post_id' => 1, 'comment_count' => 2, 'is_private' => 0],
+                // Deliberately left untagged, to prove gamification does not
+                // reach a discussion outside the enabled tags.
+                ['id' => 2, 'title' => 'Untagged', 'created_at' => $now, 'last_posted_at' => $now, 'user_id' => self::AUTHOR, 'first_post_id' => 3, 'comment_count' => 1, 'is_private' => 0],
             ],
             Post::class => [
                 ['id' => 1, 'discussion_id' => 1, 'number' => 1, 'created_at' => $now, 'user_id' => self::AUTHOR, 'type' => 'comment', 'content' => '<t><p>first</p></t>'],
                 ['id' => 2, 'discussion_id' => 1, 'number' => 2, 'created_at' => $now, 'user_id' => self::AUTHOR, 'type' => 'comment', 'content' => '<t><p>reply</p></t>'],
+                ['id' => 3, 'discussion_id' => 2, 'number' => 1, 'created_at' => $now, 'user_id' => self::AUTHOR, 'type' => 'comment', 'content' => '<t><p>untagged</p></t>'],
             ],
             'ranks' => [
                 ['id' => 1, 'points' => 1, 'name' => 'Rookie', 'color' => '#ffffff'],
@@ -291,6 +302,18 @@ class VoteWritePathTest extends EnhancedTestCase
 
         $this->assertSame(403, $this->vote(self::VOTER, 'up'));
         $this->assertSame([], $this->voteRows());
+    }
+
+    #[Test]
+    public function a_vote_on_an_untagged_discussion_is_refused_and_records_nothing()
+    {
+        // The tag gate applies to the write path too, not just to what is
+        // serialized: a refused vote must leave no row and move no tally.
+        $this->boot();
+
+        $this->assertSame(403, $this->vote(self::VOTER, 'up', 3));
+        $this->assertSame([], $this->voteRows(3));
+        $this->assertSame(0, $this->authorVotes());
     }
 
     #[Test]

@@ -14,6 +14,7 @@ namespace FoF\Gamification\Api;
 use Flarum\Api\Context;
 use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
+use FoF\Gamification\TagGate;
 use Flarum\Post\Post;
 
 class DiscussionResourceFields
@@ -31,9 +32,23 @@ class DiscussionResourceFields
      */
     private \WeakMap $firstPosts;
 
-    public function __construct()
-    {
+    public function __construct(
+        protected TagGate $tags
+    ) {
         $this->firstPosts = new \WeakMap();
+    }
+
+    /**
+     * Whether the actor may see this discussion's vote tally.
+     *
+     * These two fields ask the Discussion ability directly rather than going
+     * through the post policy, so they would otherwise bypass the tag gate and
+     * expose a tally on a tag where gamification is switched off.
+     */
+    private function seesVotes(Discussion $discussion, Context $context): bool
+    {
+        return $this->tags->allows($discussion)
+            && $context->getActor()->can('canSeeVotes', $discussion);
     }
 
     /**
@@ -87,10 +102,10 @@ class DiscussionResourceFields
                     return $post?->actualvotes->firstWhere('user_id', $context->getActor()->id)?->isDownvote() ?? false;
                 }),
             Schema\Number::make('votes')
-                ->visible(fn (Discussion $discussion, Context $context) => $context->getActor()->can('canSeeVotes', $discussion))
+                ->visible(fn (Discussion $discussion, Context $context) => $this->seesVotes($discussion, $context))
                 ->get(fn (Discussion $discussion) => $discussion->votes),
             Schema\Boolean::make('seeVotes')
-                ->get(fn (Discussion $discussion, Context $context) => $context->getActor()->can('canSeeVotes', $discussion)),
+                ->get(fn (Discussion $discussion, Context $context) => $this->seesVotes($discussion, $context)),
             Schema\Boolean::make('canVote')
                 ->get(function (Discussion $discussion, Context $context) {
                     $post = $this->firstPost($discussion);
