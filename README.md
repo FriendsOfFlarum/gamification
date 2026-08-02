@@ -2,8 +2,6 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/gamification.svg)](https://packagist.org/packages/fof/gamification) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate)  
 
-[![Extiverse](https://extiverse.com/extension/fof/gamification/open-graph-image)](https://extiverse.com/extension/fof/gamification)
-
 A [Flarum](http://flarum.org) extension. Add upvotes, downvotes, and ranks to your Flarum Community!
 
 Upvote and downvote posts anonymously, and reward active users with ranks, and sort posts by hotness/popularity.
