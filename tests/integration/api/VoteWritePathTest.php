@@ -298,16 +298,16 @@ class VoteWritePathTest extends EnhancedTestCase
     {
         $this->boot();
 
+        // Authenticated requests get the CSRF bypass for free via
+        // authenticatedAs; a guest request has to ask for it, or the response
+        // is a CSRF failure rather than the authorization outcome under test.
         $response = $this->send(
             $this->request('PATCH', '/api/posts/1', [
                 'json' => ['data' => ['attributes' => ['vote' => 'up']]],
-            ])
+            ])->withAttribute('bypassCsrfToken', true)
         );
 
-        // 400 rather than 401/403: the vote field is writable only when the
-        // actor can vote, so for a guest it is not a writable field at all and
-        // the request fails validation before any authorization check.
-        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(401, $response->getStatusCode());
         $this->assertSame([], $this->voteRows());
     }
 }
