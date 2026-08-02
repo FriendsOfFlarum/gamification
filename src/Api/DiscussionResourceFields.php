@@ -14,8 +14,8 @@ namespace FoF\Gamification\Api;
 use Flarum\Api\Context;
 use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
-use FoF\Gamification\TagGate;
 use Flarum\Post\Post;
+use FoF\Gamification\TagGate;
 
 class DiscussionResourceFields
 {

@@ -31,7 +31,7 @@ return [
         // and this one reads the tags table. Without flarum/tags there is
         // nothing to seed from — and nothing to gate, since a forum with no
         // tags has no per-tag distinction to make.
-        if (! $schema->hasTable('tags')) {
+        if (!$schema->hasTable('tags')) {
             return;
         }
 

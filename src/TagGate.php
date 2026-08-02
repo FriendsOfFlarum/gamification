@@ -60,7 +60,7 @@ class TagGate
 
     public function allows(Discussion $discussion): bool
     {
-        if (! isset($this->answers[$discussion])) {
+        if (!isset($this->answers[$discussion])) {
             $this->answers[$discussion] = $this->resolve($discussion);
         }
 
@@ -77,7 +77,7 @@ class TagGate
         // or has no tags — keeps gamification everywhere rather than silently
         // losing it. An empty list, by contrast, is a deliberate choice: the
         // migration always writes a value.
-        if (! $this->configured) {
+        if (!$this->configured) {
             return true;
         }
 
@@ -123,7 +123,7 @@ class TagGate
 
         $decoded = json_decode($raw, true);
 
-        if (! is_array($decoded)) {
+        if (!is_array($decoded)) {
             $this->configured = false;
 
             return $this->enabled = [];

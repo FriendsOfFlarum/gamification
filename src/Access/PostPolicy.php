@@ -39,7 +39,7 @@ class PostPolicy extends AbstractPolicy
     {
         // Availability first, and deliberately before any permission check:
         // this gate applies to admins too, who bypass permissions entirely.
-        if (! $this->tags->allowsPost($post)) {
+        if (!$this->tags->allowsPost($post)) {
             return $this->deny();
         }
 
@@ -58,7 +58,7 @@ class PostPolicy extends AbstractPolicy
     {
         // Availability first, and deliberately before any permission check:
         // this gate applies to admins too, who bypass permissions entirely.
-        if (! $this->tags->allowsPost($post)) {
+        if (!$this->tags->allowsPost($post)) {
             return $this->deny();
         }
 
@@ -73,7 +73,7 @@ class PostPolicy extends AbstractPolicy
     {
         // Availability first, and deliberately before any permission check:
         // this gate applies to admins too, who bypass permissions entirely.
-        if (! $this->tags->allowsPost($post)) {
+        if (!$this->tags->allowsPost($post)) {
             return $this->deny();
         }
 
