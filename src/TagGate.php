@@ -14,6 +14,8 @@ namespace FoF\Gamification;
 use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Decides whether gamification applies to a discussion at all.
@@ -49,6 +51,53 @@ class TagGate
         protected SettingsRepositoryInterface $settings
     ) {
         $this->answers = new \WeakMap();
+    }
+
+    /**
+     * Constrain a query on discussions to those gamification applies to.
+     *
+     * Used to keep the page's vote loads off discussions that will never show
+     * a vote: with no first post matched there is nothing for the dependent
+     * vote load to key on, so Eloquent skips it altogether.
+     */
+    public function constrainToEnabled(Builder|Relation $query): void
+    {
+        $enabled = $this->enabledTagIds();
+
+        if (!$this->configured) {
+            return;
+        }
+
+        if ($enabled === []) {
+            $query->whereRaw('1 = 0');
+
+            return;
+        }
+
+        // `tags` reaches Discussion through an extender rather than the
+        // model, so it is not a callable relation here — query the pivot
+        // directly instead.
+        // `tags` reaches Discussion through an extender rather than the
+        // model, so it is not a callable relation here — query the pivot
+        // directly instead.
+        //
+        // Untagged discussions are deliberately left in. They are not gamified
+        // and allows() will say so, but excluding them from the load would
+        // strip vote data from a forum whose discussions carry no tags, and
+        // this constraint exists only to avoid needless work — never to change
+        // what is visible.
+        $query->where(function ($outer) use ($enabled) {
+            $outer->whereExists(function ($sub) use ($enabled) {
+                $sub->selectRaw('1')
+                    ->from('discussion_tag')
+                    ->whereColumn('discussion_tag.discussion_id', 'posts.discussion_id')
+                    ->whereIn('discussion_tag.tag_id', $enabled);
+            })->orWhereNotExists(function ($sub) {
+                $sub->selectRaw('1')
+                    ->from('discussion_tag')
+                    ->whereColumn('discussion_tag.discussion_id', 'posts.discussion_id');
+            });
+        });
     }
 
     public function allowsPost(Post $post): bool
