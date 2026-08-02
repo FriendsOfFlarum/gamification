@@ -121,11 +121,20 @@ return [
         // The discussion's vote fields resolve through its first post, so load
         // it and the actor's own vote on it for the whole page at once.
         ->endpoint('index', function (Endpoint\Index $endpoint) {
-            return $endpoint->eagerLoadWhere('firstPost.actualvotes', function ($query, Context $context) {
-                // A guest has no votes to find; constraining on a null id
-                // would run the query anyway and match nothing.
-                $query->where('user_id', $context->getActor()->id ?? 0);
-            });
+            return $endpoint
+                // Restrict the first-post load to discussions gamification
+                // applies to. On a forum that confines voting to a few tags
+                // most pages carry none, and with no first post matched the
+                // dependent vote load below has nothing to key on, so it is
+                // skipped entirely rather than fetching rows no field reads.
+                ->eagerLoadWhere('firstPost', function ($query, Context $context) {
+                    resolve(TagGate::class)->constrainToEnabled($query);
+                })
+                ->eagerLoadWhere('firstPost.actualvotes', function ($query, Context $context) {
+                    // A guest has no votes to find; constraining on a null id
+                    // would run the query anyway and match nothing.
+                    $query->where('user_id', $context->getActor()->id ?? 0);
+                });
         }),
 
     (new Extend\ApiResource(Resource\PostResource::class))

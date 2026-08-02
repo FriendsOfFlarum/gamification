@@ -59,6 +59,14 @@ class DiscussionResourceFields
     private function firstPost(Discussion $discussion): ?Post
     {
         if (!isset($this->firstPosts[$discussion])) {
+            // The index deliberately skips loading first posts for discussions
+            // gamification does not apply to. Without this the fallback below
+            // would read that as a missing first post and fetch one per row,
+            // turning an optimisation into an N+1.
+            if (!$this->tags->allows($discussion)) {
+                return $this->firstPosts[$discussion] = null;
+            }
+
             $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
 
             // The post policies read $post->discussion, which would otherwise
@@ -82,6 +90,12 @@ class DiscussionResourceFields
                     // first post to answer that cost one query per discussion
                     // in the list for a result that was always false.
                     if ($context->getActor()->isGuest() || !$context->getActor()->exists) {
+                        return false;
+                    }
+
+                    // Vote state belongs to the same gate as the tally: a
+                    // discussion outside the enabled tags carries none.
+                    if (!$this->tags->allows($discussion)) {
                         return false;
                     }
 

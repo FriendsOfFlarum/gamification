@@ -14,6 +14,7 @@ namespace FoF\Gamification\Tests\integration\api;
 use Carbon\Carbon;
 use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
+use Flarum\Tags\Tag;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\User\User;
 use FoF\Gamification\Tests\EnhancedTestCase;
@@ -27,7 +28,7 @@ class FirstPostVotesTest extends EnhancedTestCase
     {
         parent::setUp();
 
-        $this->extension('fof-gamification');
+        $this->extension('flarum-tags', 'fof-gamification');
 
         $this->prepareDatabase([
             User::class => [
@@ -39,6 +40,14 @@ class FirstPostVotesTest extends EnhancedTestCase
                     'email'              => 'actor@machine.local',
                     'is_email_confirmed' => 1,
                 ],
+            ],
+            // Gamification applies per tag, so the discussion needs one it is
+            // enabled on — the seeding migration enables every existing tag.
+            Tag::class => [
+                ['id' => 1, 'name' => 'Gamified', 'slug' => 'gamified', 'position' => 0, 'is_restricted' => 0],
+            ],
+            'discussion_tag' => [
+                ['discussion_id' => 1, 'tag_id' => 1],
             ],
             Discussion::class => [
                 ['id' => 1, 'title' => 'Voted discussion', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'first_post_id' => 1, 'comment_count' => 1, 'is_private' => 0],
