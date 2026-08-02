@@ -187,7 +187,7 @@ class LeaderboardMovementTest extends EnhancedTestCase
         }
 
         $this->prepareDatabase([
-            User::class => $users,
+            User::class       => $users,
             Discussion::class => [
                 ['id' => 1, 'title' => 'D', 'created_at' => $now->toDateTimeString(), 'last_posted_at' => $now->toDateTimeString(), 'user_id' => 3, 'first_post_id' => 1, 'comment_count' => count($posts), 'is_private' => 0],
             ],

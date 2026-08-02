@@ -11,7 +11,6 @@
 
 namespace FoF\Gamification\Api\Resource;
 
-use Flarum\Api\Context;
 use Flarum\Api\Endpoint;
 use Flarum\Api\Resource\AbstractResource;
 use Flarum\Api\Resource\Contracts\Countable;
@@ -24,8 +23,8 @@ use Flarum\User\User;
 use FoF\Gamification\Leaderboard\MetricRegistry;
 use FoF\Gamification\Leaderboard\Period;
 use Tobyz\JsonApiServer\Context as OriginalContext;
-use Tobyz\JsonApiServer\Schema\CustomFilter;
 use Tobyz\JsonApiServer\Pagination\OffsetPagination;
+use Tobyz\JsonApiServer\Schema\CustomFilter;
 
 /**
  * A ranked leaderboard.

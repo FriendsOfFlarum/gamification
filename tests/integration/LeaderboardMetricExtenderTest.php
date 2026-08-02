@@ -12,9 +12,7 @@
 namespace FoF\Gamification\Tests\integration;
 
 use FoF\Gamification\Extend\LeaderboardMetric;
-use FoF\Gamification\Leaderboard\Metric\DiscussionsStarted;
 use FoF\Gamification\Leaderboard\Metric\PostsWritten;
-use FoF\Gamification\Leaderboard\Metric\UpvotesReceived;
 use FoF\Gamification\Leaderboard\MetricInterface;
 use FoF\Gamification\Leaderboard\MetricRegistry;
 use FoF\Gamification\Tests\EnhancedTestCase;

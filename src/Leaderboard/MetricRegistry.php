@@ -302,8 +302,8 @@ class MetricRegistry
      * are ahead of them answers it without paging through the whole board.
      *
      * @return array{position: int, score: int, toNext: int|null}|null null if
-     *                                               they are not ranked at all
-     *                                               — no score, or not eligible
+     *                                                                 they are not ranked at all
+     *                                                                 — no score, or not eligible
      */
     public function standingFor(MetricInterface $metric, ?\DateTimeInterface $since, ?int $userId): ?array
     {

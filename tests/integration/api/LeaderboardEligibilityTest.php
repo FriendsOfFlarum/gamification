@@ -56,7 +56,7 @@ class LeaderboardEligibilityTest extends EnhancedTestCase
         }
 
         $this->prepareDatabase([
-            User::class => [$this->normalUser(), $alice, $bob, $carol],
+            User::class  => [$this->normalUser(), $alice, $bob, $carol],
             Group::class => [
                 ['id' => 100, 'name_singular' => 'Staff', 'name_plural' => 'Staff'],
             ],
