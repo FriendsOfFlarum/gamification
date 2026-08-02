@@ -117,9 +117,13 @@ return [
             SortColumn::make('votes')
                 ->descendingAlias('votes'),
         ])
+        // The discussion's vote fields resolve through its first post, so load
+        // it and the actor's own vote on it for the whole page at once.
         ->endpoint('index', function (Endpoint\Index $endpoint) {
             return $endpoint->eagerLoadWhere('firstPost.actualvotes', function ($query, Context $context) {
-                $query->where('user_id', $context->getActor()->id);
+                // A guest has no votes to find; constraining on a null id
+                // would run the query anyway and match nothing.
+                $query->where('user_id', $context->getActor()->id ?? 0);
             });
         }),
 
@@ -129,9 +133,18 @@ return [
             return $endpoint->addDefaultInclude(['user.ranks']);
         })
         ->endpoint(['index', 'show', 'update'], function (Endpoint\Index|Endpoint\Show|Endpoint\Update $endpoint) {
-            return $endpoint->eagerLoadWhere('actualvotes', function ($query, Context $context) {
-                $query->where('user_id', $context->getActor()->id);
-            });
+            return $endpoint
+                ->eagerLoadWhere('actualvotes', function ($query, Context $context) {
+                    $query->where('user_id', $context->getActor()->id ?? 0);
+                })
+                // Each post serializes its discussion, whose own vote fields
+                // resolve through that discussion's first post. Without these
+                // the first post and its votes were fetched one discussion at
+                // a time.
+                ->eagerLoad('discussion.firstPost')
+                ->eagerLoadWhere('discussion.firstPost.actualvotes', function ($query, Context $context) {
+                    $query->where('user_id', $context->getActor()->id ?? 0);
+                });
         }),
 
     (new Extend\ApiResource(Resource\ForumResource::class))
