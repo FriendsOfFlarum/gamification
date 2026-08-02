@@ -34,6 +34,11 @@ export default function () {
     // already does this; the two now behave the same way.
     if (!post.canSeeVotes()) return;
 
+    // A deleted post keeps no vote controls. The alternate layout bails out on
+    // hidden posts before it can swap this widget for its own, so adding it
+    // here at all left the buttons on show behind the deleted-post overlay.
+    if (post.isHidden()) return;
+
     const hasDownvoted = post.hasDownvoted();
     const hasUpvoted = post.hasUpvoted();
 
