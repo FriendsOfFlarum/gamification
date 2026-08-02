@@ -40,7 +40,7 @@ class DiscussionResourceFields
      */
     private function firstPost(Discussion $discussion): ?Post
     {
-        if (! isset($this->firstPosts[$discussion])) {
+        if (!isset($this->firstPosts[$discussion])) {
             $post = $discussion->firstPost ?: $discussion->posts()->where('number', 1)->first();
 
             // The post policies read $post->discussion, which would otherwise
@@ -63,7 +63,7 @@ class DiscussionResourceFields
                     // fields are never sent to a guest, and resolving the
                     // first post to answer that cost one query per discussion
                     // in the list for a result that was always false.
-                    if ($context->getActor()->isGuest() || ! $context->getActor()->exists) {
+                    if ($context->getActor()->isGuest() || !$context->getActor()->exists) {
                         return false;
                     }
 

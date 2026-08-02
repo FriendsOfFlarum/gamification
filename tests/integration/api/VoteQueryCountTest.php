@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/gamification.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\Gamification\Tests\integration\api;
 
 use Carbon\Carbon;
@@ -55,28 +64,48 @@ class VoteQueryCountTest extends EnhancedTestCase
         }
 
         $this->prepareDatabase([
-            User::class => $users,
-            Group::class => [['id' => 101, 'name_singular' => 'V', 'name_plural' => 'V']],
-            'group_user' => [['user_id' => 3, 'group_id' => 101]],
+            User::class        => $users,
+            Group::class       => [['id' => 101, 'name_singular' => 'V', 'name_plural' => 'V']],
+            'group_user'       => [['user_id' => 3, 'group_id' => 101]],
             'group_permission' => [
                 ['group_id' => 101, 'permission' => 'discussion.canSeeVotes'],
                 ['group_id' => 101, 'permission' => 'discussion.canSeeVoters'],
                 ['group_id' => 101, 'permission' => 'discussion.votePosts'],
             ],
             Discussion::class => $discussions,
-            Post::class => $posts,
-            'post_votes' => $votes,
+            Post::class       => $posts,
+            'post_votes'      => $votes,
         ]);
     }
 
     private function get(string $uri, ?int $actor = null): int
     {
         $options = $actor !== null ? ['authenticatedAs' => $actor] : [];
+
         return $this->send($this->request('GET', $uri, $options))->getStatusCode();
     }
 
-    #[Test] public function probe_index_member() { $this->assertSame(200, $this->get('/api/discussions', 3)); }
-    #[Test] public function probe_index_guest() { $this->assertSame(200, $this->get('/api/discussions')); }
-    #[Test] public function probe_posts_member() { $this->assertSame(200, $this->get('/api/posts?filter[discussion]=1', 3)); }
-    #[Test] public function probe_posts_guest() { $this->assertSame(200, $this->get('/api/posts?filter[discussion]=1')); }
+    #[Test]
+    public function probe_index_member()
+    {
+        $this->assertSame(200, $this->get('/api/discussions', 3));
+    }
+
+    #[Test]
+    public function probe_index_guest()
+    {
+        $this->assertSame(200, $this->get('/api/discussions'));
+    }
+
+    #[Test]
+    public function probe_posts_member()
+    {
+        $this->assertSame(200, $this->get('/api/posts?filter[discussion]=1', 3));
+    }
+
+    #[Test]
+    public function probe_posts_guest()
+    {
+        $this->assertSame(200, $this->get('/api/posts?filter[discussion]=1'));
+    }
 }
