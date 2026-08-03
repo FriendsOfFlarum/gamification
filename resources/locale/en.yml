@@ -191,7 +191,7 @@ fof-gamification:
     subject:
       postVoted: Your post was voted on by {display_name}
 
-lib:
+  lib:
     gambits:
       trending:
         key: trending
