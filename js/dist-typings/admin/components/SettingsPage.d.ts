@@ -1,45 +1,34 @@
-export default class SettingsPage extends ExtensionPage<import("flarum/admin/components/ExtensionPage").ExtensionPageAttrs> {
-    constructor();
-    oninit(vnode: any): void;
-    fields: string[] | undefined;
-    switches: string[] | undefined;
-    ranks: import("flarum/common/Model").default[] | undefined;
-    values: {} | undefined;
-    settingsPrefix: string | undefined;
+import ExtensionPage, { ExtensionPageAttrs } from 'flarum/admin/components/ExtensionPage';
+import Stream from 'flarum/common/utils/Stream';
+import ItemList from 'flarum/common/utils/ItemList';
+import Rank from '../../common/models/Rank';
+import type Mithril from 'mithril';
+export default class SettingsPage extends ExtensionPage {
+    fields: string[];
+    switches: string[];
+    ranks: Rank[];
+    values: Record<string, Stream<any>>;
+    settingsPrefix: string;
     newRank: {
-        points: any;
-        name: any;
-        color: any;
-    } | undefined;
-    /**
-     * @returns {*}
-     */
-    content(): any;
-    updateName(rank: any, value: any): void;
-    updatePoints(rank: any, value: any): void;
-    updateColor(rank: any, value: any): void;
-    deleteRank(rankToDelete: any): void;
+        points: Stream<string>;
+        name: Stream<string>;
+        color: Stream<string>;
+    };
+    oninit(vnode: Mithril.Vnode<ExtensionPageAttrs, this>): void;
+    content(): JSX.Element;
+    updateName(rank: Rank, value: string): void;
+    updatePoints(rank: Rank, value: string): void;
+    updateColor(rank: Rank, value: string): void;
+    deleteRank(rankToDelete: Rank): void;
     addRank(): void;
-    /**
-     *
-     * @returns boolean
-     */
     changed(): boolean;
-    prepareSubmissionData(): {};
-    /**
-     * @param e
-     */
-    onsubmit(e: any): void;
-    /**
-     * @returns string
-     */
-    addPrefix(key: any): string;
-    settingsItems(): ItemList<any>;
-    firstSectionGroupItems(): ItemList<any>;
-    secondSectionGroupItems(): ItemList<any>;
-    rankItems(): ItemList<any>;
-    voteItems(): ItemList<any>;
-    rankingsItems(): ItemList<any>;
+    prepareSubmissionData(): Record<string, any>;
+    onsubmit(e: Event): void;
+    addPrefix(key: string): string;
+    settingsItems(): ItemList<Mithril.Children>;
+    firstSectionGroupItems(): ItemList<Mithril.Children>;
+    secondSectionGroupItems(): ItemList<Mithril.Children>;
+    rankItems(): ItemList<Mithril.Children>;
+    voteItems(): ItemList<Mithril.Children>;
+    rankingsItems(): ItemList<Mithril.Children>;
 }
-import ExtensionPage from "flarum/admin/components/ExtensionPage";
-import ItemList from "flarum/common/utils/ItemList";
