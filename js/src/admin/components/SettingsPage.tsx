@@ -1,5 +1,5 @@
 import app from 'flarum/admin/app';
-import ExtensionPage from 'flarum/admin/components/ExtensionPage';
+import ExtensionPage, { ExtensionPageAttrs } from 'flarum/admin/components/ExtensionPage';
 import Button from 'flarum/common/components/Button';
 import saveSettings from 'flarum/admin/utils/saveSettings';
 import Switch from 'flarum/common/components/Switch';
@@ -11,14 +11,33 @@ import Form from 'flarum/common/components/Form';
 import FormGroup from 'flarum/common/components/FormGroup';
 import FormSection from 'flarum/admin/components/FormSection';
 import FormSectionGroup from 'flarum/admin/components/FormSectionGroup';
-import UploadImageButton from './UploadImageButton';
+import Icon from 'flarum/common/components/Icon';
+import UploadImageButton from 'flarum/common/components/UploadImageButton';
 import GroupSettings from './GroupSettings';
 import ExcludedUsersSetting from './ExcludedUsersSetting';
 import ExcludedGroupsSetting from './ExcludedGroupsSetting';
-import Icon from 'flarum/common/components/Icon';
+import Rank from '../../common/models/Rank';
+
+import type Mithril from 'mithril';
+
+interface LeaderboardMetric {
+  key: string;
+  label: string;
+}
 
 export default class SettingsPage extends ExtensionPage {
-  oninit(vnode) {
+  fields!: string[];
+  switches!: string[];
+  ranks!: Rank[];
+  values!: Record<string, Stream<any>>;
+  settingsPrefix!: string;
+  newRank!: {
+    points: Stream<string>;
+    name: Stream<string>;
+    color: Stream<string>;
+  };
+
+  oninit(vnode: Mithril.Vnode<ExtensionPageAttrs, this>) {
     super.oninit(vnode);
 
     this.fields = [
@@ -51,7 +70,7 @@ export default class SettingsPage extends ExtensionPage {
       'allowSelfVotes',
     ];
 
-    this.ranks = app.store.all('ranks');
+    this.ranks = app.store.all<Rank>('ranks');
 
     this.values = {};
 
@@ -70,10 +89,7 @@ export default class SettingsPage extends ExtensionPage {
     };
   }
 
-  /**
-   * @returns {*}
-   */
-  content() {
+  content(): JSX.Element {
     return (
       <div className="SettingsPage">
         <div className="container">
@@ -83,31 +99,31 @@ export default class SettingsPage extends ExtensionPage {
     );
   }
 
-  updateName(rank, value) {
+  updateName(rank: Rank, value: string) {
     rank.save({ name: value });
   }
 
-  updatePoints(rank, value) {
+  updatePoints(rank: Rank, value: string) {
     rank.save({ points: value });
   }
 
-  updateColor(rank, value) {
+  updateColor(rank: Rank, value: string) {
     rank.save({ color: value });
   }
 
-  deleteRank(rankToDelete) {
+  deleteRank(rankToDelete: Rank) {
     rankToDelete.delete();
-    this.ranks.some((rank, i) => {
-      if (rank.data.id === rankToDelete.data.id) {
-        this.ranks.splice(i, 1);
-        return true;
-      }
-    });
+
+    const index = this.ranks.findIndex((rank) => rank.id() === rankToDelete.id());
+
+    if (index !== -1) {
+      this.ranks.splice(index, 1);
+    }
   }
 
   addRank() {
     app.store
-      .createRecord('ranks')
+      .createRecord<Rank>('ranks')
       .save({
         points: this.newRank.points(),
         name: this.newRank.name(),
@@ -124,18 +140,15 @@ export default class SettingsPage extends ExtensionPage {
       });
   }
 
-  /**
-   *
-   * @returns boolean
-   */
-  changed() {
-    var switchesCheck = this.switches.some((key) => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
-    var fieldsCheck = this.fields.some((key) => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
+  changed(): boolean {
+    const switchesCheck = this.switches.some((key) => this.values[key]() !== (app.data.settings[this.addPrefix(key)] == '1'));
+    const fieldsCheck = this.fields.some((key) => this.values[key]() !== app.data.settings[this.addPrefix(key)]);
+
     return fieldsCheck || switchesCheck;
   }
 
-  prepareSubmissionData() {
-    const settings = {};
+  prepareSubmissionData(): Record<string, any> {
+    const settings: Record<string, any> = {};
 
     this.switches.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
     this.fields.forEach((key) => (settings[this.addPrefix(key)] = this.values[key]()));
@@ -143,17 +156,12 @@ export default class SettingsPage extends ExtensionPage {
     return settings;
   }
 
-  /**
-   * @param e
-   */
-  onsubmit(e) {
+  onsubmit(e: Event) {
     e.preventDefault();
 
     if (this.loading) return;
 
     this.loading = true;
-
-    app.alerts.dismiss(this.successAlert);
 
     saveSettings(this.prepareSubmissionData())
       .then(this.onsaved.bind(this))
@@ -164,15 +172,12 @@ export default class SettingsPage extends ExtensionPage {
       });
   }
 
-  /**
-   * @returns string
-   */
-  addPrefix(key) {
+  addPrefix(key: string): string {
     return this.settingsPrefix + '.' + key;
   }
 
-  settingsItems() {
-    const items = new ItemList();
+  settingsItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
 
     items.add(
       'convertLikesToUpvotes',
@@ -184,12 +189,12 @@ export default class SettingsPage extends ExtensionPage {
             className="Button Button--warning Ranks-button"
             aria-label={app.translator.trans('fof-gamification.admin.page.convert.button')}
             onclick={() => {
-              app
-                .request({
-                  url: app.forum.attribute('apiUrl') + '/fof/gamification/convert',
-                  method: 'POST',
-                })
-                .then(this.values.convertedLikes('converting'));
+              app.request({
+                url: app.forum.attribute('apiUrl') + '/fof/gamification/convert',
+                method: 'POST',
+              });
+
+              this.values.convertedLikes('converting');
             }}
           >
             {app.translator.trans('fof-gamification.admin.page.convert.button')}
@@ -218,8 +223,8 @@ export default class SettingsPage extends ExtensionPage {
     return items;
   }
 
-  firstSectionGroupItems() {
-    const items = new ItemList();
+  firstSectionGroupItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
 
     items.add(
       'ranks',
@@ -240,8 +245,8 @@ export default class SettingsPage extends ExtensionPage {
     return items;
   }
 
-  secondSectionGroupItems() {
-    const items = new ItemList();
+  secondSectionGroupItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
 
     items.add(
       'rankingsPage',
@@ -261,8 +266,8 @@ export default class SettingsPage extends ExtensionPage {
     return items;
   }
 
-  rankItems() {
-    const items = new ItemList();
+  rankItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
 
     items.add(
       'ranks',
@@ -353,8 +358,8 @@ export default class SettingsPage extends ExtensionPage {
     return items;
   }
 
-  voteItems() {
-    const items = new ItemList();
+  voteItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
 
     items.add(
       'enabledTags',
@@ -495,8 +500,8 @@ export default class SettingsPage extends ExtensionPage {
     return items;
   }
 
-  rankingsItems() {
-    const items = new ItemList();
+  rankingsItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
 
     items.add(
       'customImages',
@@ -510,15 +515,17 @@ export default class SettingsPage extends ExtensionPage {
 
     items.add(
       'defaultMetric',
-      'defaultPeriod',
       <div className="Form-group">
         <label>{app.translator.trans('fof-gamification.admin.page.rankings.default_metric.title')}</label>
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.default_metric.help')}</div>
         <Select
-          options={(app.forum.attribute('fof-gamification.leaderboardMetrics') || []).reduce((options, metric) => {
-            options[metric.key] = app.translator.trans(metric.label);
-            return options;
-          }, {})}
+          options={(app.forum.attribute<LeaderboardMetric[]>('fof-gamification.leaderboardMetrics') || []).reduce(
+            (options: Record<string, Mithril.Children>, metric) => {
+              options[metric.key] = app.translator.trans(metric.label);
+              return options;
+            },
+            {}
+          )}
           value={this.values.defaultMetric() || 'posts'}
           onchange={this.values.defaultMetric}
         />
@@ -532,10 +539,13 @@ export default class SettingsPage extends ExtensionPage {
         <label>{app.translator.trans('fof-gamification.admin.page.rankings.default_period.title')}</label>
         <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.default_period.help')}</div>
         <Select
-          options={(app.forum.attribute('fof-gamification.leaderboardPeriods') || []).reduce((options, period) => {
-            options[period] = app.translator.trans(`fof-gamification.forum.leaderboard.period.${period}`);
-            return options;
-          }, {})}
+          options={(app.forum.attribute<string[]>('fof-gamification.leaderboardPeriods') || []).reduce(
+            (options: Record<string, Mithril.Children>, period) => {
+              options[period] = app.translator.trans(`fof-gamification.forum.leaderboard.period.${period}`);
+              return options;
+            },
+            {}
+          )}
           value={this.values.defaultPeriod() || 'year'}
           onchange={this.values.defaultPeriod}
         />
@@ -575,7 +585,7 @@ export default class SettingsPage extends ExtensionPage {
     );
 
     items.add(
-      'customImages',
+      'customImageUploads',
       <>
         {[1, 2, 3].map((num) => (
           <div className="Form-group">
@@ -583,7 +593,7 @@ export default class SettingsPage extends ExtensionPage {
             <UploadImageButton
               className="Upload-button"
               name={`fof-gamification.topimage${num}`}
-              path={`fof/gamification/topimage${num}`}
+              routePath={`fof/gamification/topimage${num}`}
               aria-label={app.translator.trans(`fof-gamification.admin.page.rankings.custom_image_${num}`)}
             />
             <br />
