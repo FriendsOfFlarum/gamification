@@ -142,6 +142,54 @@ class LeaderboardHighlightsTest extends EnhancedTestCase
         $this->assertGreaterThan(0, $climber['places'] ?? 0);
     }
 
+    /**
+     * Turning up regularly is the one thing a total cannot show.
+     *
+     * Somebody who posts a little most days is doing something a leaderboard
+     * ranked on volume never notices, and it is a far more reachable thing to
+     * be than the busiest person on the forum.
+     */
+    #[Test]
+    public function the_most_consistent_is_whoever_was_active_on_the_most_days()
+    {
+        $this->extension('fof-gamification');
+
+        $now = Carbon::now();
+        $weekStart = $now->copy()->startOfWeek();
+
+        $users = [$this->normalUser()];
+        $posts = [];
+        $id = 1;
+
+        // Steady: one post on each of five days.
+        foreach (range(0, 4) as $day) {
+            $posts[] = ['id' => $id++, 'discussion_id' => 1, 'number' => $id, 'created_at' => $weekStart->copy()->addDays($day)->addHours(9)->toDateTimeString(), 'user_id' => 4, 'type' => 'comment', 'content' => '<t><p>x</p></t>'];
+        }
+
+        // Bursty: far more posts, but all on one day. Tops the board and so
+        // must not also take this award.
+        for ($i = 0; $i < 30; $i++) {
+            $posts[] = ['id' => $id++, 'discussion_id' => 1, 'number' => $id, 'created_at' => $weekStart->copy()->addHours(10)->toDateTimeString(), 'user_id' => 3, 'type' => 'comment', 'content' => '<t><p>x</p></t>'];
+        }
+
+        foreach ([3, 4] as $uid) {
+            $users[] = ['id' => $uid, 'username' => "u$uid", 'email' => "u$uid@machine.local", 'is_email_confirmed' => 1];
+        }
+
+        $this->prepareDatabase([
+            User::class => $users,
+            Discussion::class => [
+                ['id' => 1, 'title' => 'D', 'created_at' => $now->toDateTimeString(), 'last_posted_at' => $now->toDateTimeString(), 'user_id' => 3, 'first_post_id' => 1, 'comment_count' => count($posts), 'is_private' => 0],
+            ],
+            Post::class => $posts,
+        ]);
+
+        $consistent = $this->highlights()['consistent'] ?? null;
+
+        $this->assertSame(4, $consistent['userId'] ?? null, 'five days beats one big day');
+        $this->assertSame(5, $consistent['days'] ?? null);
+    }
+
     #[Test]
     public function the_newcomer_is_somebody_who_was_not_here_before()
     {

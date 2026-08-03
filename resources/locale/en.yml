@@ -19,7 +19,8 @@ fof-gamification:
       you: You
       highlight:
         climber: Biggest climber
-        busiest: Most active
+        consistent: Most consistent
+        days: "{count, plural, one {# day} other {# days}}"
         newcomer: New face
       find_me: "Find me ({position})"
       find_me_failed: The board changed while looking for your place. Try again.

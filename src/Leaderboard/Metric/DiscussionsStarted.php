@@ -66,4 +66,25 @@ class DiscussionsStarted implements MetricInterface
 
         return $query;
     }
+
+    public function activityQuery(?\DateTimeInterface $since, ?\DateTimeInterface $until = null): ?Builder
+    {
+        $query = $this->connection
+            ->table('discussions')
+            ->whereNotNull('discussions.user_id')
+            ->whereNull('discussions.hidden_at')
+            ->where('discussions.is_private', false)
+            ->select('discussions.user_id as user_id')
+            ->selectRaw($this->connection->getTablePrefix().'discussions.created_at as happened_at');
+
+        if ($since !== null) {
+            $query->where('discussions.created_at', '>=', $since);
+        }
+
+        if ($until !== null) {
+            $query->where('discussions.created_at', '<', $until);
+        }
+
+        return $query;
+    }
 }

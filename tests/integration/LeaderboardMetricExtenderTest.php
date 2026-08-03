@@ -180,4 +180,10 @@ class ThirdPartyMetric implements MetricInterface
             ->select('users.id as user_id')
             ->selectRaw('0 as score');
     }
+
+    public function activityQuery(?\DateTimeInterface $since, ?\DateTimeInterface $until = null): ?Builder
+    {
+        // Nothing dated to offer, which is a legitimate answer.
+        return null;
+    }
 }

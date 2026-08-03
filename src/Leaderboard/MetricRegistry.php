@@ -189,8 +189,8 @@ class MetricRegistry
      *
      * A board ranked on a lifetime total is settled years in advance, and
      * says to everybody else that turning up changes nothing. These stay
-     * winnable whoever is top: the biggest climb, the busiest window, and
-     * whoever has just arrived.
+     * winnable whoever is top: the biggest climb, who turned up most
+     * regularly, and whoever has just arrived.
      *
      * Empty for all-time, which has no window before it to compare against.
      *
@@ -248,6 +248,41 @@ class MetricRegistry
 
         if (isset($highlights['climber'])) {
             $taken[$highlights['climber']['userId']] = true;
+        }
+
+        // Most consistent: active on the most separate days.
+        //
+        // The one thing a total cannot express. Somebody posting a little
+        // most days is doing something the board never notices, and it is a
+        // far more reachable thing to be than the busiest person here.
+        $activity = $metric->activityQuery($period->since());
+
+        if ($activity !== null) {
+            $days = $this->connection
+                ->query()
+                ->fromSub($activity, 'activity')
+                ->select('activity.user_id')
+                ->selectRaw('COUNT(DISTINCT DATE('.$this->connection->getTablePrefix().'activity.happened_at)) as days')
+                ->groupBy('activity.user_id')
+                ->orderByDesc('days')
+                ->orderBy('activity.user_id')
+                ->get();
+
+            foreach ($days as $row) {
+                $userId = (int) $row->user_id;
+
+                // Only where they are actually ranked — eligibility applies
+                // to this award as much as to the board itself — and only if
+                // the day count says something a single burst would not.
+                if (isset($taken[$userId]) || !isset($positions[$userId]) || (int) $row->days < 2) {
+                    continue;
+                }
+
+                $highlights['consistent'] = ['userId' => $userId, 'days' => (int) $row->days];
+                $taken[$userId] = true;
+
+                break;
+            }
         }
 
         // Newcomer: ranked now, absent before — but only where there was an

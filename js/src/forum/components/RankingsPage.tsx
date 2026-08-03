@@ -242,7 +242,11 @@ export default class RankingsPage extends Page<IPageAttrs> {
   private highlightStrip(): Mithril.Children {
     const cards = [
       { key: 'climber', icon: 'fas fa-arrow-trend-up', value: (h: any) => `+${h.places}` },
-      { key: 'busiest', icon: 'fas fa-fire', value: (h: any) => h.score?.toLocaleString() },
+      {
+        key: 'consistent',
+        icon: 'fas fa-calendar-check',
+        value: (h: any) => app.translator.trans('fof-gamification.forum.leaderboard.highlight.days', { count: h.days }),
+      },
       { key: 'newcomer', icon: 'fas fa-seedling', value: (h: any) => h.score?.toLocaleString() },
     ].filter((card) => this.highlights[card.key]);
 

@@ -71,4 +71,27 @@ class UpvotesReceived implements MetricInterface
 
         return $query;
     }
+
+    public function activityQuery(?\DateTimeInterface $since, ?\DateTimeInterface $until = null): ?Builder
+    {
+        $query = $this->connection
+            ->table('post_votes')
+            ->join('posts', 'posts.id', '=', 'post_votes.post_id')
+            ->where('post_votes.value', '>', 0)
+            ->whereNotNull('posts.user_id')
+            ->whereNull('posts.hidden_at')
+            ->where('posts.is_private', false)
+            ->select('posts.user_id as user_id')
+            ->selectRaw($this->connection->getTablePrefix().'post_votes.created_at as happened_at');
+
+        if ($since !== null) {
+            $query->where('post_votes.created_at', '>=', $since);
+        }
+
+        if ($until !== null) {
+            $query->where('post_votes.created_at', '<', $until);
+        }
+
+        return $query;
+    }
 }

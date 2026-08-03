@@ -63,4 +63,14 @@ interface MetricInterface
      * ignore both.
      */
     public function query(?\DateTimeInterface $since, ?\DateTimeInterface $until = null): Builder;
+
+    /**
+     * A query of one row per dated contribution, for highlights that care
+     * about *when* somebody was active rather than how much they did.
+     *
+     * Two columns: `user_id` and `happened_at`. Null where the metric has no
+     * meaningful date — a running total on the user, say — in which case
+     * those highlights are simply not offered.
+     */
+    public function activityQuery(?\DateTimeInterface $since, ?\DateTimeInterface $until = null): ?Builder;
 }
