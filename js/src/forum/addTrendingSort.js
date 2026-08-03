@@ -25,6 +25,11 @@ export default function () {
   });
 
   extend(DiscussionListState.prototype, 'sortMap', function (map) {
-    map.hot = '-hotness';
+    // See addVotesSort for why this carries its own label rather than being
+    // a bare sort string.
+    map.trending = {
+      sort: '-trending',
+      label: app.translator.trans('fof-gamification.forum.index_sort.trending_button'),
+    };
   });
 }

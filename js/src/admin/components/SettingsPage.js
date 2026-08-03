@@ -3,6 +3,7 @@ import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Button from 'flarum/common/components/Button';
 import saveSettings from 'flarum/admin/utils/saveSettings';
 import Switch from 'flarum/common/components/Switch';
+import Select from 'flarum/common/components/Select';
 import withAttr from 'flarum/common/utils/withAttr';
 import Stream from 'flarum/common/utils/Stream';
 import ItemList from 'flarum/common/utils/ItemList';
@@ -12,6 +13,8 @@ import FormSection from 'flarum/admin/components/FormSection';
 import FormSectionGroup from 'flarum/admin/components/FormSectionGroup';
 import UploadImageButton from './UploadImageButton';
 import GroupSettings from './GroupSettings';
+import ExcludedUsersSetting from './ExcludedUsersSetting';
+import ExcludedGroupsSetting from './ExcludedGroupsSetting';
 import Icon from 'flarum/common/components/Icon';
 
 export default class SettingsPage extends ExtensionPage {
@@ -26,12 +29,17 @@ export default class SettingsPage extends ExtensionPage {
       'rankAmt',
       'iconName',
       'blockedUsers',
+      'excludedUsers',
+      'excludedGroups',
       'iconNameAlt',
       'autoAssignedGroups',
       'enabled-tags',
+      'defaultMetric',
+      'defaultPeriod',
     ];
 
     this.switches = [
+      'excludeSuspended',
       'autoUpvotePosts',
       'customRankingImages',
       'rateLimit',
@@ -501,17 +509,69 @@ export default class SettingsPage extends ExtensionPage {
     );
 
     items.add(
-      'ignoredUsers',
+      'defaultMetric',
+      'defaultPeriod',
       <div className="Form-group">
-        <label>{app.translator.trans('fof-gamification.admin.page.rankings.blocked.title')}</label>
-        <input
-          className="FormControl Ranks-blocked"
-          placeholder={app.translator.trans('fof-gamification.admin.page.rankings.blocked.placeholder')}
-          value={this.values.blockedUsers() || ''}
-          oninput={withAttr('value', this.values.blockedUsers)}
+        <label>{app.translator.trans('fof-gamification.admin.page.rankings.default_metric.title')}</label>
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.default_metric.help')}</div>
+        <Select
+          options={(app.forum.attribute('fof-gamification.leaderboardMetrics') || []).reduce((options, metric) => {
+            options[metric.key] = app.translator.trans(metric.label);
+            return options;
+          }, {})}
+          value={this.values.defaultMetric() || 'posts'}
+          onchange={this.values.defaultMetric}
         />
       </div>,
+      95
+    );
+
+    items.add(
+      'defaultPeriod',
+      <div className="Form-group">
+        <label>{app.translator.trans('fof-gamification.admin.page.rankings.default_period.title')}</label>
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.default_period.help')}</div>
+        <Select
+          options={(app.forum.attribute('fof-gamification.leaderboardPeriods') || []).reduce((options, period) => {
+            options[period] = app.translator.trans(`fof-gamification.forum.leaderboard.period.${period}`);
+            return options;
+          }, {})}
+          value={this.values.defaultPeriod() || 'year'}
+          onchange={this.values.defaultPeriod}
+        />
+      </div>,
+      94
+    );
+
+    items.add(
+      'excludedUsers',
+      <div className="Form-group">
+        <label>{app.translator.trans('fof-gamification.admin.page.rankings.excluded_users.title')}</label>
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.excluded_users.help')}</div>
+        <ExcludedUsersSetting value={this.values.excludedUsers() || '[]'} onchange={this.values.excludedUsers} />
+      </div>,
       90
+    );
+
+    items.add(
+      'excludedGroups',
+      <div className="Form-group">
+        <label>{app.translator.trans('fof-gamification.admin.page.rankings.excluded_groups.title')}</label>
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.excluded_groups.help')}</div>
+        <ExcludedGroupsSetting value={this.values.excludedGroups() || '[]'} onchange={this.values.excludedGroups} />
+      </div>,
+      85
+    );
+
+    items.add(
+      'excludeSuspended',
+      <div className="Form-group">
+        <Switch state={this.values.excludeSuspended() ?? true} onchange={this.values.excludeSuspended}>
+          {app.translator.trans('fof-gamification.admin.page.rankings.exclude_suspended')}
+        </Switch>
+        <div className="helpText">{app.translator.trans('fof-gamification.admin.page.rankings.exclude_suspended_help')}</div>
+      </div>,
+      84
     );
 
     items.add(

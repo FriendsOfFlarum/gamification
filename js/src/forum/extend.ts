@@ -7,12 +7,16 @@ import Post from 'flarum/common/models/Post';
 import User from 'flarum/common/models/User';
 
 import Rank from '../common/models/Rank';
+import LeaderboardEntry from '../common/models/LeaderboardEntry';
 
 export default [
   ...commonExtend,
 
   new Extend.Routes() //
     .add('rankings', '/rankings', RankingsPage),
+
+  new Extend.Store() //
+    .add('leaderboard-entries', LeaderboardEntry),
 
   new Extend.Model(Discussion) //
     .attribute<number>('votes')

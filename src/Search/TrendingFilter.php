@@ -20,11 +20,11 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * @implements FilterInterface<DatabaseSearchState>
  */
-class HotFilter implements FilterInterface
+class TrendingFilter implements FilterInterface
 {
     public function getFilterKey(): string
     {
-        return 'hot';
+        return 'trending';
     }
 
     public function filter(SearchState $state, array|string $value, bool $negate): void
@@ -34,6 +34,6 @@ class HotFilter implements FilterInterface
 
     protected function sort(Builder $query, User $actor, bool $negate): void
     {
-        $query->orderBy('hotness', 'desc');
+        $query->orderBy('trending', 'desc');
     }
 }

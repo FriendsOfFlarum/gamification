@@ -1,11 +1,11 @@
 import Extend from 'flarum/common/extenders';
 import Rank from './models/Rank';
-import HotGambit from './gambits/HotGambit';
+import TrendingGambit from './gambits/TrendingGambit';
 
 export default [
   new Extend.Store() //
     .add('ranks', Rank),
 
   new Extend.Search() //
-    .gambit('discussions', HotGambit),
+    .gambit('discussions', TrendingGambit),
 ];
