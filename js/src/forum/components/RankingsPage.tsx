@@ -239,6 +239,31 @@ export default class RankingsPage extends Page<IPageAttrs> {
    * whoever showed up this week, which is the only part most members can
    * change — so they are given their own row rather than buried.
    */
+  /**
+   * The selected period, phrased to sit inside a sentence.
+   *
+   * "this month" rather than "This month", because it is read as part of an
+   * explanation rather than as the label on a control.
+   */
+  private periodName(): string {
+    return extractText(app.translator.trans(`fof-gamification.forum.leaderboard.period_phrase.${this.period}`));
+  }
+
+  /** The window an award is measured against — "last month", not "this month". */
+  private previousPeriodName(): string {
+    return extractText(app.translator.trans(`fof-gamification.forum.leaderboard.period_previous.${this.period}`));
+  }
+
+  /**
+   * The sentence explaining what an award measures.
+   */
+  private highlightHelp(key: string): Mithril.Children {
+    return app.translator.trans(`fof-gamification.forum.leaderboard.highlight.${key}_help`, {
+      period: this.periodName(),
+      previous: this.previousPeriodName(),
+    });
+  }
+
   private highlightStrip(): Mithril.Children {
     const cards = [
       { key: 'climber', icon: 'fas fa-arrow-trend-up', value: (h: any) => `+${h.places}` },
@@ -268,6 +293,10 @@ export default class RankingsPage extends Page<IPageAttrs> {
                 <Link href={app.route('user', { username: highlight.slug })} className="RankingsPage-highlightName">
                   {highlight.displayName}
                 </Link>
+                {/* A label and a number assume the reader knows the rule.
+                    Each award measures something different, over the period
+                    currently selected, so both are spelled out. */}
+                <span className="RankingsPage-highlightHelp">{this.highlightHelp(card.key)}</span>
               </span>
 
               <span className="RankingsPage-highlightValue">{card.value(highlight)}</span>

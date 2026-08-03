@@ -17,11 +17,29 @@ fof-gamification:
       empty: Nobody has made the leaderboard yet.
       relative_label: Score relative to the leader
       you: You
+      # Read inside a sentence, so lower case and no leading capital. The
+      # comparison phrase names the window each award is measured against,
+      # which is not always the same wording as the window itself.
+      period_phrase:
+        day: today
+        week: this week
+        month: this month
+        year: this year
+        all: all time
+      period_previous:
+        day: yesterday
+        week: last week
+        month: last month
+        year: last year
+        all: all time
       highlight:
         climber: Biggest climber
+        climber_help: Climbed the most places since {previous}
         consistent: Most consistent
-        days: "{count, plural, one {# day} other {# days}}"
+        consistent_help: Active on the most separate days {period}
         newcomer: New face
+        newcomer_help: Highest placed of the people who were not here {previous}
+        days: "{count, plural, one {# day} other {# days}}"
       find_me: "Find me ({position})"
       find_me_failed: The board changed while looking for your place. Try again.
       moved_new: New

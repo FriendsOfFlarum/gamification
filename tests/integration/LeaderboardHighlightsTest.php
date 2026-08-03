@@ -190,6 +190,48 @@ class LeaderboardHighlightsTest extends EnhancedTestCase
         $this->assertSame(5, $consistent['days'] ?? null);
     }
 
+    /**
+     * Consistency counts separate days, so a window that is itself one day
+     * gives everybody a score of one and the award means nothing.
+     */
+    #[Test]
+    public function consistency_is_not_offered_when_the_window_is_a_single_day()
+    {
+        $this->extension('fof-gamification');
+
+        $now = Carbon::now();
+        $today = $now->copy()->startOfDay()->addHours(9);
+        $yesterday = $now->copy()->startOfDay()->subDay()->addHours(9);
+
+        $users = [$this->normalUser()];
+        $posts = [];
+        $id = 1;
+
+        // Two people active today, and both active yesterday too, so the
+        // previous window exists and the other awards can still resolve.
+        foreach ([[3, 6], [4, 3]] as [$uid, $count]) {
+            $users[] = ['id' => $uid, 'username' => "u$uid", 'email' => "u$uid@machine.local", 'is_email_confirmed' => 1];
+
+            foreach ([$today, $yesterday] as $when) {
+                for ($i = 0; $i < $count; $i++) {
+                    $posts[] = ['id' => $id++, 'discussion_id' => 1, 'number' => $id, 'created_at' => $when->toDateTimeString(), 'user_id' => $uid, 'type' => 'comment', 'content' => '<t><p>x</p></t>'];
+                }
+            }
+        }
+
+        $this->prepareDatabase([
+            User::class => $users,
+            Discussion::class => [
+                ['id' => 1, 'title' => 'D', 'created_at' => $now->toDateTimeString(), 'last_posted_at' => $now->toDateTimeString(), 'user_id' => 3, 'first_post_id' => 1, 'comment_count' => count($posts), 'is_private' => 0],
+            ],
+            Post::class => $posts,
+        ]);
+
+        // Everybody has exactly one distinct day, so nobody is more
+        // consistent than anybody else.
+        $this->assertArrayNotHasKey('consistent', $this->highlights(Period::Day));
+    }
+
     #[Test]
     public function the_newcomer_is_somebody_who_was_not_here_before()
     {
