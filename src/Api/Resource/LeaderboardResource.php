@@ -131,6 +131,9 @@ class LeaderboardResource extends AbstractResource implements Listable, Countabl
         // Resolve the named people in one query so the client has names and
         // avatars without a second round trip.
         $users = User::query()
+            // Serializing a user reads its groups, which would otherwise be
+            // fetched one user at a time.
+            ->with('groups')
             ->whereIn('id', array_column($highlights, 'userId'))
             ->get()
             ->keyBy('id');
@@ -219,6 +222,7 @@ class LeaderboardResource extends AbstractResource implements Listable, Countabl
         $query->query = $this->metrics->rankingQuery($metric, $period->since());
         $query->metric = $metric;
         $query->period = $period;
+        $query->since = $period->since();
     }
 
     public function sorts(): array
@@ -284,6 +288,7 @@ class LeaderboardResource extends AbstractResource implements Listable, Countabl
 
         // One query for the whole page rather than one per row.
         $users = User::query()
+            ->with('groups')
             ->whereIn('id', $rows->pluck('user_id')->all())
             ->get()
             ->keyBy('id');
@@ -320,6 +325,9 @@ class LeaderboardResource extends AbstractResource implements Listable, Countabl
             return 0;
         }
 
-        return (clone $query->query)->count();
+        // Counted from the ranking this request already computed. Asking the
+        // database again means a second aggregate over every post in the
+        // period purely to size the pager.
+        return $this->metrics->ranking($query->metric, $query->since)->count();
     }
 }

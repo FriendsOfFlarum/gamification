@@ -15,6 +15,7 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use FoF\Gamification\LeaderboardEligibility;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * The metrics available to the leaderboard, and the one place their queries
@@ -65,6 +66,22 @@ class MetricRegistry
      * @var array<string, MetricInterface>
      */
     private array $metrics = [];
+
+    /**
+     * Rankings already computed during this request, keyed by metric and
+     * window.
+     *
+     * One page asks for the same ranking several times over — the entries
+     * themselves, the movement column, the viewer's standing and the
+     * highlights — and each was scanning every post in the period again. The
+     * results cannot change mid-request, so they are computed once.
+     *
+     * Deliberately per instance, and the registry is bound per request: two
+     * page loads a second apart must not share an answer.
+     *
+     * @var array<string, \Illuminate\Support\Collection<int, object>>
+     */
+    private array $rankings = [];
 
     public function __construct(
         protected LeaderboardEligibility $eligibility,
@@ -125,6 +142,26 @@ class MetricRegistry
      * users who may be ranked come back, and so that the ordering is applied
      * consistently rather than being each metric's problem.
      */
+    /**
+     * The ranking as rows, computed once per metric and window.
+     *
+     * Prefer this to running rankingQuery() directly wherever the whole
+     * ranking is wanted; the query builder is still exposed for the paginated
+     * slice, which is bounded work and differs per page.
+     *
+     * @return \Illuminate\Support\Collection<int, object>
+     */
+    public function ranking(MetricInterface $metric, ?\DateTimeInterface $since, ?\DateTimeInterface $until = null): Collection
+    {
+        $key = implode('|', [
+            $metric->key(),
+            $since?->format('c') ?? '',
+            $until?->format('c') ?? '',
+        ]);
+
+        return $this->rankings[$key] ??= $this->rankingQuery($metric, $since, $until)->get();
+    }
+
     public function rankingQuery(MetricInterface $metric, ?\DateTimeInterface $since, ?\DateTimeInterface $until = null): Builder
     {
         $inner = $metric->supportsPeriods()
@@ -164,8 +201,8 @@ class MetricRegistry
             return [];
         }
 
-        $before = $this->positions($this->rankingQuery($metric, $window[0], $window[1]));
-        $now = $this->positions($this->rankingQuery($metric, $period->since()));
+        $before = $this->positions($this->ranking($metric, $window[0], $window[1]));
+        $now = $this->positions($this->ranking($metric, $period->since()));
 
         $movement = [];
 
@@ -204,13 +241,13 @@ class MetricRegistry
             return [];
         }
 
-        $current = $this->rankingQuery($metric, $period->since())->get();
+        $current = $this->ranking($metric, $period->since());
 
         if ($current->isEmpty()) {
             return [];
         }
 
-        $before = $this->positions($this->rankingQuery($metric, $window[0], $window[1]));
+        $before = $this->positions($this->ranking($metric, $window[0], $window[1]));
 
         $highlights = [];
 
@@ -315,14 +352,16 @@ class MetricRegistry
     }
 
     /**
+     * @param \Illuminate\Support\Collection<int, object> $ranking
+     *
      * @return array<int, int> user id => 1-based position
      */
-    private function positions(Builder $ranking): array
+    private function positions(Collection $ranking): array
     {
         $positions = [];
         $place = 0;
 
-        foreach ($ranking->get() as $row) {
+        foreach ($ranking as $row) {
             $positions[(int) $row->user_id] = ++$place;
         }
 
@@ -346,53 +385,35 @@ class MetricRegistry
             return null;
         }
 
-        $ranking = $this->rankingQuery($metric, $since);
+        // Read from the ranking rather than querying around it. It is already
+        // ordered and already computed for this request, so the position, the
+        // score and the gap to the place above are all a walk of rows that
+        // have been fetched — where this used to be three more aggregates
+        // over every post in the period.
+        $ranking = $this->ranking($metric, $since);
 
-        $own = (clone $ranking)->where('scores.user_id', $userId)->first();
+        $place = 0;
+        $previousScore = null;
 
-        if ($own === null) {
-            return null;
+        foreach ($ranking as $row) {
+            $place++;
+
+            if ((int) $row->user_id !== $userId) {
+                $previousScore = (int) $row->score;
+
+                continue;
+            }
+
+            $score = (int) $row->score;
+
+            return [
+                'position' => $place,
+                'score'    => $score,
+                // Null for the leader, who has nobody to catch.
+                'toNext'   => $previousScore === null ? null : max(0, $previousScore - $score),
+            ];
         }
 
-        $score = (int) $own->score;
-
-        // Everyone ahead of them: a higher score, or the same score and an
-        // earlier place under the tiebreak the ranking itself uses.
-        $ahead = (clone $ranking)
-            ->where(function ($query) use ($score, $userId) {
-                $query->where('scores.score', '>', $score)
-                    ->orWhere(function ($tie) use ($score, $userId) {
-                        $tie->where('scores.score', $score)
-                            ->where('scores.user_id', '<', $userId);
-                    });
-            })
-            ->count();
-
-        // The score of the person immediately above, so the page can say how
-        // much is left to close rather than only where somebody sits. A board
-        // is far more encouraging when the next rung is a number of posts
-        // instead of an abstract place.
-        // The person one place above, which is the row the ranking's own
-        // ordering puts immediately before this one — not merely anybody with
-        // a higher score, and not somebody tied on the same score who happens
-        // to sort first.
-        $next = (clone $ranking)
-            ->where(function ($query) use ($score, $userId) {
-                $query->where('scores.score', '>', $score)
-                    ->orWhere(function ($tie) use ($score, $userId) {
-                        $tie->where('scores.score', $score)
-                            ->where('scores.user_id', '<', $userId);
-                    });
-            })
-            ->reorder()
-            ->orderBy('scores.score')
-            ->orderByDesc('scores.user_id')
-            ->first();
-
-        return [
-            'position' => $ahead + 1,
-            'score'    => $score,
-            'toNext'   => $next ? max(0, (int) $next->score - $score) : null,
-        ];
+        return null;
     }
 }
