@@ -57,7 +57,10 @@ class VotesReceived implements MetricInterface
             ->where('posts.is_private', false)
             ->groupBy('posts.user_id')
             ->select('posts.user_id as user_id')
-            ->selectRaw('SUM(post_votes.value) as score');
+            // Built rather than raw: a raw string naming the table does not
+            // get the configured prefix applied, so on a prefixed install the
+            // column does not resolve at all.
+            ->selectRaw('SUM('.$this->connection->getTablePrefix().'post_votes.value) as score');
 
         if ($since !== null) {
             $query->where('post_votes.created_at', '>=', $since);
