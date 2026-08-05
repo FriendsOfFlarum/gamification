@@ -128,15 +128,29 @@ return [
         // it and the actor's own vote on it for the whole page at once.
         ->endpoint('index', function (Endpoint\Index $endpoint) {
             return $endpoint
-                // Restrict the first-post load to discussions gamification
-                // applies to. On a forum that confines voting to a few tags
-                // most pages carry none, and with no first post matched the
-                // dependent vote load below has nothing to key on, so it is
-                // skipped entirely rather than fetching rows no field reads.
-                ->eagerLoadWhere('firstPost', function ($query, Context $context) {
-                    resolve(TagGate::class)->constrainToEnabled($query);
-                })
+                // The first post is loaded unconstrained. Narrowing it to the
+                // gamified tags skipped the dependent vote load on pages that
+                // carry none, but `eagerLoadWhere()` feeds `loadMissing()`, and
+                // a relation loaded with no match is still *marked* loaded — so
+                // a discussion outside those tags served `firstPost` as
+                // present-and-null, and a client that explicitly asked for
+                // `include=firstPost` was handed nothing. Flarum's admin
+                // announcements widget reads its excerpts from that include and
+                // rendered every card blank.
+                //
+                // The saving belongs on the votes load itself, which is what was
+                // ever worth avoiding: it is this extension's query, and
+                // narrowing it changes no relation the API promises.
+                ->eagerLoad('firstPost')
                 ->eagerLoadWhere('firstPost.actualvotes', function ($query, Context $context) {
+                    // Only the discussions gamification applies to can show a
+                    // vote, so there is nothing to fetch for the rest. This
+                    // query is on `post_votes`, so the gate is applied through
+                    // the vote's own post.
+                    $query->whereHas('post', function ($posts) {
+                        resolve(TagGate::class)->constrainToEnabled($posts);
+                    });
+
                     // A guest has no votes to find; constraining on a null id
                     // would run the query anyway and match nothing.
                     $query->where('user_id', $context->getActor()->id ?? 0);
