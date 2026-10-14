@@ -11,35 +11,26 @@
 
 namespace FoF\Gamification\Api;
 
+use Flarum\Api\Context;
 use Flarum\Api\Schema;
 use Flarum\User\User;
 
 class UserResourceFields
 {
-    /**
-     * Cached answers to canHaveVotingNotifications, keyed by the user's set of
-     * group ids — the only thing the answer depends on.
-     *
-     * @var array<string, bool>
-     */
-    private array $votingNotifications = [];
-
     public function __invoke(): array
     {
         return [
             Schema\Number::make('points')
                 ->property('votes'),
             Schema\Boolean::make('canHaveVotingNotifications')
-                ->get(function (User $user) {
-                    // Asked of every user in a listing, and the answer depends
-                    // only on their groups — so users who share a set of groups
-                    // share an answer. Without this, a page of users re-ran the
-                    // same permission lookup for each of them.
-                    $groups = $user->groups->pluck('id')->sort()->implode(',');
-
-                    return $this->votingNotifications[$groups] ??= $user->hasPermission('discussion.upvote_notifications')
-                        || $user->hasPermission('discussion.downvote_notifications');
-                }),
+                // Only the forum's own user reads this, to decide whether to
+                // offer the vote notification setting. Serialized for every
+                // user in a listing, it cost a permission lookup per distinct
+                // set of groups among them, and told everyone what each
+                // member is allowed.
+                ->visible(fn (User $user, Context $context) => $context->getActor()->id === $user->id)
+                ->get(fn (User $user) => $user->hasPermission('discussion.upvote_notifications')
+                    || $user->hasPermission('discussion.downvote_notifications')),
 
             Schema\Relationship\ToMany::make('ranks')
                 ->type('ranks')
