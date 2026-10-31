@@ -32,6 +32,6 @@ declare module 'flarum/common/models/User' {
   export default interface User {
     points(): number;
     ranks(): Rank[];
-    canHaveVotingNotifications(): boolean;
+    canHaveVotingNotifications(): boolean | undefined;
   }
 }
