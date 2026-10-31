@@ -139,9 +139,7 @@ class PostResourceFields
         $this->updatePoints($post->user, $post);
 
         if ($voteUser = $vote->post->user) {
-            $ranks = Rank::where('points', '<=', $voteUser->votes)->pluck('id');
-
-            $voteUser->ranks()->sync($ranks);
+            Rank::syncFor($voteUser);
         }
 
         $actor->last_vote_time = Carbon::now();
