@@ -10,24 +10,6 @@ export default function () {
     return (node) => node && node.attrs && node.attrs.className && String(node.attrs.className).split(' ').includes(className);
   };
 
-  const findMatchClass = function (node, className) {
-    const arr = [];
-
-    if (node && node.children && Array.isArray(node.children)) {
-      const nodeInChildren = node.children.find(matchClass(className));
-
-      if (nodeInChildren) {
-        arr.push(nodeInChildren);
-      }
-
-      node.children.forEach(function (currentValue) {
-        arr.push(...findMatchClass(currentValue, className));
-      });
-    }
-
-    return arr;
-  };
-
   extend(UserCard.prototype, 'infoItems', function (items) {
     const user = this.attrs.user;
 
@@ -43,49 +25,32 @@ export default function () {
     );
   });
 
-  extend(UserCard.prototype, 'view', function (vnode) {
+  // Ranks join the user's badges. Core builds those in UserCard's contentItems
+  // (inside UserCard-content), so a list added to the vnode beside them sat
+  // between the avatar and the content and broke the card's layout.
+  extend(UserCard.prototype, 'contentItems', function (items) {
     const user = this.attrs.user;
-    const profile_node = findMatchClass(vnode, 'UserCard-profile')[0];
     const amt = app.forum.attribute('fof-gamification.rankAmt') ?? user.ranks().length;
 
-    if (!profile_node) return;
+    if (!user.ranks()) return;
 
-    let badges_node = profile_node.children.find(matchClass('UserCard-badges'));
-    if (user.ranks()) {
-      if (!badges_node) {
-        profile_node.children.splice(
-          1,
-          0,
-          <ul className="UserCard-badges badges">
-            {user
-              .ranks()
-              .reverse()
-              .map((rank, i) => {
-                if (!amt || i < amt) {
-                  return <li className="User-Rank">{rankLabel(rank)}</li>;
-                }
-              })}
-          </ul>
-        );
-      } else {
-        user
-          .ranks()
-          .reverse()
-          .map((rank, i) => {
-            if (!amt || i < amt) {
-              return <li className="User-Rank">{rankLabel(rank)}</li>;
-            }
-          })
-          .forEach((rank) => {
-            if (!rank) {
-              return;
-            }
-            badges_node.children.push(rank);
-          });
-      }
+    const ranks = user
+      .ranks()
+      .reverse()
+      .filter((rank, i) => !amt || i < amt)
+      .map((rank) => (
+        <li className="User-Rank" key={`rank-${rank.id()}`}>
+          {rankLabel(rank)}
+        </li>
+      ));
+
+    if (!ranks.length) return;
+
+    if (items.has('badges')) {
+      items.get('badges').children.push(...ranks);
+    } else {
+      items.add('badges', <ul className="UserCard-badges badges">{ranks}</ul>, 90);
     }
-
-    return vnode;
   });
 
   extend(PostUser.prototype, 'view', function (vnode) {
