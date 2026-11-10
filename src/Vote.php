@@ -66,13 +66,19 @@ class Vote extends AbstractModel
         return $query->sum('value');
     }
 
+    /**
+     * Recount a member's points: the votes on their posts, plus any points
+     * other extensions have granted them ({@see PointGrants}). Grants are
+     * added here rather than kept in `users.votes` alone so that every
+     * recount, including `fof:gamification:resyncUsers`, keeps them.
+     */
     public static function updateUserVotes(User $user): User
     {
         $user->votes = self::calculate(
             self::query()
                 ->join('posts', 'posts.id', '=', 'post_votes.post_id')
                 ->where('posts.user_id', $user->id)
-        );
+        ) + resolve(PointGrants::class)->total($user);
 
         return $user;
     }

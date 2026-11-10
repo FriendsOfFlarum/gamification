@@ -80,6 +80,14 @@ class Rank extends AbstractModel
         return $this;
     }
 
+    /**
+     * Give a member exactly the ranks their current points have reached.
+     */
+    public static function syncFor(User $user): void
+    {
+        $user->ranks()->sync(self::query()->where('points', '<=', $user->votes)->pluck('id'));
+    }
+
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class);
