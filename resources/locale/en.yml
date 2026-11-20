@@ -195,3 +195,9 @@ fof-gamification:
     gambits:
       trending:
         key: trending
+
+core:
+  email:
+    notification:
+      types:
+        vote: Votes on your posts
