@@ -47,7 +47,29 @@ Updates all discussions with their total first post votes.
 
 #### `php flarum fof:gamification:resyncUsers`
 
-Updates all users with a forced recalculation of points.
+Updates all users with a forced recalculation of points. Points granted by other extensions (below) are kept.
+
+### Granting points from another extension
+
+A member's points are recounted from the votes on their posts, so writing to `users.votes` directly does not last. To give points for something else, such as a completed quest, use the `PointGrants` service:
+
+```php
+use FoF\Gamification\PointGrants;
+
+$grants = resolve(PointGrants::class);
+
+// Give 10 points, once: granting the same source and reason again does
+// nothing and returns false. Points may be negative, but not zero.
+$grants->grant($user, 'my-extension', 'quest:42', 10);
+
+// Take them back. Returns false if there was nothing to revoke.
+$grants->revoke($user, 'my-extension', 'quest:42');
+
+// Everything the member has been granted, across all extensions.
+$grants->total($user);
+```
+
+`source` names your extension (up to 100 characters) and `reason` what the points were for (up to 150). Use plain machine-readable reasons such as `quest:42`: on MySQL, reasons that differ only in letter case or accents count as the same grant. When a grant or revocation changes a member's total, their ranks are updated and `FoF\Gamification\Events\UserPointsUpdated` is dispatched, as for a vote. A member's grants are deleted with them wherever the database enforces foreign keys, which Flarum sets up by default.
 
 ### Links
 
