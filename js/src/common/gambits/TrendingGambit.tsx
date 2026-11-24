@@ -6,6 +6,10 @@ export default class TrendingGambit extends BooleanGambit {
     return app.translator.trans('fof-gamification.lib.gambits.trending.key', {}, true);
   }
 
+  canonicalKey() {
+    return 'trending';
+  }
+
   filterKey() {
     return 'trending';
   }
