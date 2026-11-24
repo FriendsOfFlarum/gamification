@@ -31,9 +31,9 @@
         }
     ],
     "require": {
-        "flarum/core": "^2.0.0",
+        "flarum/core": "2.x-dev",
         "ext-json": "*",
-        "flarum/tags": "^2.0"
+        "flarum/tags": "^2.1.0-beta.1"
     },
     "autoload": {
         "psr-4": {
@@ -57,7 +57,7 @@
             }
         },
         "branch-alias": {
-            "2.x": "2.x-dev"
+            "dev-2.x": "2.x-dev"
         }
     },
     "scripts": {
@@ -79,18 +79,18 @@
         "test:setup": "Sets up a database for use with integration tests. Execute this only once."
     },
     "require-dev": {
-        "flarum/phpstan": "^2.0.0",
-        "flarum/pusher": "*",
-        "flarum/testing": "^2.0.0",
-        "flarum/likes": "*",
-        "flarum/suspend": "*",
-        "flarum/gdpr": "*"
+        "flarum/phpstan": "^2.1.0-beta.1",
+        "flarum/pusher": "^2.1.0-beta.1",
+        "flarum/testing": "^2.1.0-beta.1",
+        "flarum/likes": "^2.1.0-beta.1",
+        "flarum/suspend": "^2.1.0-beta.1",
+        "flarum/gdpr": "^2.1.0-beta.1"
     },
     "autoload-dev": {
         "psr-4": {
             "FoF\\Gamification\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "beta",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

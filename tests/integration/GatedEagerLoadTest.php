@@ -190,7 +190,8 @@ class GatedEagerLoadTest extends EnhancedTestCase
         $perDiscussion = [];
 
         $this->app()->getContainer()->make('events')->listen(QueryExecuted::class, function (QueryExecuted $query) use (&$perDiscussion) {
-            if (str_contains($query->sql, 'from "posts" where "posts"."discussion_id" =')) {
+            // Bound to one discussion, unlike core's correlated visibility subquery.
+            if (str_contains($query->sql, 'from "posts" where "posts"."discussion_id" = ?')) {
                 $perDiscussion[] = $query->sql;
             }
         });
