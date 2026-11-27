@@ -7,16 +7,16 @@
   },
   "devDependencies": {
     "@babel/runtime": "^7.29.7",
-    "@flarum/jest-config": "^2.0.0",
+    "@flarum/jest-config": "^2.1.1",
     "@flarum/prettier-config": "^1.0.0",
     "cross-env": "^10.1.0",
     "flarum-tsconfig": "^2.0.0",
-    "flarum-webpack-config": "^3.0.2",
+    "flarum-webpack-config": "^3.1.1",
     "jquery": "^3.6.0",
     "mithril": "^2.2",
     "prettier": "^3.0.3",
     "typescript-coverage-report": "^0.6.1",
-    "webpack": "^5.89.0",
+    "webpack": "^5.104.1",
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
